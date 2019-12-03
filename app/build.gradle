@@ -209,7 +209,7 @@ dependencies {
     //    implementation 'com.jakewharton:butterknife:8.4.0'
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    implementation(name: 'lib.5plus.base-release', ext: 'aar')
+//    implementation(name: 'lib.5plus.base-release', ext: 'aar')
     implementation 'com.lijiankun24:shadowlayout:1.0.0'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-20'
     //implementation(name: 'shanyan_sdk_v2.3.0.1', ext: 'aar')
