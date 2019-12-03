@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.puyue.www.qiaoge.view.CompatToolbar
+        android:layout_marginTop="@dimen/size_20dp"
+        android:id="@+id/compatToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/app_border_bottom_bg">
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/iv_activity_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:src="@mipmap/ic_back_arrow" />
+
+        <TextView
+            android:id="@+id/tv_activity_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="13dp"
+            android:layout_marginTop="13dp"
+            android:text="支付结果"
+            android:textColor="@color/app_top_bar_text"
+            android:textSize="18dp" />
+    </com.puyue.www.qiaoge.view.CompatToolbar>
+
+    <LinearLayout
+        android:layout_below="@+id/compatToolbar"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_60dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+            android:visibility="gone"
+                android:id="@+id/iv_activity_order_success"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@mipmap/icon_pay_success"
+                />
+
+            <TextView
+
+                android:layout_marginTop="@dimen/size_15dp"
+                android:gravity="center"
+                android:id="@+id/textViewSuccess"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="@dimen/dp_10"
+                android:textColor="@color/color_AAA8AB"
+                android:layout_marginTop="@dimen/size_15dp"
+                android:gravity="center"
+                android:id="@+id/otherMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/iv_activity_order_error"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@mipmap/icon_pay_error"
+                />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:visibility="gone"
+                android:id="@+id/lav_activity_loading"
+                android:layout_width="33dp"
+                android:layout_height="5dp"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="loading_result.json"
+                app:lottie_loop="true" />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tv_activity_result_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="等待支付"
+                android:textColor="@color/app_front_black"
+                android:textSize="15dp" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginTop="@dimen/size_20dp"
+            android:id="@+id/tv_activity_order_look"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/app_pay_request_tv_bg"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="查看订单详情"
+            android:textColor="@color/color_AAA8AB"
+            android:textSize="18dp" />
+
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/imageViewRecommend"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

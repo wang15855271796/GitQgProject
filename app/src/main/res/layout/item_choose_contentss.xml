@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_15dp"
+            tools:text="1.5/盒"
+            android:layout_centerVertical="true"
+            android:textColor="#FF680A"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_unit"
+            tools:text="(1箱10盒)"
+            android:textSize="10sp"
+            android:layout_marginTop="18dp"
+            android:textColor="#666666"
+            android:layout_marginLeft="@dimen/size_10dp"
+            android:layout_toRightOf="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_old_price"
+            android:text="(1箱10盒)"
+            android:layout_marginTop="18dp"
+            tools:textSize="10sp"
+            android:textColor="#666666"
+            android:layout_marginLeft="@dimen/size_10dp"
+            android:layout_toRightOf="@+id/tv_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/size_16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <ImageView
+                android:id="@+id/iv_cut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:src="@mipmap/app_reduce" />
+
+            <TextView
+                android:id="@+id/tv_num"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="number"
+                android:text="0"
+                android:textColor="@color/app_front_black"
+                android:textSize="15dp" />
+
+            <EditText
+                android:gravity="center"
+                android:id="@+id/et_goods"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_search_edit"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
+                android:textSize="14dp" />
+
+
+
+            <ImageView
+                android:id="@+id/iv_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:src="@mipmap/app_add" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</LinearLayout>

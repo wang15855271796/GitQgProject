@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/icons-extra.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css"/>
+	</head>
+	<style type="text/css">
+		.mui-table-view .mui-media-object{
+			width: 42px;
+			font-size: 12px;
+			border-radius: 50%;
+			background: #F66E24;
+			color: #FFFFFF;
+			text-align: center;
+		}
+		.mui-media-body{
+			height: 42px;
+			line-height: 42px;
+			color: #646464;
+			font-size: 19px;
+		}
+		.mui-media-body>span{
+			color: #F66E24;
+			font-size: 30px;
+			margin: 0 5px;
+		}
+	</style>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <a class="mui-icon mui-icon-extra mui-icon-extra-calendar mui-pull-right" id="datatime" ></a>
+		    <h1 class="mui-title">我的数据</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+			    <li class="mui-table-view-cell mui-media">
+			        <a href="javascript:;">
+			        	<div class="mui-media-object mui-pull-left">
+			        		客户
+			        	</div>
+			            <div class="mui-media-body">
+			   				累计注册客户：<span class="registerNum"></span>人
+			            </div>
+			        </a>
+			    </li>
+			    <li class="mui-table-view-cell mui-media">
+			        <a href="javascript:;">
+			            <div class="mui-media-object mui-pull-left">
+			        		 订单
+			        	</div>
+			            <div class="mui-media-body">
+			               	 累计下单数量：
+			                <span class="orderNum"></span>笔
+			            </div>
+			        </a>
+			    </li>
+			    <li class="mui-table-view-cell mui-media">
+			        <a href="javascript:;">
+			            <div class="mui-media-object mui-pull-left">
+			        		 销售额
+			        	</div>
+			            <div class="mui-media-body">
+			             线上金额： <span class="onlineAmount"></span>元
+			            </div>
+			        </a>
+			    </li>
+			    <li class="mui-table-view-cell mui-media">
+			        <a href="javascript:;">
+			            <div class="mui-media-object mui-pull-left">
+			        		   销售额
+			        	</div>
+			            <div class="mui-media-body">
+			         	线下金额： <span class="offlineAmount"></span>元
+			            </div>
+			        </a>
+			    </li>
+			    <li class="mui-table-view-cell mui-media">
+			        <a href="javascript:;">
+			            <div class="mui-media-object mui-pull-left">
+			        		新下单
+			        	</div>
+			            <div class="mui-media-body">
+			             新下单业绩：<span class="newAmount"></span>元
+			                
+			            </div>
+			        </a>
+			    </li>
+			</ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			(function($) {
+			  mui.init();
+			  mui.plusReady(function(){
+    			showdata();
+			  });
+			   //今天的时间
+				 //alert(new Date().getFullYear()+"-" +(new Date().getMonth()+1)+ "-" + new Date().getDate())
+			  //展示数据
+				function showdata(){
+					var url=urls+service_url.querySaleIndexUserDataInfo_url;
+					var start=document.querySelector('#datatime').getAttribute('start') || (new Date().getFullYear()+"-" +(new Date().getMonth()+1)+ "-" + new Date().getDate());
+					var end=document.querySelector('#datatime').getAttribute('end') || (new Date().getFullYear()+"-" +(new Date().getMonth()+1)+ "-" + new Date().getDate());
+					var dataForm={};
+					dataForm.token=app.getState().token;
+					dataForm.startTime=start;
+					dataForm.endTime=end;
+					//alert(JSON.stringify(dataForm));
+					ajaxmethod(url,'POST',dataForm,function(data){
+						//关闭等待框
+					    plus.nativeUI.closeWaiting();
+					   //显示当前页面
+					    mui.currentWebview.show();
+						document.getElementsByClassName('registerNum')[0].innerHTML=data.data.registerNum||0;  //注册数
+						document.getElementsByClassName('orderNum')[0].innerHTML=data.data.orderNum||0;//订单数
+						document.getElementsByClassName('onlineAmount')[0].innerHTML=data.data.onlineAmount||0;//线上金额
+						document.getElementsByClassName('offlineAmount')[0].innerHTML=data.data.offlineAmount||0;//线下金额
+						document.getElementsByClassName('newAmount')[0].innerHTML=data.data.newAmount||0;//新下单金额
+					});
+				}
+				//选择时间事件
+				document.getElementById('datatime').addEventListener('tap',function(){
+					//打开新页面
+					mui.openWindow({					//打开新的页面
+						url:'mydatatime.html',
+						id:"mydatatime",
+						style:{},
+						show:{
+							autoShow: true,
+							aniShow: "slide-in-right",   //配置动画 
+							duration: 100     //配置动画
+						},
+						waiting:{
+							autoShow:true,
+							title:"正在加载...",
+							options:{   //等待框的宽高
+								
+							}
+						}
+					})					
+				},false)
+				
+				//选择完成时间
+				window.addEventListener("selscttime", function(e) {
+					var start=e.detail.start;
+					var end=e.detail.end;
+					document.querySelector('#datatime').setAttribute('start',start);
+					document.querySelector('#datatime').setAttribute('end',end);					
+					showdata();
+				})
+			})(mui);
+			
+			
+			
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_5dp"
+        android:layout_marginRight="@dimen/size_8dp"
+
+        android:background="#fff5f5f5"
+        android:gravity="center"
+        android:padding="@dimen/size_5dp"
+        android:text="佣金充值"
+        android:textColor="#ff333333"
+        android:textSize="@dimen/size_14dp" />
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/iv_select"
+        android:layout_gravity="right|bottom"
+        android:src="@mipmap/ic_qg_select"
+        android:layout_marginRight="@dimen/size_8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</FrameLayout>

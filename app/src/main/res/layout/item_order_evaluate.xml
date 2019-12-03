@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_good"
+        android:layout_width="@dimen/size_60dp"
+        android:layout_height="@dimen/size_60dp"
+        android:layout_marginLeft="@dimen/size_15dp"
+        android:layout_marginTop="@dimen/size_10dp" />
+
+    <com.puyue.www.qiaoge.view.StarBarView
+        android:id="@+id/sbv_star_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/size_15dp"
+        android:layout_marginTop="@dimen/size_10dp"
+        android:layout_toRightOf="@id/iv_good"
+        app:space_width="10dp"
+        app:star_height="18dp"
+        app:star_hollow="@mipmap/ic_wu_star"
+        app:star_isIndicator="false"
+        app:star_max="5"
+        app:star_orientation="horizontal"
+        app:star_rating="5"
+        app:star_solid="@mipmap/ic_star"
+        app:star_width="18dp" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_marginRight="@dimen/size_15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/size_10dp"
+        android:textSize="@dimen/size_12dp" />
+
+    <TextView
+        android:id="@+id/tv_item_order_evaluate_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sbv_star_bar"
+        android:layout_marginLeft="@dimen/size_15dp"
+        android:layout_marginTop="@dimen/size_14dp"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@id/iv_good"
+        android:textColor="#232131"
+        android:textSize="15dp" />
+
+    <EditText
+        android:id="@+id/edit_item_order_evaluate"
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:layout_below="@id/tv_item_order_evaluate_name"
+     android:layout_marginLeft="@dimen/size_15dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+      android:background="@null"
+        android:gravity="top"
+        android:hint="产品满足你的期待吗？说说你的感受，分享给想买的他们吧！"
+        android:padding="10dp"
+        android:textColor="@color/app_color_black"
+        android:textColorHint="#D5D5D5"
+        android:textSize="12dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/recycler"
+        android:visibility="gone"
+        android:layout_marginLeft="@dimen/size_15dp"
+        android:layout_below="@id/edit_item_order_evaluate"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+    <HorizontalScrollView
+        android:layout_below="@id/edit_item_order_evaluate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <com.puyue.www.qiaoge.view.flowtaglayout.FlowTagLayout
+                android:id="@+id/fl_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_margin="10dp"/>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+
+
+
+
+<ImageView
+    android:visibility="gone"
+    android:id="@+id/iv_add"
+    android:layout_marginLeft="@dimen/size_15dp"
+    android:layout_below="@id/edit_item_order_evaluate"
+    android:src="@mipmap/ic_evaluvate"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
+</RelativeLayout>

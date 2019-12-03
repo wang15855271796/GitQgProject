@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+
+        android:layout_marginTop="@dimen/size_15dp"
+        android:layout_marginLeft="@dimen/size_5dp"
+        android:layout_marginRight="@dimen/size_5dp"
+        android:id="@+id/relativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/app_my_wallet_bg_three"
+       >
+
+        <TextView
+
+            android:text=""
+            android:gravity="center"
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+       android:paddingTop="@dimen/size_10dp"
+            android:paddingBottom="@dimen/size_5dp"
+            android:textColor="@color/app_black"
+            android:textSize="@dimen/size_22dp"
+           />
+
+        <TextView
+
+            android:id="@+id/textHint"
+            android:layout_marginBottom="@dimen/size_10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/price"
+            android:layout_centerHorizontal="true"
+            android:text="送50优惠券"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_10dp" />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/ic_my_wallet_bg" />
+
+        <TextView
+
+            android:id="@+id/textCampaign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_9dp" />
+    </RelativeLayout>
+
+
+</LinearLayout>

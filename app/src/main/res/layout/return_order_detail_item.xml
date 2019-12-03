@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_good"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+
+        android:id="@+id/iv_food"
+        android:layout_width="@dimen/size_90dp"
+        android:layout_height="@dimen/size_90dp"
+        android:layout_marginLeft="@dimen/size_8dp"
+        android:layout_marginTop="@dimen/size_8dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginTop="@dimen/size_8dp"
+        android:layout_toRightOf="@id/iv_food"
+        android:orientation="horizontal">
+
+        <ImageView
+
+            android:id="@+id/iv_flag"
+            android:layout_width="@dimen/size_29dp"
+            android:layout_height="@dimen/size_15dp" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            tools:text="黄鱼"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ff000000"
+            android:textSize="@dimen/size_11dp" />
+    </LinearLayout>
+
+
+    <TextView
+        tools:text="30"
+        android:id="@+id/tv_return_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_title"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginTop="@dimen/size_45dp"
+        android:layout_toRightOf="@id/iv_food"
+        android:textSize="@dimen/size_10dp" />
+
+
+    <TextView
+        android:id="@+id/tv_return_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_title"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/size_45dp"
+        android:layout_marginRight="@dimen/size_14dp"
+        android:textColor="#fff6551a"
+        android:textSize="@dimen/size_15dp" />
+
+
+    <TextView
+        android:id="@+id/tv_return_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_title"
+        android:layout_alignBottom="@id/tv_return_amount"
+        android:layout_marginTop="@dimen/size_45dp"
+        android:layout_toLeftOf="@id/tv_return_amount"
+        android:gravity="bottom"
+        android:text="退款 ￥"
+        android:textColor="#fff6551a"
+        android:textSize="@dimen/size_10dp" />
+</RelativeLayout>

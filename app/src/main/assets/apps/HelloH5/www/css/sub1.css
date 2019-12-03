@@ -1,0 +1,274 @@
+.Ranking-mainbody{
+	background: #F0F0F0;
+}
+.header{
+	background:linear-gradient(90deg,rgba(255,138,0,1) 0%,rgba(255,104,10,1) 100%);
+	color: #FFFFFF;
+}
+.header h1{rangk-select
+	color: #FFFFFF;
+}
+.mui-bar .mydata{
+	/*line-height: 12px;*/
+	color: #FFFFFF;
+	font-size: 12px;
+}
+.mydata span{
+	color: #FFFFFF;
+	font-size: 12px;
+	line-height: 24px;
+}
+.mui-content{
+	background: #F0F0F0;
+}
+.indextopbg{
+	position: relative;
+}
+.indextopbg::after{
+    position: fixed;
+    content: '';
+    width: 100%;
+    top: 44px;
+    left: 0;
+    height: 170px;
+    z-index: 0;
+    background:linear-gradient(90deg,rgba(255,138,0,1) 0%,rgba(255,104,10,1) 100%);
+}
+.main-marage{
+	z-index: 1;
+    height: 100%;
+    margin: 0 8px;
+    position: relative;
+    background: #F0F0F0;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+.card-main {
+    height: 285.5px;
+    background: #ffffff;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+.user-item {
+    height: 170px;
+    display: flex;
+}
+.user-img {
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.user-sigin {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.user-bg {
+    width: 102.5px;
+    height: 102.5px;
+    border-radius: 50%;
+    background: #F56D23;
+    text-align: center;
+    line-height: 102.5px;
+    color: #FFFFFF;
+}
+.user-iphone {
+    height: 30px;
+    line-height: 30px;
+    color: #333333;
+    font-size: 18px;
+}
+.user-company {
+    height: 30px;
+    line-height: 30px;
+    color: #333333;
+    font-size: 16px;
+}
+.user-business {
+    height: 40px;
+    line-height: 40px;
+    color: #F56D23;
+    font-size: 13px;
+    width: 100px;
+    text-align: center;
+    border: 1px solid #F56D23;
+    border-radius: 10px;
+}
+.data-list {
+    display: flex;
+}
+.data-item {
+    flex: 1;
+    text-align: center;
+}
+.data-name {
+    font-size: 14px;
+    height: 40px;
+    line-height: 40px;
+    color: #333333;
+}
+.title-data {
+    font-size:40px;
+    height: 56px;
+    line-height: 56px;
+    color: #333333;
+}
+.Ranking-main {
+    margin-top: 12px;
+    /*height: 400px;*/
+    background: #ffffff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 10px;
+}
+.rangk-header{
+	box-sizing: border-box;
+    padding-top: 5px;
+}
+.rangk-header-item{
+	height: 40px;
+	line-height: 40px;
+	display: flex;
+}
+.rangk-title{
+	flex: 1;
+	color: #333333;
+	font-size: 24px;
+	font-weight: bold;
+}
+/*.rangk-select{
+	width: 80px;
+	text-align: center;
+	color: #F56D23;
+	font-size: 12px;
+}*/
+.rangk-select-name{
+	height: 50px;
+	color: #FF5100;
+	font-size: 14px;
+	font-weight:500;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.rangk-select-name .start_time{
+	height: 24px;
+	line-height: 24px;
+	text-align: center;
+	border: 1px solid #666666;
+	box-sizing: border-box;
+	padding: 0px 8px;
+}
+.rangk-select-name .end_time{
+	height: 24px;
+	line-height: 24px;
+	text-align: center;
+	border: 1px solid #666666;
+	box-sizing: border-box;
+	padding: 0px 8px;
+}
+.rangk-select-name .ranking_type{
+	height: 24px;
+	line-height: 24px;
+	text-align: center;
+	border: 1px solid #666666;
+	box-sizing: border-box;
+	padding: 0px 8px;
+	display: flex;
+	align-items: center;
+}
+.rangk-select-name .ranking_type select{
+	height: 20px !important;
+	margin: 0;
+	padding: 0;
+	border: none !important;
+	text-align: center;
+}
+#showdata{
+	display: flex;
+}
+#showdata>div{
+	color:#666666;
+	font-size: 12px;
+	
+}
+.Rankingunitscompany{
+	flex: 1;
+}
+.Rankingnamecompany{
+	flex: 2;
+	text-align: center;
+}
+.Rankingdatacompany{
+	flex: 1;
+	text-align: center;
+}
+.rangkingtab{
+	display: flex;
+	justify-content: space-around;	
+}
+.Serialnum{
+	flex: 1;
+	color: #666666;
+	font-size: 12px;
+}
+.Rankingname{
+	flex: 2;
+	text-align: center;
+	color: #666666;
+	font-size: 12px;
+}
+.Rankingdata{
+	flex: 1;
+	text-align: center;
+	color: #F56D23;
+	font-size: 12px;
+}
+#elementlist li:nth-child(1)>.Serialnum
+{
+	background-image: url(../image/icon-gold.png);
+	background-repeat: no-repeat;
+	background-position: 0px center;
+	background-size: 14px 22px;
+	/*font-size: 18px;*/
+}
+#elementlist li:nth-child(1)>.Rankingname
+{
+	font-size: 18px;
+}
+#elementlist li:nth-child(1)>.Rankingdata
+{
+	font-size: 18px;
+}
+#elementlist li:nth-child(2)>.Serialnum
+{
+	background-image: url(../image/icon-silver.png);
+	background-repeat: no-repeat;
+	background-position: 0 center;
+	background-size: 14px 22px;
+}
+#elementlist li:nth-child(2)>.Rankingname
+{
+	font-size: 18px;
+}
+#elementlist li:nth-child(2)>.Rankingdata
+{
+	font-size: 18px;
+}
+#elementlist li:nth-child(3)>.Serialnum
+{
+	background-image: url(../image/icon-bronze.png);
+	background-repeat: no-repeat;
+	background-position: 0 center;
+	background-size: 14px 22px;
+}
+#elementlist li:nth-child(3)>.Rankingname
+{
+	font-size: 18px;
+}
+#elementlist li:nth-child(3)>.Rankingdata
+{
+	font-size: 18px;
+}

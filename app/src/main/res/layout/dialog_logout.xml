@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#e5e5e5"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_color_white"
+        android:gravity="center"
+        android:padding="13dp"
+        android:text="确定退出登录吗？"
+        android:textColor="@color/app_color_gary"
+        android:textSize="13dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_line_size"
+        android:background="@color/app_line_color" />
+
+    <TextView
+        android:id="@+id/tv_dialog_logout_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/app_border_none_selector"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="退出登录"
+        android:textColor="#F56D23"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/tv_dialog_logout_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/app_border_none_selector"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="取消"
+        android:textColor="@color/app_color_black"
+        android:textSize="15dp" />
+</LinearLayout>

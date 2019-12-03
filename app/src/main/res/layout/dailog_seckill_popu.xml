@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="400dp"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_border_inform">
+
+        <ImageView
+            android:id="@+id/iv_discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="25dp"
+            android:src="@mipmap/iv_discount_one" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="130dp"
+            android:layout_toRightOf="@id/iv_discount"
+            android:src="@mipmap/iv_discount_two" />
+
+        <TextView
+            android:id="@+id/tv_inform"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_discount"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="开启通知权限"
+            android:textColor="#7466FE"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/tv_inform_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_inform"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="由于您的手机没有开启推送权限"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_inform_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_inform_one"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="因此无法设置提醒"
+            android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/btn_set"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_inform_two"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/bg_start_inform"
+            android:text="立即开启"
+            android:textColor="#FFFFFF"
+            android:textSize="18dp" />
+
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_set"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="以后再说"
+            android:textColor="#6E6969"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tv_cancel"
+            android:layout_alignLeft="@id/tv_cancel"
+            android:layout_alignRight="@id/tv_cancel"
+
+            android:background="#6E6969"
+            android:gravity="center" />
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/iv_close_inform" />
+</LinearLayout>

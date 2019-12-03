@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/ll_cart_order"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:background="@drawable/cart_tool_bg"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_cart_title"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:text="购物车"
+                android:layout_marginTop="@dimen/size_36dp"
+                android:textColor="@color/white"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/tv_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="删除"
+                android:layout_marginTop="@dimen/size_40dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_15dp" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_below="@+id/rl"
+            android:id="@+id/fl"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/size_13dp"
+            android:layout_height="wrap_content">
+
+            <com.puyue.www.qiaoge.helper.AlwaysMarqueeTextViewHelper
+                android:id="@+id/marqueeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/bg_cart_bar"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textColor="#FFF6551A"
+                android:textSize="@dimen/size_13dp" />
+
+            <ImageView
+                android:id="@+id/iv_clear"
+                android:layout_width="18dp"
+                android:layout_marginRight="12dp"
+                android:layout_height="18dp"
+                android:layout_gravity="right"
+                android:src="@mipmap/qg_cart_close" />
+        </FrameLayout>
+
+    </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginTop="130dp"
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,105 @@
+<resources>
+    <string name="app_name">翘歌</string>
+
+    <string name="header_scrolling_behavior">com.puyue.www.qiaoge.helper.HeaderScrollingBehavior</string>
+    <string name="header_float_behavior">com.puyue.www.qiaoge.helper.HeaderFloatBehavior</string>
+
+    <string name="home_search_address">杭州</string>
+    <string name="homePreferential">秒杀特惠</string>
+    <string name="homeToMake">精品冻品,秒到就是赚到</string>
+    <string name="textMore">更多</string>
+    <string name="homeABargainDeals">超值团购</string>
+    <string name="textEnglish">Super&#160;&#160;Value&#160;&#160;group&#160;&#160; purchase</string>
+    <string name="homeSpecially">特别精选</string>
+    <string name="homeEnglishSpecially">Specially&#160;&#160;Selected</string>
+    <string name="text_order">我的订单</string>
+    <string name="textPayment">待付款</string>
+    <string name="textGoods">待发货</string>
+    <string name="textForTheGoods">待收货</string>
+    <string name="textEvaluate">待评价</string>
+    <string name="textReturn">退货</string>
+    <string name="textTheWallet">钱包</string>
+    <string name="textCoupons">优惠券</string>
+    <string name="textMyCollection">我的收藏</string>
+    <string name="textSetting">设置</string>
+    <string name="textManagement">子账号管理</string>
+    <string name="textAddress">我的地址</string>
+    <string name="textCallService">联系客服</string>
+    <string name="textFeedBack">意见反馈</string>
+    <string name="textVersion">版本</string>
+    <string name="mineVip">会员中心</string>
+    <string name="mineIntegral">我的积分</string>
+
+
+    <string name="noCoupons">您还没有优惠券哦~</string>
+    <string name="noUseCoupons">不可使用优惠券</string>
+    <string name="textOverdue">已过期</string>
+    <string name="textUser">已使用</string>
+    <string name="MyWallet">我的钱包</string>
+    <string name="MyAccount">余额充值</string>
+    <string name="textDetail">明细</string>
+    <string name="myBalance">我的余额（元）</string>
+    <string name="withdrawal">充值提现</string>
+    <string name="textWeChat">微信</string>
+    <string name="textWeChatPay">微信支付</string>
+    <string name="rules">充值规则</string>
+    <string name="otherAmount">其他金额</string>
+    <string name="textAliPay">支付宝</string>
+    <string name="textDetailed">我的账单</string>
+    <string name="noData">暂无数据</string>
+    <string name="allDetailed">全部明细</string>
+    <string name="textScreen">筛选</string>
+    <string name="textCancel">取消</string>
+    <string name="storeName">店&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;名:</string>
+    <string name="chooseCoupons">选择优惠券</string>
+    <string name="firmOrder">确认订单</string>
+    <string name="commodityAmount">商品金额</string>
+    <string name="distributionFee">配送费:</string>
+    <string name="vipSubtraction">会员满减</string>
+    <string name="vipSubtractionActivity">满减活动</string>
+    <string name="message">买家留言</string>
+    <string name="goPay">去支付</string>
+    <string name="choicePay">选择支付方式</string>
+    <string name="balance">余额</string>
+    <string name="editTextHint">选填：填写内容已和卖家协商确认</string>
+    <string name="input_commodity">请输入搜索的商品名</string>
+    <string name="tellMine">跟我们反馈</string>
+    <string name="inputTellMine">感谢你使用翘歌烧烤APP，使用过程中有任何意见或建议请反馈给我们。</string>
+    <string name="tvBalance">余额</string>
+    <string name="myCommission">我的佣金</string>
+    <string name="tvLanding">登录</string>
+    <string name="inputPhone">手机号码</string>
+    <string name="inputPsd">密码</string>
+    <string name="inputPhoneNum">请输入手机号</string>
+    <string name="inputPhoneCode">请输入验证码</string>
+    <string name="registerRead">我已阅读并同意《翘歌用户注册协议》</string>
+    <string name="inputPsdWord">请输入密码</string>
+    <string name="againInputPsd">确认密码</string>
+    <string name="inputCode">请输入授权码（选填）</string>
+    <string name="seachTitle">搜索</string>
+    <string name="groupTitle">团购特惠</string>
+    <string name="inputCommodityName">请输入商品名称</string>
+    <string name="mineIntegralDetailed">积分明细</string>
+    <string name="newOrderPhone">订单编号：</string>
+    <string name="newOrderTime">下单时间：</string>
+    <string name="newOrderPay">支付方式：</string>
+    <string name="newOrderRemarks">订单备注：</string>
+    <string name="newOrderReason">退款原因：</string>
+    <string name="watching">大家都在看</string>
+    <string name="commodityDetails">商品详情</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <!--<item name="position" type="id">false</item>-->
+    <item name="position" type="id"/>
+    <string name="no_any">noany</string>
+
+    <string name="viewfinderview_status_text1">将二维码/条码放入取景框内</string>
+    <string name="viewfinderview_status_text2">即可自动扫描</string>
+    <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
+
+
+    <string name="button_ok">OK</string>
+</resources>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/size_15dp"
+    android:layout_marginLeft="@dimen/size_15dp"
+    android:layout_marginRight="@dimen/size_15dp"
+    android:orientation="vertical">
+
+
+
+
+
+
+
+
+    <LinearLayout
+        android:id="@+id/LinearLayoutOne"
+        android:background="@drawable/item_bg_chose"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="bottom">
+                <ImageView
+                    android:id="@+id/moneyBag"
+                    android:src="@mipmap/ic_money_bag_yes"
+                    android:layout_width="21dp"
+                    android:layout_height="27dp"
+                    />
+                <TextView
+
+                    android:id="@+id/couponsTitle"
+                    android:text="daff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/app_black"
+                    android:textSize="@dimen/size_15dp"
+                    android:layout_marginLeft="10dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:text="daff"
+                android:id="@+id/couponsCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_black"
+                android:textSize="@dimen/size_17dp"
+                android:layout_marginLeft="31dp"/>
+            <TextView
+                android:text="时间"
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_AAA8AB"
+                android:textSize="@dimen/size_12dp"
+                android:layout_marginLeft="31dp"/>
+            <LinearLayout
+                android:id="@+id/LinearLayoutView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/untime">
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/app_my_coupons"
+                    android:layerType="software"></View>
+            </LinearLayout>
+
+            <TextView
+
+                android:text="备注"
+                android:id="@+id/note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_5dp"
+                android:textColor="@color/color_979797"
+                android:textSize="@dimen/size_12dp"
+                android:layout_marginLeft="31dp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/LinearLayoutCoupon"
+            android:background="@mipmap/coupons_yes"
+            >
+
+
+          <RelativeLayout
+              android:gravity="center"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+              <TextView
+
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                  android:text="¥"
+                  android:paddingBottom="@dimen/size_20dp"
+
+                 android:id="@+id/textView"
+                  android:layout_marginLeft="@dimen/size_9dp"
+                  android:layout_gravity="bottom"
+                  android:textColor="@color/white"
+                  android:textSize="@dimen/size_20dp" />
+
+
+              <TextView
+                  android:layout_centerHorizontal="true"
+                    android:layout_toRightOf="@+id/textView"
+                  android:layout_centerVertical="true"
+                  android:text="12"
+                  android:id="@+id/priceNum"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="@dimen/dp_4"
+                  android:layout_marginRight="@dimen/dp_4"
+                  android:textColor="@color/white"
+                  android:textSize="@dimen/size_45dp" />
+              <ImageView
+                  android:layout_centerHorizontal="true"
+                  android:layout_centerVertical="true"
+                  android:id="@+id/imagestate"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:src="@mipmap/ic_overdue" />
+          </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+    <ImageView
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_onclick_count" />
+</LinearLayout>

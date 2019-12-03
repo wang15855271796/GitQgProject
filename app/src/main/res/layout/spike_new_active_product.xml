@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="1dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginRight="1dp"
+    android:background="@drawable/app_item_shadow"
+    android:orientation="vertical"
+    android:paddingTop="10dp">
+
+    <!--130dp 固定 之前:wrap_content-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_20dp"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_10">
+
+        <FrameLayout
+            android:id="@+id/iv_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/iv_item_spike_img"
+                android:layout_width="105dp"
+                android:layout_height="105dp"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginRight="5dp"
+                android:scaleType="fitXY"
+               />
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/iv_sold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginRight="5dp"
+                android:scaleType="fitXY"
+             />
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:id="@+id/tv_bg"
+                android:layout_width="105dp"
+                android:layout_height="105dp"
+                android:background="@color/app_black"
+                android:visibility="gone" />
+        </FrameLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_5dp"
+            android:layout_marginRight="@dimen/dp_10"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_item_spike_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/size_15dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="逊谈起降价时逊谈起降价时逊谈起降价时逊谈起降价时"
+                    android:textColor="@color/app_black"
+                    android:textSize="13dp" />
+
+                <TextView
+                    android:id="@+id/tv_item_spike_specification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_10dp"
+                    android:text="规格"
+                    android:textColor="@color/color_C1C1C1"
+                    android:textSize="10dp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/line">
+
+                <RelativeLayout
+                    android:id="@+id/lin"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_25dp"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_item_spike_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_FF703C"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_item_spike_old_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/tv_item_spike_price"
+                        android:layout_gravity="bottom"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@id/tv_item_spike_price"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_747474"
+                        android:textSize="10dp" />
+
+
+                </RelativeLayout>
+
+
+                <!--  <RelativeLayout
+                      android:id="@+id/rl"
+                      android:layout_marginTop="1dp"
+                      android:layout_marginBottom="1dp"
+                      android:layout_gravity="bottom"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@id/lin">-->
+
+                <com.puyue.www.qiaoge.view.SnapUpCountDownTimerView
+                    android:id="@+id/view_item_spike_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/size_10dp"
+                    android:visibility="gone" />
+                <!--    </RelativeLayout>-->
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lin"
+                    android:layout_centerVertical="true">
+
+
+                    <ProgressBar
+                        android:id="@+id/pb_item_spike"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="100dp"
+                        android:layout_height="10dp"
+                        android:layout_centerVertical="true"
+                        android:progressDrawable="@drawable/spike_progress" />
+
+                    <TextView
+
+                        android:id="@+id/tv_item_spike_sales"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/pb_item_spike"
+                        android:gravity="right"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_9C9C9C"
+                        android:textSize="@dimen/size_8dp" />
+
+                    <ImageView
+                        android:id="@+id/addCar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="@dimen/size_5dp"
+                        android:src="@mipmap/ic_add_buy" />
+
+                    <ImageView
+                        android:id="@+id/sold_out"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="5dp"
+                        android:src="@mipmap/iv_sold_out"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/now_add_good"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="5dp"
+                        android:src="@mipmap/now_add_amount"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/imageOver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/size_20dp"
+                android:src="@mipmap/ic_ovre"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

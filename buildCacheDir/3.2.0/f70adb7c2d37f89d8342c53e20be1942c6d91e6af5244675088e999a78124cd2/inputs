@@ -1,0 +1,14 @@
+COMMAND=PREDEX_LIBRARY_TO_DEX_ARCHIVE
+FILE.path=C:\Users\Administrator\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-28.0.0.aar\765a8a61b8e6adc91a07848328b24b26\jars\classes.jar
+FILE.hash=fd925c5d2d0d96766660a79595472ee681a04affc487bc87af9b3e42a9c051f4
+DX_VERSION=1.16
+JUMBO_MODE=true
+OPTIMIZE=true
+DEXER_TOOL=D8
+CACHE_KEY_VERSION=4
+MIN_SDK_VERSION=16
+IS_DEBUGGABLE=true
+EXTRA_DEPENDENCIES[0].path=C:\Users\Administrator\AppData\Local\Android\Sdk\platforms\android-28\android.jar
+EXTRA_DEPENDENCIES[0].hash=d20853d289a5161d9cf1c1268d7923076487d4fa68c970b0733e2d5a0ccfc3c5
+EXTRA_DEPENDENCIES[1].path=C:\Users\Administrator\.gradle\caches\transforms-1\files-1.1\support-compat-28.0.0.aar\fdc818a131989672cfc91010e77ff8af\jars\classes.jar
+EXTRA_DEPENDENCIES[1].hash=b1fe91268aa9d0e5c4a6d5ddeb1e39dabcd2d6627ccde1f530a7b799e9b4bb82

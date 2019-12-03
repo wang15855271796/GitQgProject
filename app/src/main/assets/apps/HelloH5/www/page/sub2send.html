@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style type="text/css">
+		#add{
+			border: none;
+			font-size: 17px;
+		}
+		.mui-table-view .mui-media-object {
+		    line-height: normal;
+		    text-align: center;
+		    max-width: 120px;
+		    min-width: 90px;
+		    height: 50px;
+		    background: #FF8625;
+		    color: #FFFFFF;
+		    /*margin-right:0px !important;*/
+		}
+		.mlist-name{
+			height: 25px;
+			line-height: 25px;
+			display: flex;
+			justify-content: space-between;
+		}
+		.mlist-name .textlf{
+			color: #333333;
+			font-size: 16px;
+		}
+		.mlist-name .textrg{
+			color: #F56D23;
+			width: 30px;
+			font-size: 10px;
+		}
+		.mlist-name .textrg input[type=radio]{
+		    display: inline-block;
+		    width: 28px;
+		    height: 25px;
+		    border: 0;
+		    outline: 0!important;
+		    background-color: transparent;
+		    -webkit-appearance: none;
+		}
+		.mlist-name .textrg input[type=radio]:before{
+			content: '\e411';
+		    font-family: Muiicons;
+		    font-size: 24px;
+		    font-weight: 400;
+		    line-height: 1;
+		    text-decoration: none;
+		    color: #aaa;
+		    border-radius: 0;
+		    background: 0 0;
+		    -webkit-font-smoothing: antialiased;
+		}
+		.mlist-name .textrg>input[type=radio]:checked:before {
+			font-weight: 400;
+		    content: '\e441';
+		    color: #007aff;
+		}
+		.mcoupon-item{
+			height: 25px;
+			line-height: 25px;
+			display: flex;
+			justify-content: space-between;
+			color: #666666;
+			font-size: 12px;
+		}
+		.usedamount{
+			height: 30px;
+			line-height: 30px;
+		}
+		.endamount{
+			height: 50px;
+			line-height: 50px;
+		}
+		.amountdetails{
+			height: 20px;
+			line-height: 20px;
+			font-size: 10px;
+		}
+		</style>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">优惠券列表</h1>
+		    <button type="button" class="mui-btn mui-btn-outlined mui-pull-right" id="add">发放</button>		     
+		</header>
+		<div class="mui-content">
+		    <ul class="mui-table-view">
+				<!--<li class="mui-table-view-cell">
+					<div class="mui-media-object mui-pull-left">
+		        		<div class="endamount">100元</div>
+		        		<div class="amountdetails">点击查看详情</div>
+		        	</div>
+		        	<div class="mui-media-body">
+		        		<div class="mlist-name">
+		               		<span class="textlf">100元无门槛消费券  </span>
+		               		<span class="textrg">
+		               			<input name="radio" type="radio">
+		               		</span>
+		               	</div>
+		        		<p class='mui-ellipsis mcoupon-item'>
+		        			<span class="textlf">总量：</span>
+		        			<span class="textc">发放量：</span>
+		        			<span class="textrg">剩余量：</span>
+		        		</p>
+		     
+		        	</div>
+				</li>	-->			
+			</ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init();
+			window.onload=function(){
+				mui.plusReady(function(){
+					var id=plus.webview.currentWebview().userId;
+					var url=urls+service_url.querySaleSelfGiftList_url;
+					var dataForm={};
+					dataForm.token=app.getState().token;
+					dataForm.state=1;
+					ajaxmethod(url,'POST',dataForm,function(res){
+						var list=res.data;
+						var html='';
+						for (var i in list) {
+							html+='<li class="mui-table-view-cell" poolNo="'+ list[i].poolNo+'">';
+								html+='<div class="mui-media-object mui-pull-left">';
+									html+='<div class="endamount">'+list[i].amount+'元</div>';
+									//html+='<div class="amountdetails">点击查看详情</div>';
+								html+='</div>';
+								html+='<div class="mui-media-body">';
+									html+='<div class="mlist-name">';
+										html+='<span class="textlf">'+list[i].giftName+'</span>';
+										html+='<span class="textrg"><input name="radio" type="radio"></span>';
+									html+='</div>';
+									html+='<p class="mui-ellipsis mcoupon-item">';
+										html+='<span class="textlf">总量：'+list[i].totalNum+'</span>';
+										html+='<span class="textc">发放量：'+list[i].usedNum+'</span>';
+										html+='<span class="textrg">剩余量：'+list[i].availNum+'</span>';
+									html+='</p>';
+								html+='</div>';
+							html+='</li>';
+						}
+						document.querySelector('.mui-table-view').innerHTML=html;					
+					})
+					document.getElementById('add').addEventListener('tap',function(){
+						var btnArray = ['取消', '确认'];
+						mui.confirm('是否确认发放？', '确认', btnArray, function(e) {
+							if (e.index == 1) {
+								var ischecked=document.querySelector("input[name='radio']:checked");
+								//console.log(ischecked.parentNode.parentNode.parentNode.parentNode.getAttribute('poolNo'));
+								if(ischecked){
+									//发放优惠卷
+									var url=urls+service_url.saleSendGiftToUser_url;
+									var dataForm={};
+									dataForm.token=app.getState().token;
+									dataForm.userId=id;
+									dataForm.poolNo=ischecked.parentNode.parentNode.parentNode.parentNode.getAttribute('poolNo');
+									dataForm.sendNum=1;
+									ajaxmethod(url,'POST',dataForm,function(res){
+										if(res.code==1){
+											mui.toast('发放成功');
+										}else{
+											mui.toast(res.message);
+										}
+									})
+								}
+							} else {
+								return
+							}
+						})
+						
+						
+					})
+				})
+			}
+			
+		</script>
+	</body>
+
+</html>

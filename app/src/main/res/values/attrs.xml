@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SuperTextView">
+        <attr name="corner" format="dimension" />
+        <attr name="left_top_corner" format="boolean" />
+        <attr name="right_top_corner" format="boolean" />
+        <attr name="left_bottom_corner" format="boolean" />
+        <attr name="right_bottom_corner" format="boolean" />
+        <attr name="solid" format="reference|color" />
+        <attr name="stroke_width" format="dimension" />
+        <attr name="stroke_color" format="reference|color" />
+        <attr name="state_drawable" format="reference" />
+        <attr name="state_drawable_width" format="dimension" />
+        <attr name="state_drawable_height" format="dimension" />
+        <attr name="state_drawable_padding_left" format="dimension" />
+        <attr name="state_drawable_padding_top" format="dimension" />
+        <attr name="isShowState" format="boolean" />
+        <attr name="text_stroke" format="boolean" />
+        <attr name="text_stroke_color" format="reference|color" />
+        <attr name="text_stroke_width" format="dimension" />
+        <attr name="text_fill_color" format="reference|color" />
+        <attr name="autoAdjust" format="boolean" />
+        <attr name="state_drawable_mode" format="enum">
+            <enum name="left" value="0" />
+            <enum name="top" value="1" />
+            <enum name="right" value="2" />
+            <enum name="bottom" value="3" />
+            <enum name="center" value="4" />
+            <enum name="fill" value="5" />
+            <enum name="leftTop" value="6" />
+            <enum name="rightTop" value="7" />
+            <enum name="leftBottom" value="8" />
+            <enum name="rightBottom" value="9" />
+        </attr>
+        <attr name="shaderStartColor" format="reference|color" />
+        <attr name="shaderEndColor" format="reference|color" />
+        <attr name="shaderMode" format="enum">
+            <enum name="topToBottom" value="0" />
+            <enum name="bottomToTop" value="1" />
+            <enum name="leftTopRight" value="2" />
+            <enum name="rightToLeft" value="3" />
+        </attr>
+        <attr name="shaderEnable" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="TagFlowLayout">
+        <!--最大选择数量-->
+        <attr name="max_select" format="integer"/>
+        <!--最大可显示行数-->
+        <attr name="limit_line_count" format="integer"/>
+        <!--是否设置多行隐藏-->
+        <attr name="is_limit" format="boolean"/>
+        <attr name="tag_gravity">
+            <enum name="left" value="-1"/>
+            <enum name="center" value="0"/>
+            <enum name="right" value="1"/>
+        </attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="Banner">
+        <attr name="delay_time" format="integer" />
+        <attr name="scroll_time" format="integer" />
+        <attr name="is_auto_play" format="boolean" />
+        <attr name="title_background" format="color|reference" />
+        <attr name="title_textcolor" format="color" />
+        <attr name="title_textsize" format="dimension" />
+        <attr name="title_height" format="dimension" />
+        <attr name="indicator_width" format="dimension" />
+        <attr name="indicator_height" format="dimension" />
+        <attr name="indicator_margin" format="dimension" />
+        <attr name="indicator_drawable_selected" format="reference" />
+        <attr name="indicator_drawable_unselected" format="reference" />
+        <attr name="banner_layout" format="reference"/>
+        <attr name="banner_default_image" format="reference"/>
+        <attr name="image_scale_type" format="enum">
+            <enum name="center" value="0" />
+            <enum name="center_crop" value="1" />
+            <enum name="center_inside" value="2" />
+            <enum name="fit_center" value="3" />
+            <enum name="fit_end" value="4" />
+            <enum name="fit_start" value="5" />
+            <enum name="fit_xy" value="6" />
+            <enum name="matrix" value="7" />
+        </attr>
+        <!--<attr name="indicator_animator" format="reference" />-->
+        <!--<attr name="indicator_animator_reverse" format="reference" />-->
+    </declare-styleable>
+
+    <declare-styleable name="MarqueeViewStyle">
+        <attr name="mvInterval" format="integer|reference" />
+        <attr name="mvAnimDuration" format="integer|reference" />
+        <attr name="mvTextSize" format="dimension|reference" />
+        <attr name="mvTextColor" format="color|reference" />
+        <attr name="mvGravity">
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="WarpLinearLayout">
+        <attr name="grivate" format="enum"><!--对齐方式 !-->
+            <enum name="right" value="0"></enum>
+            <enum name="left" value="1"></enum>
+            <enum name="center" value="2"></enum>
+        </attr>
+        <attr name="horizontal_Space" format="dimension"></attr>
+        <attr name="vertical_Space" format="dimension"></attr>
+        <attr name="isFull" format="boolean"></attr>
+    </declare-styleable>
+    <!--侧滑删除-->
+    <declare-styleable name="EasySwipeMenuLayout">
+        <attr name="leftMenuView" format="reference" />
+        <attr name="rightMenuView" format="reference" />
+        <attr name="contentView" format="reference" />
+        <attr name="canRightSwipe" format="boolean" />
+        <attr name="canLeftSwipe" format="boolean" />
+        <attr name="fraction" format="float" />
+    </declare-styleable>
+
+
+
+
+    <!--嵌套滑动的拖拽面板-->
+    <declare-styleable name="SlideNestedPanelLayout">
+        <attr name="panelHeight" format="dimension" /><!--面板高度-->
+        <attr name="parallaxOffset" format="dimension" /><!--视觉差比例-->
+        <attr name="fadeColor" format="color" /><!--渐变颜色-->
+        <attr name="flingVelocity" format="integer" /><!--滑动速度-->
+        <attr name="scrollView" format="reference" /><!--嵌套滑动控件-->
+        <attr name="overlay" format="boolean" /><!--是否覆盖-->
+        <attr name="clipPanel" format="boolean" /><!--裁剪面板-->
+        <attr name="anchorPoint" format="float" /><!--拖拽描点-->
+        <attr name="interpolator" format="reference" /><!--动画插值器-->
+        <attr name="initialState" format="enum" ><!--初始化状态-->
+            <enum name="expanded" value="0" />
+            <enum name="collapsed" value="1" />
+            <enum name="anchored" value="2" />
+            <enum name="hidden" value="3" />
+        </attr>
+    </declare-styleable>
+
+
+
+    <attr name="header_view" format="reference"/>
+    <attr name="target_view" format="reference"/>
+    <attr name="header_init_offset" format="dimension"/>
+    <attr name="target_init_offset" format="dimension"/>
+    <declare-styleable name="EventDispatchPlanLayout">
+        <attr name="header_view"/>
+        <attr name="target_view"/>
+        <attr name="header_init_offset"/>
+        <attr name="target_init_offset"/>
+    </declare-styleable>
+
+    <declare-styleable name="NestingScrollPlanLayout">
+        <attr name="header_view"/>
+        <attr name="target_view"/>
+        <attr name="header_init_offset"/>
+        <attr name="target_init_offset"/>
+    </declare-styleable>
+
+
+
+
+
+    <!--星星控件属性-->
+    <declare-styleable name="StarBarView">
+        <!--设置星星间的间隔-->
+        <attr name="space_width" format="dimension" />
+        <!--星星间宽度-->
+        <attr name="star_width" format="dimension" />
+        <!--星星间高度-->
+        <attr name="star_height" format="dimension" />
+        <!--最大数量-->
+        <attr name="star_max" format="integer" />
+        <!--选中数量-->
+        <attr name="star_rating" format="float" />
+        <!--未选中图片-->
+        <attr name="star_hollow" format="reference" />
+        <!--选中图片-->
+        <attr name="star_solid" format="reference" />
+        <!--是否可以滑动改变选中数量-->
+        <attr name="star_isIndicator" format="boolean" />
+        <!--排列方向-->
+        <attr name="star_orientation" format="enum">
+            <enum name="vertical" value="1" />
+            <enum name="horizontal" value="0" />
+        </attr>
+    </declare-styleable>
+
+</resources>

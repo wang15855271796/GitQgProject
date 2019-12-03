@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+		<style type="text/css">
+			.header{
+				display: flex;
+				justify-content: space-around;
+			}
+			.mui-pull-left{
+				
+			}
+			.mui-input-clear{
+				flex: 1;
+			}
+			input[type=search]{
+				font-size: 14px;
+			}
+			.search_right{
+				line-height: 40px;
+				text-align: center;
+				margin-left: 10px;
+				color: #333333;
+				font-size: 14px;
+			}
+			.online-type{
+				border-radius: 50%;
+				background:#F56D23;
+				color: #FFFFFF;
+				width: 42px;
+				text-align: center;
+			}
+		</style>
+	<body>
+		<header class="mui-bar mui-bar-nav header">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <input type="search" placeholder="请输入客户姓名或账号" class="mui-input-clear whiteBg" autofocus="autofocus"/>
+		    <div class="search_right">搜索</div>
+		</header>
+		<div class="mui-content">
+		    <ul class="mui-table-view">
+				<!--<li class="mui-table-view-cell mui-media">
+			        <a href="javascript:;" class="mui-navigate-right">
+			        	<div class="mui-media-object mui-pull-left online-type">
+			        		线上
+			        	</div>
+			            <div class="mui-media-body">
+			                	幸福
+			                <p class='mui-ellipsis'>182 0347 1798 </p>
+			            </div>
+			        </a>
+			    </li>-->
+			</ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function(){
+				var self = plus.webview.currentWebview();
+				var num = self.availNum;//获得参数  发放最大数量
+				var id = self.Issue;   //礼物编号
+				var other=self.otherName;
+				//绑定事件
+				document.querySelector('.search_right').addEventListener('tap',function(){
+					//清空
+					var f=document.body.querySelector('.mui-table-view');
+					var childs=f.childNodes;
+					for(var i = childs.length - 1; i >= 0; i--) {
+	                  f.removeChild(childs[i]);
+	                }
+					var parameter=document.querySelector('.whiteBg').value;  //获取value值	
+					var url=urls+service_url.queryGiftBeSendUser_url;
+					var dataForm={};
+					dataForm.token=app.getState().token;
+					dataForm.nameOrPhone=parameter;
+					ajaxmethod(url,'POST',dataForm,function(res){
+						if(res.code==1){
+							var data=res.data;
+							var table = document.body.querySelector('.mui-table-view');
+							if(data.length>0){
+								for (var i=0;i<data.length;i++) {
+									var result="";
+									var li = document.createElement('li');
+									li.className = 'mui-table-view-cell mui-media';
+									li.setAttribute('userId',data[i].userId);
+									li.setAttribute('source',data[i].source);
+									li.setAttribute('ellipsis',data[i].phone);
+									result+='<a href="javascript:;" class="mui-navigate-right">';
+									result+='<div class="mui-media-object mui-pull-left online-type">';
+									result+=(data[i].source==1?'线上':'线下')+'</div>';
+									result+='<div class="mui-media-body">';
+									result+=data[i].userName;
+									result+='<p class="mui-ellipsis">'+ data[i].phone +'</p>';
+									result+='</div>';
+									result+='</a>';
+									//result+='</li>';
+									li.innerHTML=result;
+							        //下拉刷新，新纪录插到最前面；
+							        table.appendChild(li);
+									//table.insertBefore(li, table.firstChild); 
+								}
+							}else{
+								table.innerHTML=record;
+							}							
+						}else{
+							mui.toast(res.message) 
+						}						
+					})
+				})
+				
+				
+　　　　　　　　　　  
+				
+				//发放优惠卷 ，弹出弹窗
+				mui('ul.mui-table-view').on('tap','li',function(e){
+					var userid=this.getAttribute("userId");
+					var username=this.getAttribute('ellipsis');
+					var alerttext=username+other+'一张';
+					e.detail.gesture.preventDefault(); //修复iOS 8.x平台存在的bug，使用plus.nativeUI.prompt会造成输入法闪一下又没了
+						var btnArray = ['取消', '确认'];
+						mui.confirm(alerttext, '提     示', btnArray, function(e) {
+							if (e.index == 1) {
+								//info.innerText = '你刚确认MUI是个好框架';
+								var url=urls+service_url.saleSendGiftToUser_url;
+								var dataForm={};
+								dataForm.token=app.getState().token;
+								dataForm.sendNum=1;
+								dataForm.poolNo=id;
+								dataForm.userId=userid;
+								ajaxmethod(url,'POST',dataForm,function(res){
+									mui.toast(res.message,{ duration:'short', type:'div' });
+								})
+							} else {
+								//info.innerText = 'MUI没有得到你的认可，继续加油'
+							}
+						})
+				})
+			})
+			
+		</script>
+	</body>
+
+</html>

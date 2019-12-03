@@ -1,0 +1,16 @@
+COMMAND=PREDEX_LIBRARY_TO_DEX_ARCHIVE
+FILE.path=C:\Users\Administrator\.gradle\caches\transforms-1\files-1.1\loader-28.0.0.aar\a95de4b8c1f4257240a3d2637f2d21c6\jars\classes.jar
+FILE.hash=fa076e0debea7bd604a3d519bb58690d639093d547fad5fcf7cde096101a06f0
+DX_VERSION=1.16
+JUMBO_MODE=true
+OPTIMIZE=true
+DEXER_TOOL=D8
+CACHE_KEY_VERSION=4
+MIN_SDK_VERSION=16
+IS_DEBUGGABLE=false
+EXTRA_DEPENDENCIES[0].path=C:\Users\Administrator\AppData\Local\Android\Sdk\platforms\android-28\android.jar
+EXTRA_DEPENDENCIES[0].hash=d20853d289a5161d9cf1c1268d7923076487d4fa68c970b0733e2d5a0ccfc3c5
+EXTRA_DEPENDENCIES[1].path=C:\Users\Administrator\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.1.aar\c0a36c92b57c2a08592887974d80c0a2\jars\classes.jar
+EXTRA_DEPENDENCIES[1].hash=5f26c690cdaa59d73401bc69de74fe4ea19df74475664b745446b160ec82dd36
+EXTRA_DEPENDENCIES[2].path=C:\Users\Administrator\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.1.aar\0487d174553e5ad0701c0b427b9d3c78\jars\classes.jar
+EXTRA_DEPENDENCIES[2].hash=6d0770c01ef6acb7e306cc00400ff249fd943b3e35c3bdf4e24bd420e6f5dc49

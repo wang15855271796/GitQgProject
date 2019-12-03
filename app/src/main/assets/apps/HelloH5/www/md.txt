@@ -1,0 +1,12 @@
+login
+index
+	sub1
+	sub2   
+		customerInformation		客户信息详情
+				sub2send			发放优惠卷
+				Coupondetails 		优惠券明细
+				sub2remarks			点击备注
+	sub3
+		select_time		选择日期
+	sub4
+	

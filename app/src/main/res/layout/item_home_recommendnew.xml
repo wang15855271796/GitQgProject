@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_item_group"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+   <LinearLayout
+       android:layout_marginRight="@dimen/size_5dp"
+       android:layout_marginLeft="@dimen/size_8dp"
+       android:layout_marginTop="@dimen/size_5dp"
+       android:id="@+id/linearLayout"
+       android:orientation="vertical"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+       <ImageView
+           android:background="@drawable/app_item_home_photo"
+           android:layout_centerHorizontal="true"
+           android:id="@+id/iv_home_seckill_img"
+           android:layout_width="100dp"
+           android:layout_height="@dimen/size_100dp"
+           android:scaleType="fitXY" />
+
+       <RelativeLayout
+           android:layout_below="@+id/iv_home_seckill_img"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:paddingBottom="@dimen/size_10dp"
+           >
+           <TextView
+               android:id="@+id/tvTitle"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="@dimen/size_15dp"
+               android:ellipsize="end"
+               android:maxLines="1"
+               android:textColor="@color/app_black"
+               android:textSize="@dimen/size_9dp" />
+
+           <TextView
+               android:id="@+id/tvMonthlySale"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_below="@+id/tvTitle"
+               android:layout_marginTop="@dimen/size_5dp"
+               android:textColor="@color/color_FF703C"
+               android:textSize="@dimen/size_8dp" />
+
+
+           <RelativeLayout
+               android:id="@+id/relativeLayoutShoppingCart"
+               android:layout_below="@+id/tvMonthlySale"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+               <TextView
+
+                   android:ellipsize="end"
+                   android:maxLines="1"
+                   android:id="@+id/tvHomePrice"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginTop="@dimen/size_5dp"
+                   android:textColor="@color/app_black"
+                   android:textSize="@dimen/size_14dp"
+                   android:textStyle="bold" />
+
+               <TextView
+
+                   android:id="@+id/tvOriginalPrice"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_toRightOf="@+id/tvHomePrice"
+                    android:layout_marginTop="@dimen/dp_10"
+                   android:textColor="@color/color_666666"
+                   android:textSize="9dp" />
+
+               <ImageView
+                   android:layout_alignParentRight="true"
+                   android:id="@+id/shoppingCart"
+                   android:layout_width="@dimen/size_45dp"
+                   android:layout_height="wrap_content"
+                   android:layout_alignBottom="@+id/tvHomePrice"
+                   android:src="@mipmap/icon_miaoshagouwuche" />
+           </RelativeLayout>
+
+       </RelativeLayout>
+   </LinearLayout>
+
+
+    <View
+        android:layout_below="@+id/linearLayout"
+        android:background="@color/app_line_gray"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"/>
+</RelativeLayout>

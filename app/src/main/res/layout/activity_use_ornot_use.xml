@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_color_white"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/size_20dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/app_border_bottom_bg"
+        app:navigationIcon="@mipmap/ic_back_arrow">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/noUseCoupons"
+            android:textColor="#232131"
+            android:textSize="18dp" />
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorHeight="1dp"
+        app:tabGravity="center"
+        app:tabIndicatorColor="@color/app_black"
+        app:tabSelectedTextColor="@color/app_black"
+        app:tabTextAppearance="@style/TabText"
+        app:tabTextColor="@color/app_black" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_line_size"
+        android:background="@color/app_line_color" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="@dimen/dp_10"
+    android:layout_marginLeft="@dimen/size_12dp"
+    android:background="@drawable/shape_grey_button"
+    tools:text="搜索历史"
+    android:padding="6dp"
+    android:singleLine="true"
+    android:textColor="#666666"
+    android:textSize="13sp">
+
+</TextView>

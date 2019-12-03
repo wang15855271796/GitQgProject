@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_30dp"
+            android:background="@drawable/app_border_bottom_bg">
+
+            <ImageView
+                android:id="@+id/iv_evaluate_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:padding="10dp"
+                android:src="@mipmap/ic_back_arrow" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:text="查看评价"
+                android:textColor="#232131"
+                android:textSize="18dp" />
+
+
+            <TextView
+                android:id="@+id/btn_order_evaluate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="20dp"
+                android:gravity="right"
+                android:text="提交"
+                android:textSize="18dp"
+
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_driver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_10dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:id="@+id/tv_driver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:layout_marginTop="@dimen/size_15dp"
+                    android:text="司机评价"
+                    android:textColor="#ff000000"
+                    android:textSize="@dimen/size_14dp" />
+
+                <com.puyue.www.qiaoge.view.StarBarView
+                    android:id="@+id/sbv_star_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="@dimen/size_20dp"
+                    android:layout_marginTop="@dimen/size_15dp"
+                    android:layout_toRightOf="@id/tv_driver"
+                    android:clickable="false"
+                    android:visibility="gone"
+                    app:space_width="10dp"
+                    app:star_height="18dp"
+                    app:star_hollow="@mipmap/ic_wu_star"
+                    app:star_isIndicator="false"
+                    app:star_max="5"
+                    app:star_orientation="horizontal"
+                    app:star_rating="5"
+                    app:star_solid="@mipmap/ic_star"
+                    app:star_width="18dp" />
+
+                <TextView
+                    android:id="@+id/tv_evaluate_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/size_15dp"
+                    android:layout_marginRight="@dimen/size_15dp"
+                    android:textColor="#ff999999"
+                    android:textSize="@dimen/size_12dp" />
+
+                <TextView
+                    android:id="@+id/tv_driver_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_driver"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:layout_marginTop="@dimen/size_20dp"
+                    android:text=""
+                    android:textColor="#ff000000"
+                    android:textSize="@dimen/size_12dp" />
+
+                <TextView
+                    android:id="@+id/tv_send_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/sbv_star_bar"
+                    android:layout_alignBaseline="@id/sbv_star_bar"
+                    android:layout_marginLeft="@dimen/size_20dp"
+                    android:layout_marginTop="@dimen/size_20dp"
+                    android:layout_toRightOf="@id/tv_driver"
+                    android:textColor="#ff000000"
+                    android:textSize="@dimen/size_12dp" />
+
+
+                <View
+                    android:id="@+id/tv_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@id/tv_send_time"
+
+                    android:layout_marginTop="@dimen/size_10dp"
+                    android:background="@color/app_line_gray" />
+
+                <TextView
+                    android:id="@+id/tv_driver_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_driver_name"
+                    android:background="@null"
+                    android:gravity="start"
+
+                    android:paddingLeft="@dimen/size_15dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:textColor="#ff000000"
+                    android:textSize="@dimen/size_18dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@id/et_content"
+                    android:background="@color/app_line_gray" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_driver_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/size_17dp"
+                    android:layout_marginRight="@dimen/size_15dp"
+                    android:layout_marginBottom="@dimen/size_17dp"
+                    android:text="司机的评价会以匿名的形式展现"
+                    android:textColor="#ff929292"
+                    android:textSize="12dp" />
+            </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_10dp"
+                android:background="@color/white"
+                android:paddingLeft="@dimen/size_15dp"
+                android:paddingBottom="@dimen/size_10dp"
+                android:text="商品评价"
+                android:textColor="#ff000000"
+                android:textSize="@dimen/size_14dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_order_evaluate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+
+                android:background="@color/white" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:visibility="gone">
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

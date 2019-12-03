@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout_special"
+    android:layout_width="130dp"
+
+    android:layout_height="match_parent">
+
+    <FrameLayout
+
+        android:id="@+id/ll_special"
+        android:layout_width="123dp"
+        android:layout_height="123dp"
+        android:layout_margin="4dp"
+        android:background="@drawable/iv_bg_line">
+
+        <ImageView
+            android:id="@+id/iv_special"
+            android:layout_width="122dp"
+            android:layout_height="122dp"
+
+            android:scaleType="fitXY" />
+
+        <ImageView
+
+            android:id="@+id/sold_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/tv_bg"
+            android:layout_width="123dp"
+            android:layout_height="123dp"
+            android:background="@color/app_black"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_sale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sale_bg"
+            android:padding="3dp"
+            android:text="2"
+            android:textColor="@color/white"
+            android:textSize="8dp" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_special_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_special"
+        android:layout_marginLeft="4dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:minLines="2"
+        android:paddingTop="15dp"
+
+        android:text="1"
+        android:textColor="@color/app_black"
+        android:textSize="9dp" />
+
+    <TextView
+        android:id="@+id/tvOldPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/tv_special_title"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/size_5dp"
+        android:layout_marginTop="@dimen/size_10dp"
+        android:text="3422222"
+        android:textColor="@color/color_666666"
+        android:textSize="@dimen/size_8dp" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutShoppingCart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvOldPrice"
+        android:paddingBottom="3dp">
+
+        <TextView
+            android:id="@+id/tvSpecialPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="@dimen/size_5dp"
+            android:text="2222"
+            android:textColor="@color/app_black"
+            android:textSize="@dimen/size_14dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textSpecial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_toRightOf="@+id/tvSpecialPrice"
+            android:text="12333"
+            android:textColor="@color/color_7C7C7C"
+            android:textSize="@dimen/size_9dp"
+            android:visibility="gone" />
+
+
+        <ImageView
+            android:id="@+id/shoppingCart"
+            android:layout_width="@dimen/size_45dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tvSpecialPrice"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/icon_miaoshagouwuche" />
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+		<style type="text/css">
+			.header{
+				display: flex;
+			}
+			.header .sreach-lf{
+				flex: 1;
+			}
+			.mui-action-time{
+				line-height: 40px;
+				text-align: center;
+				margin-left: 10px;
+				color: #333333;
+				font-size: 14px;
+			}
+			.online-type{
+			border-radius: 50%;
+			background:#F56D23;
+			color: #FFFFFF;
+			width: 42px;
+			text-align: center;
+		}
+		.mui-table-view .mui-media-object.mui-pull-left {
+		    margin-top: 10px;
+		}
+		.mlist-name{
+			display: flex;
+			justify-content: space-between;
+		}
+		.mlist-name .textlf{
+			color: #333333;
+			font-size: 18px;
+		}
+		.mlist-name .textrg{
+			color: #F56D23;
+			font-size: 12px;
+		}
+		.shop-peice{
+			display: flex;
+			justify-content: space-between;
+		}
+		.shop-peice .textlf{
+			color: #666;
+			font-size: 12px;
+		}
+		.shop-peice .textrg{
+			color: #F56D23;
+			font-size: 16px;
+		}		
+		</style>
+	<body>
+		<header class="mui-bar mui-bar-nav header">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <a class="sreach-lf">
+		    	<div class="mui-input-row mui-search">
+		    		<input type="search" placeholder="输入订单分拣编号搜索" class="mui-input-clear whiteBg" autofocus="autofocus"/>
+		    	</div>
+		    </a>
+		    <div class="search_right mui-action-time">搜索</div>
+		</header>
+		<div class="mui-content">
+		    <ul class="mui-table-view">		    	
+				<!--<li class="mui-table-view-cell mui-media">
+			        <a href="javascript:;" class="mui-navigate-right">
+			        	<div class="mui-media-object mui-pull-left online-type">
+			        		线上
+			        	</div>
+			            <div class="mui-media-body">
+			                	<div class="mlist-name">
+			                		<span class="textlf">2</span>
+			                		<span class="textrg">2</span>
+			                	</div>
+			                	<p class="mui-ellipsis">22</p>
+			                	<p class="mui-ellipsis shop-peice">
+			                		<span class="textlf">共计件商品</span>
+			                		<span class="textrg">￥件商品</span>
+			                	</p>
+			            </div>
+			        </a>
+			    </li>-->
+			</ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init();
+			window.onload=function(){
+				mui.plusReady(function(){
+					var self = plus.webview.currentWebview();
+    				var token = self.tokens;//获得参数
+    				//绑定事件
+					document.querySelector('.search_right').addEventListener('tap',function(){	
+						//清空
+						var f=document.body.querySelector('.mui-table-view');
+						var childs=f.childNodes;
+						for(var i = childs.length - 1; i >= 0; i--) {
+		                  f.removeChild(childs[i]);
+		                }
+						var parameter=document.querySelector('.whiteBg').value;  //获取value值	
+						var url=urls+service_url.querySaleUserOrderPage_url;
+						var dataForm={};
+						dataForm.token=app.getState().token;
+						dataForm.name=parameter;
+						dataForm.pageNum=1;
+						dataForm.pageSize=999;
+						console.log(JSON.stringify(dataForm))
+						ajaxmethod(url,'POST',dataForm,function(res){
+							console.log(JSON.stringify(res))
+							if(res.code==1){
+								var data = res.data.beanPage?res.data.beanPage.list:0;
+								var table = document.body.querySelector('.mui-table-view');
+								if(data.length>0){
+									for (var i=0;i<data.length;i++) {
+										var result="";
+										var li = document.createElement('li');
+										li.className = 'mui-table-view-cell mui-media';
+										li.setAttribute('orderId',data[i].orderId);
+										li.setAttribute('orderSource',data[i].orderSource);	
+										li.setAttribute('orderStatus',data[i].orderStatus);	
+										result+='<a href="javascript:;">';
+											result+='<div class="mui-media-object mui-pull-left online-type">';
+											if(data[i].orderSource==1){result+='线上</div>'}
+											else if(data[i].orderSource==2){result+='线下</div>'}
+											else if(data[i].orderSource==3){result+='退货</div>'}
+				//							result+=(data[i].orderSource==1?'线上':'线下')+'</div>';
+											result+='<div class="mui-media-body">';
+												result+='<div class="mlist-name">';
+													result+='<span class="textlf">'+data[i].name+'</span>';
+													result+='<span class="textrg">'+data[i].orderStatusStr+'</span>';
+												result+='</div>';
+												result+='<p class="mui-ellipsis">'+ data[i].gmtCreate +'</p>';
+												result+='<p class="mui-ellipsis shop-peice">';
+													result+='<span class="textlf">共计'+ data[i].prodNum +'件商品</span>';
+													result+='<span class="textrg">￥'+ data[i].totalAmount +'元</span>';
+												result+='</p>';
+											result+='</div>';
+										result+='</a>';
+										li.innerHTML=result;
+								        //下拉刷新，新纪录插到最前面
+								        table.appendChild(li);
+									}
+								}else{
+									table.innerHTML=record;
+								}
+							}else{
+								mui.toast(res.message) 
+							}
+						})
+					})
+					
+
+					//点击list中某一项时触发details页面的"update"事件 
+					mui('ul.mui-table-view').on('tap','li',function(event){
+						if(this.getAttribute("orderSource")==1){
+							var ev_nd=this;
+							var detailPage=plus.webview.getWebviewById('sub3.html');  //获得页面   判断webview是否存在
+						    mui.fire(detailPage,'opendetail',{//触发事件
+						        orderId:ev_nd.getAttribute("orderId"),
+						        orderStatus:ev_nd.getAttribute("orderStatus")
+						    });
+						}
+						
+					})
+				})
+			}
+		</script>
+	</body>
+
+</html>

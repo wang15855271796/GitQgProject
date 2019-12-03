@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">		
+			body,.mui-content{
+				background: #FFFFFF;
+			}
+			.pickmain{
+				width: 80%;
+				margin: 40px auto 0;
+				-webkit-touch-callout: none;
+			}
+			.pickmain img{
+				width: 100%;
+				-webkit-touch-callout: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">我的名片</h1>
+		    <a class="mui-icon  mui-icon-upload mui-pull-right" onclick="shareApp();"></a>
+		</header>
+		<div class="mui-content">
+		    <div class="pickmain">
+		    	<!--<img src="../images/100356.jpg"/>-->
+		    </div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/plusshare.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/savePic.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+                gestureConfig: {
+                	doubletap: true, 
+                    longtap: true   //默认为 false, 长按事件
+                } 
+            });
+			
+			
+			mui.plusReady(function(){				
+				var url=urls+service_url.querySaleIndexCard_url+'?token='+app.getState().token;
+				document.querySelector('.pickmain').innerHTML='<img src="'+url+'"/>'
+				document.querySelector('.pickmain').addEventListener('longtap', function(e) {
+					var target = e.target;
+            		savePic(target);
+
+                });
+			});					
+					
+			
+				//分享
+				function shareApp() {				
+					//分享内容，开发者可自定义
+					var message = {
+						title: "买食材上翘歌", //应用名字
+						content: "翘歌——中小餐饮食材一站式采购平台，全品类轻松搞定，省人、省事、省时间！",
+						href: 'http://shaokao.qiaogeshipin.cn/apph5/html/register.html?inviteToken=99b73caace', //分享出去后，点击跳转地址
+						thumbs: ["../image/logo.jpg"] //分享缩略图
+					}
+					
+					//调起分享
+					plusShare(message, function(res) {
+						//分享回调函数
+						if(res) {
+							plus.nativeUI.toast("分享成功");
+						} else {
+							plus.nativeUI.toast("分享失败");
+						}
+					})
+				}					
+
+		</script>
+	</body>
+
+</html>

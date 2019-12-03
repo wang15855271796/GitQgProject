@@ -1,0 +1,299 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style type="text/css">
+		.select-tab-main{
+			position: fixed;
+			top: 44px;
+			height: 38px;
+			left: 0;
+			right: 0;
+			z-index: 3;
+    		background: #fff;
+		}
+		.tab-transform{
+			display: flex;
+			height: 100%;
+			flex: 1;
+			justify-content: space-around;
+			align-items: center;
+		}
+		.OrderTotal{
+			position: fixed;
+			z-index: 1;
+			width: 100%;
+			bottom: 0px;
+			height: 45px;
+			background-color: #FFF3C1;
+			line-height: 45px;
+			text-align: right;
+		}
+		#Total{
+			color: #666666;
+			font-size: 12px;
+			margin-right: 15px;
+		}
+		.TotalNum{
+			color: #F76A33;
+			font-size: 14px;
+		}
+		.TotalPrice{
+			color: #F76A33;
+			font-size: 14px;
+		}
+		.online-type{
+			border-radius: 50%;
+			background:#F56D23;
+			color: #FFFFFF;
+			width: 42px;
+			text-align: center;
+		}
+		.mui-table-view .mui-media-object.mui-pull-left {
+		    margin-top: 10px;
+		}
+		.mlist-name{
+			display: flex;
+			justify-content: space-between;
+		}
+		.mlist-name .textlf{
+			color: #333333;
+			font-size: 18px;
+		}
+		.mlist-name .textrg{
+			color: #F56D23;
+			font-size: 12px;
+		}
+		.shop-peice{
+			display: flex;
+			justify-content: space-between;
+		}
+		.shop-peice .textlf{
+			color: #666;
+			font-size: 12px;
+		}
+		.shop-peice .textrg{
+			color: #F56D23;
+			font-size: 16px;
+		}
+		.mui-scroll-wrapper{
+			bottom: 45px;
+			/*top: 82px;*/
+		}
+		.mui-bar-nav~.mui-content{
+			padding-top: 82px;
+		}
+	</style>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">订单列表</h1>
+		</header>
+		
+		<div class="select-tab-main">
+            <div class="tab-transform">          	
+            	<div class="tab-item-name">
+            		<select class="sel mui-btn is-consumption">  
+            			<option value="">订单状态</option>
+	                    <option value="2">待发货</option> 	            
+	                    <option value="3">待收货</option>  
+	                    <option value="4">已完成</option> 
+	                </select>  
+            	</div>
+            	<div class="tab-item-name">
+            		<select class="sel mui-btn is-time">  
+	                    <option value="1">订单日期降序</option>  
+	                    <option value="2">订单金额降序</option>  
+	                    <option value="3">订单金额升序</option>
+	               </select> 
+            	</div>
+            </div>
+      	</div>
+     	
+      	<!--下拉刷新容器-->
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-chevron">
+				   <!--<li class="mui-table-view-cell mui-media">
+				        <a href="javascript:;">
+				            <div class="mui-media-object mui-pull-left online-type">
+				        		线上
+				        	</div>
+				            <div class="mui-media-body">
+				               	<div class="mlist-name">
+				               		<span class="textlf">孙闯 </span>
+				               		<span class="textrg">已完成</span>
+				               	</div>
+				                <p class='mui-ellipsis'>2019-07-12 17:27:28 </p>
+				                <p class='mui-ellipsis shop-peice'>
+				                	<span class="textlf">共计5件商品</span>
+				                	<span class="textrg">￥236.10元</span>
+				                </p>
+				            </div>
+				        </a>
+				    </li> -->
+				</ul>
+			</div>
+		</div>
+      	<div class="OrderTotal">
+      		<span id="Total">
+      			共 <span class="TotalNum">0</span>个订单，用户下单金额
+      			<span class="TotalPrice">0.0元</span>
+      		</span>
+      	</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			(function($, doc) {				
+				var lastPage;  //总共页数
+		　　　　     var hasNextPage=false; //是否有下一页
+		　　　　     var counter=1; //计数器
+				var pageNum=1;  //当前页数
+				var pageSize=10;//美页数显示条数
+				$.plusReady(function() {
+					mui.init({
+						pullRefresh: {
+							container: '#pullrefresh',
+							down: {
+								auto:true,
+								style:'circle',
+								callback: pulldownRefresh
+							},
+							up: {								
+								contentrefresh: '正在加载...',
+								callback: pullupRefresh
+							}
+						}
+					});
+					
+					/**
+					 * 下拉刷新具体业务实现
+					 */
+					function pulldownRefresh(){					
+						window.setTimeout(function(){
+							//刷新清空子节点
+							counter=1; //计数器
+							pageNum=1;  //当前页数
+							var f=document.body.querySelector('.mui-table-view');
+							var childs=f.childNodes;
+							for(var i = childs.length - 1; i >= 0; i--) {
+			                  f.removeChild(childs[i]);
+			                }
+							getdata();
+							mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+							mui('#pullrefresh').pullRefresh().refresh(true);
+						},500);
+					}
+					
+					
+					/**
+					 * 上拉加载具体业务实现
+					 */
+					function pullupRefresh() {
+						window.setTimeout(function(){
+							if(hasNextPage){
+								pageNum++;    //当前页数         counter计数器
+								getdata();
+							}
+							mui('#pullrefresh').pullRefresh().endPullupToRefresh((++counter>=lastPage));
+						},500);
+					}
+					
+					//获取数据
+					function getdata(){
+						//子页面触发父页面函数   获取参数source,orderBy,isSale,shopTypeId
+						var tab_index2=document.querySelector('.is-consumption').selectedIndex;//订单状态 待发货，待提货：2 , 待收货：3 , 已完成：4
+						var tab_index4=document.querySelector('.is-time').selectedIndex;//排序
+						var url=urls+service_url.querySaleUserOrderPage_url;
+						var dataForm={};
+						dataForm.token=app.getState().token;
+						dataForm.customerId=plus.webview.currentWebview().userId;//客户id
+						dataForm.orderSource=plus.webview.currentWebview().Source;//线上客户线下客户
+						dataForm.orderStatus=document.querySelector('.is-consumption').options[tab_index2].value;
+						dataForm.orderBy=document.querySelector('.is-time').options[tab_index4].value;					
+						dataForm.pageNum=pageNum;
+						dataForm.pageSize=pageSize;
+						//console.log(JSON.stringify(dataForm))
+						ajaxmethod(url,'POST',dataForm,function(res){
+							//console.log(JSON.stringify(res))
+							lastPage = res.data.beanPage?res.data.beanPage.pages:0;
+			　　　　　　　　　　   pageNum = res.data.beanPage?res.data.beanPage.pageNum:1;
+							hasNextPage=res.data.beanPage?res.data.beanPage.hasNextPage:false;
+			　　　　　　　　　　  var data = res.data.beanPage.list;
+							var table = document.body.querySelector('.mui-table-view');
+							document.querySelector('.TotalNum').innerHTML=res.data.totalOrderNum;
+							document.querySelector('.TotalPrice').innerHTML=res.data.totalOrderAmount;
+							for (var i=0;i<data.length;i++) {
+								var result="";
+								var li = document.createElement('li');
+								li.className = 'mui-table-view-cell mui-media';
+								li.setAttribute('orderId',data[i].orderId);
+								li.setAttribute('orderSource',data[i].orderSource);	
+								li.setAttribute('orderStatus',data[i].orderStatus);	
+								result+='<a>';
+									result+='<div class="mui-media-object mui-pull-left online-type">';									
+									result+=(data[i].orderSource==1?'线上':'线下')+'</div>';
+									result+='<div class="mui-media-body">';
+										result+='<div class="mlist-name">';
+											result+='<span class="textlf">'+data[i].name+'</span>';
+											result+='<span class="textrg">'+data[i].orderStatusStr+'</span>';
+										result+='</div>';
+										result+='<p class="mui-ellipsis">'+ data[i].gmtCreate +'</p>';
+										result+='<p class="mui-ellipsis shop-peice">';
+											result+='<span class="textlf">共计'+ data[i].prodNum +'件商品</span>';
+											result+='<span class="textrg">￥'+ data[i].totalAmount +'元</span>';
+										result+='</p>';
+									result+='</div>';
+								result+='</a>';
+								li.innerHTML=result;								
+						        //下拉刷新，新纪录插到最前面
+						        table.appendChild(li);						        
+							}							
+						})
+					}
+
+					//点击tab中某一项时触发sub3view页面的select事件 
+					mui('.tab-transform').on('change','.tab-item-name',function(event){
+						pulldownRefresh()
+					})
+					
+					//线上订单详情
+					mui('ul.mui-table-view').on('tap','li',function(event){
+						var ev_nd=this;
+						if(this.getAttribute("orderSource")==1){
+							var mainPage=plus.webview.getWebviewById('sub3listdetails');
+							mui.fire(mainPage,'accountdetail',{//触发事件
+						        orderId:ev_nd.getAttribute("orderId"),
+						        orderStatus:ev_nd.getAttribute("orderStatus")
+						    });
+						    mui.openWindow({
+						       url:'sub3listdetails.html',
+						       id: 'sub3listdetails',//详情页webview的id
+						       show: {
+							       	   autoShow: true,
+							           aniShow: 'slide-in-right', //页面不显示动画
+							           duration: '0' //
+							        },
+						        waiting:{
+									autoShow:true,
+									title:"正在加载...",
+									options:{   //等待框的宽高
+										
+									}
+								}
+						    });
+						}
+					})
+				})
+			}(mui, document));
+							
+		</script>
+	</body>
+
+</html>

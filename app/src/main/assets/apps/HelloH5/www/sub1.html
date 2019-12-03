@@ -1,0 +1,333 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/sub1.css"/>
+		<link rel="stylesheet" type="text/css" href="css/mui.picker.min.css"/>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav header">
+			<a class=" mui-icon  mui-icon-gear mui-pull-left out"></a>
+		    <h1 class="mui-title">首页</h1>
+		    <button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right mydata" id="godata" type="button">我的数据</button>
+		    <!--<a class="mui-icon mui-pull-right mydata">
+		    	<span>
+		    		我的数据
+		    	</span>
+		    </a>-->
+		</header>
+		<div class="mui-content indextopbg">
+				<div class="main-marage">
+					 <!-- 名片 -->
+                      <div class="card-main">
+                          <div class="user-item">
+                            <div class="user-img">
+                                <div class="user-bg"></div>
+                            </div>
+                            <div class="user-sigin">
+                              <div class="user-iphone"></div>
+                              <div class="user-company"></div>
+                              <div class="user-business" id="username">我的名片</div>
+                            </div>
+                          </div>
+                          <div class="data-list">
+                              <div class="data-item">
+                                <div class="data-name" >今日注册客户</div>
+                                <div class="title-data todayRegisterNum"></div>
+                              </div>
+                              <div class="data-item">
+                                <div class="data-name">今日线上订单</div>
+                                <div class="title-data todayOnlineNum"></div>
+                              </div>
+                              <div class="data-item">
+                                <div class="data-name">今日线下订单</div>
+                                <div class="title-data offlineNum"></div>
+                              </div>
+                          </div>
+                      </div>
+                      <!-- 排行榜 -->
+                      <div class="Ranking-main">
+                      	<div class="rangk-header">
+                      		<div class="rangk-header-item">
+                      			<div class="rangk-title">
+                      				排行榜
+                      			</div>
+                      			<!--<div class="rangk-select">
+                      				筛选
+                      			</div>-->
+                      		</div>
+                      		<div class="rangk-select-name">
+                      			<div class="start_time btn" data-options='{"type":"date"}'>
+                      				开始时间
+                      			</div>
+                      			--
+                      			<div class="end_time btn" data-options='{"type":"date"}'>
+                      				结束时间
+                      			</div>
+                      			--
+                      			<div class="ranking_type">
+                      				<select name="" id='rtype'>
+                      					<option value="1">总销售额</option>
+                      					<option value="2">线上销售额</option>
+                      					<option value="3">线下销售额</option>
+                      					<option value="4">注册量</option>
+                      					<option value="5">新下单金额</option>
+                      				</select>
+                      			</div>
+                      		</div>
+                      	</div>
+                      	<div class="" id="showdata">
+                      		<div class="Rankingunitscompany">排行</div>
+                      		<div class="Rankingnamecompany">姓名</div>
+                      		<div class="Rankingdatacompany">数量</div>
+                      	</div>
+                      </div>
+                      <!-- 排行榜结束 -->
+                      <ul class="mui-table-view" id="elementlist">
+				        	<!--<li class="mui-table-view-cell rangkingtab">
+				        		<div class="Serialnum">1</div>
+				        		<div class="Rankingname">1</div>
+				        		<div class="Rankingdata">2</div>
+				        	</li>        -->   
+				      </ul>
+
+				</div>
+		    <!--<div class="mui-control-content">-->
+		    			    <!--</div>-->
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/api.js"></script>
+		<script src="js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			(function($) {
+				mui.init();
+				mui.plusReady(function(){
+					rangklist();
+					var url=urls+service_url.querySaleIndexUserBaseInfo_url;
+					var dataForm={};
+					dataForm.token=app.getState().token;
+					ajaxmethod(url,'POST',dataForm,function(data){
+						//alert('sub1data'+JSON.stringify(data))
+						//mui.openWindow('index.html');
+						if(data.code==1){
+							document.getElementsByClassName('user-iphone')[0].innerHTML=data.data.phone;
+							document.getElementsByClassName('user-company')[0].innerHTML=data.data.companyName;//公司名称
+							document.getElementsByClassName('todayRegisterNum')[0].innerHTML=data.data.todayRegisterNum;//今日注册数
+							document.getElementsByClassName('todayOnlineNum')[0].innerHTML=data.data.todayOnlineNum;//线上订单
+							document.getElementsByClassName('offlineNum')[0].innerHTML=data.data.offlineNum;//线下订单
+							document.getElementsByClassName('user-bg')[0].innerHTML=data.data.userName;//线下订单
+						}else{
+							//登录失效
+							mui.toast('登录失效，重新登录',{ duration:'1000',type: 'div'});
+							//重新登录
+							app.setState({});
+							mui.openWindow({
+								url: 'index.html',
+								id: 'index',
+								show: {
+									aniShow: 'pop-in'
+								},
+								waiting: {
+									autoShow: false
+								}
+							});
+						}
+						
+					});					
+				})
+				//我的数据
+				document.getElementById('godata').addEventListener('tap',function(){
+					mui.openWindow({					//打开新的页面
+						url:'./page/mydata.html',
+						id:"mydata.html",
+						style:{},
+						show:{
+							autoShow: false,
+							aniShow: "slide-in-right",   //配置动画 
+							duration: 100     //配置动画
+						},
+						waiting:{
+							autoShow:true,
+							title:"正在加载...",
+							options:{   //等待框的宽高
+								
+							}
+						}
+					})
+				})
+				//我的名片
+				document.getElementById('username').addEventListener('tap',function(){
+					mui.openWindow({					//打开新的页面
+						url:'./page/tab1-username.html',
+						id:"tab1-username.html",
+						style:{},
+						show:{
+							autoShow: true,
+							aniShow: "slide-in-right",   //配置动画 
+							duration: 100     //配置动画
+						},
+						waiting:{
+							autoShow:true,
+							title:"正在加载...",
+							options:{   //等待框的宽高
+								
+							}
+						}
+					})
+				})
+				//退出登录
+				document.querySelector('.out').addEventListener('tap',function(){
+					if (mui.os.ios) {
+						var btnArray = ['取消', '确认'];
+						mui.confirm('确认要退出吗？', '确认', btnArray, function(e) {
+							if (e.index == 1) {
+								app.setState({});
+								plus.runtime.restart();
+								mui.openWindow({
+									url: 'index.html',
+									id: 'index',
+									show: {
+										aniShow: 'pop-in'
+									},
+									waiting: {
+										autoShow: false
+									}
+								});								
+							} else {
+								//取消
+							}
+						})
+						return;
+					}
+					var btnArray = [{
+						title: "退出当前账号"
+					}, {
+						title: "直接关闭应用"
+					}];
+					plus.nativeUI.actionSheet({
+						cancel: "取消",
+						buttons: btnArray
+					}, function(event) {
+						var index = event.index;
+						switch (index) {
+							case 1:
+								//注销账号
+								app.setState({});
+								plus.runtime.restart();
+								/*
+								 * 注意：
+								 * 1、因本示例应用启动页就是登录页面，因此注册成功后，直接显示登录页即可；
+								 * 2、如果真实案例中，启动页不是登录页，则需修改，使用mui.openWindow打开真实的登录页面
+								 */
+								plus.webview.getLaunchWebview().show("pop-in");   //从新打开页面
+								//若启动页不是登录页，则需通过如下方式打开登录页
+		//						mui.openWindow({
+		//							url: 'login.html',
+		//							id: 'login',
+		//							show: {
+		//								aniShow: 'pop-in'
+		//							}
+		//						});
+								break;
+							case 2:
+								plus.runtime.quit();								
+								break;
+						}
+					});
+				})
+				
+				//排行榜
+				function rangklist(){
+					var url=urls+service_url.querySaleIndexUserRankList_url;
+					var start=document.querySelector('.start_time').getAttribute('time') || (new Date().getFullYear()+"-" +(new Date().getMonth()+1)+ "-" + new Date().getDate());
+					var end=document.querySelector('.end_time').getAttribute('time') || (new Date().getFullYear()+"-" +(new Date().getMonth()+1)+ "-" + new Date().getDate());
+					var myselect=document.getElementById("rtype");
+					var index=myselect.selectedIndex;
+					//var type=document.querySelector('#rtype>option:selected').value;
+					var dataForm={};
+					dataForm.token=app.getState().token;
+					dataForm.type=myselect.options[index].value;
+					dataForm.startTime=start;
+					dataForm.endTime=end;
+					//alert(JSON.stringify(dataForm));
+					ajaxmethod(url,'POST',dataForm,function(data){
+						var elementNS=document.getElementById('elementlist');
+						elementNS.innerHTML='';
+						var para;
+						for (var i=0;i<data.data.length;i++) {
+							para=document.createElement('li');
+							para.setAttribute('class','mui-table-view-cell rangkingtab');
+							para.innerHTML='<div class="Serialnum">'+(i<3?'':(i+1))+'</div><div class="Rankingname">'+data.data[i].name+'</div><div class="Rankingdata">'+data.data[i].num+'</div>';
+							elementNS.appendChild(para);
+						}
+					});
+				}
+				//开始时间
+				var btns = $('.btn');
+				btns.each(function(i, btn) {
+					btn.addEventListener('tap', function() {
+						var _self = this;
+						if(_self.picker) {
+							_self.picker.show(function (rs) {
+								_self.setAttribute('time',rs.text);
+								_self.innerText = rs.text;
+								_self.picker.dispose();
+								_self.picker = null;
+								rangklist();
+							});
+						} else {
+							var optionsJson = this.getAttribute('data-options') || '{}';
+							var options = JSON.parse(optionsJson);
+							var id = this.getAttribute('id');
+							/*
+							 * 首次显示时实例化组件
+							 * 示例为了简洁，将 options 放在了按钮的 dom 上
+							 * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+							 */
+							_self.picker = new $.DtPicker(options);
+							_self.picker.show(function(rs) {
+								/*
+								 * rs.value 拼合后的 value
+								 * rs.text 拼合后的 text
+								 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+								 * rs.m 月，用法同年
+								 * rs.d 日，用法同年
+								 * rs.h 时，用法同年
+								 * rs.i 分（minutes 的第二个字母），用法同年
+								 */
+								_self.setAttribute('time',rs.text);
+								_self.innerText = rs.text;
+								rangklist();
+								/* 
+								 * 返回 false 可以阻止选择框的关闭
+								 * return false;
+								 */
+								/*
+								 * 释放组件资源，释放后将将不能再操作组件
+								 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+								 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+								 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+								 */
+								_self.picker.dispose();
+								_self.picker = null;
+								
+							});
+						}
+						
+					}, false);
+				});
+				//结束时间
+				
+				//选择类型
+				document.querySelector('#rtype').addEventListener('change',function(e){
+					rangklist();
+				});
+			})(mui);
+		</script>
+	</body>
+
+</html>

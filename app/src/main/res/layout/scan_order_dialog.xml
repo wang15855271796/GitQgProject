@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/rl_scan"
+    android:layout_marginRight="38dp"
+    android:layout_marginLeft="38dp"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="38dp"
+        android:text="分拣编号:"
+        android:textColor="#333333"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/tv_order_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:layout_toRightOf="@id/tv_order"
+        android:textColor="#333333"
+        android:textSize="18dp" />
+
+
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_order"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="16dp"
+        android:text="送货地址："
+        android:textColor="#333333"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/tv_order_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_address"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="21dp"
+        android:maxLines="3"
+        android:textColor="#333333"
+        android:textSize="14dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="188dp"
+        android:src="@mipmap/driver_order_right" />
+
+    <TextView
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="251dp"
+        android:textSize="24dp"
+        android:textColor="#333333"
+        android:text="扫描成功"
+        android:layout_marginBottom="26dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

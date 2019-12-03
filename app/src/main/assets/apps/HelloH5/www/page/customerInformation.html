@@ -1,0 +1,485 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style type="text/css">
+		.madd-item{
+			display: flex !important;
+		}
+		.madd-title{
+			/*float: left;*/
+			width: 100px;
+		}
+		.madd-name1,.madd-name2{
+			font-size: 12px;
+			flex: 1;
+			text-align: right;
+			white-space: normal;
+		}
+		.mui-badge{
+			border-radius:initial;
+			background-color:rgba(255,255,255,1);
+		}
+		.add{
+			margin-top: 20px;
+			margin-bottom: 20px;
+			box-sizing: border-box;
+			padding: 0px 15px;
+			text-align: center;
+			height: 48px;
+			line-height: 48px;
+		}
+		.add>div{
+			border-radius: 48px;
+			background-color: #F56D23;
+			color: #FFFFFF;
+		}
+	</style>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">客户信息</h1>
+		</header>
+		<div class="mui-content">
+		    <ul class="mui-table-view uls_id">
+			    <li class="mui-table-view-cell">
+			    	<a class="mui-navigate-right editname">
+			    		客户姓名：
+			        	<span class="mui-badge customername1"></span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			    	<a class="mui-navigate-right">
+			    		联系电话：
+			        	<span class="mui-badge customeriphone1 telphone"></span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell ismainnumber">
+			    	<a class="mui-navigate-right">
+			    		主账号：
+			        	<span class="mui-badge mainnumber"></span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell ischildrennumber">
+			    	<a class="mui-navigate-right">
+			    		子帐号：
+			        	<span class="mui-badge childrennumber"></span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			    	<a class="madd-item">
+			    		<span class="madd-title">
+			    			送货地址：
+			    		</span>
+			    		<span class="madd-name1">
+			    			浙江省杭州市余杭区 星桥北路56号星空间一楼川秘麻辣烫
+			    		</span>
+			        	<!--<span class="mui-badge">浙江省杭州市余杭区 星桥北路56号星空间一楼川秘麻辣烫</span>-->
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell Purchase1">
+			    	<a class="mui-navigate-right">
+			    		购买次数：
+			        	<span class="mui-badge shopnumber1">98</span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell coupon">
+			    	<a class="mui-navigate-right">
+			    		优惠券明细
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			    	<a >
+			    		累积消费金额：
+			        	<span class="mui-badge shopmoney1">￥9999999999</span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			    	<a >
+			    		最后购买时间：
+			        	<span class="mui-badge shop-end-time1">2019-07-12 19:18:17</span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			    	<a>
+			    		类型
+			        	<span class="mui-badge type">批发</span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			    	<a>
+			    		余额
+			        	<span class="mui-badge balance">99</span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			    	<a>
+			    		VIP/普通会员
+			        	<span class="mui-badge vip">99</span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			    	<a>
+			    		店铺类型
+			        	<span class="mui-badge shop-type">99</span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell notes">
+			    	<a class="mui-navigate-right">
+			    		备注
+			        	<span class="mui-badge remarks"></span>
+			    	</a>
+			    </li>
+			</ul>
+			<ul class="mui-table-view Underline">  
+				<li class="mui-table-view-cell">
+			    	<a class="mui-navigate-right">
+			    		客户姓名：
+			        	<span class="mui-badge customername2"></span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			    	<a class="mui-navigate-right">
+			    		联系电话：
+			        	<span class="mui-badge customeriphone2 telphone"></span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			    	<a class="madd-item">
+			    		<span class="madd-title">
+			    			送货地址：
+			    		</span>
+			    		<span class="madd-name2">
+			    			浙江省杭州市余杭区 星桥北路56号星空间一楼川秘麻辣烫
+			    		</span>
+			        	<!--<span class="mui-badge">浙江省杭州市余杭区 星桥北路56号星空间一楼川秘麻辣烫</span>-->
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell Purchase2">
+			    	<a class="mui-navigate-right">
+			    		购买次数：
+			        	<span class="mui-badge shopnumber2">98</span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			    	<a >
+			    		累积消费金额：
+			        	<span class="mui-badge shopmoney2">￥9999999999</span>
+			    	</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			    	<a >
+			    		最后购买时间：
+			        	<span class="mui-badge shop-end-time2">2019-07-12 19:18:17</span>
+			    	</a>
+			    </li>
+			</ul>
+			<div class="add">
+				<div class="addsend">发放优惠券</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function(){
+				//在details页面接收id参数
+				//var ws=plus.webview.currentWebview(); 
+				//document.querySelector('.add').innerHTML=JSON.stringify(ws);
+				window.addEventListener('accountdetail',function(event){
+				  //获得事件参数
+				  var id = event.detail.userId;              //接收userId   source
+				  var source = event.detail.source;
+				  var url=urls+service_url.querySaleUserDetail_url;
+				  var dataForm={};
+				  dataForm.token=app.getState().token;
+				  dataForm.userId=id;
+				  dataForm.source=source;
+				  //根据id向服务器请求新闻详情
+				  ajaxmethod(url,'POST',dataForm,function(res){
+				  	//console.log('zi'+JSON.stringify(res));
+				  	//关闭等待框
+				    plus.nativeUI.closeWaiting();
+				   //显示当前页面
+				    mui.currentWebview.show();
+				    if(source==1){				    	
+				    	document.querySelector('.uls_id').style.display="block";
+				    	document.querySelector('.Underline').style.display="none";
+				    	document.querySelector('.add').style.display="block";
+				    	document.querySelector('.mui-title').innerHTML='线上客户信息';				    	
+				    	document.querySelector('.customername1').innerHTML=res.data.userName;
+				    	document.querySelector('.customeriphone1').innerHTML=res.data.phone;	
+				    	if(res.data.hasParentAccount){        //是否有主账号
+				    		document.querySelector('.mainnumber').innerHTML=res.data.parentPhone;
+				    		document.querySelector('.ismainnumber').style.display='block';
+				    		document.querySelector('.ismainnumber').setAttribute('id',res.data.parentId);
+				    	}else{
+				    		document.querySelector('.ismainnumber').style.display='none';
+				    	}
+				    	if(res.data.hasSubAccount){            //是否有子账号
+				    		document.querySelector('.childrennumber').innerHTML=res.data.subAccountNum;
+				    		document.querySelector('.ischildrennumber').style.display='block';
+				    		document.querySelector('.ischildrennumber').setAttribute('userId',res.data.userId);
+				    	}else{
+				    		document.querySelector('.ischildrennumber').style.display='none';
+				    	}				    	
+				    	document.querySelector('.madd-name1').innerHTML=res.data.address;				    	
+				    	document.querySelector('.Purchase1').setAttribute('userId',res.data.userId);
+				    	document.querySelector('.shopnumber1').innerHTML=res.data.buyNum;
+				    	document.querySelector('.coupon').setAttribute('userId',res.data.userId);				    	
+				    	document.querySelector('.shopmoney1').innerHTML=res.data.allOrderAmount;
+				    	document.querySelector('.shop-end-time1').innerHTML=res.data.lastBuyTime;
+				    	document.querySelector('.type').innerHTML=(res.data.type==2?'授权':'未授权');
+				    	document.querySelector('.balance').innerHTML=res.data.balance;
+				    	document.querySelector('.vip').innerHTML=res.data.vip?'vip':'普通会员';				    	
+				    	document.querySelector('.shop-type').innerHTML=res.data.shopType;
+				    	document.querySelector('.notes').setAttribute('userId',res.data.userId);		    	
+				    	document.querySelector('.addsend').setAttribute('userId',res.data.userId);  //发放优惠卷	
+				    	document.querySelector('.uls_id').setAttribute('userId',res.data.userId);
+				    }else{
+				    	document.querySelector('.uls_id').style.display="none";
+				    	document.querySelector('.Underline').style.display="block";	
+				    	document.querySelector('.add').style.display="none";
+				    	document.querySelector('.mui-title').innerHTML='线下客户信息';				    	
+				    	document.querySelector('.customername2').innerHTML=res.data.userName;
+				    	document.querySelector('.customeriphone2').innerHTML=res.data.phone;				    	
+				    	document.querySelector('.madd-name2').innerHTML=res.data.address;
+				    	document.querySelector('.Purchase2').setAttribute('userId',res.data.userId);
+				    	document.querySelector('.shopnumber2').innerHTML=res.data.buyNum;
+				    	document.querySelector('.shopmoney2').innerHTML=res.data.allOrderAmount;
+				    	document.querySelector('.shop-end-time2').innerHTML=res.data.lastBuyTime;				    					    	
+				    }  
+				  })
+				  
+				});
+
+				//联系电话mui-table-view
+				mui('.mui-table-view').on('tap','.telphone',function(event){
+					var tel=this.innerHTML.trim();
+					plus.device.dial(tel);
+				})
+				
+			})
+			
+			
+			
+			
+			//子账号
+			mui('.uls_id').on('tap','.ischildrennumber',function(event){
+				var id=this.getAttribute('userId');//用户id
+				mui.openWindow({
+			       url:'sub2account.html',
+			       id:'sub2account', //详情页webview的id
+			       extras:{
+			      	userId:id,//自定义扩展参数，可以用来处理页面间传值
+			       },
+			       show: {
+			       	   autoShow: true,
+			           aniShow:'slide-in-right', //页面显示动画
+			           duration:'100' //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+			        },
+			        waiting:{
+						autoShow:true,
+						title:"正在加载...",
+						options:{   //等待框的宽高
+							
+						}
+					}
+			    })
+			})
+			
+			
+			//主账号
+			mui('.uls_id').on('tap','.ismainnumber',function(event){				
+				  var url=urls+service_url.querySaleUserDetail_url;
+				  var dataForm={};
+				  dataForm.token=app.getState().token;
+				  dataForm.userId=this.getAttribute('id');
+				  dataForm.source=1;
+				  //根据id向服务器请求新闻详情
+				  ajaxmethod(url,'POST',dataForm,function(res){
+				  	    document.querySelector('.uls_id').style.display="block";
+				    	document.querySelector('.Underline').style.display="none";
+				    	document.querySelector('.add').style.display="block";
+				    	document.querySelector('.mui-title').innerHTML='线上客户信息';				    	
+				    	document.querySelector('.customername1').innerHTML=res.data.userName;
+				    	document.querySelector('.customeriphone1').innerHTML=res.data.phone;	
+				    	if(res.data.hasParentAccount){
+				    		document.querySelector('.mainnumber').innerHTML=res.data.parentPhone;
+				    		document.querySelector('.ismainnumber').style.display='block';
+				    		document.querySelector('.ismainnumber').setAttribute('id',res.data.parentId);
+				    	}else{
+				    		document.querySelector('.ismainnumber').style.display='none';
+				    	}
+				    	if(res.data.hasSubAccount){
+				    		document.querySelector('.childrennumber').innerHTML=res.data.subAccountNum;
+				    		document.querySelector('.ischildrennumber').setAttribute('userId',res.data.userId);
+				    		document.querySelector('.ischildrennumber').style.display='block';
+				    	}else{
+				    		document.querySelector('.ischildrennumber').style.display='none';
+				    	}				    	
+				    	document.querySelector('.madd-name1').innerHTML=res.data.address;
+				    	document.querySelector('.Purchase1').setAttribute('userId',res.data.userId);
+				    	document.querySelector('.shopnumber1').innerHTML=res.data.buyNum;
+				    	document.querySelector('.coupon').setAttribute('userId',res.data.userId);
+				    	document.querySelector('.shopmoney1').innerHTML=res.data.allOrderAmount;
+				    	document.querySelector('.shop-end-time1').innerHTML=res.data.lastBuyTime;
+				    	document.querySelector('.type').innerHTML=(res.data.type==2?'授权':'未授权');
+				    	document.querySelector('.balance').innerHTML=res.data.balance;
+				    	document.querySelector('.vip').innerHTML=res.data.vip?'vip':'普通会员';				    	
+				    	document.querySelector('.shop-type').innerHTML=res.data.shopType;
+				    	document.querySelector('.notes').setAttribute('userId',res.data.userId);		    	
+				    	document.querySelector('.addsend').setAttribute('userId',res.data.userId);  //发放优惠卷	
+				    	document.querySelector('.uls_id').setAttribute('userId',res.data.userId);
+				  })
+			})
+			
+			
+			//购买次数
+			mui('.uls_id').on('tap','.Purchase1',function(event){				
+				var id=this.getAttribute('userId');//客户id	
+				openpull(1,id);
+			})
+			mui('.Underline').on('tap','.Purchase2',function(event){				
+				var id=this.getAttribute('userId');//客户id	
+				openpull(2,id);
+			})
+			function openpull(index,id){
+				mui.openWindow({
+			       url:'Orderlist.html',
+			       id:'Orderlist', //详情页webview的id
+			       extras:{
+			      	userId:id,//自定义扩展参数，可以用来处理页面间传值
+			      	Source:index
+			       },
+			       show: {
+			       	   autoShow: true,
+			           aniShow:'slide-in-right', //页面显示动画
+			           duration:'100' //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+			        },
+			        waiting:{
+						autoShow:true,
+						title:"正在加载...",
+						options:{   //等待框的宽高
+							
+						}
+					}
+			    })
+			}
+			
+			//优惠卷明细
+			mui('.uls_id').on('tap','.coupon',function(event){
+				var id=this.getAttribute('userId');//用户id
+				mui.openWindow({
+			       url:'Coupondetails.html',
+			       id:'Coupondetails.html', //详情页webview的id
+			       extras:{
+			      	userId:id,//自定义扩展参数，可以用来处理页面间传值
+			       },
+			       show: {
+			       	   autoShow: true,
+			           aniShow:'slide-in-right', //页面显示动画
+			           duration:'100' //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+			        },
+			        waiting:{
+						autoShow:true,
+						title:"正在加载...",
+						options:{   //等待框的宽高
+							
+						}
+					}
+			    })
+			})
+			//发放优惠卷
+			mui('.add').on('tap','div',function(event){
+				var id=this.getAttribute('userId');//编号
+				mui.openWindow({
+			       url:'sub2send.html',
+			       id:'sub2send.html', //详情页webview的id
+			       extras:{
+			      	userId:id,//自定义扩展参数，可以用来处理页面间传值
+			       },
+			       show: {
+			       	   autoShow: true,
+			           aniShow:'slide-in-right', //页面显示动画
+			           duration:'100' //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+			        },
+			        waiting:{
+						autoShow:true,
+						title:"正在加载...",
+						options:{   //等待框的宽高
+							
+						}
+					}
+			    })
+			});
+			
+			//编辑客户姓名getAttribute
+	        mui('.uls_id').on('tap','.editname',function(e){
+	        	e.detail.gesture.preventDefault(); //修复iOS 8.x平台存在的bug，使用plus.nativeUI.prompt会造成输入法闪一下又没了
+				var btnArray = ['取消', '确定'];
+				var parent=this;
+				mui.prompt(' ', '输入客户姓名', '编辑姓名', btnArray, function(e) {
+					if (e.index == 1) {
+						//获取输入框值
+						var ex=e.value;
+						if(!ex){    //不能为空
+							mui.toast('姓名不能为空');
+						}else{
+							//修改用户姓名
+							document.querySelector('.customername1').innerHTML=ex;
+							//获取id
+							var nd=parent.parentNode.parentNode.getAttribute('userId');
+							var url=urls+service_url.saleSetUserName_url;
+							  var dataForm={};
+							  dataForm.token=app.getState().token;
+							  dataForm.userId=nd;
+							  dataForm.name=ex;
+							  //根据id向服务器请求新闻详情
+							  ajaxmethod(url,'POST',dataForm,function(res){
+							  	if(res.code==1){
+							  		mui.toast(res.message);
+							  	}else{
+							  		mui.toast('服务器错误');
+							  	}
+							  })
+						}
+						//info.innerText = '谢谢你的评语：' + e.value;
+					} else {
+						//info.innerText = '你点了取消按钮';
+					}
+				})
+	       });
+	       
+	        //点击备注
+	        mui('.uls_id').on('tap','.notes',function(event){
+	       		var id=this.getAttribute('userId');//编号
+	       		mui.openWindow({
+			       url:'sub2remarks.html',
+			       id:'sub2remarks', //详情页webview的id
+			       extras:{
+			      	userId:id,//自定义扩展参数，可以用来处理页面间传值
+			       },
+			       show: {
+			       	   autoShow: true,
+			           aniShow:'slide-in-right', //页面显示动画
+			           duration:'100' //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+			        },
+			        waiting:{
+						autoShow:true,
+						title:"正在加载...",
+						options:{   //等待框的宽高
+							
+						}
+					}
+			    })
+	        })
+		</script>
+	</body>
+
+</html>

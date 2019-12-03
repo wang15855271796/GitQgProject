@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayoutItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:background="@color/app_color_white"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_item_my_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_15dp"
+        android:layout_marginTop="@dimen/size_15dp">
+
+        <TextView
+            android:id="@+id/tv_item_my_order_final_text"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/size_70dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="@color/app_black"
+            android:textSize="@dimen/size_15dp" />
+
+        <com.puyue.www.qiaoge.view.GradientColorTextView
+            android:id="@+id/tv_item_my_order_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/size_15dp"
+            android:textSize="@dimen/size_12dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_15dp"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:id="@+id/orderTime"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_AEAEAE"
+            android:textSize="@dimen/dp_10" />
+
+        <TextView
+            android:id="@+id/subUserBuy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_5dp"
+            android:textColor="@color/color_AEAEAE"
+            android:textSize="@dimen/dp_10" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_15dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="@dimen/size_15dp"
+        android:layout_marginBottom="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/commodityOne"
+                android:layout_width="@dimen/size_46dp"
+                android:layout_height="@dimen/size_46dp"
+                android:background="@drawable/app_my_wallet_bg"
+                android:scaleType="fitXY" />
+
+            <ImageView
+                android:id="@+id/commodityTwo"
+                android:layout_width="@dimen/size_46dp"
+                android:layout_height="@dimen/size_46dp"
+                android:layout_marginLeft="@dimen/size_2dp"
+                android:background="@drawable/app_my_wallet_bg"
+                android:scaleType="fitXY" />
+
+            <ImageView
+                android:id="@+id/commodityThree"
+                android:layout_width="@dimen/size_46dp"
+                android:layout_height="@dimen/size_46dp"
+                android:layout_marginLeft="@dimen/size_2dp"
+                android:background="@drawable/app_my_wallet_bg"
+                android:scaleType="fitXY" />
+
+            <ImageView
+                android:id="@+id/commodityFour"
+                android:layout_width="@dimen/size_46dp"
+                android:layout_height="@dimen/size_46dp"
+                android:layout_marginLeft="@dimen/size_2dp"
+                android:background="@drawable/app_my_wallet_bg"
+                android:scaleType="fitXY" />
+
+            <ImageView
+                android:id="@+id/commodityMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/size_10dp"
+                android:src="@mipmap/ic_ellipsis" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_18dp"
+            android:layout_toLeftOf="@+id/tv_item_my_order_all_price"
+            android:text="￥"
+            android:textColor="#F6551A"
+            android:textSize="@dimen/size_9dp" />
+
+        <TextView
+            android:id="@+id/tv_item_my_order_all_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textColor="#F6551A"
+            android:textSize="@dimen/size_15dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:id="@+id/iv_cancel_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="102dp"
+            android:src="@mipmap/ic_cancel_order"
+            android:visibility="gone" />
+
+
+        <ImageView
+            android:id="@+id/evaluateNow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="102dp"
+            android:src="@mipmap/ic_evaluate_now_two" />
+
+        <ImageView
+            android:id="@+id/imageGo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="@dimen/size_15dp"
+            android:src="@mipmap/ic_pay_now_two"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/againBay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="@dimen/size_15dp"
+            android:src="@mipmap/ic_again_buy_two" />
+
+        <ImageView
+            android:id="@+id/iv_delete_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="102dp"
+            android:src="@mipmap/ic_delete_order"
+            android:visibility="gone" />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/iv_confirm_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="102dp"
+            android:src="@mipmap/ic_confirm_order" />
+
+        <ImageView
+            android:id="@+id/iv_confirm_order_self"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="102dp"
+            android:src="@mipmap/ic_confirm_order_self"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/iv_order_self_return"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="192dp"
+            android:src="@mipmap/ic_order_self_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</LinearLayout>

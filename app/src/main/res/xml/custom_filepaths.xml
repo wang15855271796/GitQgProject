@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <paths>
+        <!-- <external-path path="" name="camera_photos" />-->
+        <!-- <external-files-path name="hm_external_files" path="" />-->
+        <!-- <external-cache-path name="hm_external_cache" path="" />-->
+        <!--  <external-path name="hm_file" path="" />-->
+        <!-- <external-path name="my_images" path="Android/data/com.rpd.yidai/files/Pictures"/>-->
+        <!--<external-path path="" name="Android/data" />-->
+
+        <external-path path="" name="storage/emulated/0" />
+    </paths>
+</resources>

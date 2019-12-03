@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.manin{
+				box-sizing: border-box;
+				padding: 20px;
+				width: 100%;
+			}
+			.title{
+				height: 40px;
+				line-height: 40px;
+				font-weight:500;
+				background: #FFFFFF;
+				color: #333333;
+				font-size: 18px;
+				box-sizing: border-box;
+				padding-left: 10px;
+				padding-right: 10px;
+			}
+			.content{
+				margin-top: 20px;
+				box-sizing: border-box;
+				padding: 10px;
+				background: #FFFFFF;
+				color: #666666;
+				font-size: 12px;
+			}
+			.sigin{
+				text-align: right;
+			}
+			.name{
+				margin-right: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">备注详情</h1>		    
+		</header>
+		<div class="mui-content">		        
+	        <div class="manin">
+	        	<div class="title"> 这里是主题</div>
+	        	<div class="content">
+	        		<div class="content_text">备注内容备注内容备注内容备注内容备注内容备注内容备注内 容备注内容备注内容备注内容备注内容备注内容备注内容备注 内容备注内容备</div>
+	        		<div class="sigin">
+	        			<span class="name">朱龙龙</span>
+	        			<span class="time">2019-08-20</span>
+	        		</div>
+	        	</div>
+	        </div>
+	    </div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function(){
+				window.addEventListener('accountdetail',function(event){
+					var id = event.detail.orderId;	
+					var url=urls+service_url.querySaleUserMemoLogDetail_url;
+					var dataForm={};
+					dataForm.token=app.getState().token;
+					dataForm.id=id;
+					ajaxmethod(url,'POST',dataForm,function(res){
+						//关闭等待框
+					    plus.nativeUI.closeWaiting();
+					    if(res.code==1){
+					    	document.querySelector('.title').innerHTML=res.data.title;
+					    	document.querySelector('.content_text').innerHTML=res.data.content;
+					    	document.querySelector('.name').innerHTML=res.data.creator;
+					    	document.querySelector('.time').innerHTML=res.data.dateTime;
+					    }else{
+					    	 mui.toast(res.message); 
+					    }
+					    //显示当前页面
+					    mui.currentWebview.show();
+					})
+				})
+			})
+		</script>
+	</body>
+
+</html>

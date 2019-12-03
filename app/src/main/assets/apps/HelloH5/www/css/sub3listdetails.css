@@ -1,0 +1,379 @@
+
+body,html{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+}
+.mui-content{
+	background-color: #fff;
+}
+a{
+    text-decoration: none;
+}
+li{
+    list-style: none;
+}
+
+.main{
+    margin: 0;
+    padding: 0; 
+    /* display: none; */
+}
+
+.content{
+    box-sizing: border-box;
+    padding: 20px 10px;
+}
+.Purchasing-method{
+	    box-shadow: 0px 3px 27px 0px rgba(178,178,178,0.27);
+	    background-color: #ffffff;
+	    border-radius: 10px;
+	    box-sizing: border-box;
+	    padding: 10px;
+}
+.method-list{
+	height: 40px;
+	line-height: 40px;
+	display: flex;
+}
+.method-name{
+	width: 90px;
+	color: #333333;
+	font-size: 14px;
+	font-weight: 500;
+}
+.method-num{
+	text-align: right;
+	flex: 1;
+	color: #666666;
+	position: relative;
+}
+.method-num:after{
+	right: 0px;
+    content: '\e583';
+    font-family: Muiicons;
+    font-size: inherit;
+    line-height: 1;
+    position: absolute;
+    top: 50%;
+    display: inline-block;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    text-decoration: none;
+    color: #666666;
+    -webkit-font-smoothing: antialiased;
+}
+.method-iphone{
+	margin-right: 20px;
+}
+.method-type{
+	flex: 1;
+	color: #F56D23;
+	text-align: right;
+}
+.method-eceiving{
+	flex: 1;
+	color: #666666;
+	text-align: right;
+}
+.method-Driver{
+	flex: 1;
+	color: #666666;
+	text-align: right;
+}
+.address{
+	margin-top: 15px;
+    box-shadow:0px 3px 27px 0px rgba(178,178,178,0.27);
+    background-color: #ffffff;
+    border-radius:10px;
+    /* height: 1.65rem; */
+    box-sizing: border-box;
+    padding: 10px;
+}
+.addressitem{
+    display: flex;
+    color: #333333;
+    font-size: 14px;
+}
+.addico{
+    width: 5px;
+    margin-left: 25px;
+    position: relative;
+}
+.addico::after{
+    content: "";
+    width: 18px;
+    height: 23px;
+    position: absolute;
+    top: 1.5px;
+    left: -23px;
+    background-size: 100% 100%;
+    background-image: url(../image/coordinate.png);
+    background-repeat: no-repeat;
+}
+.addlist{
+	flex: 1;
+}
+.a_item_sign{
+    /* height: .36rem; */
+    line-height:18px;
+    font-weight: 500;
+    font-size: 14px;
+}
+.storename{
+    margin-right: 10px;
+}
+.useriphone{
+    margin-left: 10px;
+}
+.a_item_name{
+    line-height:18px
+    font-weight: 500;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.box{
+    margin-top: 15px;
+    /* height: 6.11rem; */
+    max-height: 305.5px;
+    box-shadow:0px 3px 27px 0px rgba(178,178,178,0.27);
+    border-radius:10px;
+    box-sizing: border-box;
+    padding: 10px 7.5px;
+    overflow-y: auto;
+}
+.boxlist{
+   display: flex;
+   margin: 5px 0;
+}
+.boximg{
+    width: 66px;
+    height: 66px;
+}
+.boximg img{
+    width: 100%;
+    height: 100%;
+}
+.boxitem{
+    flex: 1;
+    overflow: hidden;
+}
+.shopname {
+    margin:0 30px 0 10px;
+    height: 40px;
+    /* overflow: hidden; */
+    position: relative;
+}
+.shopname_scale{
+    width: 200%;
+    font-size: 22px;
+    transform: scale(0.5) translate(-50%,-50%);
+    position: absolute;
+    color: #000;
+    line-height: 40px;
+    /* transform: translate(-50%,-50%); */
+    /* top: -50%;
+    left: -50%; */
+}
+
+.group{
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    top: 1px;
+    right: -30px;
+    /* background-size: 100% 100%;
+    background-image: url(../image/group.png);
+    background-repeat: no-repeat;  */
+}
+.group img{
+    width: 100%;
+    height: 100%;
+}
+.Specifications{
+    display: flex;
+    /* height: .28rem; */
+    /* margin-top: .1rem; */
+    margin-left: 5px;
+}
+.Price{
+    flex: 1;
+    position: relative;
+    /* overflow: hidden; */
+}
+
+
+.Price{
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: space-around; */
+}
+
+.Price>div {
+    position: relative;
+    height: 17.5px;
+    width: 50%;
+    color: #939393;
+    font-size: 10px;
+}
+
+.oldPrice{
+    width: 50px;
+    text-align: center;
+    font-size: 13px;
+}
+.newPrice{
+    text-align: right;
+    width: 55px;
+
+    color: #F6551A;
+    position: relative;
+    font-size: 13px;
+}
+.newPrice>span{
+    position: absolute; 
+    font-size: .4rem;
+    line-height: .56rem;
+    width: 200%;
+    height: 200%;
+    transform: scale(0.5) translate(-150%,-50%);
+}
+.Dividing{
+    color: #939393;
+    line-height: 25px;
+    height: 25px;
+    text-align: center;
+    overflow: hidden;
+}
+.Dividing>span{
+    display: inline-block;
+    font-size: 11px;
+}
+.moneylist{
+    width: 100%;
+}
+.moneyitem{
+    height: 30px;
+    line-height: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    padding: 0 15px;
+}
+.moneyitem>div{
+    width: 33.33%;
+    height: 30px;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+    font-weight:500;
+    font-size: 11px;
+}
+.moneyitem>.detailsleft{
+    text-align: left;
+}
+
+.moneyitem>.detailscontent{
+    text-align: center;
+}
+
+.moneyitem>.detailsrg{
+    text-align: right;
+}
+.Amount{
+    height: 40px;
+    line-height: 40px;
+    display: flex;
+    flex-direction: row-reverse;
+    box-sizing: border-box;
+    padding: 0 15px;
+    overflow: hidden;
+    color: #000;
+    font-size: 11px;
+    
+}
+
+
+.Amountname> .Company{
+	color: #F6551A;
+}
+.Amountnumber{
+	color: #F6551A;
+	font-size: 22px;
+}
+.information{
+    box-sizing: border-box;
+    padding: 15px;
+}
+.informationname{
+	color: #CEA6FF;
+	font-size: 14px;
+	font-weight:500;
+	height: 40px;
+	line-height: 40px;
+}
+.informationlist{
+	height: 40px;
+	line-height: 40px;
+	overflow: hidden;
+	color: #000;
+	font-size: 11px;
+}
+
+.informationlist span:first-child{
+	color: #939393;
+}
+.informationlist span:nth-child(2){
+	margin-left: 5px;
+}
+.informationlist .informationico{
+	margin-left: 5px !important;
+	position: relative;
+}
+.informationico::after{
+	position: absolute;
+	content: "";
+	width: 20px;
+	height: 20px;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	top: 50%;
+	left: 0%;
+	transform: translate(0%,-50%);
+}
+.informtype1::after{
+    background-image: url("../image/balance.png");
+}
+.informtype2::after{
+    background-image: url("../image/zhifubao.png");
+}
+.informtype3::after{
+    background-image: url("../image/WeChat.png");
+}
+.Remarks{
+    display: flex;
+    flex-wrap: nowrap;
+}
+.Remarksname{
+	width: 70px;
+	height: 40px;
+ 	line-height: 40px;
+	color: #939393;
+	font-size: 11px;
+	position: relative;
+}
+
+.Remarkssign{
+	flex: 1;
+	height: 140px;
+	color: #939393;
+	border: 1px solid #C7C7CC;
+	border-radius:10px;
+	font-weight:500;
+	line-height: 30px;
+	color: #000000;
+	font-size: 11px;
+}

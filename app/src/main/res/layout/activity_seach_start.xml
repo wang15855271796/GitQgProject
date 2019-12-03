@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_30dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingTop="6dp">
+
+        <LinearLayout
+            android:id="@+id/iv_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/ic_back_arrow" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="@dimen/size_5dp"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/size_5dp"
+            android:layout_weight="1"
+            android:background="@drawable/app_search"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="6dp">
+
+            <EditText
+                android:id="@+id/et_goods"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:drawablePadding="5dp"
+                android:drawableLeft="@mipmap/icon_search"
+                android:background="@drawable/bg_search_edit"
+                android:hint="请输入商品名称"
+                android:imeOptions="actionSearch"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:singleLine="true"
+                android:textColorHint="@color/app_cancle_gray"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/iv_activity_search_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="0.06"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="搜索"
+                android:textColor="@color/color_333"
+                android:textSize="13sp" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_activity_search_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="取消"
+            android:textColor="@color/app_front_black"
+            android:textSize="15dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f8f8f8" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="历史搜索"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:layout_marginTop="27dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/iv_clear"
+            android:layout_marginTop="27dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_marginRight="12dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/icon_clear_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+
+
+        <com.puyue.www.qiaoge.activity.flow.TagFlowLayout
+            android:id="@+id/fl_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            app:is_limit="true"
+            app:limit_line_count="2"
+            app:max_select="1">
+
+        </com.puyue.www.qiaoge.activity.flow.TagFlowLayout>
+
+    <TextView
+        android:id="@+id/tv_arrow"
+        android:text="查看更多"
+        android:layout_marginTop="@dimen/dp_10"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:drawablePadding="@dimen/dp_10"
+        android:drawableRight="@mipmap/icon_arrow_down"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+    <com.puyue.www.qiaoge.view.LineBreakLayout
+        android:visibility="gone"
+        android:id="@+id/tv_item_search_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textSpe"
+        android:layout_alignLeft="@+id/textSpe"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="@dimen/size_15dp"
+        android:layout_marginRight="@dimen/size_15dp"
+        android:padding="@dimen/size_5dp"
+        android:paddingBottom="@dimen/size_5dp"
+        app:grivate="left"
+        app:horizontal_Space="@dimen/size_10dp"
+        app:isFull="false"
+        app:vertical_Space="10dp" />
+
+    <TextView
+        android:text="产品推荐"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_marginTop="27dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

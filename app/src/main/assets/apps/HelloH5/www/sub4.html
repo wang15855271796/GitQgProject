@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style type="text/css">
+		.mui-control-content {
+			background-color: white;
+			min-height: 215px;
+		}
+		.mui-control-content .mui-loading {
+			margin-top: 50px;
+		}
+		.mui-table-view .mui-media-object {
+		    line-height: normal;
+		    max-width: 120px;
+		    height: 50px;
+		    background: #FF8625;
+		    color: #FFFFFF;
+		    box-sizing: border-box;
+		    padding: 0 10px;
+		    /*margin-right:0px !important;*/
+		}
+		.mui-table-view .gray{
+			background: #999999 !important;
+		}
+		.even-neme{
+			height: 30px;
+			font-size: 24px;
+			font-weight: bold;
+			text-align: center;
+		}
+		.even-neme span{
+			font-size: 12px;
+		}
+		.even-detail{
+			height: 20px;
+			font-size: 10px;
+			text-align: center;
+		}
+		.mlist-name{
+			height: 25px;
+			line-height: 25px;
+			display: flex;
+			justify-content: space-between;
+		}
+		.mlist-name .textlf{
+			color: #333333;
+			font-size: 16px;
+		}
+		.mlist-name .textrg{
+			color: #F56D23;
+			font-size: 10px;
+		}
+		.mcoupon-item{
+			height: 25px;
+			line-height: 25px;
+			display: flex;
+			justify-content: space-between;
+			color: #C4C4C4;
+			font-size: 10px;
+		}
+	</style>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <h1 class="mui-title">我的优惠券</h1>
+		</header>
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-chevron"></ul>
+			</div>
+		</div>	
+		<script src="js/mui.min.js"></script>
+		<script src="js/api.js"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				var mainPage = null;//获得页面   判断webview是否存在
+				$.plusReady(function() {
+					mui.init({
+						pullRefresh: {
+							container: '#pullrefresh',
+							down: {
+								height:50,//可选,默认50.触发下拉刷新拖动距离,
+								//offset:0,
+							    auto: true,//可选,默认false.首次加载自动下拉刷新一次
+							    contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+							    contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+							    contentrefresh : "正在加载...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+								style:'circle',
+								callback: function(){
+									window.setTimeout(function(){										
+										var url=urls+service_url.querySaleSelfGiftList_url;
+										var dataForm={};
+										dataForm.token=app.getState().token;
+										dataForm.state='';
+										ajaxmethod(url,'POST',dataForm,function(res){
+											mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+											var list=res.data;
+											var html='';
+											for (var i in list) {
+												html+='<li class="mui-table-view-cell" poolNo="'+ list[i].poolNo+'">';
+													if(list[i].availNum==0){html+='<div class="mui-media-object mui-pull-left gray">';}
+													else{html+='<div class="mui-media-object mui-pull-left">';}							
+														html+='<div class="even-neme">'+list[i].amount+'<span>元</span></div>';
+														html+='<div class="even-detail">点击查看详情</div>';
+													html+='</div>';
+													html+='<div class="mui-media-body">';
+														html+='<div class="mlist-name">';
+															html+='<span class="textlf">'+list[i].giftName+'</span>';
+														html+='</div>';
+														html+='<p class="mui-ellipsis mcoupon-item">';
+															html+='<span class="textlf">总量：'+list[i].totalNum+'</span>';
+															html+='<span class="textc">发放量：'+list[i].usedNum+'</span>';
+															html+='<span class="textrg">剩余量：'+list[i].availNum+'</span>';
+														html+='</p>';
+													html+='</div>';
+												html+='</li>';
+											}
+											document.querySelector('.mui-table-view').innerHTML=html;					
+										})
+									},500);
+								}
+							}
+						}
+					});
+					
+
+					//预加载				
+					var main_loaded_flag = false;   //初始化不存在
+					if(!mainPage){
+						//不存在的时候预加载主页面
+						mainPage = $.preload({
+							"id": 'sub4details',
+							"url": './page/sub4details.html'
+						});
+					}else{
+						main_loaded_flag = true;
+					}
+					//是否加载完成
+					mainPage.addEventListener("loaded",function () {
+						main_loaded_flag = true;
+					});
+					
+					
+					//查看详情
+					mui('ul.mui-table-view').on('tap','li',function(event){
+						var ev_nd=this;
+						var id = setInterval(function () {
+							if(main_loaded_flag){
+								clearInterval(id);
+								mui.fire(mainPage,'update',{//触发事件
+							        poolNo:ev_nd.getAttribute('poolNo')
+							    });
+							    mainPage.show('slide-in-right',300);//显示详情页 
+							}
+						},20);	
+						
+						    
+					})
+				})
+			}(mui, document));
+		</script>
+	</body>
+
+</html>

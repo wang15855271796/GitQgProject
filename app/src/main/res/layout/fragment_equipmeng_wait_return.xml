@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_color_white"
+    android:orientation="vertical">
+
+    <in.srain.cube.views.ptr.PtrClassicFrameLayout
+        android:id="@+id/ptr_equipment_wait_return"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_equipment_wait_return"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/iv_equipment_wait_return_no_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:src="@mipmap/ic_no_data"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_line_size"
+        android:background="#CBCBCB" />
+
+    <LinearLayout
+        android:id="@+id/ll_equipment_wait_return_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rl_equipment_all_select"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_equipment_all_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="全选"
+                android:textColor="#A7A7A7"
+                android:textSize="15dp" />
+
+            <CheckBox
+                android:id="@+id/cb_equipment_all_select"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:layout_toLeftOf="@id/tv_equipment_all_select"
+                android:background="@drawable/app_equipment_all_select"
+                android:button="@null"
+                android:clickable="false"
+                android:enabled="false" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_equipment_return"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#F56D23"
+            android:gravity="center"
+            android:text="一键归还"
+            android:textColor="@color/app_color_white"
+            android:textSize="15dp" />
+    </LinearLayout>
+</LinearLayout>

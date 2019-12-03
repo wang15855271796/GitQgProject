@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+		<style>
+			.mui-input-group {
+				margin-top: 10px;
+			}
+			
+			.mui-input-group:first-child {
+				margin-top: 20px;
+			}
+			
+			.mui-input-group label {
+				width: 22%;
+			}
+			
+			.mui-input-row label~input,
+			.mui-input-row label~select,
+			.mui-input-row label~textarea {
+				width: 78%;
+			}
+			
+			.mui-checkbox input[type=checkbox],
+			.mui-radio input[type=radio] {
+				top: 6px;
+			}
+			
+			.mui-content-padded {
+				margin-top: 25px;
+			}
+			
+			.mui-btn {
+				padding: 10px;
+			}
+			
+		</style>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">登录</h1>
+		</header>		
+		<div class="mui-content">
+			<form id='login-form' class="mui-input-group">
+				<div class="mui-input-row">
+					<label>账号</label>
+					<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入账号">
+				</div>
+				<div class="mui-input-row">
+					<label>密码</label>
+					<input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
+				</div>
+			</form>
+			<form class="mui-input-group">
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell">
+						记住密码
+						<div id="autoLogin" class="mui-switch">
+							<div class="mui-switch-handle"></div>
+						</div>
+					</li>
+				</ul>
+			</form>
+			<div class="mui-content-padded">
+				<button id='login' type="button" class="mui-btn mui-btn-block mui-btn-primary">登录</button>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			(function($, doc) {
+				mui.init({
+					statusBarBackground: '#f7f7f7',
+					swipeBack:true //启用右滑关闭功能
+				});	
+				
+				
+				$.plusReady(function() {
+					var settings = app.getSettings();  //获取是否自动登陆
+					var state = app.getState();      //获取当前状态
+					var mainPage = plus.webview.getWebviewById("main");//获得页面   判断webview是否存在
+					var main_loaded_flag = false;   //初始化不存在
+					if(!mainPage){
+						//不存在的时候预加载主页面
+						mainPage = $.preload({
+							"id": 'main',
+							"url": 'main.html'
+						});
+					}else{
+						main_loaded_flag = true;
+					}
+					//加载
+					mainPage.addEventListener("loaded",function () {
+						main_loaded_flag = true;
+					});
+					
+					var toMain = function() {
+						//使用定时器的原因：
+						//可能执行太快，main页面loaded事件尚未触发就执行自定义事件，此时必然会失败
+						var id = setInterval(function () {
+							if(main_loaded_flag){
+								clearInterval(id);
+								$.fire(mainPage, 'show', null);
+								mainPage.show("pop-in");//打开预加载页面
+							}
+						},20);
+					};
+					//登陆
+					if (settings.autoLogin && state.token) {						
+						//自动登陆，同时记住密码
+						toMain();
+					}else{
+						app.setState(null);
+					}
+										
+					var loginButton = doc.getElementById('login');		//获取登陆
+					var accountBox = doc.getElementById('account');		//获取账号
+					var passwordBox = doc.getElementById('password');		//获取密码
+					var autoLoginButton = doc.getElementById("autoLogin");	//记住密码
+					//var regButton = doc.getElementById('reg');				//注册
+					//var forgetButton = doc.getElementById('forgetPassword');	//忘记密码
+					loginButton.addEventListener('tap', function(event) {
+						var loginInfo = {
+							loginName: accountBox.value,   	//账号
+							loginPwd: passwordBox.value		//密码
+						};						
+						app.login(loginInfo, function(err) {
+							if (err) {
+								plus.nativeUI.toast(err);  //弱提示
+								return;
+							}							
+							toMain();
+						});
+					});
+					
+					
+					autoLoginButton.classList[settings.autoLogin ? 'add' : 'remove']('mui-active')
+					autoLoginButton.addEventListener('toggle', function(event) {
+						setTimeout(function() {
+							var isActive = event.detail.isActive;
+							settings.autoLogin = isActive;
+							app.setSettings(settings);
+						}, 50);
+					}, false);
+					//键盘事件
+					/*window.addEventListener('resize', function() {
+						oauthArea.style.display = document.body.clientHeight > 400 ? 'block' : 'none';
+					}, false);*/
+					//阻止返回
+					var backButtonPress = 0;
+					$.back = function(event) {
+						backButtonPress++;
+						if (backButtonPress > 1) {
+							plus.runtime.quit();
+						} else {
+							plus.nativeUI.toast('再按一次退出应用');
+						}
+						setTimeout(function() {
+							backButtonPress = 0;
+						}, 1000);
+						return false;
+					};
+				})
+			}(mui, document))
+		</script>
+	</body>
+
+</html>

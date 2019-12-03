@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shanyan_privacy_rootlayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:id="@+id/shanyan_privacy_checkbox_rootlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:paddingBottom="10dp">
+
+        <CheckBox
+            android:id="@+id/shanyan_privacy_checkbox"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@drawable/umcsdk_check_image"
+            android:button="@null"
+            android:checked="true" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/shanyan_privacy_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:lineSpacingMultiplier="1.3"
+        android:text="同意《运营商服务协议》并授权闪验获取本机号码"
+        android:textColor="#222222"
+        android:textSize="10sp" />
+</LinearLayout>

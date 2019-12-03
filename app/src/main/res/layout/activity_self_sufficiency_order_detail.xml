@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.puyue.www.qiaoge.view.CompatToolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_30dp"
+        android:background="@drawable/app_border_bottom_bg">
+
+        <ImageView
+            android:id="@+id/imageViewBreak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:src="@mipmap/ic_back_arrow" />
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="13dp"
+            android:text="订单详情"
+            android:textColor="@color/app_black"
+            android:textSize="16dp" />
+
+    </com.puyue.www.qiaoge.view.CompatToolbar>
+
+    <android.support.v4.widget.NestedScrollView
+        android:background="@color/color_F6F6F6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <include layout="@layout/activity_self_order_head" />
+
+
+            <include layout="@layout/activity_confirm_order_head_four" />
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/relativeLayout_driver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/new_order_bg"
+                android:paddingBottom="5dp">
+                <TextView
+                    android:id="@+id/tv_driver_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@mipmap/driver_iv"
+                    android:drawablePadding="10dp"
+                    android:text="2019-3-10"
+                    android:textColor="#333333"
+                    android:textSize="15dp" />
+                <ImageView
+                    android:id="@+id/iv_fresh_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_toRightOf="@id/tv_driver_content"
+                    android:src="@mipmap/iv_driver_status" />
+                <TextView
+                    android:id="@+id/tv_order_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="等待接受订单"
+                    android:textColor="#333333"
+                    android:textSize="15dp" />
+                <TextView
+                    android:id="@+id/tv_driver_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_driver_content"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="5dp"
+                    android:text="程师傅"
+                    android:textSize="15dp" />
+                <TextView
+                    android:id="@+id/tv_driver_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_driver_content"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@id/tv_driver_name"
+                    android:text="程师傅"
+                    android:textSize="15dp" />
+                <TextView
+                    android:id="@+id/tv_order_driver_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_order_status"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    android:text="查看物流信息"
+                    android:textColor="#FE560A"
+                    android:textSize="15dp"
+                    android:visibility="gone" />
+            </RelativeLayout>
+            <LinearLayout
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/new_order_bg"
+                android:orientation="horizontal"
+                android:padding="@dimen/size_10dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/address_location" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tvNewOrderAddresseeName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/size_15dp"
+                        android:textColor="@color/app_black"
+                        android:textSize="@dimen/size_11dp" />
+                    <TextView
+                        android:id="@+id/tvNewOrderAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/size_15dp"
+                        android:textColor="@color/app_black"
+                        android:textSize="@dimen/size_11dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayout_address_arrow"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/address_arrow" />
+                </LinearLayout>
+            </LinearLayout>
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/confirm_order_three">
+                <com.puyue.www.qiaoge.view.MaxHeightRecyclerView
+                    android:id="@+id/recyclerView"
+                    android:background="@drawable/confirm_order_three"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:maxHeight="360dp">
+                </com.puyue.www.qiaoge.view.MaxHeightRecyclerView>
+            </RelativeLayout>
+            <include layout="@layout/activity_new_order_foot" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+
+</LinearLayout>

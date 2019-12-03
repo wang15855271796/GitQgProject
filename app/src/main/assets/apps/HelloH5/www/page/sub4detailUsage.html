@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+		<style type="text/css">
+			.header{
+				display: flex;
+				justify-content: space-around;
+			}
+			.mui-pull-left{
+				
+			}
+			.mui-input-clear{
+				flex: 1;
+			}
+			input[type=search]{
+				font-size: 14px;
+			}
+			.search_right{
+				line-height: 40px;
+				text-align: center;
+				margin-left: 10px;
+				color: #333333;
+				font-size: 14px;
+			}
+			.mui-media{
+				display: flex;
+				height: 72px;
+			}
+			.online-type{
+				border-radius: 50%;
+				background:#F56D23;
+				color: #FFFFFF;
+				width: 50px;
+				text-align: center;
+				line-height: 50px;
+				font-size: 10px;
+				margin-right: 10px;
+			}
+			.user-name-phone{
+				width: 120px;
+				
+			}
+			.user-name{
+				height: 28px;
+				line-height: 28px;
+				font-size: 17px;
+			}
+			.user-phone{
+				font-size: 14px;
+				color: #8f8f94;
+				height: 22px;
+				line-height: 22px;
+			}
+			.endtime{
+				flex: 1;
+				color: #2D2DFF;
+				font-size: 12px;
+				font-weight: bold;
+				line-height: 78px;
+			}
+			.userdetail{
+				flex: 1;
+				display: flex;
+				flex-direction: row-reverse;
+				align-items: center;
+			}
+		</style>
+	<body>
+		<header class="mui-bar mui-bar-nav header">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <input type="search" placeholder="请输入客户姓名或电话" class="mui-input-clear whiteBg" autofocus="autofocus"/>
+		    <div class="search_right">搜索</div>
+		</header>
+		<div class="mui-content">
+		    <ul class="mui-table-view">
+				<!--<li class="mui-table-view-cell mui-media">
+			        <div class="online-type">线上</div>
+			        <div class="user-name-phone">
+			        	<div class="user-name">
+			        		孙闯
+			        	</div>
+			        	<div class="user-phone">
+			        		182 0347 1798 
+			        	</div>
+			        </div>
+			        <div class="endtime">
+			        	到期时间：2019-04-13
+			        </div>
+			        <div class="userdetail">
+			        	<button type="button" class="mui-btn mui-btn-success mui-btn-outlined">订单详情</button>
+			        </div>
+			    </li>-->
+			</ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function(){				
+				var self = plus.webview.currentWebview();
+				var id = self.Issue;   //礼物编号
+				show(id,'');
+				document.querySelector('.search_right').addEventListener('tap',function(){	
+					var parameter=document.querySelector('.whiteBg').value;  //获取value值
+					show(id,parameter)
+				})
+				
+				
+				//展示
+				function show(id,parameter){
+					//清空
+					var f=document.body.querySelector('.mui-table-view');
+					var childs=f.childNodes;
+					for(var i = childs.length - 1; i >= 0; i--) {
+	                  f.removeChild(childs[i]);
+	                }	
+					var url=urls+service_url.queryGiftSendUser_url;
+					var dataForm={};
+					dataForm.token=app.getState().token;
+					dataForm.nameOrPhone=parameter;
+					dataForm.poolNo=id;
+					//console.log(JSON.stringify(dataForm));
+					ajaxmethod(url,'POST',dataForm,function(res){
+						if(res.code==1){
+							var data=res.data;
+							//console.log(JSON.stringify(res));
+							var table = document.body.querySelector('.mui-table-view');
+							if(data.length>0){
+								for (var i=0;i<data.length;i++) {
+									var result="";
+									var li = document.createElement('li');
+									li.className = 'mui-table-view-cell mui-media';
+									result+='<div class="online-type">'+data[i].stateDesc+'</div>';
+									result+='<div class="user-name-phone">';
+										result+='<div class="user-name">'+data[i].userName+'</div>';
+										result+='<div class="user-phone">'+data[i].phone+'</div>';
+							        result+='</div>';
+							        if(data[i].state=='USED'){
+							        	result+='<div class="userdetail">';
+							        		result+='<button type="button" class="mui-btn mui-btn-success mui-btn-outlined" no="'+data[i].giftDetailNo+'">订单详情</button>';
+							        	result+='</div>'
+							        }else{
+							        	result+='<div class="endtime">到期时间：'+data[i].expireTime+'</div>';
+							        }
+									li.innerHTML=result;
+							        //下拉刷新，新纪录插到最前面；
+							        table.appendChild(li);							        
+								}
+							}else{
+								table.innerHTML=record;
+							}
+						}else{
+							mui.toast(res.message)
+						}
+					})
+				}
+			})
+			//点击详情
+			mui('ul.mui-table-view').on('tap','.mui-btn',function(e){
+				var no=this.getAttribute("no");
+				mui.openWindow({					//打开新的页面
+					url:'sub4detailshow.html',
+					id:"sub4detailshow.html",
+					style:{},
+					show:{
+						autoShow: false,
+						aniShow: "slide-in-right",   //配置动画 
+						duration: 100     //配置动画
+					},
+					extras:{  
+				        giftDetailNo:no,  				
+				    },  
+					waiting:{
+						autoShow:true,
+						title:"正在加载...",
+						options:{   //等待框的宽高
+							
+						}
+					}
+				})
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginLeft="@dimen/size_23dp"
+    android:layout_marginRight="@dimen/size_23dp"
+    android:background="@drawable/dialog_auth"
+    android:orientation="vertical">
+
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="@dimen/size_25dp"
+        android:text="请输入邀请码:"
+        android:textColor="#FF333333"
+        android:textSize="@dimen/size_18dp" />
+
+    <EditText
+        android:id="@+id/et_dialog_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/dialog_auth_text_bg"
+        android:gravity="center"
+        android:hint="点击输入邀请码"
+        android:inputType="number"
+        android:padding="10dp"
+        android:textColor="@color/color333333"
+        android:textColorHint="#ffb6b6b6"
+        android:textSize="28dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="客服电话："
+            android:textColor="#ffb9b9b9"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_dialog_cell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#3595D8"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_line_size"
+        android:background="@color/app_line_gray"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_30dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_dialog_cancle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="取消"
+            android:textColor="#ffbebdc0"
+            android:textSize="14dp" />
+
+        <View
+            android:layout_width="@dimen/app_line_size"
+            android:layout_height="match_parent"
+            android:background="@color/app_line_gray" />
+
+        <TextView
+            android:id="@+id/tv_dialog_sure"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_auth_ok"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="下一步"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+</LinearLayout>

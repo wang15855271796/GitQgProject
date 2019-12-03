@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/size_15dp"
+        android:background="@mipmap/ic_new_order_head_bg"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/orderLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvOrderTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_15dp"
+                android:gravity="center_horizontal"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_18dp" />
+
+            <com.puyue.www.qiaoge.view.SnapUpCountDownTimerView
+                android:id="@+id/orderTimerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_10dp"
+                android:gravity="center_horizontal"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvOrderContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="收到商品后，可以来评价试试"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_12dp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout_shipped"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_order_return"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_50dp"
+                    android:background="@drawable/app_new_order_evaluate_bg"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/size_20dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_20dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:text="售         后"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size_15dp" />
+
+                <TextView
+                    android:id="@+id/tv_copy_order"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/size_40dp"
+                    android:background="@drawable/white_bg"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/size_20dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_20dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:text="复制订单"
+                    android:textColor="@color/color_785DFD"
+                    android:textSize="@dimen/size_15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:id="@+id/linearLayout_evalute"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/size_25dp"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+
+                    android:visibility="gone"
+                    android:id="@+id/buttonReturnGood_two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/app_new_order_return_goods_bg"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/size_20dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_20dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:text="售后"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size_15dp" />
+
+                <!--<TextView
+                    android:id="@+id/tv_confirm_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:background="@drawable/white_bg"
+                    android:paddingLeft="@dimen/size_20dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_20dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:text="确认收货"
+                    android:textColor="@color/color_785DFD"
+                    android:textSize="@dimen/size_15dp" />-->
+
+                <TextView
+                    android:id="@+id/buttonEvaluate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:background="@drawable/app_new_order_evaluate_bg"
+                    android:paddingLeft="@dimen/size_20dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_20dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:text="评价"
+                    android:visibility="gone"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size_15dp"
+                    />
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tv_evaluate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:background="@drawable/app_new_order_evaluate_bg"
+                    android:paddingLeft="@dimen/size_20dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_20dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:text="查看评价"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size_15dp" />
+                <TextView
+
+                    android:id="@+id/buttonAgainBuy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:background="@drawable/white_bg"
+                    android:paddingLeft="@dimen/size_20dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_20dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:src="@mipmap/ic_order_two_by"
+                    android:text="复制订单"
+                    android:textColor="@color/color_785DFD"
+                    android:textSize="@dimen/size_15dp" />
+            </LinearLayout>
+            <LinearLayout
+android:visibility="gone"
+                android:id="@+id/threeButtonLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_25dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:id="@+id/buttonReturnGoods"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/app_new_order_return_goods_bg"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/size_20dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_20dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:text="售后"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size_15dp" />
+
+                <TextView
+                    android:id="@+id/tv_confirm_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:background="@drawable/white_bg"
+                    android:paddingLeft="@dimen/size_20dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_20dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:text="确认提货"
+                    android:textColor="@color/color_785DFD"
+                    android:textSize="@dimen/size_15dp" />
+
+
+                <TextView
+                    android:id="@+id/copy_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:background="@drawable/white_bg"
+                    android:paddingLeft="@dimen/size_20dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_20dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:src="@mipmap/ic_order_two_by"
+                    android:text="复制订单"
+                    android:textColor="@color/color_785DFD"
+                    android:textSize="@dimen/size_15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/twoButtonLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_25dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/buttonCancelOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/app_new_order_evaluate_bg"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/size_30dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_30dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:text="取消订单"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size_15dp" />
+
+
+                <TextView
+                    android:id="@+id/buttonGOPay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:background="@drawable/white_bg"
+                    android:paddingLeft="@dimen/size_30dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_30dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:src="@mipmap/ic_order_two_by"
+                    android:text="立即付款"
+                    android:textColor="@color/color_785DFD"
+                    android:textSize="@dimen/size_15dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:visibility="gone"
+                android:gravity="center"
+                android:id="@+id/linearLayout_get_order"
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_get_order_copy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:background="@drawable/white_bg"
+                    android:paddingLeft="@dimen/size_20dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_20dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:src="@mipmap/ic_order_two_by"
+                    android:text="复制订单"
+                    android:textColor="@color/color_785DFD"
+                    android:textSize="@dimen/size_15dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/deleteButtonLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_25dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/app_new_order_return_goods_bg"
+                    android:paddingLeft="@dimen/size_20dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_20dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:text="删除订单"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+
+                <TextView
+
+                    android:id="@+id/tv_buttonAgainBuy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:background="@drawable/white_bg"
+                    android:paddingLeft="@dimen/size_20dp"
+                    android:paddingTop="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_20dp"
+                    android:paddingBottom="@dimen/size_10dp"
+                    android:src="@mipmap/ic_order_two_by"
+                    android:text="复制订单"
+                    android:textColor="@color/color_785DFD"
+                    android:textSize="@dimen/size_15dp" />
+                />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ReturnGoodsLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/size_25dp"
+       >
+
+            <TextView
+                android:id="@+id/ReturnGoodsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_40dp"
+                android:gravity="center_horizontal"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_18dp" />
+
+            <TextView
+                android:id="@+id/ReturnGoodsContent"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_45dp"
+                android:gravity="center_horizontal"
+                android:text="收到商品后，可以来评价试试"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_12dp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/ic_view_icon" />
+</LinearLayout>

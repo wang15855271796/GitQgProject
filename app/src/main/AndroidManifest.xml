@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.puyue.www.qiaoge">
+
+    <!-- Required Required  自定义权限 只有相同的签名可以访问 普通 -->
+    <permission
+        android:name="com.barbecue.app.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="com.barbecue.app.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 允许应用在手机屏幕关闭后后台进程仍然运行,用户唤醒权限 普通 -->
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <!-- Required 普通 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Required 危险，但申请写就会有读 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- //地图SDK（包含其搜索功能）需要的基础权限 -->
+    <!-- 允许程序打开网络套接字 普通权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 允许程序设置内置sd卡的写权限 危险 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 允许程序获取网络状态 普通 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 允许程序访问WiFi网络信息 普通 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 允许程序读写手机状态和身份 危险 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 允许程序访问CellID或WiFi热点来获取粗略的位置 危险 -->
+    <!--  读取系统信息，包含系统版本等信息，用作统计-->
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 允许程序读取或写入系统设置 爆红 原因是因为现在是signature 这个判断出来之后需要引导用户去进行系统设置 -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <!-- 允许访问振动设备 普通权限 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 允许程序修改全局音频设置  普通权限 -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- 允许挂载和反挂载文件系统可移动存储 爆红 原因是因为现在是signature -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- 8.0系统，允许安装未知来源的apk的权限 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <!-- 系统级别权限 -->
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+
+    <!-- 这个权限用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <!-- 这个权限用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
+    <!-- 用于读取手机当前的状态-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <!-- 访问网络，网络定位需要上网-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- SD卡读取权限，用户写入离线定位数据-->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"></uses-permission>
+    <uses-permission android:name="android.permission.GET_TASKS" />
+<!--io.dcloud.application.DCloudApplication-->
+    <application
+        android:name="io.dcloud.application.DCloudApplication"
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        tools:replace="android:name"
+        android:usesCleartextTraffic="true"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="KqnEcjvFD0DdacMhQxUtxtSYm2Fj9Lia">
+
+
+        </meta-data>
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote">
+
+        </service>
+        <!--  -->
+        <activity
+            android:name=".activity.HomeActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize|stateVisible">
+            <!-- 商品分享出去打开app -->
+            <!-- Main /LAUNCHER之前存放的位置 -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />　　　　　　
+                <category android:name="android.intent.category.DEFAULT" />　　　
+                <category android:name="android.intent.category.BROWSABLE" />　　
+                <data
+                    android:host="android"
+                    android:scheme="wushang" />
+            </intent-filter>
+        </activity>
+        <!--  -->
+        <!-- 优化空白在theme里 -->
+        <activity
+            android:launchMode="singleTask"
+            android:name=".activity.SplashActivity"
+            android:theme="@style/AppBlackTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="cn.jpush.android.service.PushService"
+            android:process=":multiprocess"
+            tools:node="replace" />
+
+        <!--  -->
+        <activity
+            android:name=".activity.mine.FeedBackActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+        <!--  -->
+        <activity android:name=".activity.mine.login.LoginActivity"
+
+            />
+
+
+        <activity android:name=".activity.mine.login.RegisterStep1Activity"/>
+        <activity android:name=".activity.mine.login.RegisterMessageActivity"/>
+        <activity android:name=".activity.home.CouponDetailActivity"/>
+        <activity android:name=".activity.home.TeamDetailActivity"/>
+        <activity android:name=".activity.home.NewProductActivity"
+            />
+        <activity android:name=".activity.home.SelectionGoodActivity"/>
+        <activity android:name=".adapter.home.HotProductActivity"/>
+
+        <activity android:name=".adapter.home.CommonProductActivity"/>
+
+        <activity android:name=".adapter.home.ReductionProductActivity"/>
+
+        <activity android:name=".activity.mine.login.DcloudActvity" />
+        <!-- android:screenOrientation="portrait" -->
+        <activity
+            android:name=".activity.mine.login.RegisterActivity"
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
+        <!--  -->
+        <activity android:name=".activity.mine.account.AccountCenterActivity" />
+        <!--  -->
+        <activity android:name=".activity.mine.account.SubAccountActivity" />
+        <!--  -->
+        <activity android:name=".activity.mine.MessageCenterActivity" />
+        <!--  -->
+        <activity android:name=".activity.TestActivity"/>
+        <activity android:name=".activity.mine.account.EditAccountInputPhoneActivity" />
+        <!--  -->
+        <activity android:name=".activity.mine.account.EditPasswordInputCodeActivity" />
+        <!--  -->
+        <activity android:name=".activity.mine.account.EditPasswordInputPasswordActivity" />
+        <!--  -->
+        <activity android:name=".activity.mine.account.EditAccountOrPasswordResultActivity" />
+        <!-- <activity android:name=".activity.mine.wallet.MineWalletActivity" />-->
+        <activity android:name=".activity.mine.wallet.WithDrawActivity" />
+        <activity android:name=".activity.mine.wallet.RechargeActivity" />
+        <activity android:name=".activity.mine.MyCollectionActivity" />
+        <activity android:name=".activity.mine.order.MyOrdersActivity"
+
+            />
+        <activity android:name=".activity.home.SpikeGoodsDetailsActivity" />
+        <activity android:name=".activity.mine.EquipmentReturnActivity" />
+        <activity android:name=".activity.home.SearchReasultActivity" />
+        <activity
+            android:name=".activity.home.SearchStartActivity"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustPan" />
+        <activity android:name=".activity.mine.account.AddressListActivity" />
+        <activity
+            android:name=".activity.mine.account.EditAddressActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".activity.mine.order.OrderDetailActivity" />
+        <activity android:name=".activity.mine.order.ReturnGoodsListActivity" />
+        <activity android:name=".activity.mine.order.ReturnReasonActivity" />
+        <activity android:name=".activity.home.HomeGoodsListActivity" />
+        <activity android:name=".activity.CommonH5Activity" />
+        <activity android:name=".activity.home.TeamGoodsDetailActivity" />
+        <activity android:name=".activity.home.PlaceGoodsDetailActivity" />
+        <activity android:name=".activity.home.MasterGoodsDetailActivity" />
+        <activity android:name=".activity.home.CommonGoodsDetailActivity" />
+        <activity android:name=".activity.home.EquipmentGoodsDetailActivity" />
+        <activity android:name=".activity.home.ScenicListActivity" />
+        <activity android:name=".activity.cart.ConfirmOrderActivity" />
+        <activity android:name=".activity.mine.MessageDetailActivity" />
+        <activity android:name=".activity.cart.PayResultActivity" />
+        <activity android:name=".activity.mine.wallet.WalletResultActivity" />
+        <activity android:name=".activity.home.MapActivity" />
+        <activity android:name=".activity.mine.coupons.MyCouponsActivity" />
+        <activity android:name=".activity.mine.coupons.UseOrNotUseActivity" />
+        <activity android:name=".activity.mine.wallet.MyWalletActivity" />
+        <activity android:name=".activity.mine.wallet.MyWalletDetailActivity" />
+        <activity android:name=".activity.mine.coupons.ChooseCouponsActivity" />
+        <activity android:name=".activity.mine.order.ConfirmOrderNewActivity" />
+        <!--  -->
+
+        <!--  **********************联通授权页activity**************************-->
+        <activity
+            android:name="com.sdk.mobile.manager.login.cucc.OauthActivity"
+            android:launchMode="singleTop"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <!--  **********************移动授权页activity**************************-->
+        <activity
+            android:name="com.cmic.sso.sdk.activity.LoginAuthActivity"
+            android:launchMode="singleTop"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <!--  **********************电信授权页activity**************************-->
+        <activity
+            android:name="com.chuanglan.shanyan_sdk.view.ShanYanOneKeyActivity"
+            android:launchMode="singleTop"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <!--  **********************协议页activity**************************-->
+        <activity
+            android:name="com.chuanglan.shanyan_sdk.view.CTCCPrivacyProtocolActivity"
+            android:launchMode="singleTop"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name="com.barbecue.app.wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleInstance" />
+        <!--  -->
+        <activity
+            android:name=".activity.mine.order.OrderEvaluateActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name=".activity.mine.order.ReturnGoodsAgainListActivity" />
+        <activity android:name=".activity.CartActivity" />
+        <activity android:name=".activity.home.NoticeListActivity" />
+        <activity android:name=".activity.home.HomeUseActivity" />
+        <activity android:name=".activity.mine.order.MyConfireOrdersActivity" />
+        <activity android:name=".activity.mine.wallet.MyWalletNewActivity" />
+        <activity android:name=".activity.mine.order.NewOrderDetailActivity" />
+        <activity android:name=".NewWebViewActivity" />
+        <activity android:name=".activity.mine.wallet.MinerIntegralActivity" />
+        <activity android:name=".activity.home.EvaluationActivity" />
+        <activity android:name=".activity.home.SpecialGoodDetailActivity" />
+        <activity android:name=".activity.home.SelectionGoodsActivity" />
+        <activity android:name=".activity.mine.IntegralPayActivity" />
+        <activity android:name=".activity.mine.order.VipPayResultActivity" />
+        <!--  -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent100424468" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5bcef11ab465f52b9d000094" />
+        <meta-data
+            android:name="com.puyue.www.qiaoge.view.GlideConfiguration"
+            android:value="GlideModule" />
+        <!-- 友盟统计多渠道end -->
+
+        <!--   <provider
+               android:name="android.support.v4.content.FileProvider"
+               android:authorities="com.puyue.www.qiaoge.fileprovider"
+               android:exported="false"
+               android:grantUriPermissions="true">
+               <meta-data
+                   android:name="android.support.FILE_PROVIDER_PATHS"
+                   android:resource="@xml/custom_filepaths" />
+           </provider>-->
+
+        <activity android:name=".activity.cart.CartPoint"></activity>
+        <activity android:name=".activity.mine.wallet.MyWalletPointActivity"></activity>
+        <activity android:name=".activity.mine.wallet.WalletResultPointActivity"></activity>
+
+        <activity android:name=".activity.mine.order.ReturnGoodActivity"
+
+            ></activity>
+
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.barbecue.app.provider"
+            android:exported="false"
+
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity android:name=".activity.mine.order.MapOrderMessageActivity"></activity>
+        <activity android:name=".activity.WebDriverActivity"></activity>
+
+        <activity android:name=".view.scrollview.NestingScrollActivity"></activity>
+
+
+        <activity
+            android:name=".activity.android.CaptureActivity"
+            android:screenOrientation="portrait"
+
+            android:theme="@android:style/Theme.NoTitleBar" />
+
+
+        <activity
+            android:name=".activity.mine.order.ConfirmNewOrderActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTop"
+            />
+        <activity android:name=".activity.mine.order.SelfSufficiencyOrderDetailActivity"></activity>
+
+        <activity android:name=".activity.home.ChangeCityActivity" />
+
+        <activity android:name=".activity.mine.wallet.MyCountDetailActivity" />
+        <activity android:name=".activity.mine.order.UserEvaluateActivity"></activity>
+        <activity android:name=".activity.mine.order.ReturnGoodDetailActivity"></activity>
+    </application>
+
+
+</manifest>

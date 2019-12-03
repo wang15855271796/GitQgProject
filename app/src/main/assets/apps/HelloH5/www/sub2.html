@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style type="text/css">
+		.select-tab-main{
+			position: fixed;
+			top: 44px;
+			height: 38px;
+			left: 0;
+			right: 0;
+			z-index: 10;
+    		background: #fff;
+		}
+		.tab-transform{
+			display: flex;
+			height: 100%;
+			flex: 1;
+			justify-content: space-around;
+			align-items: center;
+		}
+		.tab-item-name{
+			height: 100%;
+		}
+		.tab-item-name select{
+			text-align: center;
+			padding: 0;
+			height: 100%;
+			margin: 0;
+		}
+		 .mui-bar-nav~ .mui-content .mui-pull-top-pocket{
+			top:80px !important;
+		}
+	</style>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+	    		<input type="search" placeholder="请输入客户姓名或账号" class="mui-input-clear whiteBg" name="" id="ndsearch" value="" readonly="readonly"/>
+		</header>
+		
+		<div class="select-tab-main">
+            <div class="tab-transform">
+            	<div class="tab-item-name">
+            		<select class="sel mui-btn is-line">           			
+	                    <option value="1">线上</option>  
+	                    <option value="2">线下</option>  
+	                </select>  
+            	</div>
+            	<div class="tab-item-name">
+            		<select class="sel mui-btn is-consumption">  
+            			<option value="">全部</option>
+	                    <option value="1">已消费</option>  
+	                    <option value="0">未消费</option>  
+	                </select>  
+            	</div>
+            	<div class="tab-item-name">
+            		<select class="sel mui-btn is-shop-type">  
+	               </select> 	             
+            	</div>
+            	
+            	<div class="tab-item-name">
+            		<select class="sel mui-btn is-time">  
+	                    <option value="1">最近一次下单时间</option>  
+	                    <option value="2">注册降序</option>  
+	                    <option value="3">注册升序</option>
+	                    <option value="4">累计金额降序</option>
+	                    <option value="5">累计金额升序</option>
+	               </select> 
+            	</div>
+            </div>
+       </div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+		(function($, doc) {
+			var mainPage = null;//获得页面   判断webview是否存在
+			$.plusReady(function() {				
+				//请求数据
+				var url=urls+service_url.querySaleShopTypeList_url;
+				var dataForm={};
+				dataForm.token=app.getState().token;
+				ajaxmethod(url,'POST',dataForm,function(res){
+					var sel_nd=document.querySelector('.is-shop-type');
+					for (var i=0;i<res.data.length;i++) {
+						sel_nd.add(new Option(res.data[i].shopName,res.data[i].shopTypeId||''));
+					}
+					mui.init({					 	
+			            subpages:[{                //下边是初始化，然后这个页面显示我们将插入的页面
+			                url:"./page/sub2view.html",
+			                id:"./page/sub2view.html",
+			                styles:{
+			                    top:"82px",
+			                    bottom:"0px"
+			                }
+			            }]
+			            
+			        });
+				})
+				
+				//预加载				
+				var main_loaded_flag = false;   //初始化不存在
+				if(!mainPage){
+					//不存在的时候预加载主页面
+					mainPage = $.preload({
+						"id": 'customerInformation',
+						"url": './page/customerInformation.html'
+					});
+				}else{
+					main_loaded_flag = true;
+				}
+				//是否加载完成
+				mainPage.addEventListener("loaded",function () {
+					main_loaded_flag = true;
+				});
+				
+				
+				//监听子页面打开列表详情页面
+		        window.addEventListener("opendetail", function(e) {		        	
+		        	//使用定时器的原因：
+					//可能执行太快，main页面loaded事件尚未触发就执行自定义事件，此时必然会失败
+					var id = setInterval(function () {
+						if(main_loaded_flag){
+							clearInterval(id);
+							$.fire(mainPage, 'accountdetail',{  //触发accountdetail事件
+						        userId:e.detail.userId,
+						        source:e.detail.source
+						   });
+							mui.openWindow({
+						       url:'./page/customerInformation.html',
+						       id: 'customerInformation',     //详情页webview的id
+						       show: {
+						       	   autoShow: false,
+						           aniShow: 'slide-in-right', //页面不显示动画
+						           duration: '0' //
+						        },
+						        waiting:{
+									autoShow:true,
+									title:"正在加载...",
+									options:{   //等待框的宽高
+										
+									}
+								}
+						    });
+						}
+					},20);
+				});
+			})
+			
+			 
+	        
+			
+			//点击tab中某一项时触发sub2view页面的select事件 
+			mui('.tab-transform').on('change','.tab-item-name',function(event){
+				//清空节点
+				var subWebview = plus.webview.getWebviewById('./page/sub2view.html');			
+	            //fire自定义事件
+	            mui.fire(subWebview, 'clearnode');
+			})
+			
+			//搜索页面ndsearch
+			document.querySelector('#ndsearch').addEventListener('tap',function(){
+				//跳转到搜索页面
+				mui.openWindow({					//打开新的页面
+					url:'./page/sub2search.html',
+					id:"./page/sub2search.html",
+					style:{},
+					show:{
+						autoShow: true,
+						aniShow: "slide-in-right",   //配置动画 
+						duration: 100     //配置动画
+					},
+					extras:{  
+				        tokens:app.getState().token,  				
+				    },  
+					waiting:{
+						autoShow:true,
+						title:"正在加载...",
+						options:{   //等待框的宽高
+							
+						}
+					}
+				})
+			})
+		}(mui, document));
+		
+		//给子页面传值  子页面定义
+		function fathereven(){
+			//子页面触发父页面函数   获取参数source,orderBy,isSale,shopTypeId
+			var token=app.getState().token;
+			var tab_index1=document.querySelector('.is-line').selectedIndex;
+			var tab1=document.querySelector('.is-line').options[tab_index1].value;
+			var tab_index2=document.querySelector('.is-consumption').selectedIndex;
+			var tab2=document.querySelector('.is-consumption').options[tab_index2].value;
+			var tab_index3=document.querySelector('.is-shop-type').selectedIndex;
+			var tab3=document.querySelector('.is-shop-type').options[tab_index3].value;
+			var tab_index4=document.querySelector('.is-time').selectedIndex;
+			var tab4=document.querySelector('.is-time').options[tab_index4].value;
+			var subWebview = plus.webview.getWebviewById('./page/sub2view.html');			
+            //fire自定义事件
+            mui.fire(subWebview, 'Passvalue', {
+            	token:app.getState().token,
+            	source:tab1,
+		        orderBy:tab4,
+		        isSale:tab2,
+		        shopTypeId:tab3
+            });	
+		}
+		</script>
+	</body>
+
+</html>

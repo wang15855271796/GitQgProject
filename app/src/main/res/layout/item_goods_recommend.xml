@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="120dp"
+    android:layout_height="wrap_content"
+    android:id="@+id/ll_item_goods_detail_recommend"
+    android:orientation="vertical"
+  >
+
+    <ImageView
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/iv_item_goods_recommend"
+        android:layout_width="106dp"
+        android:layout_height="106dp"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/tv_item_goods_recommend_name"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_marginTop="10dp"
+        android:text="海欣龙虾2.5KG*1包+海ssssssss"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textColor="@color/app_front_black"
+        android:textSize="11dp" />
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_item_goods_recommend_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="@color/app_tab_selected"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/tv_item_goods_recommend_pin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:maxLines="1"
+            android:textColor="@color/app_light_gray"
+            android:textSize="9dp" />
+    </LinearLayout>
+
+</LinearLayout>

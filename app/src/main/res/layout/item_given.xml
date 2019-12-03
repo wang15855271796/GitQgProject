@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+
+        android:background="@drawable/cart_item_good_bg"
+        android:id="@+id/rl_cart_item_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:id="@+id/fr_iv"
+            android:layout_width="@dimen/size_65dp"
+            android:layout_height="@dimen/size_65dp"
+            android:layout_marginLeft="@dimen/size_10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="@dimen/size_65dp"
+                android:layout_height="@dimen/size_65dp"
+                android:src="@mipmap/ic_logo"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/tv_iv_bg"
+                android:layout_width="@dimen/size_65dp"
+                android:layout_height="@dimen/size_65dp"
+                android:background="@color/black"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_finish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/fr_iv"
+            android:orientation="vertical">
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:src="@mipmap/ic_logo"
+                    android:id="@+id/iv_flag"
+                    android:layout_width="20dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="5dp"
+
+
+                    android:layout_marginRight="5dp" />
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    tools:text="标题"
+                    android:textColor="@color/app_black"
+                    android:textSize="@dimen/size_12dp" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="fitXY"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tv_spec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_5dp"
+                android:text="规格"
+                android:textColor="@color/color_9B9B9B"
+                android:textSize="10dp" />
+
+            <TextView
+                android:id="@+id/tv_stock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="库存"
+                android:textColor="@color/color_9B9B9B"
+                android:textSize="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_given_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="赠品数量"
+                    android:textColor="#FFF6551A"
+                    android:textSize="14dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/iv_item_cart_img_add"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/iv_item_cart_img_add"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_item_cart_price_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥1000/箱"
+                android:textColor="#A7A7A7"
+                android:textSize="10dp" />
+
+            <TextView
+                android:id="@+id/tv_item_cart_volume_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="月销:1000"
+                android:textColor="#A7A7A7"
+                android:textSize="10dp" />
+
+            <TextView
+                android:id="@+id/tv_item_cart_stock_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="库存:1000"
+                android:textColor="#A7A7A7"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

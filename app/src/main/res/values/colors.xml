@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorInitFloatBackground">#b0ffffff</color>
+    <color name="colorCollapsedFloatBackground">#e4e4e4</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="translucent">#00000000</color>
+    <color name="blue_ctc">#01bdd5</color>
+    <color name="red">#cc000a</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="app_color_black">#434343</color>
+    <color name="app_color_gary">#6e6e6e</color>
+    <color name="app_line_color">#e5e5e5</color>
+    <color name="app_color_white">#ffffff</color>
+    <color name="bgColor_divier">#d7d7db</color>
+    <color name="app_black">#000000</color>
+    <color name="bgColor_alertview_alert_start">#f0f0f0</color>
+    <color name="textColor_actionsheet_msg">#8f8f8f</color>
+    <color name="bgColor_actionsheet_cancel_nor">#ffffff</color>
+    <color name="bgColor_alertview_alert">#f8f8f8</color>
+    <color name="textColor_actionsheet_title">#8f8f8f</color>
+    <color name="textColor_alert_button_destructive">#ff3b30</color>
+    <color name="textColor_alert_button_others">#007aff</color>
+    <color name="app_color_bottom_gray">#d1d1d1</color>
+    <color name="app_tab_selected">#f54022</color>
+    <color name="app_btn_unable">#F8A070</color>
+    <color name="app_top_bar_text">#232131</color>
+    <color name="textColor_alert_button_cancel">#007aff</color>
+    <color name="app_bg_colon">#FF3E4D</color>
+    <color name="bgColor_alert_button_press">#EAEAEA</color>
+    <color name="wallet_bg">#F56D23</color>
+    <color name="app_trans_white">#f8a070</color>
+    <color name="wallet_checked">#f78a4f</color>
+    <color name="wallet_unchecked">#F56D23</color>
+    <color name="wallet_line">#f67c39</color>
+    <color name="app_dark_gray">#737373</color>
+    <color name="app_cancle_gray">#A7A7A7</color>
+    <color name="app_line_gray">#E5E5E5</color>
+    <color name="app_front_black">#232131</color>
+    <color name="app_bg_gray">#F4F4F4</color>
+    <color name="app_light_gray">#A7A7A7</color>
+    <color name="province_line_border">#C7C7C7</color>
+    <color name="app_gray_5">#D5D5D5</color>
+    <color name="progress_background">#D8E8FF</color>
+    <color name="add_car">#F5AD22</color>
+    <color name="once_buy">#B5B5B5</color>
+    <color name="navpage">#FFE1E8EB</color>
+    <color name="transparent">#00000000</color>
+    <color name="canotbuy">#CBCBCB</color>
+    <color name="car_num_color">#F84754</color>
+    <color name="color_F9F9F9">#F9F9F9</color>
+    <color name="color_FF703C">#FF703C</color>
+    <color name="color_666666">#666666</color>
+    <color name="color_252525">#252525</color>
+    <color name="color_FF3343">#FF3343</color>
+    <color name="color_AAA8AB">#AAA8AB</color>
+    <color name="color_979797">#979797</color>
+    <color name="color_9B9B9B">#9B9B9B</color>
+    <color name="color_484848">#484848</color>
+    <color name="color_E8E8E8">#E8E8E8</color>
+    <color name="color_FF5C01">#FF5C01</color>
+    <color name="color_9E5AFE">#9E5AFE</color>
+    <color name="color_8B5CEF">#8B5CEF</color>
+    <color name="color_655EFB">#655EFB</color>
+    <color name="color_F6F6F6">#F6F6F6</color>
+    <color name="color_ACAAAD">#ACAAAD</color>
+    <color name="color_939393">#939393</color>
+    <color name="color_F6551A">#F6551A</color>
+    <color name="color_FF5B01">#FF5B01</color>
+    <color name="color_E5E5E5">#E5E5E5</color>
+    <color name="color_4C4C4C">#4C4C4C</color>
+    <color name="color_F4F4F4">#F4F4F4</color>
+    <color name="color_1F1F1F">#1F1F1F</color>
+    <color name="color_555555">#555555</color>
+    <color name="color_0A0A0A">#0A0A0A</color>
+    <color name="color_F5F5F7">#F5F5F7</color>
+    <color name="color_747474">#747474</color>
+    <color name="color_676767">#676767</color>
+    <color name="color_7C7C7C">#7C7C7C</color>
+    <color name="color_ADADB0">#ADADB0</color>
+    <color name="color_AEAEAE">#AEAEAE</color>
+    <color name="color_BDBDBD">#BDBDBD</color>
+    <color name="color_CACACB">#CACACB</color>
+    <color name="color_8B8B8B">#8B8B8B</color>
+    <color name="color_B7B7B7">#B7B7B7</color>
+    <color name="color_7F7F7F">#7F7F7F</color>
+    <color name="color_C1C1C1">#C1C1C1</color>
+    <color name="color_9C9C9C">#9C9C9C</color>
+    <color name="color_6A6A6A">#6A6A6A</color>
+    <color name="color_DA673D">#DA673D</color>
+    <color name="color_785DFD">#785DFD</color>
+    <color name="color_515151">#515151</color>
+    <color name="color_626262">#626262</color>
+    <color name="color_time_bg">#F5F5F5</color>
+    <color name="color_iv_bg">#A9A9A9</color>
+    <color name="blue">#33b5e5</color>
+    <color name="color_333">#333333</color>
+    <color name="color_666">#666666</color>
+    <color name="color_999">#999999</color>
+
+
+    <color name="color_f6">#f6f6f6</color>
+    <color name="colorWhite">#ffffffff</color>
+    <!--透明度百分之33的黑色-->
+    <color name="color333333">#333333</color>
+
+    <!--标题颜色-->
+    <color name="public_orange">#fd910e</color>
+    <color name="select_title">#ffff680a</color>
+    <!--线条颜色-->
+    <color name="public_line_color">#e5e5e5</color>
+
+
+    <color name="gray">#ffcccccc</color>
+
+
+
+
+
+    <!--Zxing相关-->
+    <color name="contents_text">#ff000000</color>
+    <color name="encode_view">#ffffffff</color>
+    <color name="possible_result_points">#c0ffbd21</color> <!-- Android standard ICS color -->
+    <color name="result_minor_text">#ffc0c0c0</color>
+    <color name="result_points">#c099cc00</color> <!-- Android standard ICS color -->
+    <color name="result_text">#ffffffff</color>
+    <color name="result_view">#b0000000</color>
+    <color name="status_text">#ffffffff</color>
+<!--    <color name="transparent">#00000000</color>-->
+    <color name="viewfinder_laser">#ffcc0000</color> <!-- Android standard ICS color -->
+    <color name="viewfinder_mask">#60000000</color>
+</resources>

@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style type="text/css">
+		.mui-content{
+			box-sizing: border-box;
+			padding: 14px;
+		}
+		.se_bt{
+			height: 30px;
+			margin: auto;
+			margin-top: 20px;
+		}
+		.se_bt .switch_type{
+			height: 30px;
+			line-height: 30px;
+			color: #333333;
+			font-size: 12px;
+			width: 80px;
+			text-align: center;
+			background: #FFFFFF;
+		}
+		.sigin{
+			text-align: right;
+		}
+		.mui-table-view{
+			background: #efeff4 !important;
+		}
+		.mui-table-view:after{
+			height: 0px;
+			position: static;
+		}
+		.mui-table-view-cell{
+			background: #FFFFFF;
+			margin-top: 10px;
+		}
+	</style>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">备注列表</h1>
+		    <button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right additem">添加</button>
+		</header>
+		<div class="mui-content">
+			<div class="se_bt">
+		    	<div class="switch_type" onlySelf=0>只看我的</div>
+		    </div>	
+		    <ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
+		        <!--<li class="mui-table-view-cell">
+		            <div class="mui-table">
+		                <div class="mui-table-cell ">
+		                    <h4 class="mui-ellipsis">信息化推进办公室张彦合同付款信息化</h4>		                    
+		                    <p class="mui-h6 mui-ellipsis">Hi，李明明，申请交行信息卡，100元等你拿，李明明，申请交行信息卡，100元等你拿，</p>
+		                    <div class="sigin">
+		                    	<h5>
+		                    		<span>猪猪侠</span>
+		                    		<span>2019-05-13</span>
+		                    	</h5>
+		                    </div>
+		                </div>	                
+		            </div>
+		        </li>-->		        
+		    </ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				mui.init();
+				var mainPage = null;//获得页面   判断webview是否存在
+				var main_loaded_flag = false;   //初始化不存在
+				mui.plusReady(function(){
+					//获取列表
+					var n_id;
+					showlist(0);
+					//展示列表
+					function showlist(id,callback){
+						n_id=plus.webview.currentWebview().userId;
+						var url=urls+service_url.querySaleUserMemoLog_url;
+						var dataForm={};
+						dataForm.token=app.getState().token;
+						dataForm.userId=n_id;
+						dataForm.onlySelf=document.querySelector('.switch_type').getAttribute('onlySelf');//0全部1个人	
+						ajaxmethod(url,'POST',dataForm,function(res){		
+							//alert(JSON.stringify(res))
+							var html='';
+							for(var i=0;i<res.data.length;i++){
+								html+='<li class="mui-table-view-cell" id="'+res.data[i].id+'"><div class="mui-table"><div class="mui-table-cell ">';
+									html+='<h4 class="mui-ellipsis">'+res.data[i].title+'</h4>';
+									html+='<p class="mui-h6 mui-ellipsis">'+res.data[i].content+'</p>';
+									html+='<div class="sigin"><h5>';
+									html+='<span>'+res.data[i].creator+'</span>';
+									html+='<span>'+res.data[i].dateTime+'</span>';
+								html+='</h5></div></div></div></li>';
+							}
+							document.querySelector('.mui-table-view').innerHTML=html;
+							//关闭等待框
+						    plus.nativeUI.closeWaiting();
+						   //显示当前页面
+						    mui.currentWebview.show();
+							//return callback(true);						
+						})
+					}				
+					
+					//点击切换
+					document.querySelector('.switch_type').addEventListener('tap',function(){
+						//切换
+						if(this.getAttribute('onlySelf')==0){
+							this.setAttribute('onlySelf',1);
+							this.innerHTML='查看全部';
+							showlist(1);
+						}else{
+							this.setAttribute('onlySelf',0);
+							this.innerHTML='只看我的';
+							showlist(0);
+						}
+					})
+					
+					//添加
+					mui('header').on('tap','.additem',function(event){
+						mui.openWindow({
+					       url:'sub2addremarks.html',
+					       id:'sub2addremarks', //详情页webview的id
+					       extras:{
+					      	userId:n_id,//自定义扩展参数，可以用来处理页面间传值
+					       },
+					       show: {
+					       	   autoShow: true,
+					           aniShow:'slide-in-right', //页面显示动画
+					           duration:'100' //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+					        },
+					        waiting:{
+								autoShow:true,
+								title:"正在加载...",
+								options:{   //等待框的宽高
+									
+								}
+							}
+					    })
+					});
+					
+					
+					//预加载									
+					if(!mainPage){
+						//不存在的时候预加载主页面
+						mainPage = $.preload({
+							"id": 'sub2remarksdetail',
+							"url": 'sub2remarksdetail.html'
+						});
+					}else{
+						main_loaded_flag = true;
+					}
+					//是否加载完成
+					mainPage.addEventListener("loaded",function () {
+						main_loaded_flag = true;						
+					});	
+					//打开详情
+					//点击list中某一项时触发details页面的"update"事件 
+					mui('ul.mui-table-view').on('tap','li',function(event){
+						//获取id
+						var id=this.getAttribute('id');					
+						var times = setInterval(function () {
+							if(main_loaded_flag){
+								clearInterval(times);	
+								mui.fire(mainPage,'accountdetail',{//触发事件
+							        orderId:id,
+							    });
+							    //打开详情页面          
+							    mui.openWindow({
+							       url:'sub2remarksdetail.html',
+							       id: 'sub2remarksdetail',//详情页webview的id							       
+							       show: {
+								       	   autoShow: false,
+								           aniShow: 'slide-in-right', //页面不显示动画
+								           duration: '0' //
+								        },
+							        waiting:{
+										autoShow:true,
+										title:"正在加载...",
+										options:{   //等待框的宽高
+											
+										}
+									}
+							    });
+							}
+						},20)
+					})
+					
+					
+					window.addEventListener('refresh', function(e) {
+			        //执行刷新
+				        //plus.webview.getWebviewById('sub2remarks').reload();
+				        //location.reload();
+				        showlist(0);
+				    });
+				});
+				
+			})(mui, document);
+			
+			
+		</script>
+	</body>
+
+</html>

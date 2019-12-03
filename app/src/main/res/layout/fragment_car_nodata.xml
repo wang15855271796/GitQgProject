@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="-15dp"
+
+    android:background="@color/color_F4F4F4"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:background="@drawable/app_my_wallet_bg"
+        android:layout_marginRight="@dimen/size_15dp"
+        android:layout_marginLeft="@dimen/size_15dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:gravity="center"
+            android:text="今日宜补货~ "
+            android:textSize="@dimen/size_22dp"
+            android:layout_marginTop="@dimen/size_100dp"
+            android:textColor="@color/color_4C4C4C"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_go_bay"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/size_100dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>

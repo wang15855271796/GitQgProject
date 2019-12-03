@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style type="text/css">
+		.mui-input-group .mui-input-row {
+		    height: 60px;
+		    display: flex;
+		    background: #FFFFFF;
+		    margin-bottom: 5px;
+		}
+		.coupondetails {
+		    width: 120px;
+		    height: 60px;
+		    background: #FF8625;
+		    color: #FFFFFF;
+		    /*margin-right:0px !important;*/
+		}
+		.mlist-name{
+			height: 30px;
+			line-height: 30px;
+			display: flex;
+			flex: 1;
+			justify-content: space-between;
+		}
+		.mlist-name .textlf{
+			color: #333333;
+			font-size: 16px;
+		}
+		.mlist-name .textrg{
+			color: #F56D23;
+			font-size: 10px;
+		}
+		.mlist-item{
+			flex: 1;
+		}
+		.mcoupon-item{
+			height: 30px;
+			line-height: 30px;
+			margin: 0 10px 0 15px;
+			display: flex;
+			justify-content: space-between;
+			color: #C4C4C4;
+			font-size: 10px;
+		}
+		.mui-card{
+			background: #efeff4;
+			    box-shadow: 0 0px 0px rgba(0,0,0,0);
+		}
+		.mui-input-group {
+		    background-color: #efeff4; 
+		}
+	</style>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">优惠券列表</h1>
+		    <button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right">添加</button>
+		</header>
+		<div class="mui-content">
+			<div class="mui-card">
+				<form class="mui-input-group">
+					<!--<div class="mui-input-row mui-checkbox">
+						<div class="coupondetails">
+							<div>100元</div>
+							<div>点击查看订单</div>
+						</div>
+						<div class="mlist-item">
+							<div class="mlist-name">
+								<label>
+									100元无门槛消费券
+								</label>
+								<input name="checkbox1" value="Item 3" type="checkbox" >
+							</div>
+							<div class="mcoupon-item">
+								<span class="textlf">
+			        				总量：100 
+			        			</span>
+			        			<span class="textc">
+			        				总量：100 
+			        			</span>
+			        			<span class="textrg">
+			        				总量：100 
+			        			</span>
+							</div>
+						</div>
+					</div>			-->		
+				</form>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack:true //启用右滑关闭功能
+			});
+			mui('.mui-input-group').on('change', 'input', function() {
+				var value = this.checked?"true":"false";
+				this.previousElementSibling.innerText = "checked："+value;
+			});
+		</script>
+	</body>
+
+</html>

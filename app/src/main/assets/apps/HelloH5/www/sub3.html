@@ -1,0 +1,289 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+		<link href="css/mui.min.css" rel="stylesheet" />		
+	</head>
+	<style type="text/css">
+		.header{
+			display: flex;
+		}
+		.header .sreach-lf{
+			flex: 1;
+		}		
+		.mui-action-time{
+			line-height: 40px;
+			text-align: center;
+			margin-left: 10px;
+			color: #333333;
+			font-size: 14px;			
+		}
+		
+		.select-tab-main{
+			position: fixed;
+			top: 44px;
+			height: 38px;
+			left: 0;
+			right: 0;
+			z-index: 1;
+    		background: #fff;
+		}
+		.tab-transform{
+			display: flex;
+			height: 100%;
+			flex: 1;
+			justify-content: space-around;
+			align-items: center;
+		}
+		.OrderTotal{
+			position: fixed;
+			z-index: 1;
+			width: 100%;
+			bottom: 0px;
+			height: 45px;
+			background-color: #FFF3C1;
+			line-height: 45px;
+			text-align: right;
+		}
+		#Total{
+			color: #666666;
+			font-size: 12px;
+			margin-right: 15px;
+		}
+		.TotalNum{
+			color: #F76A33;
+			font-size: 14px;
+		}
+		.TotalPrice{
+			color: #F76A33;
+			font-size: 14px;
+		}
+	</style>
+	<body>
+		<header class="mui-bar mui-bar-nav header">
+			<!--<a class=" mui-icon  mui-pull-left">微糖资讯</a>-->
+			<a href="#" class="sreach-lf">
+		    	<input type="search" placeholder="请输入客户姓名或账号" class="mui-input-clear whiteBg" name="" id="ndsearch" value="" />
+		    </a>
+		    <div class="search_right mui-action-time" start='' end=''>选择日期</div>
+		    <!--<a class="mui-icon mui-icon-bars mui-pull-right"></a>-->
+		</header>
+		
+		<div class="select-tab-main">
+            <div class="tab-transform">
+            	<div class="tab-item-name">
+            		<select class="sel mui-btn is-line"> 
+            			<option value="">全部</option>
+	                    <option value="1">线上</option>  
+	                    <option value="2">线下</option>  	                    
+	                </select>  
+            	</div>
+            	<div class="tab-item-name">
+            		<select class="sel mui-btn is-shop-type">            			
+	               </select> 	             
+            	</div>
+            	<div class="tab-item-name">
+            		<select class="sel mui-btn is-consumption">  
+            			<option value="">订单状态</option>
+	                    <option value="2">待发货</option> 	            
+	                    <option value="3">待收货</option>  
+	                    <option value="4">已完成</option> 
+	                </select>  
+            	</div>
+            	<div class="tab-item-name">
+            		<select class="sel mui-btn is-time">  
+	                    <option value="1">订单日期降序</option>  
+	                    <option value="2">订单金额降序</option>  
+	                    <option value="3">订单金额升序</option>
+	               </select> 
+            	</div>
+            </div>
+      	</div>
+      	<div class="OrderTotal">
+      		<span id="Total">
+      			共 <span class="TotalNum">0</span>个订单，用户下单金额
+      			<span class="TotalPrice">0.0元</span>
+      		</span>
+      	</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+					
+			(function($, doc) {
+				var mainPage = null;//获得页面   判断webview是否存在
+				$.plusReady(function() {
+					var url=urls+service_url.querySaleShopTypeList_url;
+					var dataForm={};
+					dataForm.token=app.getState().token;
+					ajaxmethod(url,'POST',dataForm,function(res){
+						var sel_nd=document.querySelector('.is-shop-type');
+						for (var i=0;i<res.data.length;i++) {
+							sel_nd.add(new Option(res.data[i].shopName,res.data[i].shopTypeId||''));
+						}
+						mui.init({						 	
+				            subpages:[{                //下边是初始化，然后这个页面显示我们将插入的页面
+				                url:"./page/sub3view.html",
+				                id:"./page/sub3view.html",
+				                styles:{
+				                    top:"84px",
+				                    bottom:"45px"
+				                }
+				            }]
+				            
+				        });
+					})
+					
+					//预加载				
+					var main_loaded_flag = false;   //初始化不存在
+					if(!mainPage){
+						//不存在的时候预加载主页面
+						mainPage = $.preload({
+							"id": 'sub3listdetails',
+							"url": './page/sub3listdetails.html'
+						});
+					}else{
+						main_loaded_flag = true;
+					}
+					//是否加载完成
+					mainPage.addEventListener("loaded",function () {
+						main_loaded_flag = true;
+					});		
+					//选择完成时间
+					window.addEventListener("selscttime", function(e) {
+						var start=e.detail.start;
+						var end=e.detail.end;
+						document.querySelector('.mui-action-time').setAttribute('start',start);
+						document.querySelector('.mui-action-time').setAttribute('end',end);					
+						//fathereven();
+						//清空节点
+						var subWebview = plus.webview.getWebviewById('./page/sub3view.html');			
+			            //fire自定义事件
+			            mui.fire(subWebview, 'clearnode');
+					})
+					//打开详情
+					window.addEventListener("opendetail", function(e) {
+						var id = setInterval(function () {
+							if(main_loaded_flag){
+								clearInterval(id);
+								mui.fire(mainPage,'accountdetail',{//触发事件
+							        orderId:e.detail.orderId,
+							        orderStatus:e.detail.orderStatus
+							    });
+							    //打开详情页面          
+							    mui.openWindow({
+							       url:'./page/sub3listdetails.html',
+							       id: 'sub3listdetails',//详情页webview的id
+							       show: {
+								       	   autoShow: false,
+								           aniShow: 'slide-in-right', //页面不显示动画
+								           duration: '0' //
+								        },
+							        waiting:{
+										autoShow:true,
+										title:"正在加载...",
+										options:{   //等待框的宽高
+											
+										}
+									}
+							    });
+							}
+						},20)
+					});
+					
+					window.addEventListener('changeTotal',function(){
+						document.querySelector('.TotalNum').innerHTML=event.detail.TotalNum;
+						document.querySelector('.TotalPrice').innerHTML=event.detail.TotalPrice;
+					})
+				})
+				
+				//选择日期
+				mui('header').on('tap','.mui-action-time',function(event){
+					//select_time.html
+					mui.openWindow({					//打开新的页面
+						url:'./page/select_time.html',
+						id:"select_time.html",
+						style:{},
+						show:{
+							autoShow: true,
+							aniShow: "slide-in-right",   //配置动画 
+							duration: 100     //配置动画
+						},
+						waiting:{
+							autoShow:true,
+							title:"正在加载...",
+							options:{   //等待框的宽高
+								
+							}
+						}
+					})
+				})	
+				
+				//搜索页面
+				document.querySelector('#ndsearch').addEventListener('tap',function(){
+					//跳转到搜索页面
+					mui.openWindow({					//打开新的页面
+						url:'./page/sub3search.html',
+						id:"sub3search",
+						style:{},
+						show:{
+							autoShow: true,
+							aniShow: "slide-in-right",   //配置动画 
+							duration: 100     //配置动画
+						},
+						extras:{  
+					        tokens:app.getState().token,  				
+					    },  
+						waiting:{
+							autoShow:true,
+							title:"正在加载...",
+							options:{   //等待框的宽高
+								
+							}
+						}
+					})
+				})
+			}(mui, document));
+			//给子页面传值  子页面定义
+			function fathereven(){
+				//子页面触发父页面函数   获取参数source,orderBy,isSale,shopTypeId
+				var token=app.getState().token;
+				var tab_index1=document.querySelector('.is-line').selectedIndex; //订单类型， 1线上 2线下 3退货
+				var tab1=document.querySelector('.is-line').options[tab_index1].value;
+				var tab_index2=document.querySelector('.is-consumption').selectedIndex;//订单状态 待发货，待提货：2 , 待收货：3 , 已完成：4
+				var tab2=document.querySelector('.is-consumption').options[tab_index2].value;
+				var tab_index3=document.querySelector('.is-shop-type').selectedIndex;  //店铺类型
+				var tab3=document.querySelector('.is-shop-type').options[tab_index3].value;
+				var tab_index4=document.querySelector('.is-time').selectedIndex;//排序
+				var tab4=document.querySelector('.is-time').options[tab_index4].value;
+				var subWebview = plus.webview.getWebviewById('./page/sub3view.html');
+				var tab5start=document.querySelector('.mui-action-time').getAttribute('start');
+				var tab5end=document.querySelector('.mui-action-time').getAttribute('end');
+                //fire自定义事件
+                mui.fire(subWebview, 'Passvalue', {
+                	token:app.getState().token,
+                	source:tab1,
+			        orderBy:tab4,
+			        orderStatus:tab2,
+			        shopTypeId:tab3,
+			        start:tab5start,
+			        end:tab5end
+                });	
+			}
+				
+			//点击tab中某一项时触发sub3view页面的select事件 
+			mui('.tab-transform').on('change','.tab-item-name',function(event){
+				//清空节点
+				var subWebview = plus.webview.getWebviewById('./page/sub3view.html');			
+	            //fire自定义事件
+	            mui.fire(subWebview, 'clearnode');
+			})
+				
+				
+		</script>
+	</body>
+
+</html>

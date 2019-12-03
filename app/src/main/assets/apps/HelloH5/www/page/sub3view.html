@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style type="text/css">		
+		.online-type{
+			border-radius: 50%;
+			background:#F56D23;
+			color: #FFFFFF;
+			width: 42px;
+			text-align: center;
+		}
+		.mui-table-view .mui-media-object.mui-pull-left {
+		    margin-top: 10px;
+		}
+		.mlist-name{
+			display: flex;
+			justify-content: space-between;
+		}
+		.mlist-name .textlf{
+			color: #333333;
+			font-size: 18px;
+		}
+		.mlist-name .textrg{
+			color: #F56D23;
+			font-size: 12px;
+		}
+		.shop-peice{
+			display: flex;
+			justify-content: space-between;
+		}
+		.shop-peice .textlf{
+			color: #666;
+			font-size: 12px;
+		}
+		.shop-peice .textrg{
+			color: #F56D23;
+			font-size: 16px;
+		}
+	</style>
+	<body>
+		<!--下拉刷新容器-->
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view">
+				    
+				</ul>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var lastPage;  //总共页数
+	　　　　    var hasNextPage=false; //是否有下一页
+	　　　　    var counter=1; //计数器
+			var pageNum=1;  //当前页数
+			var pageSize=10;//美页数显示条数
+			var total;//总数
+			mui.plusReady(function(){
+				
+			})
+			mui.init({
+				
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {                 //下拉
+						height:50,//可选,默认50.触发下拉刷新拖动距离,
+						//offset:0,
+					    auto: true,//可选,默认false.首次加载自动下拉刷新一次
+					    contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+					    contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+					    contentrefresh : "正在加载...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+						callback: pulldownRefresh
+					},
+					up: {					//上滑
+						contentrefresh: '正在加载...',
+						contentnomore:'没 有 更 多 数 据 了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+						callback: pullupRefresh
+					}
+				}
+			});
+			/**
+			 * 下拉刷新具体业务实现
+			 */
+			function pulldownRefresh(){
+				window.setTimeout(function(){
+					//刷新清空子节点
+					counter=1; //计数器
+					pageNum=1;  //当前页数
+					var f=document.body.querySelector('.mui-table-view');
+					var childs=f.childNodes;
+					for(var i = childs.length - 1; i >= 0; i--) {
+	                  f.removeChild(childs[i]);
+	                }
+					getdata();
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+					mui('#pullrefresh').pullRefresh().refresh(true);
+				},500);
+			}
+			
+			
+			/**
+			 * 上拉加载具体业务实现
+			 */
+			function pullupRefresh() {
+				window.setTimeout(function(){
+					if(hasNextPage){
+						pageNum++;    //当前页数         counter计数器
+						getdata();
+					}
+					mui('#pullrefresh').pullRefresh().endPullupToRefresh((++counter>=lastPage));
+				},500);
+			}
+			
+			function getdata(){
+				//调用父页面
+				var wvB = plus.webview.currentWebview(); //获取当前窗口的WebviewObject对象，即B
+                var wvA = wvB.opener(); //获取当前窗口的创建者，即A  
+                wvA.evalJS("fathereven()"); //执行父窗口中的方法  A中的showAG方法  
+			}
+			//Passvalue函数接收父页面传入的值
+			window.addEventListener('Passvalue', function(event) {
+				var type1=event.detail.source;
+				var type2=event.detail.orderBy;
+				var type3=event.detail.orderStatus;
+				var type4=event.detail.shopTypeId;
+				var type5=event.detail.token; 
+				var typestart=event.detail.start;
+				var typesend=event.detail.end;
+				ShowData(type5,type1,type2,type3,type4,typestart,typesend);
+                //处理一些逻辑
+            });
+			
+			
+			//清空节点			
+			window.addEventListener('clearnode', function(event) {
+				pulldownRefresh();
+			})
+			
+			
+			//数据
+			function ShowData(token,source,orderBy,orderStatus,shopTypeId,typestart,typesend){
+				var url=urls+service_url.querySaleUserOrderPage_url;
+				var dataForm={};
+				dataForm.token=token;
+				dataForm.orderSource=source;
+				dataForm.orderBy=orderBy;
+				dataForm.orderStatus=orderStatus;
+				dataForm.shopTypeId=shopTypeId;
+				dataForm.name='';
+				dataForm.gmtCreateStart=typestart;
+				dataForm.gmtCreateEnd=typesend;
+				dataForm.pageNum=pageNum;
+				dataForm.pageSize=pageSize;
+				//alert(JSON.stringify(dataForm))
+				console.log(JSON.stringify(dataForm));
+				ajaxmethod(url,'POST',dataForm,function(res){
+					//console.log(JSON.stringify(res))
+					lastPage = res.data.beanPage?res.data.beanPage.pages:0;
+	　　　　　　　　　　   pageNum = res.data.beanPage?res.data.beanPage.pageNum:1;
+					hasNextPage=res.data.beanPage?res.data.beanPage.hasNextPage:false;
+	　　　　　　　　　　  var data = res.data.beanPage.list;
+					var table = document.body.querySelector('.mui-table-view');
+ 					//获取父页面
+ 					var main=plus.webview.getWebviewById("sub3.html");
+ 					//自定义事件,事件名为changeCity
+					mui.fire(main,'changeTotal',{
+						TotalNum:res.data.totalOrderNum,
+						TotalPrice:res.data.totalOrderAmount
+					});
+					for (var i=0;i<data.length;i++) {
+						var result="";
+						var li = document.createElement('li');
+						li.className = 'mui-table-view-cell mui-media';
+						li.setAttribute('orderId',data[i].orderId);
+						li.setAttribute('orderSource',data[i].orderSource);	
+						li.setAttribute('orderStatus',data[i].orderStatus);	
+						result+='<a href="javascript:;">';
+							result+='<div class="mui-media-object mui-pull-left online-type">';							
+							result+=(data[i].orderSource==1?'线上':'线下')+'</div>';
+							result+='<div class="mui-media-body">';
+								result+='<div class="mlist-name">';
+									result+='<span class="textlf">'+data[i].name+'</span>';
+									result+='<span class="textrg">'+data[i].orderStatusStr+'</span>';
+								result+='</div>';
+								result+='<p class="mui-ellipsis">'+ data[i].gmtCreate +'</p>';
+								result+='<p class="mui-ellipsis shop-peice">';
+									result+='<span class="textlf">共计'+ data[i].prodNum +'件商品</span>';
+									result+='<span class="textrg">￥'+ data[i].totalAmount +'元</span>';
+								result+='</p>';
+							result+='</div>';
+						result+='</a>';
+						li.innerHTML=result;
+				        //下拉刷新，新纪录插到最前面
+				        table.appendChild(li);
+						//table.insertBefore(li, table.firstChild); 
+					}
+					//document.getElementsByClassName('user-iphone')[0].innerHTML=data.data.phone;
+				});
+			}
+			//点击list中某一项时触发details页面的"update"事件 
+			mui('ul.mui-table-view').on('tap','li',function(event){
+				//var ws=plus.webview.currentWebview();
+				if(this.getAttribute("orderSource")==1){
+					var ev_nd=this;
+					var detailPage=plus.webview.getWebviewById('sub3.html');  //获得页面   判断webview是否存在
+					//alert(detailPage)
+				    mui.fire(detailPage,'opendetail',{//触发事件
+				        orderId:ev_nd.getAttribute("orderId"),
+				        orderStatus:ev_nd.getAttribute("orderStatus")
+				    });
+				}
+			})
+		</script>
+	</body>
+
+</html>

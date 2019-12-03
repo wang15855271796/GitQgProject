@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8">
+    //26944
+      	mui.init();
+    </script>
+</head>
+<style type="text/css">
+@supports (bottom: constant(safe-area-inset-bottom)) or (bottom: env(safe-area-inset-bottom)) {  
+      .mui-bar-tab {  
+        margin-bottom: constant(safe-area-inset-bottom);  
+        margin-bottom: env(safe-area-inset-bottom);  
+      }  
+    } 
+</style>
+<body class="indextopbg">
+	<!--mh 头部-->
+	
+	<!--mbody 内容部-->
+	<!--<div class="mui-content">
+	    
+	</div>-->
+	<!--mt底部-->
+	<nav class="mui-bar mui-bar-tab">
+	    <a class="mui-tab-item mui-active" href="sub1.html">
+	        <span class="mui-icon mui-icon-home"></span>
+	        <span class="mui-tab-label">首页</span>
+	    </a>
+	    <a class="mui-tab-item" href="sub2.html">
+	        <span class="mui-icon mui-icon-phone"></span>
+	        <span class="mui-tab-label">客户</span>
+	    </a>
+	    <a class="mui-tab-item" href="sub3.html">
+	        <span class="mui-icon mui-icon-email"></span>
+	        <span class="mui-tab-label">订单</span>
+	    </a>
+	    <a class="mui-tab-item" href="sub4.html">
+	        <span class="mui-icon mui-icon-gear"></span>
+	        <span class="mui-tab-label">优惠券</span>
+	    </a>
+	</nav>
+</body>
+<script type="text/javascript">
+	(function($, doc) {
+		var subpages=['sub1.html','sub2.html','sub3.html','sub4.html'];
+	  	var subpageStyle={
+	  		top:'0px',
+	  		bottom:'50px'
+	  	}
+	  	window.addEventListener('show', function() {
+			mui.plusReady(function(){
+				if (isIPhoneX()) {
+					subpageStyle = {
+						top: '0px',
+						bottom: '88px', //34px
+						styles: {
+							"render": "always",
+						}
+					};
+				}
+		  		var self=plus.webview.currentWebview();	//获取当前窗体
+		  		for (var i=0;i<subpages.length;i++) {
+		  			var sub=plus.webview.create(subpages[i],subpages[i],subpageStyle);//url  id   style  extras(参数可选填)
+		  			sub.hide();   //隐藏所有页面
+		  			self.append(sub);
+		  		}
+		  		plus.webview.show(subpages[0]);//显示id为。。的窗体
+		  		
+		  		//--
+				$.oldBack = mui.back;
+				var backButtonPress = 0;
+				$.back = function(event) {
+					backButtonPress++;
+					if (backButtonPress > 1) {
+						plus.runtime.quit();
+					} else {
+						plus.nativeUI.toast('再按一次退出应用');
+					}
+					setTimeout(function() {
+						backButtonPress = 0;
+					}, 1000);
+					return false;
+				};
+		  	})
+			
+		}, false);
+	  	
+	  	
+	  	mui(".mui-bar-tab").on("tap","a",function(e){
+	  		var tagPage=this.getAttribute("href");
+	  		//sub.hide();
+	  		plus.webview.show(tagPage,"fade-in");
+	  	})
+  	
+  	}(mui, document));
+</script>
+</html>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_black"
+    android:orientation="vertical">
+
+    <com.puyue.www.qiaoge.view.datepicker.FingerFrameLayout
+        android:id="@+id/ffl_dialog_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp">
+
+
+        <com.puyue.www.qiaoge.view.PhotoViewPager
+            android:id="@+id/vp_dialog_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_dialog_photo"
+            android:layout_width="60dp"
+            android:background="@drawable/dialog_show_photo_bg"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="5dp"
+            android:text="1"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/white" />
+    </com.puyue.www.qiaoge.view.datepicker.FingerFrameLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_detail"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_15dp"
+        android:layout_marginRight="@dimen/size_15dp"
+        android:paddingBottom="@dimen/size_15dp">
+
+        <ImageView
+            android:id="@+id/iv_flag"
+            android:layout_marginTop="@dimen/size_10dp"
+            android:layout_width="@dimen/size_30dp"
+            android:layout_height="@dimen/size_30dp"
+            android:src="@mipmap/ic_account_detail" />
+
+        <TextView
+            android:layout_marginLeft="@dimen/size_15dp"
+            android:id="@+id/textTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/iv_flag"
+         android:paddingTop="@dimen/size_10dp"
+android:paddingBottom="@dimen/size_10dp"
+            android:text=""
+            android:textColor="@color/app_black"
+            android:textSize="@dimen/size_15dp" />
+
+
+        <TextView
+
+            android:id="@+id/textPries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/size_10dp"
+            android:textColor="@color/color_FF5C01"
+            android:textSize="@dimen/size_15dp" />
+
+        <TextView
+            android:layout_marginLeft="@dimen/size_15dp"
+           android:layout_toRightOf="@id/iv_flag"
+            android:id="@+id/textTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textTitle"
+            android:textColor="@color/color_ACAAAD"
+            android:textSize="@dimen/size_12dp" />
+
+        <TextView
+            android:id="@+id/textViewFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textPries"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/color_ACAAAD"
+            android:textSize="@dimen/size_12dp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_1dp"
+        android:background="@color/color_F6F6F6" />
+
+</LinearLayout>

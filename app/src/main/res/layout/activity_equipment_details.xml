@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.puyue.www.qiaoge.view.CompatToolbar
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/size_20dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/app_border_bottom_bg">
+
+        <ImageView
+            android:id="@+id/iv_activity_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:src="@mipmap/ic_back_arrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="13dp"
+            android:layout_marginTop="13dp"
+            android:text="设备详情"
+            android:textColor="@color/app_top_bar_text"
+            android:textSize="18dp" />
+    </com.puyue.www.qiaoge.view.CompatToolbar>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/app_color_white">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0dp"
+            app:layout_behavior="com.puyue.www.qiaoge.view.GoodsBehavior">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/app_color_white"
+                    android:orientation="vertical">
+
+                    <com.puyue.www.qiaoge.banner.Banner
+                        android:id="@+id/banner_activity_equipment"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:background="@color/app_bg_gray" />
+
+                    <TextView
+                        android:id="@+id/tv_activity_equipment_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/app_color_white"
+                        android:padding="10dp"
+                        android:textColor="@color/app_front_black"
+                        android:textSize="15dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/app_line_size"
+                        android:background="@color/app_line_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingBottom="12dp"
+                        android:paddingTop="12dp"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/tv_activity_equipment_price"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:padding="8dp"
+                            android:textColor="@color/app_tab_selected"
+                            android:textSize="15dp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="@dimen/app_line_size"
+                            android:layout_height="match_parent"
+                            android:background="@color/app_line_gray" />
+
+                        <TextView
+                            android:id="@+id/tv_activity_equipment_volume"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:padding="8dp"
+                            android:textColor="@color/app_dark_gray"
+                            android:textSize="15dp" />
+
+                        <View
+                            android:layout_width="@dimen/app_line_size"
+                            android:layout_height="match_parent"
+                            android:background="@color/app_line_gray" />
+
+                        <TextView
+                            android:id="@+id/tv_activity_equipment_inven"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:padding="8dp"
+                            android:textColor="@color/app_dark_gray"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_activity_equipment_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="20dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:textColor="@color/app_cancle_gray"
+                        android:textSize="12dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:background="@color/app_bg_gray" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="20dp"
+                        android:text="预定时间"
+                        android:textColor="@color/app_front_black"
+                        android:textSize="15dp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+
+                            <ImageView
+                                android:id="@+id/iv_activity_equipment_last"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:background="@mipmap/icon_calendar_last" />
+
+                            <TextView
+                                android:id="@+id/tv_activity_equipment_month"
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:textColor="@color/app_front_black"
+                                android:textSize="18dp" />
+
+                            <ImageView
+                                android:id="@+id/iv_activity_equipment_next"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:background="@mipmap/icon_calendar_next" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_activity_equipment_clean"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/shape_wallet_sure"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:paddingTop="5dp"
+                            android:text="清除"
+                            android:textColor="@color/white" />
+
+                    </RelativeLayout>
+
+                    <com.puyue.www.qiaoge.view.WeekView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <com.puyue.www.qiaoge.calendar.weiget.CalendarView
+                        android:id="@+id/cv_activity_equipment"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="预约数量"
+                            android:textColor="@color/app_front_black"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="15dp"
+                            android:visibility="invisible" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/tv_activity_equipment_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                android:src="@mipmap/app_reduce" />
+
+                            <TextView
+                                android:id="@+id/tv_activity_subscribe_amount"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="1"
+                                android:textColor="@color/app_front_black"
+                                android:textSize="15dp" />
+
+                            <ImageView
+                                android:id="@+id/tv_activity_equipment_add"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                android:src="@mipmap/app_add" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/app_line_size"
+                        android:background="@color/app_line_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:text="合计"
+                            android:textColor="@color/app_cancle_gray"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/tv_activity_equipment_total_day"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="共0天"
+                            android:textColor="@color/app_front_black"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/tv_activity_equipment_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
+                            android:text="￥0.00"
+                            android:textColor="@color/app_tab_selected"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:background="@color/app_bg_gray" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_activity_equipment_tobuy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center"
+                            android:text="直接购买"
+                            android:textColor="@color/app_front_black"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:background="@color/app_bg_gray" />
+                </LinearLayout>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/app_color_white"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+                <!--选项卡-->
+                <com.flyco.tablayout.SlidingTabLayout
+                    android:id="@+id/tab_activity_equipment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="20dp"
+                    app:tl_indicator_color="#F68653"
+                    app:tl_indicator_corner_radius="1dp"
+                    app:tl_indicator_height="2dp"
+                    app:tl_indicator_width="30dp"
+                    app:tl_textSelectColor="#F68653"
+                    app:tl_textUnselectColor="#A7A7A7"
+                    app:tl_textsize="15dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/app_line_size"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/app_line_gray" />
+
+            </RelativeLayout>
+
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_activity_equipment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <include layout="@layout/view_include_order_detail" />
+</LinearLayout>

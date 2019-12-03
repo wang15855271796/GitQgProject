@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/app_dialog_background"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="余额支付"
+            android:textColor="@color/app_front_black"
+            android:textSize="18dp" />
+
+        <LinearLayout
+            android:id="@+id/iv_cancel"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center">
+
+            <ImageView
+
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_order_cancel" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_line_size"
+        android:background="@color/app_line_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="10dp"
+            android:text="请输入您的支付密码"
+            android:textColor="#555555"
+            android:textSize="15dp" />
+
+        <EditText
+            android:id="@+id/et_dialog_paypwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/order_pay_pw_bg"
+            android:hint="请输入支付密码"
+            android:inputType="textPassword"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+
+            android:textColor="#6E6E74"
+            android:textColorHint="@color/app_cancle_gray"
+            android:textSize="15dp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_line_size"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/app_line_gray" />
+
+
+    <TextView
+
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="3dp"
+        android:text="温馨提示：交易密码为6-12位字母与数字组合"
+        android:textSize="11dp"
+        android:textColor="#555555"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <TextView
+        android:id="@+id/tv_dialog_sure"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/shape_wallet_sure"
+        android:gravity="center"
+        android:paddingLeft="23dp"
+        android:paddingTop="8dp"
+        android:paddingRight="23dp"
+        android:paddingBottom="8dp"
+        android:text="确认"
+        android:textColor="@color/white"
+        android:textSize="12dp" />
+
+    <TextView
+        android:id="@+id/tv_dialog_cancle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginBottom="15dp"
+        android:gravity="center"
+        android:paddingLeft="23dp"
+        android:paddingTop="8dp"
+        android:paddingRight="23dp"
+        android:paddingBottom="8dp"
+        android:text="忘记密码"
+        android:textColor="#555555"
+        android:textSize="12dp" />
+</LinearLayout>

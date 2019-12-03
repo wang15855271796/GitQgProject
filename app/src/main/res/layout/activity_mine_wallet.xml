@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.puyue.www.qiaoge.view.CompatToolbar
+        android:layout_marginTop="@dimen/size_20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/app_border_bottom_bg">
+
+        <ImageView
+            android:id="@+id/iv_mine_wallet_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:src="@mipmap/ic_back_arrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="13dp"
+            android:layout_marginTop="13dp"
+            android:text="我的钱包"
+            android:textColor="@color/app_top_bar_text"
+            android:textSize="18dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_mine_wallet_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="13dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="时间"
+                android:textColor="@color/app_top_bar_text"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:id="@+id/iv_mine_wallet_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_arrow_down" />
+
+        </LinearLayout>
+
+
+    </com.puyue.www.qiaoge.view.CompatToolbar>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:clickable="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/wallet_bg"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="余额(元)"
+                    android:textColor="@color/app_trans_white"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/tv_mine_wallet_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/app_color_white"
+                    android:textSize="36dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/wallet_line" />
+
+            <RadioGroup
+                android:id="@+id/rg_mine_wallet"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/wallet_line"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_mine_wallet_all"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="0.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_mine_wallet"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="全部"
+                    android:textColor="@drawable/selector_wallet_text"
+                    android:textSize="15dp" />
+
+                <RadioButton
+                    android:id="@+id/rb_mine_wallet_out"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="0.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_mine_wallet"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="支出"
+                    android:textColor="@drawable/selector_wallet_text"
+                    android:textSize="15dp" />
+
+                <RadioButton
+                    android:id="@+id/rb_mine_wallet_in"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_mine_wallet"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="收入"
+                    android:textColor="@drawable/selector_wallet_text"
+                    android:textSize="15dp" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/app_bg_gray"
+                android:orientation="horizontal"
+                android:padding="6dp">
+
+                <LinearLayout
+                    android:id="@+id/ll_activity_child_account"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="子账号"
+                        android:textColor="@color/app_front_black"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/tv_activity_wallet_account"
+                        android:layout_width="100dp"
+                        android:layout_height="18dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@mipmap/icon_spinner_down"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="5dp"
+                        android:text="请选择"
+                        android:textColor="@color/app_front_black"
+                        android:textSize="12dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="类型"
+                        android:textColor="@color/app_front_black"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/tv_activity_wallet_type"
+                        android:layout_width="100dp"
+                        android:layout_height="18dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@mipmap/icon_spinner_down"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="5dp"
+                        android:text="请选择"
+                        android:textColor="@color/app_front_black"
+                        android:textSize="12dp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <in.srain.cube.views.ptr.PtrClassicFrameLayout
+                android:id="@+id/ptr_mine_wallet"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_mine_wallet"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_mine_wallet_no_data"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="50dp"
+                        android:src="@mipmap/ic_no_data"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+            </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/app_color_bottom_gray" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/wallet_bg" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_mine_wallet_withdraw"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/app_color_white"
+                    android:gravity="center"
+                    android:padding="17dp"
+                    android:text="提现"
+                    android:textColor="@color/wallet_bg"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/tv_mine_wallet_recharge"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/wallet_bg"
+                    android:gravity="center"
+                    android:padding="17dp"
+                    android:text="充值"
+                    android:textColor="@color/app_color_white"
+                    android:textSize="15dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_activity_wallet_time"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#35000000"
+            android:clickable="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+        </LinearLayout>
+    </FrameLayout>
+
+
+</LinearLayout>

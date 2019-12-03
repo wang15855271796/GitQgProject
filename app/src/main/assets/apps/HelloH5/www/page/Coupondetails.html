@@ -1,0 +1,361 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style type="text/css">
+		.mui-control-content {
+			background-color: white;
+			min-height: 215px;
+		}
+		.mui-control-content .mui-loading {
+			margin-top: 50px;
+		}
+		.mui-table-view .mui-media-object {
+		    line-height: normal;
+		    text-align: center;
+		    max-width: 120px;
+		    min-width: 90px;
+		    height: 50px;
+		    background: #FF8625;
+		    color: #FFFFFF;
+		    /*margin-right:0px !important;*/
+		}
+		.mlist-name{
+			height: 25px;
+			line-height: 25px;
+			display: flex;
+			justify-content: space-between;
+		}
+		.mlist-name .textlf{
+			color: #333333;
+			font-size: 16px;
+		}
+		.mlist-name .textrg{
+			color: #F56D23;
+			font-size: 10px;
+		}
+		.mcoupon-item{
+			height: 25px;
+			line-height: 25px;
+			display: flex;
+			justify-content: space-between;
+			color: #666666;
+			font-size: 12px;
+		}
+		.usedamount{
+			height: 30px;
+			line-height: 30px;
+		}
+		.endamount{
+			height: 50px;
+			line-height: 50px;
+		}
+		.amountdetails{
+			height: 20px;
+			line-height: 20px;
+			font-size: 10px;
+		}
+		.mui-bar~.mui-content .mui-fullscreen {
+		top: 44px;
+		height: auto;
+	}
+	.mui-pull-top-tips {
+		position: absolute;
+		top: -20px;
+		left: 50%;
+		margin-left: -25px;
+		width: 40px;
+		height: 40px;
+		border-radius: 100%;
+		z-index: 1;
+	}
+	.mui-bar~.mui-pull-top-tips {
+		top: 24px;
+	}
+	.mui-pull-top-wrapper {
+		width: 42px;
+		height: 42px;
+		display: block;
+		text-align: center;
+		background-color: #efeff4;
+		border: 1px solid #ddd;
+		border-radius: 25px;
+		background-clip: padding-box;
+		box-shadow: 0 4px 10px #bbb;
+		overflow: hidden;
+	}
+	.mui-pull-top-tips.mui-transitioning {
+		-webkit-transition-duration: 200ms;
+		transition-duration: 200ms;
+	}
+	.mui-pull-top-tips .mui-pull-loading {
+		/*-webkit-backface-visibility: hidden;
+		-webkit-transition-duration: 400ms;
+		transition-duration: 400ms;*/
+		margin: 0;
+	}
+	.mui-pull-top-wrapper .mui-icon,
+	.mui-pull-top-wrapper .mui-spinner {
+		margin-top: 7px;
+	}
+	.mui-pull-top-wrapper .mui-icon.mui-reverse {
+		/*-webkit-transform: rotate(180deg) translateZ(0);*/
+	}
+	.mui-pull-bottom-tips {
+		text-align: center;
+		background-color: #efeff4;
+		font-size: 15px;
+		line-height: 40px;
+		color: #777;
+	}
+	.mui-pull-top-canvas {
+		overflow: hidden;
+		background-color: #fafafa;
+		border-radius: 40px;
+		box-shadow: 0 4px 10px #bbb;
+		width: 40px;
+		height: 40px;
+		margin: 0 auto;
+	}
+	.mui-pull-top-canvas canvas {
+		width: 40px;
+	}
+	.mui-slider-indicator.mui-segmented-control {
+		background-color: #efeff4;
+	}
+	</style>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">优惠券明细</h1>
+		</header>
+		
+		<div class="mui-content">
+			<div id="slider" class="mui-slider mui-fullscreen">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item" href="#item1mobile">
+						已使用
+					</a>
+					<a class="mui-control-item" href="#item2mobile">
+						未使用
+					</a>
+					
+				</div>
+				<!--<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6"></div>-->
+				<div class="mui-slider-group">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div id="scroll1" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view">
+									<!--<li class="mui-table-view-cell">
+										<div class="mui-media-object mui-pull-left">
+							        		<div class="usedamount">100元</div>
+							        		<div class="amountdetails">点击查看订单</div>
+							        	</div>
+							        	<div class="mui-media-body">
+							        		<div class="mlist-name">
+							               		<span class="textlf">100元无门槛消费券  </span>
+							               		<span class="textrg">注册赠送</span>
+							               	</div>
+							        		<p class='mui-ellipsis mcoupon-item'>
+							        			2019-09-16-2019-10-16
+							        		</p>
+							     
+							        	</div>
+									</li>-->
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div id="scroll2" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view">
+									
+								</ul>
+								<!--<div class="mui-loading">
+									<div class="mui-spinner">
+									</div>
+								</div>-->
+							</div>
+						</div>
+
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.pullToRefresh.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/mui.pullToRefresh.material.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			mui.init();
+			var lastPage;  //总共页数
+			var pageNum=1;  //当前页数
+			var pageNum1=1;//tab1当前页数
+			var pageNum2=1;//tab2当前页数
+			var counter=1; //计数器
+			var pageSize=10;//每页数显示条数
+			var levelType = 'USED'; //已使用：USED, 可用：ENABLED
+			(function($) {
+				mui.plusReady(function(){
+					//alert(plus.webview.currentWebview().userId);
+					/*var self = plus.webview.currentWebview();
+	    			var userId = self.userId;//获得参数*/				
+					//阻尼系数
+					var deceleration = mui.os.ios ? 0.003 : 0.0009;
+					$('.mui-scroll-wrapper').scroll({
+						bounce: false,
+						indicators: true, //是否显示滚动条
+						deceleration: deceleration
+					});
+					$.ready(function(){
+						 //循环初始化所有下拉刷新，上拉加载。
+						 $.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index,pullRefreshEl) {
+						 	$(pullRefreshEl).pullToRefresh({
+						 		down:{
+						 			callback:function(){
+						 				var self = this;
+						 				setTimeout(function(){
+						 					//刷新清空子节点
+											counter=1; //计数器
+											pageNum1=1;  //当前页数
+											pageNum2=1;  //当前页数
+						 					var ul=self.element.querySelector('.mui-table-view');
+						 					//ul.insertBefore(createFragment(ul, index, 10, true), ul.firstChild);
+											self.endPullDownToRefresh();
+						 					createFragment(ul, index, 10,function(res){
+						 						for(var i=ul.childNodes.length;i>0;i--){  
+												  ul.removeChild(ul.childNodes[i-1]);  
+												}
+						 						ul.appendChild(res);
+						 						self.endPullDownToRefresh(true);
+						 						self.endPullUpToRefresh((++counter>=lastPage));
+						 					});
+						 				},1000);
+						 			}
+						 		},
+						 		up:{
+						 			auto: true,//自动执行一次下拉加载，可选；
+						 			callback: function () {
+		                                var self = this;
+		                                setTimeout(function () {
+		                                    var ul = self.element.querySelector('.mui-table-view');	                                  	                                    
+		                                    createFragment(ul, index, 10,function(res){		                                    	
+		                                    	ul.appendChild(res);
+			                                    self.endPullUpToRefresh((++counter>=lastPage));
+		                                    	/*if (res.querySelectorAll('li').length<10) {
+		                                    		ul.appendChild(res);
+			                                        self.endPullUpToRefresh(true);
+			                                    } else {
+			                                        
+			                                    }*/
+		                                    });
+		                                }, 1000);
+		                            }
+						 		}
+						 	})
+						 });
+					});
+					var createFragment = function (ul, index, count, successCallback) {
+						if(index==0){
+		                    	levelType='USED';
+		                    	pageNum=pageNum1++;
+		                    }else if (index == 1) {
+		                    	pageNum=pageNum2++;
+		                        levelType = 'ENABLED';
+		                    }
+						//console.log('index:'+index);
+						var length = ul.querySelectorAll('li').length;
+	                    var fragment = null;                                    
+	                    //实现异步查询
+	                    var url=urls+service_url.querySaleUserGiftInfo_url;
+						var dataForm={};
+						dataForm.token=app.getState().token;
+						dataForm.pageNum=pageNum;
+						dataForm.pageSize=count;
+						dataForm.state=levelType;
+						dataForm.userId=plus.webview.currentWebview().userId;
+						ajaxmethod(url,'POST',dataForm,function(res){
+							var data=res.data;
+							lastPage = data.pages;
+	　　　　　　　　　　   	    pageNum = data.pageNum;
+							//console.log(data);
+							fragment = document.createDocumentFragment();
+							 $.each(data.list, function (i, n) {
+							 	var html='';
+	                            var li = document.createElement('li');
+	                            li.className = 'mui-table-view-cell';	                                                     
+                            	if(n.state=='USED'){
+                            		html+='<div class="mui-media-object mui-pull-left USED" no="'+n.giftDetailNo+'">';
+                            		html+='<div class="usedamount">'+n.amount+'元</div>';
+                            		html+='<div class="amountdetails">点击查看订单</div>';
+                            	}else if(n.state=='ENABLED'){
+                            		html+='<div class="mui-media-object mui-pull-left ENABLED">';
+                            		html+='<div class="endamount">'+n.amount+'元</div>';
+                            	}
+	                            html+='</div>';
+	                            html+='<div class="mui-media-body">';
+	                            	html+='<div class="mlist-name">';
+	                            		html+='<span class="textlf">'+n.giftName+'</span>';
+	                            		html+='<span class="textrg">'+n.applyFrom+'</span>';
+	                            	html+='</div>';
+	                            	html+='<p class="mui-ellipsis mcoupon-item">'+n.dateTime+'</p>';
+	                            html+='</div>';
+	                            li.innerHTML = html;
+	                            fragment.appendChild(li);
+	                            //下拉刷新，新纪录插到最前面；
+	                            //table.insertBefore(li, table.firstChild);
+	                       });
+	                       successCallback(fragment);
+						})      
+					}
+					
+										
+					//点击获取详情
+					mui('ul.mui-table-view').on('tap','.USED',function(event){
+						//获取值
+						var no=this.getAttribute("no");
+						mui.openWindow({					//打开新的页面
+							url:'sub4detailshow.html',
+							id:"sub4detailshow.html",
+							style:{},
+							show:{
+								autoShow: false,
+								aniShow: "slide-in-right",   //配置动画 
+								duration: 100     //配置动画
+							},
+							extras:{  
+						        giftDetailNo:no,  				
+						    },  
+							waiting:{
+								autoShow:true,
+								title:"正在加载...",
+								options:{   //等待框的宽高
+									
+								}
+							}
+						})
+					})
+				})
+				/*document.getElementById('slider').addEventListener('slide', function(e) {
+					if (e.detail.slideNumber === 1) {
+						if (item2.querySelector('.mui-loading')) {
+							setTimeout(function() {
+								item2.querySelector('.mui-scroll').innerHTML = html2;
+							}, 500);
+						}
+					}
+				});*/
+				
+			})(mui);
+		</script>
+	</body>
+
+</html>

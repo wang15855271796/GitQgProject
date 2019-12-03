@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+   >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="@dimen/size_15dp"
+        android:orientation="vertical"
+        android:padding="@dimen/size_10dp">
+
+        <TextView
+            android:id="@+id/textViewIntegralTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/app_black"
+            android:textSize="@dimen/size_14dp" />
+
+        <TextView
+            android:id="@+id/textViewIntegralPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="+13"
+            android:textColor="@color/color_FF5C01"
+            android:textSize="@dimen/size_15dp" />
+
+        <TextView
+            android:id="@+id/textViewIntegralTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2018/10/19    10.59"
+            android:layout_marginTop="-5dp"
+            android:textColor="@color/color_ACAAAD"
+            android:textSize="@dimen/dp_10" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_1dp"
+        android:background="@color/color_F6F6F6" />
+</LinearLayout>

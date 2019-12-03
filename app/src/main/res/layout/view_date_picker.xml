@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+android:layout_marginRight="@dimen/size_37dp"
+    android:layout_marginLeft="@dimen/size_37dp"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/date_select_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_30dp"
+            android:gravity="center"
+            android:text="请选择时间"
+            android:textStyle="bold"
+            android:textColor="#ff000000"
+            android:textSize="@dimen/size_21dp" />
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/size_15dp"
+            android:layout_marginLeft="@dimen/size_27dp"
+            android:layout_marginRight="@dimen/size_37dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/select_date_bg"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="20dp">
+
+            <com.puyue.www.qiaoge.view.datepicker.DatePickerView
+                android:id="@+id/year_pv"
+                android:layout_width="65dp"
+                android:layout_height="108dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="年"
+                android:textColor="@color/app_front_black"
+                android:textSize="@dimen/size_11dp" />
+
+            <com.puyue.www.qiaoge.view.datepicker.DatePickerView
+                android:id="@+id/month_pv"
+                android:layout_width="65dp"
+                android:layout_height="108dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="月"
+                android:textColor="@color/app_front_black"
+                android:textSize="@dimen/size_11dp" />
+
+            <com.puyue.www.qiaoge.view.datepicker.DatePickerView
+                android:id="@+id/day_pv"
+                android:layout_width="0dp"
+                android:layout_height="108dp"
+                android:layout_weight="2"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="日"
+                android:textSize="18sp"
+                android:visibility="gone" />
+
+            <com.puyue.www.qiaoge.view.datepicker.DatePickerView
+                android:id="@+id/hour_pv"
+                android:layout_width="0dp"
+                android:layout_height="108dp"
+                android:layout_weight="2"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/hour_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="时"
+                android:textSize="18sp"
+                android:visibility="gone" />
+
+            <com.puyue.www.qiaoge.view.datepicker.DatePickerView
+                android:id="@+id/minute_pv"
+                android:layout_width="0dp"
+                android:layout_height="108dp"
+                android:layout_weight="2"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/minute_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="分"
+                android:textSize="18sp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginBottom="@dimen/size_28dp"
+
+            android:layout_marginLeft="@dimen/size_37dp"
+            android:layout_marginRight="@dimen/size_37dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+
+            <TextView
+                android:id="@+id/tv_cancle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingLeft="23dp"
+                android:paddingTop="8dp"
+                android:paddingRight="23dp"
+                android:paddingBottom="8dp"
+                android:layout_marginRight="@dimen/size_21dp"
+                android:text="取消"
+                android:background="@drawable/shape_wallet_sure"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+
+            <TextView
+                android:layout_marginLeft="@dimen/size_21dp"
+                android:id="@+id/tv_select"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:background="@drawable/shape_wallet_sure"
+                android:gravity="center"
+                android:paddingLeft="23dp"
+                android:paddingTop="8dp"
+                android:paddingRight="23dp"
+                android:paddingBottom="8dp"
+                android:text="确定"
+                android:textColor="@color/app_color_white"
+                android:textSize="15dp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

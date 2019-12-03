@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rootview"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:background="@drawable/app_mine_toolbar_bg"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_collapseMode="pin">
+
+        <LinearLayout
+            android:id="@+id/rl_home_top_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:text="杭州"
+                android:textColor="@color/app_color_white"
+                android:textSize="13dp" />
+
+            <TextView
+                android:id="@+id/tv_home_top_search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_weight="2.5"
+                android:background="@drawable/white_bg"
+                android:drawableRight="@mipmap/ic_home_search"
+                android:gravity="center"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingTop="@dimen/size_5dp"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingBottom="@dimen/size_5dp"
+                android:text="@string/inputCommodityName"
+                android:textColor="@color/color_6A6A6A"
+                android:textSize="@dimen/size_11dp" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/homeMessage"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_home_message" />
+
+                <TextView
+                    android:text="4"
+                    android:id="@+id/view_mine_message_num"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="-2dp"
+                    android:textColor="@color/white"
+                    android:textSize="9dp"
+                    android:background="@drawable/bg_msg_count"
+                    android:layout_toRightOf="@+id/homeMessage"
+                    android:layout_height="wrap_content" />
+
+                <com.puyue.www.qiaoge.view.SuperTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="-2dp"
+                    android:layout_toRightOf="@+id/homeMessage"
+                    android:text="4"
+                    android:textColor="@color/white"
+                    android:textSize="9dp"
+                    android:visibility="gone"
+                    app:corner="7dp"
+                    app:solid="#ff0000" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--icon-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_icon"
+            android:layout_marginTop="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_bg"
+            android:minHeight="80dp" />
+
+        <!--banner-->
+        <com.daimajia.slider.library.SliderLayout
+            android:id="@+id/home_banner"
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+        </com.daimajia.slider.library.SliderLayout>
+
+        <!--公告-->
+        <LinearLayout
+            android:id="@+id/ll_home_notice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_F9F9F9"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginBottom="10dp"
+                android:src="@mipmap/ic_news" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginBottom="10dp"
+                android:src="@mipmap/icon_tongzhixiao" />
+
+            <com.puyue.www.qiaoge.view.MarqueeView
+                android:id="@+id/notice"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/size_10dp"
+                android:layout_weight="1"
+                app:mvAnimDuration="1000"
+                app:mvInterval="4000"
+
+                app:mvTextColor="@color/app_black"
+                app:mvTextSize="12dp" />
+
+
+        </LinearLayout>
+
+        <!--秒杀专区-->
+    </LinearLayout>
+
+</RelativeLayout>

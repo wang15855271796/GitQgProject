@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.mui-content{
+				padding: 14px;
+				box-sizing: border-box;
+			}
+			.switch_title{
+				margin-top: 20px;
+			}
+			.switch_title input{
+				height: 40px;
+				font-size: 18px;
+				font-weight: 500;
+				border-radius: 5px;
+			}
+			.switch_text{
+				height: 175px;
+			}
+			.switch_text textarea{
+				font-size: 12px;
+				font-weight: 500;
+				height: 100%;
+				border-radius: 5px;
+			}
+			.sendcard{
+				margin-top: 20px;
+				margin-bottom: 20px;
+				box-sizing: border-box;
+				padding: 0px 15px;
+				text-align: center;
+				height: 48px;
+				line-height: 48px;
+			}
+			.addsend{
+				border-radius: 48px;
+				font-size: 18px;
+				background-color: #F56D23;
+				color: #FFFFFF;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">添加备注</h1>
+		</header>
+		<div class="mui-content">
+		    <div class="switch_title">
+		    	<input type="text" name="" id="title" value="" placeholder="请输入备注的主题"/>
+		    </div>
+		    <div class="switch_text">
+		    	<textarea name="" rows="" cols="" placeholder="请输入备注内容" id="reviewww"></textarea>
+		    </div>
+		    <div class="sendcard">
+				<div class="addsend">保存</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+		        beforeback: function() {　　 
+		            //获得父页面的webview
+		            var list = plus.webview.currentWebview().opener();　　
+		            //触发父页面的自定义事件(refresh),从而进行刷新
+		            mui.fire(list, 'refresh');
+		            //返回true,继续页面关闭逻辑
+		            return true;
+		        }
+		    });
+		    
+		   
+			mui.plusReady(function(){
+				var id=plus.webview.currentWebview().userId;
+				mui('.sendcard').on('tap','.addsend',function(event){
+					var checkSubmitFlg = false; 
+					if(checkSubmitFlg == true){
+						return false
+					}else{
+						//获取数据
+						var title=document.getElementById("title").value;//标题
+						var con_value=document.getElementById('reviewww').value;//内容
+						if(!title){
+							mui.toast('主题不能为空',{ duration:'1000',type: 'div'});
+						}else if(!con_value){
+							mui.toast('内容不能为空',{ duration:'1000',type: 'div'});
+						}else{	
+							checkSubmitFlg == true;
+							setTimeout(function () {								
+								var url=urls+service_url.addSaleUserMemoLog_url;
+								var dataForm={};
+								dataForm.token=app.getState().token;
+								dataForm.userId=id;
+								dataForm.title=title;//
+								dataForm.content=con_value;//
+								ajaxmethod(url,'POST',dataForm,function(res){
+									if(res.code==1){
+										checkSubmitFlg == false;
+										mui.toast('添加成功');
+										mui.back();
+									}else{
+										mui.toast(res.message);
+									}
+								})
+							},1000);
+						}			
+						return true;
+					}				
+				})				
+			})
+		</script>
+	</body>
+
+</html>

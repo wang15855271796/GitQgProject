@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<!--下拉刷新容器-->
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell">
+						Item 1
+					<li class="mui-table-view-cell">
+						Item 2
+					</li>
+					<li class="mui-table-view-cell">
+						Item 3
+					</li>
+					<li class="mui-table-view-cell">
+						Item 4
+					</li>
+					<li class="mui-table-view-cell">
+						Item 5
+					</li>
+				</ul>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						callback: pulldownRefresh
+					},
+					up: {
+						contentrefresh: '正在加载...',
+						contentnomore:'没有更多数据了',
+						callback: pullupRefresh
+					}
+				}
+			});
+			
+			mui.plusReady(function(){
+				var self = plus.webview.currentWebview();
+    			var name = self.tokens;//获得参数
+    			alert(name);
+				var url=urls+service_url.querySaleIndexUserDataInfo_url;
+				var dataForm={};
+				dataForm.token=name;
+				dataForm.startTime='';
+				dataForm.endTime='';
+				ajaxmethod(url,'POST',dataForm,function(data){
+					document.getElementsByClassName('user-iphone')[0].innerHTML=data.data.phone;
+					document.getElementsByClassName('user-company')[0].innerHTML=data.data.companyName;//公司名称
+					document.getElementsByClassName('todayRegisterNum')[0].innerHTML=data.data.todayRegisterNum;//今日注册数
+					document.getElementsByClassName('todayOnlineNum')[0].innerHTML=data.data.todayOnlineNum;//线上订单
+					document.getElementsByClassName('offlineNum')[0].innerHTML=data.data.offlineNum;//线下订单
+				});
+			})
+			/**
+			 * 下拉刷新具体业务实现
+			 */
+			function pulldownRefresh() {
+				setTimeout(function() {
+					var table = document.body.querySelector('.mui-table-view');
+					var cells = document.body.querySelectorAll('.mui-table-view-cell');
+					for (var i = cells.length, len = i + 3; i < len; i++) {
+						var li = document.createElement('li');
+						li.className = 'mui-table-view-cell';
+						li.innerHTML = 'Item ' + (i + 1);
+						//下拉刷新，新纪录插到最前面；
+						table.insertBefore(li, table.firstChild);
+					}
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+				}, 1500);
+			}
+			var count = 0;
+			/**
+			 * 上拉加载具体业务实现
+			 */
+			function pullupRefresh() {
+				setTimeout(function() {
+					mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
+					var table = document.body.querySelector('.mui-table-view');
+					var cells = document.body.querySelectorAll('.mui-table-view-cell');
+					for (var i = cells.length, len = i + 5; i < len; i++) {
+						var li = document.createElement('li');
+						li.className = 'mui-table-view-cell';
+						li.innerHTML = 'tem ' + (i + 1);
+						table.appendChild(li);
+					}
+				}, 1500);
+			}
+//			if (mui.os.plus) {
+//				mui.plusReady(function() {
+//					setTimeout(function() {
+//						mui('#pullrefresh').pullRefresh().pullupLoading();
+//					}, 10);
+//
+//				});
+//			} else {
+//				mui.ready(function() {
+//					mui('#pullrefresh').pullRefresh().pullupLoading();
+//				});
+//			}
+		</script>
+	</body>
+
+</html>

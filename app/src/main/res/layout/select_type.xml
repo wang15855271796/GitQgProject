@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:paddingLeft="@dimen/size_30dp"
+    android:paddingRight="@dimen/size_30dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="选择您的店铺类型"
+        android:textColor="#ff000000"
+        android:textSize="@dimen/size_25dp" />
+
+
+    <View
+        android:layout_width="@dimen/size_30dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/size_11dp"
+        android:background="#ff000000" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_17dp"
+        android:text="标准的店铺类型有助于您高效的找到所需产品"
+        android:textColor="#ff000000"
+        android:textSize="@dimen/size_13dp" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rl_type"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/size_45dp"
+        android:layout_weight="1">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+
+    <TextView
+        android:background="@drawable/select_type_bg"
+        android:id="@+id/tv_ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/size_15dp"
+        android:text="我选好了"
+        android:textColor="@color/white"
+        android:layout_marginBottom="@dimen/size_41dp"
+        android:textSize="@dimen/size_17dp" />
+
+
+</LinearLayout>

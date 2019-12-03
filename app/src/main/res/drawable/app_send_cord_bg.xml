@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 内部用颜色 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- 填充颜色 -->
+    <solid android:color="@color/white" >
+    </solid>
+    <!-- 边框的颜色和宽度 -->
+    <stroke
+        android:width="2px"
+        android:color="#FFF56D23" >
+    </stroke>
+
+
+
+</shape>
