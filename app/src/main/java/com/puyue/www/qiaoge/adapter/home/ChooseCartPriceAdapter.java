@@ -32,6 +32,7 @@ import com.puyue.www.qiaoge.model.cart.AddCartGoodModel;
 import com.puyue.www.qiaoge.model.cart.CartAddReduceModel;
 import com.puyue.www.qiaoge.model.cart.CartsListModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -193,12 +194,14 @@ public class ChooseCartPriceAdapter extends BaseQuickAdapter<CartsListModel.Data
                                         @Override
                                         public void onNext(AddCartGoodModel addMountReduceModel) {
                                             if (addMountReduceModel.isSuccess()) {
+                                                Log.d("jineshuju.....","ssssss");
                                                 tv_num.setText(et_num.getText().toString());
                                                 alertDialog.dismiss();
                                                 String num = et_num.getText().toString();
 //                                                String data = (String) addMountReduceModel.data;
                                                 item.setProductNum(Integer.parseInt(num));
                                                 EventBus.getDefault().post(new UpdateEvent(testAdapter.getAllPrice()));
+
                                             } else {
                                                 AppHelper.showMsg(mContext, addMountReduceModel.getMessage());
                                                 tv_num.setText(addMountReduceModel.data.toString());
@@ -246,11 +249,11 @@ public class ChooseCartPriceAdapter extends BaseQuickAdapter<CartsListModel.Data
                         if (addMountReduceModel.isSuccess()) {
                             data.get(adapterPosition).setProductNum(num);
                             tv_num.setText(num + "");
-                            ToastUtils.showShortToast(mContext,"刷新购物车成功");
+//                            ToastUtils.showShortToast(mContext,"刷新购物车成功");
+                            ToastUtil.showSuccessMsg(mContext,"刷新购物车成功");
                             EventBus.getDefault().post(new UpdateEvent(testAdapter.getAllPrice()));
                         } else {
                             ToastUtils.showShortToast(mContext,addMountReduceModel.getMessage());
-//                            item.setProductNum((Integer) addMountReduceModel.data);
                         }
                     }
                 });

@@ -189,7 +189,7 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
     private NewAdapter newAdapter;
     Context context;
     int PageNum = 1;
-    int PageSize = 10;
+    int PageSize = 12;
     HomeNewRecommendModel homeNewRecommendModels;
     private MyOrderNumModel mModelMyOrderNum;
     HomeBaseModel homeBaseModels;
@@ -1042,7 +1042,7 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
                             PageNum = 1;
                             requestOrderNum();
                             getBaseList("version","1");
-                            getNewProductList(1+"",10+"");
+                            getNewProductList(1+"",12+"");
                             UserInfoHelper.saveUserHomeRefresh(getContext(), "home_has_refresh");
                         } else {
                             AppHelper.showMsg(mActivity, updateUserInvitationModel.getMessage());

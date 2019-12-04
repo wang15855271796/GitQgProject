@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.adapter.cart;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -29,6 +30,7 @@ public class ImageViewAdapter extends BaseQuickAdapter<String,BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, String item) {
         imageView = helper.getView(R.id.iv_image);
-        Picasso.with(mContext).load(item).into(imageView);
+        Log.d("woshiqutui....",item);
+        Glide.with(mContext).load(item).into(imageView);
     }
 }

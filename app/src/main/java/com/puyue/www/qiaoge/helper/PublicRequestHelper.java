@@ -1,6 +1,7 @@
 package com.puyue.www.qiaoge.helper;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetCustomerPhoneAPI;

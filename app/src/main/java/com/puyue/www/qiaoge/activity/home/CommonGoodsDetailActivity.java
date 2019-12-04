@@ -586,6 +586,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     private void getDetailImage(GetProductDetailModel model) {
         detailPic = model.getData().getDetailPic();
         ImageViewAdapter imageViewAdapter = new ImageViewAdapter(mContext,R.layout.item_imageview,detailPic);
+        recyclerViewImage.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerViewImage.setAdapter(imageViewAdapter);
 
     }
