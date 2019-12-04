@@ -249,7 +249,6 @@ public class ChooseCartPriceAdapter extends BaseQuickAdapter<CartsListModel.Data
                         if (addMountReduceModel.isSuccess()) {
                             data.get(adapterPosition).setProductNum(num);
                             tv_num.setText(num + "");
-//                            ToastUtils.showShortToast(mContext,"刷新购物车成功");
                             ToastUtil.showSuccessMsg(mContext,"刷新购物车成功");
                             EventBus.getDefault().post(new UpdateEvent(testAdapter.getAllPrice()));
                         } else {
