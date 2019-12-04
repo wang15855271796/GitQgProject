@@ -14,15 +14,13 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
-import com.lljjcoder.style.citylist.Toast.ToastUtils;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.api.mine.login.SendCodeAPI;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -145,13 +143,13 @@ public class RegisterMessageActivity extends BaseSwipeActivity implements View.O
                                         intent.putExtra("yzm",yzms);
                                         startActivity(intent);
                                     } else {
-                                        AppHelper.showMsg(mContext, mModelSendCode.message);
+                                        ToastUtil.showSuccessMsg(mContext, mModelSendCode.message);
                                     }
                                 }
                             });
 
                 }else {
-                    ToastUtils.showShortToast(mContext,"请填写完信息");
+                    ToastUtil.showSuccessMsg(mContext,"请填写完信息");
                 }
 
                 break;
@@ -163,7 +161,7 @@ public class RegisterMessageActivity extends BaseSwipeActivity implements View.O
      */
     private void requestSendCode(String phone) {
         if (!NetWorkHelper.isNetworkAvailable(mContext)) {
-            AppHelper.showMsg(mContext, "网络不给力!");
+            ToastUtil.showSuccessMsg(mContext, "网络不给力!");
         } else {
             SendCodeAPI.requestSendCode(mContext,phone,2)
                     .subscribeOn(Schedulers.io())
@@ -183,11 +181,11 @@ public class RegisterMessageActivity extends BaseSwipeActivity implements View.O
                         public void onNext(BaseModel baseModel) {
                             mModelSendCode = baseModel;
                             if (mModelSendCode.success) {
-                                AppHelper.showMsg(mContext, "发送验证码成功!");
+                                ToastUtil.showSuccessMsg(mContext, "发送验证码成功!");
                                 handleCountDown();
 
                             } else {
-                                AppHelper.showMsg(mContext, mModelSendCode.message);
+                                ToastUtil.showSuccessMsg(mContext, mModelSendCode.message);
                                 Log.d("swsdgggttttt........","swddd");
                             }
                         }

@@ -14,9 +14,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.lljjcoder.style.citylist.Toast.ToastUtils;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.api.cart.AddMountChangeTwoAPI;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.ChooseDialog;
@@ -26,6 +24,7 @@ import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartGoodModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -142,7 +141,7 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                                                 alertDialog.dismiss();
                                                 EventBus.getDefault().post(new UpDateNumEvent());
                                             } else {
-                                                AppHelper.showMsg(mContext, addMountReduceModel.getMessage());
+                                                ToastUtil.showSuccessMsg(mContext, addMountReduceModel.getMessage());
                                                 tv_num.setText(addMountReduceModel.data.toString());
                                                 alertDialog.dismiss();
                                             }
@@ -151,7 +150,7 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
 
 
                         } else {
-                            AppHelper.showMsg(mContext, "请输入数量");
+                            ToastUtil.showSuccessMsg(mContext, "请输入数量");
                         }
                     }
                 });
@@ -188,73 +187,13 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num+"");
                             Log.d("woshidaxueshujj...",num+"");
-                            ToastUtils.showShortToast(mContext,"刷新购物车成功");
+                            ToastUtil.showSuccessMsg(mContext,"刷新购物车成功");
                             EventBus.getDefault().post(new UpDateNumEvent());
                         } else {
-                            ToastUtils.showShortToast(mContext,addMountReduceModel.getMessage());
+                            ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
                         }
                     }
                 });
-
-
-
-//        helper.getView(R.id.iv_cut).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int num = Integer.parseInt(tv_num.getText().toString());
-//                num--;
-//                addCart(num,item.getPriceId(),productId,1,tv_num);
-//            }
-//        });
-//        helper.getView(R.id.iv_add).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int num = Integer.parseInt(tv_num.getText().toString());
-//                num++;
-//                addCart(num,item.getPriceId(),productId,1,tv_num);
-//            }
-//        });
-//        helper.setText(R.id.tv_price,item.getPrice());
-//        helper.setText(R.id.tv_old_price,item.getOldPrice());
-//        helper.setText(R.id.tv_unit,item.getUnitDesc());
-//        TextView tv_old_price = helper.getView(R.id.tv_old_price);
-//        tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-//        tv_num = helper.getView(R.id.tv_num);
-//
-//    }
-//
-//    /**
-//     * 添加购物车
-//     * @param num
-//     * @param tv_num
-//     */
-//    private void addCart(int num, int id, int businessId, int productType, TextView tv_num) {
-//        AddMountChangeTwoAPI.AddMountChangeService(mContext,productType,businessId,num,id)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<AddCartGoodModel>() {
-//                    @Override
-//                    public void onCompleted() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(AddCartGoodModel addMountReduceModel) {
-//                        if (addMountReduceModel.isSuccess()) {
-//                            tv_num.setText(num + "");
-//                            ToastUtils.showShortToast(mContext,"刷新购物车成功");
-//
-//                        } else {
-//
-//                            ToastUtils.showShortToast(mContext,"库存不足");
-//                        }
-//                    }
-//                });
     }
 
 

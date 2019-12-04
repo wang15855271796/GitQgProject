@@ -15,4 +15,12 @@ public class ToastUtil {
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
+
+    public static void showErroMsg(Context context, String msg) {
+        if (TextUtils.isEmpty(msg)) return;
+        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
+
 }

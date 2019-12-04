@@ -11,12 +11,9 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.lljjcoder.style.citylist.Toast.ToastUtils;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.adapter.cart.SearchInnerAdapter;
 import com.puyue.www.qiaoge.api.cart.AddMountChangeTwoAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
@@ -25,6 +22,7 @@ import com.puyue.www.qiaoge.fragment.cart.UpdateEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartGoodModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -149,7 +147,7 @@ public class MarketInnerAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
                                                 alertDialog.dismiss();
                                                 EventBus.getDefault().post(new UpDateNumEvent());
                                             } else {
-                                                AppHelper.showMsg(mContext, addMountReduceModel.getMessage());
+                                                ToastUtil.showSuccessMsg(mContext, addMountReduceModel.getMessage());
                                                 tv_num.setText(addMountReduceModel.data.toString());
                                                 alertDialog.dismiss();
                                             }
@@ -158,7 +156,7 @@ public class MarketInnerAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
 
 
                         } else {
-                            AppHelper.showMsg(mContext, "请输入数量");
+                            ToastUtil.showSuccessMsg(mContext, "请输入数量");
                         }
                     }
                 });
@@ -193,10 +191,10 @@ public class MarketInnerAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
                     public void onNext(AddCartGoodModel addMountReduceModel) {
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num + "");
-                            ToastUtils.showShortToast(mContext,"刷新购物车成功");
+                            ToastUtil.showSuccessMsg(mContext,"刷新购物车成功");
                             EventBus.getDefault().post(new UpDateNumEvent());
                         } else {
-                            ToastUtils.showShortToast(mContext,addMountReduceModel.getMessage());
+                            ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
                         }
                     }
                 });

@@ -7,11 +7,12 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.lljjcoder.style.citylist.Toast.ToastUtils;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.api.cart.AddMountChangeTwoAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
+import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartGoodModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import java.util.List;
 
@@ -92,11 +93,10 @@ public class SelectionInnerAdapter extends BaseQuickAdapter<MarketRightModel.Dat
                     public void onNext(AddCartGoodModel addMountReduceModel) {
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num + "");
-                            ToastUtils.showShortToast(mContext,"刷新购物车成功");
+                            ToastUtil.showSuccessMsg(mContext,"刷新购物车成功");
 
                         } else {
-
-                            ToastUtils.showShortToast(mContext,addMountReduceModel.getMessage());
+                            ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
                         }
                     }
                 });

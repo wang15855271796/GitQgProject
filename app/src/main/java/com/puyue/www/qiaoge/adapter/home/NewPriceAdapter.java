@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.lljjcoder.style.citylist.Toast.ToastUtils;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.api.cart.AddMountChangeTwoAPI;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
@@ -21,6 +20,7 @@ import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartGoodModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -136,7 +136,7 @@ public class NewPriceAdapter extends BaseQuickAdapter<ProductNormalModel.DataBea
                                                 alertDialog.dismiss();
                                                 EventBus.getDefault().post(new UpDateNumEvent());
                                             } else {
-                                                AppHelper.showMsg(mContext, addMountReduceModel.getMessage());
+                                                ToastUtil.showSuccessMsg(mContext, addMountReduceModel.getMessage());
                                                 tv_num.setText(addMountReduceModel.data.toString());
                                                 alertDialog.dismiss();
                                             }
@@ -145,7 +145,7 @@ public class NewPriceAdapter extends BaseQuickAdapter<ProductNormalModel.DataBea
 
 
                         } else {
-                            AppHelper.showMsg(mContext, "请输入数量");
+                            ToastUtil.showSuccessMsg(mContext, "请输入数量");
                         }
                     }
                 });
@@ -179,11 +179,10 @@ public class NewPriceAdapter extends BaseQuickAdapter<ProductNormalModel.DataBea
                     public void onNext(AddCartGoodModel addMountReduceModel) {
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num + "");
-                            ToastUtils.showShortToast(mContext,"刷新购物车成功");
+                            ToastUtil.showSuccessMsg(mContext,"刷新购物车成功");
 
                         } else {
-
-                            ToastUtils.showShortToast(mContext,addMountReduceModel.getMessage());
+                            ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
                         }
                     }
                 });

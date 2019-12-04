@@ -35,7 +35,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.lljjcoder.style.citylist.Toast.ToastUtils;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CartActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
@@ -84,6 +83,7 @@ import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
 import com.puyue.www.qiaoge.model.market.GoodsDetailModel;
 import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.FlowLayout;
 import com.puyue.www.qiaoge.view.StarBarView;
 import com.umeng.socialize.ShareAction;
@@ -328,10 +328,10 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                         if (isCollection) {
                             //取消收藏
                             clickCollection(productId1, businessType, (byte)2);
-                            ToastUtils.showShortToast(mContext,"取消收藏");
+                            AppHelper.showMsg(mContext,"取消收藏");
                         } else {
                             clickCollection(productId1, businessType, (byte) 1);
-                            ToastUtils.showShortToast(mContext,"收藏成功");
+                            AppHelper.showMsg(mContext,"收藏成功");
                         }
                     }
                 } else {
@@ -680,7 +680,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
 
 
                         } else {
-                            AppHelper.showMsg(mContext, model.message);
+                            ToastUtil.showSuccessMsg(mContext, model.message);
                         }
                     }
                 });
@@ -762,7 +762,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                             }
 
                         } else {
-                            AppHelper.showMsg(mContext, recommendModel.getMessage());
+                            ToastUtil.showSuccessMsg(mContext, recommendModel.getMessage());
                         }
                     }
                 });
@@ -785,7 +785,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                         mIvCollection.setImageResource(R.mipmap.icon_collection_null);
                     }
                 } else {
-                    AppHelper.showMsg(mContext, hasCollectModel.message);
+                    ToastUtil.showSuccessMsg(mContext, hasCollectModel.message);
                 }
             }
 
@@ -985,7 +985,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                         mTvFee.setVisibility(View.GONE);
                     }
                 } else {
-                    AppHelper.showMsg(mContext, getCartNumModel.getMessage());
+                    ToastUtil.showSuccessMsg(mContext, getCartNumModel.getMessage());
                 }
             }
 
@@ -1006,7 +1006,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                 if (getCustomerPhoneModel.isSuccess()) {
                     cell = getCustomerPhoneModel.getData();
                 } else {
-                    AppHelper.showMsg(mContext, getCustomerPhoneModel.getMessage());
+                    ToastUtil.showSuccessMsg(mContext, getCustomerPhoneModel.getMessage());
                 }
             }
 
@@ -1040,7 +1040,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                             UserInfoHelper.saveUserType(mContext, AppConstant.USER_TYPE_WHOLESALE);
                             getProductDetail(productId);
                         } else {
-                            AppHelper.showMsg(mContext, updateUserInvitationModel.getMessage());
+                            ToastUtil.showSuccessMsg(mContext, updateUserInvitationModel.getMessage());
                         }
                     }
                 });
@@ -1286,7 +1286,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                                         alertDialog.dismiss();
                                         updateUserInvitation(AppHelper.getAuthorizationCode(), shopTypeId);
                                     } else {
-                                        AppHelper.showMsg(mActivity, "请选择店铺类型");
+                                        ToastUtil.showSuccessMsg(mActivity, "请选择店铺类型");
                                     }
                                 }
                             });
@@ -1299,7 +1299,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                             });
                         } else {
                             AppHelper.setAuthorizationCode("");
-                            AppHelper.showMsg(mActivity, getRegisterShopModel.getMessage());
+                            ToastUtil.showSuccessMsg(mActivity, getRegisterShopModel.getMessage());
                         }
                     }
                 });

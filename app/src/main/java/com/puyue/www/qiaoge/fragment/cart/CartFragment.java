@@ -17,8 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.lljjcoder.style.citylist.Toast.ToastUtils;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.activity.mine.order.ConfirmNewOrderActivity;
@@ -45,6 +43,7 @@ import com.puyue.www.qiaoge.model.cart.CartCommonGoodsModel;
 import com.puyue.www.qiaoge.model.cart.CartsListModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.mine.order.CartGetReductModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.Arith;
 
 import org.greenrobot.eventbus.EventBus;
@@ -231,9 +230,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                         }
                     }
                     if(cartsId.size()==0) {
-                        ToastUtils.showShortToast(getActivity(),"请选择要删除的商品");
+                        ToastUtil.showSuccessMsg(getActivity(),"请选择要删除的商品");
                     }else {
-                        Log.d("swwwwwweeert...",cartsId.size()+"");
                         showDeleteCartDialog(0,cartsId);
                     }
 
@@ -249,12 +247,12 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                         }
                     }
                     if(cartsId.size()==0) {
-                        ToastUtils.showShortToast(getActivity(),"请选择要删除的商品");
+                        ToastUtil.showSuccessMsg(getActivity(),"请选择要删除的商品");
                     }else {
-                        Log.d("swwwwwweeert...",cartsId.size()+"");
                         showDeleteCartDialog(0,cartsId);
                     }
                 }
+
                 break;
 
             case R.id.btn_sure:
@@ -529,12 +527,12 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                         mModelDeleteCart = baseModel;
                         if (mModelDeleteCart.success) {
                             //删除成功,重新请求列表数据
-                            AppHelper.showMsg(mActivity, "删除商品成功");
+                            ToastUtil.showSuccessMsg(mActivity, "删除商品成功");
                             state = CollapsingToolbarLayoutStateHelper.EXPANDED;
                             getCartNum();
                             requestCartList();
                         } else {
-                            AppHelper.showMsg(mActivity,baseModel.message);
+                            ToastUtil.showSuccessMsg(mActivity,baseModel.message);
                         }
                     }
                 });
@@ -556,7 +554,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                         getActivity().findViewById(R.id.tv_home_car_number).setVisibility(View.GONE);
                     }
                 } else {
-                    AppHelper.showMsg(mActivity, getCartNumModel.getMessage());
+                    ToastUtil.showSuccessMsg(mActivity, getCartNumModel.getMessage());
                 }
             }
 
@@ -596,7 +594,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                             Log.d("wfdffbfkljnbkljnf..","dds");
                             startActivity(intent);
                             }else {
-                            AppHelper.showMsg(mActivity, cartBalanceModel.message);
+                            ToastUtil.showSuccessMsg(mActivity, cartBalanceModel.message);
                         }
                     }
                 });

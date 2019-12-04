@@ -24,34 +24,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.lljjcoder.style.citylist.Toast.ToastUtils;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.activity.cart.CartPoint;
-import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
-import com.puyue.www.qiaoge.activity.home.EquipmentGoodsDetailActivity;
-import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
-import com.puyue.www.qiaoge.activity.home.SpikeGoodsDetailsActivity;
-import com.puyue.www.qiaoge.activity.home.TeamGoodsDetailActivity;
 import com.puyue.www.qiaoge.activity.mine.order.ConfirmNewOrderActivity;
-import com.puyue.www.qiaoge.adapter.cart.CartActivityAdapter;
-import com.puyue.www.qiaoge.adapter.cart.CartActivityUnableAdapter;
 import com.puyue.www.qiaoge.adapter.cart.CartUnableAdapter;
-import com.puyue.www.qiaoge.api.cart.AddMountChangeTwoAPI;
 import com.puyue.www.qiaoge.api.cart.CartBalanceAPI;
 import com.puyue.www.qiaoge.api.cart.CartListAPI;
-import com.puyue.www.qiaoge.api.cart.CartPostChangeOrderDetailAPI;
 import com.puyue.www.qiaoge.api.cart.DeleteCartAPI;
-import com.puyue.www.qiaoge.api.mine.GetMyBalanceAPI;
 import com.puyue.www.qiaoge.api.mine.order.CartGetReductDescAPI;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
-import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
-import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.fragment.cart.CartFragment;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.fragment.cart.UpdateEvent;
@@ -75,6 +58,7 @@ import com.puyue.www.qiaoge.model.cart.CartsListModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.mine.GetMyBalanceModle;
 import com.puyue.www.qiaoge.model.mine.order.CartGetReductModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.Arith;
 import com.puyue.www.qiaoge.view.SlideRecyclerView;
 
@@ -239,9 +223,8 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                         }
                     }
                     if(cartsId.size()==0) {
-                        ToastUtils.showShortToast(mContext,"请选择要删除的商品");
+                        ToastUtil.showSuccessMsg(mContext,"请选择要删除的商品");
                     }else {
-                        Log.d("swwwwwweeert...",cartsId.size()+"");
                         showDeleteCartDialog(0,cartsId);
                     }
 
@@ -258,9 +241,8 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                         }
                     }
                     if(cartsId.size()==0) {
-                        ToastUtils.showShortToast(mContext,"请选择要删除的商品");
+                        ToastUtil.showSuccessMsg(mContext,"请选择要删除的商品");
                     }else {
-                        Log.d("swwwwwweeert...",cartsId.size()+"");
                         showDeleteCartDialog(0,cartsId);
                     }
                 }
@@ -537,12 +519,12 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                         mModelDeleteCart = baseModel;
                         if (mModelDeleteCart.success) {
                             //删除成功,重新请求列表数据
-                            AppHelper.showMsg(mActivity, "删除商品成功");
+                            ToastUtil.showSuccessMsg(mActivity, "删除商品成功");
                             state = CollapsingToolbarLayoutStateHelper.EXPANDED;
 
                             requestCartList();
                         } else {
-                            AppHelper.showMsg(mActivity,baseModel.message);
+                            ToastUtil.showSuccessMsg(mActivity,baseModel.message);
                         }
                     }
                 });
@@ -578,7 +560,7 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                             Log.d("wfdffbfkljnbkljnf..","dds");
                             startActivity(intent);
                         }else {
-                            AppHelper.showMsg(mActivity, cartBalanceModel.message);
+                            ToastUtil.showSuccessMsg(mActivity, cartBalanceModel.message);
                         }
                     }
                 });
