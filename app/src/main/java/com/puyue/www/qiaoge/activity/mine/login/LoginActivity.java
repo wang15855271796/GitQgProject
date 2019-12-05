@@ -50,6 +50,8 @@ import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.mine.login.LoginModel;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -416,6 +418,7 @@ public class LoginActivity extends BaseSwipeActivity {
         UserInfoHelper.saveDate(mContext, "");
         Intent intent = new Intent(mContext,HomeActivity.class);
         startActivity(intent);
+        EventBus.getDefault().post(new LoginEvent());
         finish();
     }
 

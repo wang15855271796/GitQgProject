@@ -364,59 +364,59 @@ android:visibility="gone"
 
         android:background="@color/app_line_gray" />
 
-    <LinearLayout
+    <!--<LinearLayout-->
 
-        android:id="@+id/LinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        <!--android:id="@+id/LinearLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
 
-        android:background="@color/white">
+        <!--android:background="@color/white">-->
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
+        <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="2"-->
 
-            android:padding="@dimen/size_10dp">
+            <!--android:padding="@dimen/size_10dp">-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="合计"
-                android:textColor="@color/app_black"
-                android:textSize="@dimen/size_15dp" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:text="合计"-->
+                <!--android:textColor="@color/app_black"-->
+                <!--android:textSize="@dimen/size_15dp" />-->
 
-            <TextView
-                android:id="@+id/totalPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/size_15dp"
-                android:text="价格"
-                android:textColor="@color/color_FF5B01"
-                android:textSize="@dimen/size_15dp" />
+            <!--<TextView-->
+                <!--android:id="@+id/totalPrice"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/size_15dp"-->
+                <!--android:text="价格"-->
+                <!--android:textColor="@color/color_FF5B01"-->
+                <!--android:textSize="@dimen/size_15dp" />-->
 
-            <TextView
-                android:id="@+id/textViewDiscount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/size_15dp"
-                android:text="已优惠"
-                android:textColor="@color/color_E8E8E8" />
+            <!--<TextView-->
+                <!--android:id="@+id/textViewDiscount"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/size_15dp"-->
+                <!--android:text="已优惠"-->
+                <!--android:textColor="@color/color_E8E8E8" />-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
-        <TextView
-            android:id="@+id/buttonPay"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/color_F6551A"
-            android:gravity="center"
-            android:padding="@dimen/size_10dp"
-            android:text="@string/goPay"
-            android:textColor="@color/white"
-            android:textSize="@dimen/size_18dp" />
-    </LinearLayout>
+        <!--<TextView-->
+            <!--android:id="@+id/buttonPay"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@color/color_F6551A"-->
+            <!--android:gravity="center"-->
+            <!--android:padding="@dimen/size_10dp"-->
+            <!--android:text="@string/goPay"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="@dimen/size_18dp" />-->
+    <!--</LinearLayout>-->
 
 </LinearLayout>

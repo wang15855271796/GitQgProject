@@ -1,29 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="#F0F0F0"
+    android:orientation="vertical"
     android:layout_height="match_parent">
 
 
+
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <include layout="@layout/activity_confirm_order_head_two" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:background="@color/colorWhite"
-            android:layout_marginTop="@dimen/size_10dp"
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_weight="1"
+            android:layout_height="0dp"
+         >
 
-        </android.support.v7.widget.RecyclerView>
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
 
-        <include layout="@layout/fragment_confirm_order_foot" />
+            <include layout="@layout/activity_confirm_order_head_two" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:background="@color/colorWhite"
+                android:layout_marginTop="@dimen/size_10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <include layout="@layout/fragment_confirm_order_foot" />
+
+        </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+        <LinearLayout
+
+            android:id="@+id/LinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+
+                android:padding="@dimen/size_10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="合计"
+                    android:textColor="@color/app_black"
+                    android:textSize="@dimen/size_15dp" />
+
+                <TextView
+                    android:id="@+id/totalPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:text="价格"
+                    android:textColor="@color/color_FF5B01"
+                    android:textSize="@dimen/size_15dp" />
+
+                <TextView
+                    android:id="@+id/textViewDiscount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:text="已优惠"
+                    android:textColor="@color/color_E8E8E8" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/buttonPay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/color_F6551A"
+                android:gravity="center"
+                android:padding="@dimen/size_10dp"
+                android:text="@string/goPay"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_18dp" />
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
 
-</android.support.v4.widget.NestedScrollView>
+</LinearLayout>

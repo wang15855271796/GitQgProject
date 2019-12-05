@@ -41,6 +41,7 @@ import com.puyue.www.qiaoge.activity.home.HomeGoodsListActivity;
 import com.puyue.www.qiaoge.activity.home.SearchStartActivity;
 import com.puyue.www.qiaoge.activity.mine.MessageCenterActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
+import com.puyue.www.qiaoge.activity.mine.login.LoginEvent;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletActivity;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
 import com.puyue.www.qiaoge.adapter.market.MarketAlreadyGoodAdapter;
@@ -62,6 +63,7 @@ import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
+import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -1310,8 +1312,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
         }
      /*   pageNum = 1;
         requestGoodsList();*/
-        requestGoodsList();
-        getData();
+
         mViewBanner.startAutoCycle(3000, 8000, true);
 
     }
@@ -1491,6 +1492,13 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
 
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginEvent(LoginEvent event) {
+        //刷新UI
+        requestGoodsList();
+        getData();
     }
 
 }

@@ -180,7 +180,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                                 fl.setVisibility(View.VISIBLE);
                             } else {
                                 fl.setVisibility(View.GONE);
-                                Log.d("ewewvdfdqwdvfds.s...",cartGetReductModel.getData());
+                                Log.d("ewewvdfdqwdvfdss...",cartGetReductModel.getData());
                             }
 
                         }
