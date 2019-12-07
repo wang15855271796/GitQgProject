@@ -604,13 +604,19 @@ public class SearchResultsModel {
                      * productUnit : 475
                      * unitDesc :
                      */
-
+                    int cartNum;
                     private String price;
                     private String oldPrice;
                     private int priceId;
                     private int productUnit;
                     private String unitDesc;
+                    public int getCartNum() {
+                        return cartNum;
+                    }
 
+                    public void setCartNum(int cartNum) {
+                        this.cartNum = cartNum;
+                    }
                     public String getPrice() {
                         return price;
                     }

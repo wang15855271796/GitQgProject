@@ -95,7 +95,6 @@ public class CartPoint extends BaseSwipeActivity {
         long time = System.currentTimeMillis();
         mCalendar.setTimeInMillis(time);
         currentDay = mCalendar.get(Calendar.DAY_OF_MONTH);
-        Log.i("day", "setViewData: " + currentDay);
         UserInfoHelper.saveDate(mActivity, currentDay + "");
     }
 

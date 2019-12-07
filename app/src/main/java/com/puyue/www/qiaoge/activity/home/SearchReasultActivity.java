@@ -69,7 +69,6 @@ public class SearchReasultActivity extends BaseSwipeActivity {
     public View view;
     private SearchResultAdapter searchResultAdapter;
     SearchResultsModel searchResultsModel;
-    private LoadingDailog dialog;
     private AlertDialog mTypedialog;
     private String cell; // 客服电话
     private boolean isFirst = true;
@@ -133,7 +132,6 @@ public class SearchReasultActivity extends BaseSwipeActivity {
                     if(searchResultsModel.getData() != null) {
                         if(searchResultsModel.getData().getSearchProd().isHasNextPage()) {
                             pageNum++;
-                            dialog.show();
                             getRecommendList(pageNum, 10);
                             refreshLayout.finishLoadMore();      //加载完成
                         }else {
@@ -289,14 +287,6 @@ public class SearchReasultActivity extends BaseSwipeActivity {
         searchWord = getIntent().getStringExtra(AppConstant.SEARCHWORD);
         tv_activity_result.setText(searchWord);
         getRecommendList(1,10);
-        LoadingDailog.Builder loadBuilder = new LoadingDailog.Builder(mContext)
-                .setMessage("获取数据中")
-                .setCancelable(false)
-                .setCancelOutside(false);
-        dialog = loadBuilder.create();
-
-
-
 
 
     }
@@ -329,7 +319,6 @@ public class SearchReasultActivity extends BaseSwipeActivity {
 
                             }
 
-                            dialog.dismiss();
                             if(recommendModel.getData().getRecommendProd().size()!=0) {
                                 searchResultAdapter = new SearchResultAdapter(R.layout.item_noresult_recommend, recommendModel.getData().getRecommendProd(), new SearchResultAdapter.Onclick() {
                                     @Override

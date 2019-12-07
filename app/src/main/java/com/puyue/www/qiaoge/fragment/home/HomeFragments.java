@@ -38,6 +38,7 @@ import com.puyue.www.qiaoge.activity.home.SelectionGoodActivity;
 import com.puyue.www.qiaoge.activity.home.TeamDetailActivity;
 import com.puyue.www.qiaoge.activity.mine.MessageCenterActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
+import com.puyue.www.qiaoge.activity.mine.login.LoginEvent;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
 import com.puyue.www.qiaoge.api.cart.AddCartAPI;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
@@ -67,6 +68,10 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,7 +150,7 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
     @BindView(R.id.time_end)
     SnapUpCountDownTimerView time_end;
     @BindView(R.id.smart)
-    SmartRefreshLayout smart;
+    SmartRefreshLayout refreshLayout;
     @BindView(R.id.tv_new)
     TextView tv_new;
     @BindView(R.id.tv_adv)
@@ -228,15 +233,31 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
     @Override
     public void onResume() {
         super.onResume();
-        smart.autoRefresh();
+        Log.d("wojiafsgkg;fgg...","ssdwdsd");
+//        newList.clear();
+//        skillList.clear();
+//        skillAdvList.clear();
+//        getNewProductList(1+"", PageSize+"");
+//        getBaseList("version","1");
 
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void initViews(View view) {
         binder = ButterKnife.bind(this, view);
+        EventBus.getDefault().register(this);
         context = getActivity();
         token = UserInfoHelper.getUserId(mActivity);
+
+
+
         //八个icon Adapter
         rvIconAdapter = new RvIconAdapter(R.layout.item_home_icon,iconList);
         rv_icon.setLayoutManager(new GridLayoutManager(context,4));
@@ -244,7 +265,6 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
 
         //秒杀 Adapter
         skillAdapter = new SkillAdapter(R.layout.item_skill,skillList);
-        Log.d("shouyexinxi....",skillList+"");
         rv_skill.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
         rv_skill.setAdapter(skillAdapter);
         skillAdapter.notifyDataSetChanged();
@@ -419,6 +439,13 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
     @Override
     public void setViewData() {
         requestUpdate();
+
+        newList.clear();
+        skillList.clear();
+        skillAdvList.clear();
+        getNewProductList(1+"", PageSize+"");
+        getBaseList("version","1");
+
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
         mTypedialog.setCancelable(false);
 
@@ -426,8 +453,7 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
             requestOrderNum();
         }
 
-
-        smart.setOnRefreshListener(new OnRefreshListener() {
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 PageNum = 1;
@@ -436,11 +462,11 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
                 skillAdvList.clear();
                 getNewProductList(1+"", PageSize+"");
                 getBaseList("version","1");
-                smart.finishRefresh();
+                refreshLayout.finishRefresh();
             }
         });
 
-        smart.setOnLoadMoreListener(new OnLoadMoreListener() {
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 if (homeNewRecommendModels.getData()!=null) {
@@ -448,10 +474,10 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
                     if(homeNewRecommendModels.getData().isHasNextPage()) {
                         PageNum++;
                         getNewProductList(PageNum+"", PageSize+"");
-                        smart.finishLoadMore();      //加载完成
+                        refreshLayout.finishLoadMore();      //加载完成
 
                     }else {
-                        smart.finishLoadMoreWithNoMoreData();
+                        refreshLayout.finishLoadMoreWithNoMoreData();
                     }
                 }
             }
@@ -666,6 +692,15 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
 
                     @Override
                     public void onNext(HomeBaseModel homeBaseModel) {
+                        if (homeBaseModel.getData().getCityName() != null && StringHelper.notEmptyAndNull(homeBaseModel.getData().getCityName())) {
+                            tv_city.setText(homeBaseModel.getData().getCityName());
+                        }else {
+                            if (UserInfoHelper.getCity(mActivity) != null && StringHelper.notEmptyAndNull(UserInfoHelper.getCity(mActivity))) {
+                                tv_city.setText(UserInfoHelper.getCity(mActivity));
+
+                            }
+                        }
+
                         homeBaseModels = homeBaseModel;
                         invitationCode = homeBaseModel.getData().getInvitationCode();
                         if (homeBaseModel.isSuccess()) {
@@ -739,15 +774,11 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
                                 isShowed = true;
                                 showSelectType();
                             }
+//                            String city = UserInfoHelper.getCity(mActivity);
 
-                            if (homeBaseModel.getData().getCityName() != null && StringHelper.notEmptyAndNull(homeBaseModel.getData().getCityName())) {
-                                tv_city.setText(homeBaseModel.getData().getCityName());
-                                Log.d("woshishujudemngg.....",homeBaseModel.getData().getCityName());
-                            }else {
-                                if (UserInfoHelper.getCity(mActivity) != null && StringHelper.notEmptyAndNull(UserInfoHelper.getCity(mActivity))) {
-                                    tv_city.setText(UserInfoHelper.getCity(mActivity));
-                                }
-                            }
+//                            tv_city.setText(city);
+
+                            EventBus.getDefault().post(new CityEvent());
 
                             if(homeBaseModel.getData().getClassicDesc()!=null) {
                                 tv_inner_classify.setText(homeBaseModel.getData().getClassicDesc());
@@ -806,7 +837,6 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
                                 ll_team.setVisibility(View.GONE);
                             }
 
-                            Log.d("wojiaowangtai.....",homeBaseModel.getData().getClassicList().get(0).getImg()+"");
                             //精选
                             if (homeBaseModel.getData().getClassicList() != null && homeBaseModel.getData().getClassicList().size() > 0) {
                                 List<HomeBaseModel.DataBean.ClassicListBean> classicList = homeBaseModel.getData().getClassicList();
@@ -1164,7 +1194,10 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
                 if (homeBaseModels.getData().getCityName() != null && StringHelper.notEmptyAndNull(homeBaseModels.getData().getCityName())) {
 
                 } else {
-                    startActivity(new Intent(mActivity, ChangeCityActivity.class));
+//                    startActivity(new Intent(mActivity, ChangeCityActivity.class));
+
+                    Intent messageIntent = new Intent(getActivity(), ChangeCityActivity.class);
+                    startActivityForResult(messageIntent, 104);
                 }
                 break;
 
@@ -1184,6 +1217,15 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
                     tv_num.setVisibility(View.GONE);
                 }
             }
+        }
+
+
+        if (requestCode == 104) {
+            newList.clear();
+            skillList.clear();
+            skillAdvList.clear();
+            getNewProductList(1+"", PageSize+"");
+            getBaseList("version","1");
         }
     }
 
@@ -1211,5 +1253,16 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
             intent.putExtra("name", "");
             startActivity(intent);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginEvent(LoginEvent event) {
+        //刷新UI
+        newList.clear();
+        skillList.clear();
+        skillAdvList.clear();
+        getNewProductList(1+"", PageSize+"");
+        getBaseList("version","1");
+        Log.d("woshiwangtao....","sddwd");
     }
 }

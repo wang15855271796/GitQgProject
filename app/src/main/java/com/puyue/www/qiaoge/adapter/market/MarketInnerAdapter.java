@@ -83,9 +83,9 @@ public class MarketInnerAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
                 if(num>0) {
                     num--;
                     if(businessType==11) {
-                        addCart(num,item.getPriceId(),activeId,businessType,tv_num,item.getCartNum());
+                        addCarts(num,item.getPriceId(),activeId,businessType,tv_num,item.getCartNum());
                     }else {
-                        addCart(num,item.getPriceId(),productId,businessType,tv_num,num);
+                        addCarts(num,item.getPriceId(),productId,businessType,tv_num,num);
                     }
                 }
             }
@@ -167,6 +167,33 @@ public class MarketInnerAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
 
     }
 
+    private void addCarts(int num, int id, int businessId, int productType, TextView tv_num,int cartNum) {
+        AddMountChangeTwoAPI.AddMountChangeService(mContext,productType,businessId,num,id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddCartGoodModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AddCartGoodModel addMountReduceModel) {
+                        if (addMountReduceModel.isSuccess()) {
+                            tv_num.setText(num + "");
+                            EventBus.getDefault().post(new UpDateNumEvent());
+                        } else {
+                            ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
+                        }
+                    }
+                });
+    }
+
     /**
      * 添加购物车
      * @param num
@@ -191,7 +218,7 @@ public class MarketInnerAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
                     public void onNext(AddCartGoodModel addMountReduceModel) {
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num + "");
-                            ToastUtil.showSuccessMsg(mContext,"刷新购物车成功");
+                            ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
                             EventBus.getDefault().post(new UpDateNumEvent());
                         } else {
                             ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());

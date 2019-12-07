@@ -53,13 +53,13 @@ public class SearchInnersAdapter extends BaseQuickAdapter<ExchangeProductModel.D
     protected void convert(BaseViewHolder helper, ExchangeProductModel.DataBean.ProdPricesBean item) {
         tv_price = helper.getView(R.id.tv_price);
         tv_price.setText(item.getPrice());
-        Log.d("sewwewrereretrsd...",item.getPrice()+"");
         helper.setText(R.id.tv_unit, item.getUnitDesc());
         TextView tv_old_price = helper.getView(R.id.tv_old_price);
         tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         helper.setText(R.id.tv_old_price,item.getOldPrice());
         TextView tv_num = helper.getView(R.id.tv_num);
         tv_num.setText(item.getCartNum()+"");
+        Log.d("sewwewrereretrsd...",item.getCartNum()+"");
         iv_cut = helper.getView(R.id.iv_cut);
         iv_add = helper.getView(R.id.iv_add);
 
@@ -80,7 +80,7 @@ public class SearchInnersAdapter extends BaseQuickAdapter<ExchangeProductModel.D
                 int num = Integer.parseInt(tv_num.getText().toString());
                 if (num > 0) {
                     num--;
-                    addCart(num,item.getPriceId(),productId,businessType,tv_num,item.getCartNum());
+                    addCarts(num,item.getPriceId(),productId,businessType,tv_num,item.getCartNum());
                 }
             }
         });
@@ -182,7 +182,7 @@ public class SearchInnersAdapter extends BaseQuickAdapter<ExchangeProductModel.D
                     public void onNext(AddCartGoodModel addMountReduceModel) {
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num+"");
-                            ToastUtil.showSuccessMsg(mContext,"刷新购物车成功");
+                            ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
                             EventBus.getDefault().post(new UpDateNumEvent());
                         } else {
                             ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
@@ -191,5 +191,30 @@ public class SearchInnersAdapter extends BaseQuickAdapter<ExchangeProductModel.D
                 });
     }
 
+    private void addCarts(int num, int id, int businessId, int productType, TextView tv_num,int cartNum) {
+        AddMountChangeTwoAPI.AddMountChangeService(mContext,productType,businessId,num,id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddCartGoodModel>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AddCartGoodModel addMountReduceModel) {
+                        if (addMountReduceModel.isSuccess()) {
+                            tv_num.setText(num+"");
+                            EventBus.getDefault().post(new UpDateNumEvent());
+                        } else {
+                            ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
+                        }
+                    }
+                });
+    }
 }

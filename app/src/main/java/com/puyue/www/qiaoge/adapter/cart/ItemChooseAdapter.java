@@ -82,7 +82,7 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                 int num = Integer.parseInt(tv_num.getText().toString());
                 if (num > 0) {
                     num--;
-                    addCart(num,item.getPriceId(),productId,businessType,tv_num,item.getCartNum());
+                    addCarts(num,item.getPriceId(),productId,businessType,tv_num,item.getCartNum());
                 }
             }
         });
@@ -187,7 +187,7 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num+"");
                             Log.d("woshidaxueshujj...",num+"");
-                            ToastUtil.showSuccessMsg(mContext,"刷新购物车成功");
+                            ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
                             EventBus.getDefault().post(new UpDateNumEvent());
                         } else {
                             ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
@@ -196,5 +196,31 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                 });
     }
 
+    private void addCarts(int num, int id, int businessId, int productType, TextView tv_num,int cartNum) {
+        AddMountChangeTwoAPI.AddMountChangeService(mContext,productType,businessId,num,id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddCartGoodModel>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AddCartGoodModel addMountReduceModel) {
+                        if (addMountReduceModel.isSuccess()) {
+                            tv_num.setText(num+"");
+                            Log.d("woshidaxueshujj...",num+"");
+                            EventBus.getDefault().post(new UpDateNumEvent());
+                        } else {
+                            ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
+                        }
+                    }
+                });
+    }
 }

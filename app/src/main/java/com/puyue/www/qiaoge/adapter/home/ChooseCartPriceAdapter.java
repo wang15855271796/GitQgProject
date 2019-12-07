@@ -120,6 +120,7 @@ public class ChooseCartPriceAdapter extends BaseQuickAdapter<CartsListModel.Data
 
                                         @Override
                                         public void onError(Throwable e) {
+
                                         }
 
                                         @Override
@@ -133,7 +134,7 @@ public class ChooseCartPriceAdapter extends BaseQuickAdapter<CartsListModel.Data
                 }else {
                 num--;
                 data.get(helper.getAdapterPosition()).setProductNum(num);
-                addCart(item,num,item.getProductCombinationPriceId(),businessId,businessType,tv_num,item.getCartNum());
+                addCarts(item,num,item.getProductCombinationPriceId(),businessId,businessType,tv_num,item.getCartNum());
                 }
 
             }
@@ -188,19 +189,22 @@ public class ChooseCartPriceAdapter extends BaseQuickAdapter<CartsListModel.Data
 
                                         @Override
                                         public void onNext(AddCartGoodModel addMountReduceModel) {
+
                                             if (addMountReduceModel.isSuccess()) {
                                                 tv_num.setText(et_num.getText().toString());
                                                 alertDialog.dismiss();
                                                 String num = et_num.getText().toString();
                                                 item.setProductNum(Integer.parseInt(num));
                                                 EventBus.getDefault().post(new UpdateEvent(testAdapter.getAllPrice()));
-
+                                                EventBus.getDefault().post(new ReduceNumEvent());
+                                                alertDialog.dismiss();
                                             } else {
                                                 ToastUtil.showSuccessMsg(mContext, addMountReduceModel.getMessage());
                                                 tv_num.setText(addMountReduceModel.data.toString());
                                                 String data = (String) addMountReduceModel.data;
                                                 item.setProductNum(Integer.parseInt(data));
                                                 EventBus.getDefault().post(new UpdateEvent(testAdapter.getAllPrice()));
+                                                EventBus.getDefault().post(new ReduceNumEvent());
                                                 alertDialog.dismiss();
                                             }
                                         }
@@ -241,7 +245,36 @@ public class ChooseCartPriceAdapter extends BaseQuickAdapter<CartsListModel.Data
                         if (addMountReduceModel.isSuccess()) {
                             data.get(adapterPosition).setProductNum(num);
                             tv_num.setText(num + "");
-                            ToastUtil.showSuccessMsg(mContext,"刷新购物车成功");
+                            ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
+                            EventBus.getDefault().post(new UpdateEvent(testAdapter.getAllPrice()));
+                        } else {
+                            ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
+                        }
+                    }
+                });
+    }
+
+
+    private void addCarts(CartsListModel.DataBean.ValidListBean.SpecProductListBean.ProductDescVOListBean item,int num, int id, int businessId, int productType, TextView tv_num,int cartNum) {
+        AddMountChangeTwoAPI.AddMountChangeServices(mContext,productType,businessId,num,id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddCartGoodModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AddCartGoodModel addMountReduceModel) {
+                        if (addMountReduceModel.isSuccess()) {
+                            data.get(adapterPosition).setProductNum(num);
+                            tv_num.setText(num + "");
                             EventBus.getDefault().post(new UpdateEvent(testAdapter.getAllPrice()));
                         } else {
                             ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());

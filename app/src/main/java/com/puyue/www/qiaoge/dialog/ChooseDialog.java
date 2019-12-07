@@ -26,6 +26,7 @@ import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.home.ChoiceSpecModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
@@ -126,9 +127,37 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
                             fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    int productId2 = prodSpecs.get(position).getProductId();
-                                    exchangeList(productId2);
                                     chooseSpecAdapter.selectPosition(position);
+                                    int productId2 = prodSpecs.get(position).getProductId();
+//                                    exchangeList(productId2);
+                                    GetProductDetailAPI.getExchangeList(context,productId2,1)
+                                            .subscribeOn(Schedulers.io())
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe(new Subscriber<ExchangeProductModel>() {
+
+                                                @Override
+                                                public void onCompleted() {
+
+                                                }
+
+                                                @Override
+                                                public void onError(Throwable e) {
+
+                                                }
+
+                                                @Override
+                                                public void onNext(ExchangeProductModel exchangeProductModel) {
+                                                    ItemChooseAdapter itemChooseAdapter = new ItemChooseAdapter(1, exchangeProductModel.getData().getProdSpecs().get(position).getProductId(),
+                                                            R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
+                                                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                                                    recyclerView.setAdapter(itemChooseAdapter);
+                                                    tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
+                                                    tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
+                                                    tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
+                                                    tv_stock.setText(exchangeProductModel.getData().getInventory());
+                                                    Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
+                                                }
+                                            });
 
                                 }
                             });
@@ -137,7 +166,6 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
                             fl_container.setAdapter(chooseSpecAdapter);
 
                         } else {
-
                         }
                     }
                 });
@@ -195,6 +223,7 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.iv_close:
                 dismiss();
+                EventBus.getDefault().post(new ReduceNumEvent());
                 break;
 
             case R.id.tv_confirm:

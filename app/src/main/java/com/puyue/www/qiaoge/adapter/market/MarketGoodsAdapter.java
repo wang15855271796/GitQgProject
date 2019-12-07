@@ -145,7 +145,7 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
                                     itemChooseAdapter = new SearchInnersAdapter(item.getBusinessType(),exchangeProductModel.getData().getActiveId(),
                                             R.layout.item_choose_contents,exchangeProductModel.getData().getProdPrices());
                                 }else {
-                                    itemChooseAdapter = new SearchInnersAdapter(item.getBusinessType(),item.getProdSpecs().get(position).getProductId(),
+                                    itemChooseAdapter = new SearchInnersAdapter(item.getBusinessType(),exchangeProductModel.getData().getProdSpecs().get(position).getProductId(),
                                             R.layout.item_choose_contents,exchangeProductModel.getData().getProdPrices());
                                 }
 

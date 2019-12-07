@@ -540,18 +540,29 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
                     public void onNext(GenerateOrderModel generateOrderModel) {
 
                         if (generateOrderModel.success) {
-//                            if (UserInfoHelper.getDate(mActivity).equals("") || Integer.parseInt(UserInfoHelper.getDate(mActivity)) != currentDay) {
-//                                Log.d("woshiwffnfklsdfnslt...","sss");
+
+                            if (Integer.parseInt(UserInfoHelper.getDate(mActivity)) != currentDay) {
+
                                 if(toRecharge&&totalAmount>toRechargeAmount) {
                                     Intent intent = new Intent(mActivity,CartPoint.class);
                                     intent.putExtra(AppConstant.ORDERID, generateOrderModel.getData());
                                     intent.putExtra("orderAmount", totalAmount + "");
                                     startActivity(intent);
+
                                     mActivity.finish();
-//                                }
+                                }else {
+                                    orderId = generateOrderModel.getData();
+                                    Intent intent = new Intent(mActivity, MyConfireOrdersActivity.class);
+                                    intent.putExtra("orderId", generateOrderModel.getData());
+                                    intent.putExtra("payAmount", Double.parseDouble(payAmount));
+                                    intent.putExtra("remark", messageEditText.getText().toString());
+                                    intent.putExtra("orderDeliveryType", 0);
+                                    startActivity(intent);
+                                    Log.d("swhihihihiiih....","sssssss");
+                                    mActivity.finish();
+                                }
                             }else {
                                 orderId = generateOrderModel.getData();
-                                Log.d("woshiwffnfklsdfnslt...","sss");
                                 Intent intent = new Intent(mActivity, MyConfireOrdersActivity.class);
                                 intent.putExtra("orderId", generateOrderModel.getData());
                                 intent.putExtra("payAmount", Double.parseDouble(payAmount));

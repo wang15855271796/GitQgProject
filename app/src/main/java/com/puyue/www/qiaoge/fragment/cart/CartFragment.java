@@ -30,6 +30,7 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
+import com.puyue.www.qiaoge.fragment.home.CityEvent;
 import com.puyue.www.qiaoge.fragment.market.TestAdapter;
 import com.puyue.www.qiaoge.helper.AlwaysMarqueeTextViewHelper;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -134,12 +135,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     @Override
     public int setLayoutId() {
         setTranslucentStatus();
+        Log.d("wojiaoanwwngghf....","00000");
         return R.layout.fragment_cart;
     }
 
 
     @Override
     public void initViews(View view) {
+        Log.d("wojiaoanwwngghf....","3333");
         binder = ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
         tv_delete.setOnClickListener(this);
@@ -190,6 +193,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
 
     @Override
     public void findViewById(View view) {
+        Log.d("wojiaoanwwngghf....","111111");
     }
 
 
@@ -205,13 +209,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                 break;
             case R.id.tv_clear:
                 //清空所有失效的商品
-                for (int i = 0; i <unList.size() ; i++) {
-                    List<CartsListModel.DataBean.InValidListBean.SpecProductListBeanX> specProductList = unList.get(i).getSpecProductList();
-                    for (int j = 0; j <specProductList.size() ; j++) {
-                        int cartId = specProductList.get(j).getCartId();
-                        unCartsId.add(cartId);
-                    }
-                }
+//                for (int i = 0; i <unList.size() ; i++) {
+//                    List<CartsListModel.DataBean.InValidListBean.SpecProductListBeanX> specProductList = unList.get(i).getSpecProductList();
+//                    for (int j = 0; j <specProductList.size() ; j++) {
+//                        int cartId = specProductList.get(j).getCartId();
+//                        unCartsId.add(cartId);
+//                    }
+//                }
 
                 showClearDialog();
 
@@ -683,7 +687,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     @Override
     public void setViewData() {
         requestCartList();
-
+        Log.d("wojiaoanwwngghf....","00000");
     }
 
     private void getAllPrice(List<CartsListModel.DataBean.ValidListBean> validList) {
@@ -761,7 +765,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                         //可用列表
                         List<CartsListModel.DataBean.ValidListBean> validList = cartListModel.getData().getValidList();
                         mListCart.addAll(validList);
-                        Log.d("sdadyuttuangou..",validList.size()+"");
                         testAdapter = new TestAdapter(R.layout.item_carts, mListCart,CartFragment.this);
                         mRv.setAdapter(testAdapter);
                         //过期列表
@@ -780,20 +783,39 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                             ll_NoData.setVisibility(View.VISIBLE);
                             ll.setVisibility(View.GONE);
                             tv_delete.setVisibility(View.GONE);
+
+                            ll_service.setVisibility(View.GONE);
+                            getScrollData(0);
                         }else {
                             tv_delete.setVisibility(View.VISIBLE);
                             ll_NoData.setVisibility(View.GONE);
                             ll.setVisibility(View.VISIBLE);
-                            Log.d("sdwqqgggflf...",unList.size()+"");
+
+                            getAllPrice(validList);
 
                         }
+
+                        if(mListCart.size()==0 && unList.size()!=0) {
+                            ll_service.setVisibility(View.GONE);
+                            ll.setVisibility(View.GONE);
+                        }else {
+//                            ll_service.setVisibility(View.VISIBLE);
+//                            ll.setVisibility(View.VISIBLE);
+                        }
+
 
                         if(mListCart.size()==0) {
-                            ll_service.setVisibility(View.GONE);
-                            getScrollData(0);
+//                            ll_service.setVisibility(View.GONE);
+//                            getScrollData(0);
                         }else {
-                            getAllPrice(validList);
+//                            getAllPrice(validList);
                         }
+
+//                        if(unList.size()!=0&&mListCart.size()!=0) {
+//                            ll.setVisibility(View.VISIBLE);
+//                        }else {
+//                            ll.setVisibility(View.GONE);
+//                        }
 
                         CartUnableAdapter unAbleAdapter = new CartUnableAdapter(R.layout.item_carts,unList);
 
@@ -824,5 +846,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
         requestCartList();
 
     }
+
+
 
 }

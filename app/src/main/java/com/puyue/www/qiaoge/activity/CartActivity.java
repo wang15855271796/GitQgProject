@@ -198,13 +198,13 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                 break;
             case R.id.tv_clear:
                 //清空所有失效的商品
-                for (int i = 0; i <unList.size() ; i++) {
-                    List<CartsListModel.DataBean.InValidListBean.SpecProductListBeanX> specProductList = unList.get(i).getSpecProductList();
-                    for (int j = 0; j <specProductList.size() ; j++) {
-                        int cartId = specProductList.get(j).getCartId();
-                        unCartsId.add(cartId);
-                    }
-                }
+//                for (int i = 0; i <unList.size() ; i++) {
+//                    List<CartsListModel.DataBean.InValidListBean.SpecProductListBeanX> specProductList = unList.get(i).getSpecProductList();
+//                    for (int j = 0; j <specProductList.size() ; j++) {
+//                        int cartId = specProductList.get(j).getCartId();
+//                        unCartsId.add(cartId);
+//                    }
+//                }
 
                 showClearDialog();
 
@@ -406,7 +406,8 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                 break;
 
             case R.id.ll_go_market:
-                mlisenter.jumpMarket();
+                startActivity(new Intent(mContext, HomeActivity.class));
+                EventBus.getDefault().post(new GoToMarketEvent());
                 break;
             case R.id.cb_select_all:
                 if (mSelect) {
@@ -754,20 +755,40 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                             ll_NoData.setVisibility(View.VISIBLE);
                             ll.setVisibility(View.GONE);
                             tv_delete.setVisibility(View.GONE);
+
+                            ll_service.setVisibility(View.GONE);
+                            getScrollData(0);
                         }else {
                             tv_delete.setVisibility(View.VISIBLE);
                             ll_NoData.setVisibility(View.GONE);
                             ll.setVisibility(View.VISIBLE);
+
+                            getAllPrice(validList);
                             Log.d("sdwqqgggflf...",unList.size()+"");
 
                         }
 
-                        if(mListCart.size()==0) {
+                        if(mListCart.size()==0 && unList.size()!=0) {
                             ll_service.setVisibility(View.GONE);
-                            getScrollData(0);
+                            ll.setVisibility(View.GONE);
                         }else {
-                            getAllPrice(validList);
+//                            ll_service.setVisibility(View.VISIBLE);
+//                            ll.setVisibility(View.VISIBLE);
                         }
+
+
+                        if(mListCart.size()==0) {
+//                            ll_service.setVisibility(View.GONE);
+//                            getScrollData(0);
+                        }else {
+//                            getAllPrice(validList);
+                        }
+
+//                        if(unList.size()!=0&&mListCart.size()!=0) {
+//                            ll.setVisibility(View.VISIBLE);
+//                        }else {
+//                            ll.setVisibility(View.GONE);
+//                        }
 
                         CartUnableAdapter unAbleAdapter = new CartUnableAdapter(R.layout.item_carts,unList);
 

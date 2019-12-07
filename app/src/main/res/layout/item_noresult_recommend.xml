@@ -151,13 +151,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_1dp"/>
 
-            <com.puyue.www.qiaoge.view.ExpandLayout
-                android:id="@+id/expanded"
-                android:clickable = "true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <!--<com.puyue.www.qiaoge.view.ExpandLayout-->
+                <!--android:id="@+id/expanded"-->
+                <!--android:clickable = "true"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
 
                 <LinearLayout
+                    android:id="@+id/ll"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -233,7 +234,7 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-            </com.puyue.www.qiaoge.view.ExpandLayout>
+            <!--</com.puyue.www.qiaoge.view.ExpandLayout>-->
             <View
                 android:layout_marginTop="@dimen/size_5dp"
                 android:background="@drawable/app_border_bottom"

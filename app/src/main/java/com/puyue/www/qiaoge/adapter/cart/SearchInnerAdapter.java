@@ -72,7 +72,7 @@ public class SearchInnerAdapter extends BaseQuickAdapter<SearchResultsModel.Data
                 int num = Integer.parseInt(tv_num.getText().toString());
                 if(num>0) {
                     num--;
-                    addCart(num,item.getPriceId(),productId,businessType,tv_num);
+                    addCarts(num,item.getPriceId(),productId,businessType,tv_num);
                 }
             }
         });
@@ -172,7 +172,34 @@ public class SearchInnerAdapter extends BaseQuickAdapter<SearchResultsModel.Data
                     public void onNext(AddCartGoodModel addMountReduceModel) {
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num + "");
-                            ToastUtil.showSuccessMsg(mContext,"刷新购物车成功");
+                            ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
+
+                        } else {
+                            ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
+                        }
+                    }
+                });
+    }
+
+    private void addCarts(int num, int id, int businessId, int productType, TextView tv_num) {
+        AddMountChangeTwoAPI.AddMountChangeService(mContext,productType,businessId,num,id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddCartGoodModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AddCartGoodModel addMountReduceModel) {
+                        if (addMountReduceModel.isSuccess()) {
+                            tv_num.setText(num + "");
 
                         } else {
                             ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());

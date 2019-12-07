@@ -288,6 +288,7 @@ public class NewWebViewActivity extends BaseSwipeActivity {
         });
 
         mWv.loadUrl(mUrl);
+        Log.d("wowoowffghfdgdf..",mUrl);
 
     }
 

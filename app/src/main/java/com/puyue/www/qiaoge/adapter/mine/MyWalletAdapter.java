@@ -57,6 +57,7 @@ public class MyWalletAdapter extends BaseQuickAdapter<GetWalletInfoModel.DataBea
         relativeLayout.setBackgroundResource(item.isFlag() ? R.drawable.app_my_wallet_bg_three :R.drawable.app_my_wallet_bg_two);
 
         textHint = helper.getView(R.id.textHint);
+        textHint.setTextColor(item.isFlag() ? Color.WHITE : Color.parseColor("#ffff8003"));
        /* imageView.setVisibility(item.isFlag() ? View.INVISIBLE :
                 !TextUtils.isEmpty(item.getDescUrl()) ? View.VISIBLE : View.INVISIBLE);*/
         textCampaign.setVisibility(item.isFlag() ? View.INVISIBLE :

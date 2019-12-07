@@ -1,8 +1,10 @@
 package com.puyue.www.qiaoge.activity.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -69,13 +71,15 @@ public class ChangeCityActivity extends BaseActivity {
         dividerItemDecorationMRvGroup.setDivider(R.drawable.app_divider);
         rl_city_change.addItemDecoration(dividerItemDecorationMRvGroup);
 
-mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-    @Override
-    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        UserInfoHelper.saveCity(mContext, listCity.get(position));
-        finish();
-    }
-});
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                UserInfoHelper.saveCity(mContext, listCity.get(position));
+                Intent intent = new Intent();//跳回首页
+                setResult(104,intent);
+                finish();
+            }
+        });
 
 
 

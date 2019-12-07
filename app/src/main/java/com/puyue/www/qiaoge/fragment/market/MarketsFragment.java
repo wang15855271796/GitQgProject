@@ -64,6 +64,7 @@ import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
+import com.puyue.www.qiaoge.fragment.home.CityEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -182,7 +183,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
     public int selectionPositon;
     private AlertDialog mTypedialog;
     int shopTypeId;
-    boolean flag;
+    boolean flag = false;
     int pos;
     @Override
     public int setLayoutId() {
@@ -634,13 +635,25 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cityEvent(CityEvent event) {
+        //刷新UI
+        requestGoodsList();
+            requestBanner();
+            getSearchProd();
+        getDataThree();
+        getDataTwo();
+        getData();
+    }
+
+
     @Override
     public void setViewData() {
         ArrayList<String> titles = new ArrayList<>();
 
         int height = mb_bar.getLayoutParams().height;
 
-        Log.i("daea", "setViewData: " + height);
+
         titles.add("综合排序");
         ArrayList<String> contentThree = new ArrayList<>();
         contentThree.add("综合排序");
@@ -738,7 +751,6 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
 
             @Override
             public void onLoadMore() {
-                Log.d("wwdewfgdd......",hasPage+"");
                 if (isCheck) {
 //筛选
                     if (hasPage) {
@@ -785,10 +797,11 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
                 @Override
                 public void onItemClick(View view, int position) {
                     //在点击二级列表的时候,需要将样式修改过来,然后刷新三级详情列表数据
-                    if(pos!=position) {
-                        pos = position;
+//
                         if (flag) {
                             flag = false;
+//                            if(pos!=position) {
+//                            pos = position;
                             hintKbTwo();
                             dialog.show();
                             selectionPositon = position;
@@ -822,12 +835,13 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
 
                                 }
                             }
+//                            }else {
+//                                selectionPositon = position;
+//                                mAdapterMarketSecond.selectPosition(position);
+//                                mAdapterMarketSecond.notifyDataSetChanged();
+//                            }
                         }
-                    }else {
-                        selectionPositon = position;
-                        mAdapterMarketSecond.selectPosition(position);
-                        mAdapterMarketSecond.notifyDataSetChanged();
-                    }
+
 
                 }
 
@@ -1307,6 +1321,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
 
         } else {
             pageNum = 1;
+//            getData();
 //            requestGoodsList();
             UserInfoHelper.saveUserMarketRefresh(getContext(), "market_has_refresh");
         }
@@ -1501,4 +1516,9 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
         getData();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

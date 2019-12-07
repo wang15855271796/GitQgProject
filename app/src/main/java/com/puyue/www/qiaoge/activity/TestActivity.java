@@ -117,7 +117,7 @@ public class TestActivity extends BaseSwipeActivity{
 
     @Override
     public void setContentView() {
-
+        setContentView(R.layout.test);
     }
 
     @Override

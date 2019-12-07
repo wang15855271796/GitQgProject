@@ -415,7 +415,7 @@ public class LoginActivity extends BaseSwipeActivity {
         //登录成功,登录状态有变化,需要让
         UserInfoHelper.saveUserHomeRefresh(mContext, "");
         UserInfoHelper.saveUserMarketRefresh(mContext, "");
-        UserInfoHelper.saveDate(mContext, "");
+        UserInfoHelper.saveDate(mContext, 0+"");
         Intent intent = new Intent(mContext,HomeActivity.class);
         startActivity(intent);
         EventBus.getDefault().post(new LoginEvent());

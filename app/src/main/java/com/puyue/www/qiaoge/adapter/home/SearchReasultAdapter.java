@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -63,7 +64,7 @@ public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.Da
             iv_type.setVisibility(View.VISIBLE);
             iv_no_data.setVisibility(View.GONE);
         }
-
+        LinearLayout ll = helper.getView(R.id.ll);
         RelativeLayout rl_spec = helper.getView(R.id.rl_spec);
         helper.setText(R.id.tv_spec,"规格："+item.getSpec());
         ll_group = helper.getView(R.id.ll_group);
@@ -75,7 +76,7 @@ public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.Da
                 mContext.startActivity(intent);
             }
         });
-
+        ll.setVisibility(View.GONE);
         fl_container = helper.getView(R.id.fl_container);
         SearchSpecsAdapter searchSpecAdapter = new SearchSpecsAdapter(mContext,item.getProdSpecs());
         fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -103,10 +104,13 @@ public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.Da
                             public void onNext(ExchangeProductModel exchangeProductModel) {
                                 helper.setText(R.id.tv_stock,exchangeProductModel.getData().getInventory());
                                 helper.setText(R.id.tv_desc,exchangeProductModel.getData().getSpecialOffer());
-                                SearchInnersAdapter itemChooseAdapter = new SearchInnersAdapter(1,item.getProductId(),R.layout.item_choose_content,
+                                SearchInnersAdapter itemChooseAdapter = new SearchInnersAdapter(1,exchangeProductModel.getData().getProdSpecs().get(position).getProductId(),
+                                        R.layout.item_choose_content,
                                         exchangeProductModel.getData().getProdPrices());
                                 recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
                                 recyclerView.setAdapter(itemChooseAdapter);
+
+
                             }
                         });
             }
@@ -121,25 +125,37 @@ public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.Da
         tv_stock = helper.getView(R.id.tv_stock);
         tv_stock.setText(item.getInventory());
         int productId = item.getProdSpecs().get(0).getProductId();
-        searchInnerAdapter = new SearchInnerResultAdapter(item,productId,R.layout.item_choose_content,item.getProdPrices());
+        searchInnerAdapter = new SearchInnerResultAdapter(1,productId,R.layout.item_choose_content,item.getProdPrices());
+//        SearchInnersAdapter itemChooseAdapter = new SearchInnersAdapter(1,productId, R.layout.item_choose_content, item.getProdPrices());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(searchInnerAdapter);
 
-        ExpandLayout expandLayout = helper.getView(R.id.expanded);
-        expandLayout.initExpand(false);
+//        ExpandLayout expandLayout = helper.getView(R.id.expanded);
+//        expandLayout.initExpand(false);
         TextView tv_choose_spec = helper.getView(R.id.tv_choose_spec);
         rl_spec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onclick.addDialog();
-                expandLayout.toggleExpand();
-                if(expandLayout.isExpand()) {
-                    tv_choose_spec.setText("收起");
+                if(onclick!=null) {
+                    onclick.addDialog();
+                }
+
+                if(ll.getVisibility() == View.VISIBLE) {
+                    ll.setVisibility(View.GONE);
+                    tv_choose_spec.setText("选规格");
 
                 }else {
-                    tv_choose_spec.setText("选规格");
+                    ll.setVisibility(View.VISIBLE);
+                    tv_choose_spec.setText("收起");
                 }
+//                expandLayout.toggleExpand();
+//                if(expandLayout.isExpand()) {
+//                    tv_choose_spec.setText("收起");
+//
+//                }else {
+//                    tv_choose_spec.setText("选规格");
+//                }
             }
         });
 

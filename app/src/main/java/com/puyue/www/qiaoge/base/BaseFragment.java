@@ -115,6 +115,7 @@ public abstract class BaseFragment extends Fragment {
      */
     public abstract void findViewById(View view);
 
+
     /**
      * setViewData
      */

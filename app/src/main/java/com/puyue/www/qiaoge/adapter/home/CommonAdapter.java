@@ -63,6 +63,7 @@ public class CommonAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean.
         RecyclerView recyclerView = helper.getView(R.id.recyclerView);
         ImageView iv_no_data = helper.getView(R.id.iv_no_data);
         iv_type = helper.getView(R.id.iv_type);
+        LinearLayout ll = helper.getView(R.id.ll);
         RelativeLayout rl_spec = helper.getView(R.id.rl_spec);
         if(item.getFlag()==0) {
             Glide.with(mContext).load(item.getTypeUrl()).into(iv_no_data);
@@ -84,7 +85,7 @@ public class CommonAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean.
                 mContext.startActivity(intent);
             }
         });
-
+        ll.setVisibility(View.GONE);
         fl_container = helper.getView(R.id.fl_container);
         NewSpecAdapter searchSpecAdapter = new NewSpecAdapter(mContext,item.getProdSpecs());
         fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -112,7 +113,8 @@ public class CommonAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean.
                             public void onNext(ExchangeProductModel exchangeProductModel) {
                                 helper.setText(R.id.tv_stock,exchangeProductModel.getData().getInventory());
                                 helper.setText(R.id.tv_desc,exchangeProductModel.getData().getSpecialOffer());
-                                SearchInnersAdapter itemChooseAdapter = new SearchInnersAdapter(1,item.getProdSpecs().get(position).getProductId(),R.layout.item_choose_content,
+                                SearchInnersAdapter itemChooseAdapter = new SearchInnersAdapter(1,exchangeProductModel.getData().getProdSpecs().get(position).getProductId(),
+                                        R.layout.item_choose_content,
                                         exchangeProductModel.getData().getProdPrices());
                                 recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
                                 recyclerView.setAdapter(itemChooseAdapter);
@@ -135,16 +137,23 @@ public class CommonAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean.
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(searchInnerAdapter);
 
-        ExpandLayout expandLayout = helper.getView(R.id.expanded);
-        expandLayout.initExpand(false);
+//        ExpandLayout expandLayout = helper.getView(R.id.expanded);
+//        expandLayout.initExpand(false);
         TextView tv_choose_spec = helper.getView(R.id.tv_choose_spec);
         rl_spec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                expandLayout.toggleExpand();
-
                 if(onclick!=null) {
                     onclick.addDialog();
+                }
+
+                if(ll.getVisibility() == View.VISIBLE) {
+                    ll.setVisibility(View.GONE);
+                    tv_choose_spec.setText("选规格");
+
+                }else {
+                    ll.setVisibility(View.VISIBLE);
+                    tv_choose_spec.setText("收起");
                 }
             }
         });

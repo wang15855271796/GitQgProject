@@ -175,7 +175,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     public void setViewData() {
 
         EventBus.getDefault().register(this);
-
         if (getIntent() != null) {
             type = getIntent().getStringExtra("go_home");
         }
@@ -442,27 +441,36 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                     mFragmentTransaction.show(mTabHome);
                 }
 
+//                if(mTabMarket!=null) {
+//                    mFragmentTransaction.hide(mTabMarket);
+//                }
+//
+//                if(mTabCart!=null) {
+//                    mFragmentTransaction.hide(mTabCart);
+//                }
+//
+//                if(mTabMine!=null) {
+//                    mFragmentTransaction.hide(mTabMine);
+//                }
+
 //                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
 //
 //                    QueryHomePropup();
 //                }
-
+//                mFragmentTransaction.commitAllowingStateLoss();
                 mIvHome.setImageResource(R.mipmap.ic_tab_home_enable);
                 mTvHome.setTextColor(getResources().getColor(R.color.app_tab_selected));
                 getCartPoductNum();
                 break;
             case TAB_MARKET:
-            /*    if (mTabMarket == null) {
-                    mTabMarket = new MarketFragment();
+                if (mTabMarket == null) {
+                    mTabMarket = new MarketsFragment();
                     mFragmentTransaction.add(R.id.layout_home_container, mTabMarket);
                 } else {
                     mFragmentTransaction.show(mTabMarket);
-                }*/
+                }
                 //   mTabMarket = new MarketFragment();
                 ///   mFragmentTransaction.add(R.id.layout_home_container, mTabMarket);
-
-                mTabMarket = new MarketsFragment();
-                mFragmentTransaction.add(R.id.layout_home_container, mTabMarket);
 
                 mIvMarket.setImageResource(R.mipmap.ic_tab_goods_enable);
                 mTvMarket.setTextColor(getResources().getColor(R.color.app_tab_selected));
@@ -471,30 +479,26 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                 break;
             case TAB_CART:
 
-             /*   if (mTabCart == null) {
+                if (mTabCart == null) {
                     mTabCart = new CartFragment();
 
                     mFragmentTransaction.add(R.id.layout_home_container, mTabCart);
                 } else {
                     mFragmentTransaction.show(mTabCart);
 
-                }*/
-                mTabCart = new CartFragment();
-
-                mFragmentTransaction.add(R.id.layout_home_container, mTabCart);
+                }
                 mIvCart.setImageResource(R.mipmap.ic_tab_cart_enable);
                 mTvCart.setTextColor(getResources().getColor(R.color.app_tab_selected));
                 getCartPoductNum();
                 break;
             case TAB_MINE:
-             /*   if (mTabMine == null) {
+                if (mTabMine == null) {
                     mTabMine = new MineFragment();
                     mFragmentTransaction.add(R.id.layout_home_container, mTabMine);
                 } else {
                     mFragmentTransaction.show(mTabMine);
-                }*/
-                mTabMine = new MineFragment();
-                mFragmentTransaction.add(R.id.layout_home_container, mTabMine);
+                }
+
                 mIvMine.setImageResource(R.mipmap.ic_tab_mine_enable);
                 mTvMine.setTextColor(getResources().getColor(R.color.app_tab_selected));
                 getCartPoductNum();
@@ -781,14 +785,16 @@ public class MyLocationListener extends BDAbstractLocationListener {
         String street = location.getStreet();    //获取街道信息
         String streetNumber = location.getStreetNumber();
         city = location.getCity();
-
         isGet = true;
 
         if (type.equals("goHome")) {
-            if (city != null && StringHelper.notEmptyAndNull(city)) {
+//            Log.i("wweabv......",city);
+            if (city != null) {
+
                 UserInfoHelper.saveCity(mContext, city);
 //                switchTab(TAB_HOME);
 
+                Log.i("wweabv......",UserInfoHelper.getCity(mContext));
             } else {
                 UserInfoHelper.saveCity(mContext, "杭州市");
 //                switchTab(TAB_HOME);
@@ -798,7 +804,6 @@ public class MyLocationListener extends BDAbstractLocationListener {
         type = "";
         locationMessage = location.getAddrStr();    //获取详细地址信息
 
-        Log.i("wweabv", "onReceiveLocation: " + city);
     }
 }
 }

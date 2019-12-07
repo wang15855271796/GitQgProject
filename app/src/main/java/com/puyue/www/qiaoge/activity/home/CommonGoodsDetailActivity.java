@@ -190,9 +190,13 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     SearchResultsModel searchResultsModel;
     //搜索集合
     private List<SearchResultsModel.DataBean.SearchProdBean.ListBean> searchList = new ArrayList<>();
+    //图片详情集合
+    private List<String> detailList = new ArrayList<>();
+
     private boolean isFirst = true;
     private int productId1;
     private ChooseSpecAdapter chooseSpecAdapter;
+    private ImageViewAdapter imageViewAdapter;
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
@@ -271,6 +275,9 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
         mTypedialog.setCancelable(false);
 
+        imageViewAdapter = new ImageViewAdapter(mContext,R.layout.item_imageview,detailList);
+        recyclerViewImage.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerViewImage.setAdapter(imageViewAdapter);
 
     }
 
@@ -420,6 +427,10 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                     @Override
                     public void onNext(GetProductDetailModel model) {
                         if (model.isSuccess()) {
+                            detailList.addAll(model.getData().getDetailPic());
+                            Log.d("swffsdfdssfsfdsfs...",detailList.size()+"");
+                            imageViewAdapter.notifyDataSetChanged();
+//                            getDetailImage(model);
                             productId1 = model.getData().getProductId();
                             productName = model.getData().getProductName();
                             mTvTitle.setText(productName);
@@ -500,7 +511,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                             });
 
                             getProductList();
-                            getDetailImage(model);
+
                             //填充详情
                             mListDetailImage.clear();
                         } else {
@@ -585,9 +596,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
      */
     private void getDetailImage(GetProductDetailModel model) {
         detailPic = model.getData().getDetailPic();
-        ImageViewAdapter imageViewAdapter = new ImageViewAdapter(mContext,R.layout.item_imageview,detailPic);
-        recyclerViewImage.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerViewImage.setAdapter(imageViewAdapter);
 
     }
 
@@ -1312,4 +1320,11 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         getCartNum();
 
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 }

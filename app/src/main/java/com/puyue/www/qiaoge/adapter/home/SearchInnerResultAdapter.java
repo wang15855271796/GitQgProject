@@ -35,13 +35,12 @@ class SearchInnerResultAdapter extends BaseQuickAdapter<SearchResultsModel.DataB
     private ImageView iv_add;
     int productId;
     private TextView tv_price;
-    SearchResultsModel.DataBean.SearchProdBean.ListBean items;
-
-    public SearchInnerResultAdapter(SearchResultsModel.DataBean.SearchProdBean.ListBean item, int productId, int layoutResId,
+    int businessType;
+    public SearchInnerResultAdapter(int businessType, int productId, int layoutResId,
                                     @Nullable List<SearchResultsModel.DataBean.SearchProdBean.ListBean.ProdPricesBean> data) {
         super(layoutResId, data);
         this.productId = productId;
-        this.items = item;
+        this.businessType = businessType;
     }
 
     @Override
@@ -53,7 +52,7 @@ class SearchInnerResultAdapter extends BaseQuickAdapter<SearchResultsModel.DataB
         TextView tv_num = helper.getView(R.id.tv_num);
         iv_cut = helper.getView(R.id.iv_cut);
         iv_add = helper.getView(R.id.iv_add);
-
+        tv_num.setText(item.getCartNum()+"");
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +69,7 @@ class SearchInnerResultAdapter extends BaseQuickAdapter<SearchResultsModel.DataB
                 int num = Integer.parseInt(tv_num.getText().toString());
                 if (num > 0) {
                     num--;
-                    addCart(num,item.getPriceId(),productId,1,tv_num);
+                    addCarts(num,item.getPriceId(),productId,1,tv_num);
                 }
             }
         });
@@ -150,6 +149,33 @@ class SearchInnerResultAdapter extends BaseQuickAdapter<SearchResultsModel.DataB
         });
     }
 
+    private void addCarts(int num, int id, int businessId, int productType, TextView tv_num) {
+        AddMountChangeTwoAPI.AddMountChangeService(mContext,productType,businessId,num,id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddCartGoodModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AddCartGoodModel addMountReduceModel) {
+                        if (addMountReduceModel.isSuccess()) {
+                            tv_num.setText(num + "");
+                        } else {
+                            tv_num.setText(addMountReduceModel.data+"");
+                            ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
+                        }
+                    }
+                });
+    }
+
     /**
      * 添加购物车
      */
@@ -172,7 +198,7 @@ class SearchInnerResultAdapter extends BaseQuickAdapter<SearchResultsModel.DataB
                     public void onNext(AddCartGoodModel addMountReduceModel) {
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num + "");
-                            ToastUtil.showSuccessMsg(mContext,"刷新购物车成功");
+                            ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
 
                         } else {
                             tv_num.setText(addMountReduceModel.data+"");

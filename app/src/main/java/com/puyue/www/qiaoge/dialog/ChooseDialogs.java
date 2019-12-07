@@ -158,39 +158,8 @@ public class ChooseDialogs extends Dialog implements View.OnClickListener {
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
 
-//                        ItemChooseAdapter itemChooseAdapter = new ItemChooseAdapter(1, productId, R.layout.item_choose_content
-//                                , exchangeProductModel.getData().getProdPrices(), new ChooseDialog.Onclick() {
-//                            @Override
-//                            public void addDialog(int num) {
-//                                ChoiceSpecModel choiceSpecModel = new ChoiceSpecModel();
-//                                for (int i = 0; i <prodPrices.size(); i++) {
-//                                    Log.d("shumushiduoshao.....",num+"");
-//                                    setViewDataAndCount(prodPrices.get(i), i,num);
-//                                }
-//
-//                            }
-//                        });
-//
-//                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-//                        recyclerView.setAdapter(itemChooseAdapter);
-//                        tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
-//                        tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
-//                        tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
-//                        tv_stock.setText(exchangeProductModel.getData().getInventory());
-//                        Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
                     }
                 });
-    }
-
-    private void setViewDataAndCount(GetProductDetailModel.DataBean.ProdPricesBean prodPricesBean, int i,int num) {
-        int productCombinationId;
-        final ChoiceSpecModel model = new ChoiceSpecModel();
-        model.productCombinationPriceId = prodPricesBean.getPriceId();
-        model.totalNum = 0;
-        productCombinationId = model.productCombinationPriceId;
-//        account.get(i).totalNum = num;
-        account.add(model);
-        Log.d("wsswsweddssdsdsdswww...",productCombinationId+"");
     }
 
     public void init() {
@@ -215,39 +184,12 @@ public class ChooseDialogs extends Dialog implements View.OnClickListener {
 
             case R.id.tv_confirm:
 
-                addCart();
                 break;
             default:
                 break;
 
         }
     }
-
-    private void addCart() {
-        JSONArray array = new JSONArray();
-        try {
-            for (int i = 0; i < account.size(); i++) {
-                if (account.get(i).totalNum != 0) {
-                    JSONObject object = new JSONObject();
-                    object.put("productCombinationPriceId", account.get(i).productCombinationPriceId);
-                    object.put("totalNum", account.get(i).totalNum);
-                    array.put(object);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String productCombinationPriceVOList = array.toString();
-        String totalNum = "";
-        requestAddCart(productCombinationPriceVOList, totalNum);
-        Log.d("swwswswswswssw...",productCombinationPriceVOList);
-    }
-
-
-    private void requestAddCart(String productCombinationPriceVOList, String totalNum) {
-
-    }
-
     public interface Onclick {
         void addDialog(int num);
     }
