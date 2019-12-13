@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * Created by ${王涛} on 2019/11/8
+ * 推荐规格Adapter
  */
 public class SearchSpecxAdapter extends BaseAdapter {
     Context context;

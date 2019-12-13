@@ -774,9 +774,17 @@ public class MarketRightModel {
                      * productId : 4540
                      * spec : ddd
                      */
-
+                    int activeId;
                     private int productId;
                     private String spec;
+
+                    public int getActiveId() {
+                        return activeId;
+                    }
+
+                    public void setActiveId(int activeId) {
+                        this.activeId = activeId;
+                    }
 
                     public int getProductId() {
                         return productId;

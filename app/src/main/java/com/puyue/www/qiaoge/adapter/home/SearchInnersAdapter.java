@@ -59,7 +59,6 @@ public class SearchInnersAdapter extends BaseQuickAdapter<ExchangeProductModel.D
         helper.setText(R.id.tv_old_price,item.getOldPrice());
         TextView tv_num = helper.getView(R.id.tv_num);
         tv_num.setText(item.getCartNum()+"");
-        Log.d("sewwewrereretrsd...",item.getCartNum()+"");
         iv_cut = helper.getView(R.id.iv_cut);
         iv_add = helper.getView(R.id.iv_add);
 
@@ -68,7 +67,6 @@ public class SearchInnersAdapter extends BaseQuickAdapter<ExchangeProductModel.D
             public void onClick(View v) {
                 int num = Integer.parseInt(tv_num.getText().toString());
                 num++;
-                Log.d("sdwwdddddddddd....","cfdfdd");
                 addCart(num,item.getPriceId(),productId,businessType,tv_num,item.getCartNum());
 
             }

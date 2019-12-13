@@ -867,7 +867,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
             }
         });
 
-        mAdapterMarketDetail = new MarketGoodsAdapter(R.layout.item_noresult_recommends, mListGoods,0, new MarketGoodsAdapter.Onclick() {
+        mAdapterMarketDetail = new MarketGoodsAdapter(R.layout.item_noresult_recommends, mListGoods, new MarketGoodsAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(context))) {

@@ -76,16 +76,12 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
     public String salesVolume;
     int productId;
     public List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs;
-    private List<GetProductDetailModel.DataBean.ProdPricesBean> prodPrices;
-    int productCombinationId;
-
     private ChooseSpecAdapters chooseSpecAdapter;
-    private List<ChoiceSpecModel> account = new ArrayList<>();
-
     public ChooseDialog(Context context,int productId) {
         super(context, R.style.dialog);
         this.context = context;
         this.productId = productId;
+
         init();
         getDetailSpec(productId);
     }
@@ -113,12 +109,12 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
                         if (model.isSuccess()) {
                             productName = model.getData().getProductName();
                             tv_name.setText(productName);
+                            Log.d("duoguigemingcheng...",productName);
                             tv_price.setText(model.getData().getMinMaxPrice());
                             salesVolume = model.getData().getSalesVolume();
                             tv_sale.setText(salesVolume);
                             Glide.with(context).load(model.getData().getDefaultPic()).into(iv_head);
                             tv_desc.setText(model.getData().getSpecialOffer());
-                            prodPrices = model.getData().getProdPrices();
                             prodSpecs = model.getData().getProdSpecs();
                             int productId1 = prodSpecs.get(0).getProductId();
                             exchangeList(productId1);

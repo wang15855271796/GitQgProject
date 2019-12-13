@@ -96,14 +96,14 @@
                 android:layout_alignBaseline="@id/tv_mine_phone"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/size_8dp"
-                android:layout_marginTop="@dimen/size_28dp"
+                android:layout_marginTop="@dimen/size_38dp"
                 android:layout_toRightOf="@+id/tv_mine_phone"
                 android:background="@drawable/vip_bg"
                 android:paddingLeft="8dp"
                 android:paddingTop="3dp"
                 android:paddingRight="8dp"
                 android:paddingBottom="3dp"
-                android:text=""
+                tools:text="wangtao"
                 android:textColor="@color/white"
                 android:textSize="11dp" />
 

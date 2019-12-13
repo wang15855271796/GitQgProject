@@ -425,6 +425,7 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
         UserInfoHelper.saveUserMarketRefresh(mContext, "");
         startActivity(HomeActivity.getIntent(mContext, HomeActivity.class));
         EventBus.getDefault().post(new GoToMineEvent());
+
         finish();
     }
 }

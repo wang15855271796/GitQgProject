@@ -128,7 +128,6 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
         recyclerView.setHasFixedSize(true);
         iv_back.setOnClickListener(this);
         tv_title.setText(title);
-//        getProductsList(pageNum,pageSize,productId);
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override

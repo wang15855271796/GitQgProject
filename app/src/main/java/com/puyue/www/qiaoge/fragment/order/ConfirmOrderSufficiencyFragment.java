@@ -971,7 +971,7 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
                     @Override
                     public void onNext(GenerateOrderModel generateOrderModel) {
                         if (generateOrderModel.success) {
-
+                            Log.d("温馨提示......","00000");
 //                            Log.e(TAG, "onNext: activityBalanceVOStr="+activityBalanceVOStr+"?normalProductBalanceVOStr="+normalProductBalanceVOStr+"?equipmentBalanceVOStr="+equipmentBalanceVOStr
 //                                    +"?cartListStr="+cartListStr+"?giftDetailNo="+giftDetailNo+"?=messageEditText.getText().toString()"+messageEditText.getText().toString() );
 //                            orderId = generateOrderModel.getData();
@@ -990,6 +990,7 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
                                         intent.putExtra(AppConstant.ORDERID, generateOrderModel.getData());
                                         intent.putExtra("orderAmount", totalAmount + "");
                                         startActivity(intent);
+
                                         mActivity.finish();
                                     }else {
                                         orderId = generateOrderModel.getData();
@@ -1000,6 +1001,7 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
                                         intent.putExtra("orderDeliveryType", 0);
                                         startActivity(intent);
                                         Log.d("swhihihihiiih....","sssssss");
+                                        Log.d("温馨提示......","111111");
                                         mActivity.finish();
                                     }
                                 }else {
@@ -1010,7 +1012,7 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
                                         intent.putExtra("remark", messageEditText.getText().toString());
                                         intent.putExtra("orderDeliveryType", 0);
                                         startActivity(intent);
-                                        Log.d("swhihihihiiih....", "sssssss");
+                                        Log.d("温馨提示......","222222");
                                         mActivity.finish();
 //                                }
 

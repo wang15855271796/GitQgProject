@@ -35,6 +35,7 @@ import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.ChooseDialog;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
@@ -68,20 +69,17 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
     private FlowLayout fl_container;
     private LinearLayout ll_group;
     private ImageView iv_type;
-    int FirstId;
     Onclick onclick;
-    private SearchInnersAdapter itemChooseAdapter;
+    ChoosesDialog chooseDialog;
 
-    public MarketGoodsAdapter(int layoutResId, @Nullable List<MarketRightModel.DataBean.ProdClassifyBean.ListBean> data, int FirstId, Onclick onclick) {
+    public MarketGoodsAdapter(int layoutResId, @Nullable List<MarketRightModel.DataBean.ProdClassifyBean.ListBean> data, Onclick onclick) {
         super(layoutResId, data);
-        this.FirstId = FirstId;
         this.onclick = onclick;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, MarketRightModel.DataBean.ProdClassifyBean.ListBean item) {
         int businessType = item.getBusinessType();
-        LinearLayout ll = helper.getView(R.id.ll);
         ImageView iv_no_data = helper.getView(R.id.iv_no_data);
         iv_type = helper.getView(R.id.iv_type);
         if(item.getFlag()==0) {
@@ -94,7 +92,6 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
             iv_no_data.setVisibility(View.GONE);
         }
         RelativeLayout rl_spec = helper.getView(R.id.rl_spec);
-        RecyclerView recyclerView = helper.getView(R.id.recyclerView);
         helper.setText(R.id.tv_spec,"规格："+item.getSpec());
         ll_group = helper.getView(R.id.ll_group);
         ll_group.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +100,6 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
                 if(businessType==11) {
                     Intent intent = new Intent(mContext,SpecialGoodDetailActivity.class);
                     intent.putExtra(AppConstant.ACTIVEID, item.getActiveId());
-                    Log.d("woshishuju.....",item.getActiveId()+"");
                     mContext.startActivity(intent);
                 }else {
                     Intent intent = new Intent(mContext,CommonGoodsDetailActivity.class);
@@ -113,51 +109,50 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
             }
         });
 
-        ll.setVisibility(View.GONE);
         fl_container = helper.getView(R.id.fl_container);
-        MarketSpecAdapter marketSpecAdapter = new MarketSpecAdapter(mContext,item.getProdSpecs());
-        fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                marketSpecAdapter.selectPosition(position);
-                int productIds = item.getProdSpecs().get(position).getProductId();
-
-                GetProductDetailAPI.getExchangeList(mContext,productIds,businessType)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<ExchangeProductModel>() {
-
-                            @Override
-                            public void onCompleted() {
-
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-
-                            }
-
-                            @Override
-                            public void onNext(ExchangeProductModel exchangeProductModel) {
-                                helper.setText(R.id.tv_stock,exchangeProductModel.getData().getInventory());
-                                helper.setText(R.id.tv_desc,exchangeProductModel.getData().getSpecialOffer());
-                                if(businessType==11) {
-                                    itemChooseAdapter = new SearchInnersAdapter(item.getBusinessType(),exchangeProductModel.getData().getActiveId(),
-                                            R.layout.item_choose_contents,exchangeProductModel.getData().getProdPrices());
-                                }else {
-                                    itemChooseAdapter = new SearchInnersAdapter(item.getBusinessType(),exchangeProductModel.getData().getProdSpecs().get(position).getProductId(),
-                                            R.layout.item_choose_contents,exchangeProductModel.getData().getProdPrices());
-                                }
-
-                                recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-                                recyclerView.setAdapter(itemChooseAdapter);
-
-                            }
-                        });
-            }
-        });
-
-        fl_container.setAdapter(marketSpecAdapter);
+//        MarketSpecAdapter marketSpecAdapter = new MarketSpecAdapter(mContext,item.getProdSpecs());
+//        fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                marketSpecAdapter.selectPosition(position);
+//                int productIds = item.getProdSpecs().get(position).getProductId();
+//
+//                GetProductDetailAPI.getExchangeList(mContext,productIds,businessType)
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(new Subscriber<ExchangeProductModel>() {
+//
+//                            @Override
+//                            public void onCompleted() {
+//
+//                            }
+//
+//                            @Override
+//                            public void onError(Throwable e) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onNext(ExchangeProductModel exchangeProductModel) {
+//                                helper.setText(R.id.tv_stock,exchangeProductModel.getData().getInventory());
+//                                helper.setText(R.id.tv_desc,exchangeProductModel.getData().getSpecialOffer());
+//                                if(businessType==11) {
+//                                    itemChooseAdapter = new SearchInnersAdapter(item.getBusinessType(),exchangeProductModel.getData().getActiveId(),
+//                                            R.layout.item_choose_contents,exchangeProductModel.getData().getProdPrices());
+//                                }else {
+//                                    itemChooseAdapter = new SearchInnersAdapter(item.getBusinessType(),exchangeProductModel.getData().getProdSpecs().get(position).getProductId(),
+//                                            R.layout.item_choose_contents,exchangeProductModel.getData().getProdPrices());
+//                                }
+//
+//                                recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+//                                recyclerView.setAdapter(itemChooseAdapter);
+//
+//                            }
+//                        });
+//            }
+//        });
+//
+//        fl_container.setAdapter(marketSpecAdapter);
         helper.setText(R.id.tv_name,item.getProductName());
 
         helper.setText(R.id.tv_sale,item.getSalesVolume());
@@ -165,12 +160,7 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
         helper.setText(R.id.tv_desc,item.getSpecialOffer());
         helper.setText(R.id.tv_stock,item.getInventory());
         helper.setText(R.id.tv_stock_total,item.getInventory());
-        int productId = item.getProdSpecs().get(0).getProductId();
-        int activeId = item.getActiveId();
 
-        MarketInnerAdapter marketInnerAdapter = new MarketInnerAdapter(activeId,item.getBusinessType(),productId,R.layout.item_choose_contents,item.getProdPrices());
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.setAdapter(marketInnerAdapter);
         TextView tv_choose_spec = helper.getView(R.id.tv_choose_spec);
         rl_spec.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,14 +169,8 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
                     onclick.addDialog();
                 }
 
-                if(ll.getVisibility() == View.VISIBLE) {
-                    ll.setVisibility(View.GONE);
-                    tv_choose_spec.setText("选规格");
-
-                }else {
-                    ll.setVisibility(View.VISIBLE);
-                    tv_choose_spec.setText("收起");
-                }
+                chooseDialog = new ChoosesDialog(mContext,item);
+                chooseDialog.show();
 
             }
         });

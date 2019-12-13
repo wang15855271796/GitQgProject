@@ -151,11 +151,13 @@
 
             <LinearLayout
                 android:id="@+id/ll"
+                android:visibility="gone"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RelativeLayout
+                    android:visibility="gone"
                     android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -190,6 +192,7 @@
 
 
                 <RelativeLayout
+                    android:visibility="gone"
                     android:layout_marginTop="8dp"
                     android:background="@color/white"
                     android:layout_width="match_parent"

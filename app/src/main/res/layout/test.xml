@@ -1,51 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tl="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <!--<com.aries.ui.widget.CustomViewPager-->
-        <!--android:id="@+id/main_viewpager"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginBottom="@dimen/navigation_bar_height" />-->
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
 
-
-        <LinearLayout
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            app:elevation="0dp">
 
-            <com.flyco.tablayout.CommonTabLayout
+            <com.daimajia.slider.library.SliderLayout
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="160dp">
+
+            </com.daimajia.slider.library.SliderLayout>
+
+            <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/size_54dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/white"
-                app:labelVisibilityMode="labeled"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                tl:tl_iconHeight="20dp"
-                tl:tl_iconWidth="20dp"
-                tl:tl_indicator_color="@color/colorPrimary"
-                tl:tl_indicator_height="0dp"
-                tl:tl_textSelectColor="@color/colorPrimary"
-                tl:tl_textUnselectColor="#66000000"
-                tl:tl_textsize="12sp"
-                tl:tl_underline_height="1dp" />
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_height="@dimen/size_54dp">
 
-</RelativeLayout>
+            </android.support.design.widget.TabLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+        </android.support.v7.widget.RecyclerView>
+    </android.support.design.widget.CoordinatorLayout>
+
+</LinearLayout>

@@ -609,6 +609,7 @@ public class NewWebViewActivity extends BaseSwipeActivity {
             @Override
             public void onClick(View view) {
                 UMWeb umWeb = new UMWeb(mShareUrl);
+
                 umWeb.setDescription(mShareDesc);
                 umWeb.setThumb(new UMImage(NewWebViewActivity.this, mShareIcon));
                 umWeb.setTitle(mShareTitle);

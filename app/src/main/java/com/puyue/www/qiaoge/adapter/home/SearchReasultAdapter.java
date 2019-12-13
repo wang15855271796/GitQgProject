@@ -34,7 +34,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ${daff}
  * on 2018/10/17
- * 有数据时的列表
+ * 搜索有数据时的列表
  */
 public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.DataBean.SearchProdBean.ListBean, BaseViewHolder> {
 
@@ -45,6 +45,7 @@ public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.Da
     private LinearLayout ll_group;
     private ImageView iv_type;
     Onclick onclick;
+    SearchDialog searchDialog;
     public SearchReasultAdapter(int layoutResId, @Nullable List<SearchResultsModel.DataBean.SearchProdBean.ListBean> data,Onclick onclick) {
         super(layoutResId, data);
         this.onclick = onclick;
@@ -64,7 +65,6 @@ public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.Da
             iv_type.setVisibility(View.VISIBLE);
             iv_no_data.setVisibility(View.GONE);
         }
-        LinearLayout ll = helper.getView(R.id.ll);
         RelativeLayout rl_spec = helper.getView(R.id.rl_spec);
         helper.setText(R.id.tv_spec,"规格："+item.getSpec());
         ll_group = helper.getView(R.id.ll_group);
@@ -76,7 +76,7 @@ public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.Da
                 mContext.startActivity(intent);
             }
         });
-        ll.setVisibility(View.GONE);
+
         fl_container = helper.getView(R.id.fl_container);
         SearchSpecsAdapter searchSpecAdapter = new SearchSpecsAdapter(mContext,item.getProdSpecs());
         fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -126,14 +126,10 @@ public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.Da
         tv_stock.setText(item.getInventory());
         int productId = item.getProdSpecs().get(0).getProductId();
         searchInnerAdapter = new SearchInnerResultAdapter(1,productId,R.layout.item_choose_content,item.getProdPrices());
-//        SearchInnersAdapter itemChooseAdapter = new SearchInnersAdapter(1,productId, R.layout.item_choose_content, item.getProdPrices());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(searchInnerAdapter);
 
-//        ExpandLayout expandLayout = helper.getView(R.id.expanded);
-//        expandLayout.initExpand(false);
-        TextView tv_choose_spec = helper.getView(R.id.tv_choose_spec);
         rl_spec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,21 +137,8 @@ public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.Da
                     onclick.addDialog();
                 }
 
-                if(ll.getVisibility() == View.VISIBLE) {
-                    ll.setVisibility(View.GONE);
-                    tv_choose_spec.setText("选规格");
-
-                }else {
-                    ll.setVisibility(View.VISIBLE);
-                    tv_choose_spec.setText("收起");
-                }
-//                expandLayout.toggleExpand();
-//                if(expandLayout.isExpand()) {
-//                    tv_choose_spec.setText("收起");
-//
-//                }else {
-//                    tv_choose_spec.setText("选规格");
-//                }
+                searchDialog = new SearchDialog(mContext,item);
+                searchDialog.show();
             }
         });
 

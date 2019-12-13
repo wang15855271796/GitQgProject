@@ -1,7 +1,8 @@
-package com.puyue.www.qiaoge.dialog;
+package com.puyue.www.qiaoge.adapter.market;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +10,23 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.api.market.MarketRightModel;
+import com.puyue.www.qiaoge.dialog.ChooseSpecAdapters;
 import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
 
 import java.util.List;
 
-public class ChooseSpecAdapters extends BaseAdapter {
+/**
+ * Created by ${王涛} on 2019/12/11
+ */
+public class SpecAdapter extends BaseAdapter {
     Context context;
-    List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs;
+    List<MarketRightModel.DataBean.ProdClassifyBean.ListBean.ProdSpecsBean> prodSpecs;
     int selectPosition;
-    public ChooseSpecAdapters(Context context, List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs) {
+    public SpecAdapter(Context context, List<MarketRightModel.DataBean.ProdClassifyBean.ListBean.ProdSpecsBean> prodSpecs) {
         this.context = context;
         this.prodSpecs = prodSpecs;
     }
@@ -54,14 +62,13 @@ public class ChooseSpecAdapters extends BaseAdapter {
         holder.tv_spec.setText(prodSpecs.get(position).getSpec());
 
         if(selectPosition==position) {
-            Log.d("ttttt.......",selectPosition+"");
             holder.tv_spec.setTextColor(Color.parseColor("#FF680A"));
             holder.tv_spec.setBackgroundColor(Color.parseColor("#FEF5EF"));
         }else {
-            Log.d("ttttt...............",selectPosition+"");
             holder.tv_spec.setTextColor(Color.parseColor("#333333"));
             holder.tv_spec.setBackgroundColor(Color.parseColor("#eeeeee"));
         }
+
         return convertView;
     }
 

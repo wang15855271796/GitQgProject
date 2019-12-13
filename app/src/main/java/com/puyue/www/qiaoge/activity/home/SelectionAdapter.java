@@ -44,6 +44,7 @@ public class SelectionAdapter extends BaseQuickAdapter<MarketRightModel.DataBean
     private LinearLayout ll_group;
     private ImageView iv_type;
     Onclick onclick;
+    ClassifyDialog classifyDialog;
     public SelectionAdapter(int layoutResId, @Nullable List<MarketRightModel.DataBean.ProdClassifyBean.ListBean> data,Onclick onclick) {
         super(layoutResId, data);
         this.onclick = onclick;
@@ -74,7 +75,7 @@ public class SelectionAdapter extends BaseQuickAdapter<MarketRightModel.DataBean
                 mContext.startActivity(intent);
             }
         });
-        LinearLayout ll = helper.getView(R.id.ll);
+
         fl_container = helper.getView(R.id.fl_container);
         SelectionSpecAdapter searchSpecAdapter = new SelectionSpecAdapter(mContext,item.getProdSpecs());
         fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -111,7 +112,7 @@ public class SelectionAdapter extends BaseQuickAdapter<MarketRightModel.DataBean
                         });
             }
         });
-        ll.setVisibility(View.GONE);
+
         fl_container.setAdapter(searchSpecAdapter);
         helper.setText(R.id.tv_name,item.getProductName());
         helper.setText(R.id.tv_stock_total,item.getInventory());
@@ -126,25 +127,15 @@ public class SelectionAdapter extends BaseQuickAdapter<MarketRightModel.DataBean
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(selectionInnerAdapter);
 
-//        ExpandLayout expandLayout = helper.getView(R.id.expanded);
-//        expandLayout.initExpand(false);
         TextView tv_choose_spec = helper.getView(R.id.tv_choose_spec);
         tv_choose_spec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                expandLayout.toggleExpand();
                 if(onclick!=null) {
                     onclick.addDialog();
                 }
-
-                if(ll.getVisibility() == View.VISIBLE) {
-                    ll.setVisibility(View.GONE);
-                    tv_choose_spec.setText("选规格");
-
-                }else {
-                    ll.setVisibility(View.VISIBLE);
-                    tv_choose_spec.setText("收起");
-                }
+                classifyDialog = new ClassifyDialog(mContext,item);
+                classifyDialog.show();
             }
         });
 
@@ -160,5 +151,4 @@ public class SelectionAdapter extends BaseQuickAdapter<MarketRightModel.DataBean
     public interface Onclick {
         void addDialog();
     }
-
 }
