@@ -8,9 +8,7 @@
 
     <com.puyue.www.qiaoge.view.CompatToolbar
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
-
         android:layout_marginTop="@dimen/size_30dp">
 
 
@@ -33,32 +31,33 @@
 
 
     </com.puyue.www.qiaoge.view.CompatToolbar>
-<LinearLayout
-    android:background="#F6F6F6"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_weight="1"
-    android:layout_height="0dp">
-    <TextView
-android:padding="@dimen/size_5dp"
-        android:textColor="#ff9d9d9d"
-        android:textSize="@dimen/size_12dp"
-        android:text="已开通以下城市"
-        android:layout_marginLeft="@dimen/size_14dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
+        android:background="#F6F6F6"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:id="@+id/rl_city_change"
-        android:background="@color/white"
-     android:paddingLeft="@dimen/size_14dp"
-        android:layout_height="wrap_content">
+        android:layout_weight="1"
+        android:layout_height="0dp">
+
+        <TextView
+            android:padding="@dimen/size_5dp"
+            android:textColor="#999999"
+            android:textStyle=""
+            android:textSize="@dimen/size_14dp"
+            android:text="已开放城市列表"
+            android:layout_marginLeft="@dimen/size_10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
 
-    </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/rl_city_change"
+            android:background="@color/white"
+            android:layout_height="wrap_content">
+
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 
 
 </LinearLayout>

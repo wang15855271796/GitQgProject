@@ -1,4 +1,4 @@
-package com.puyue.www.qiaoge.api.mine.subaccount;
+package com.puyue.www.qiaoge.api.mine;
 
 import android.content.Context;
 
@@ -6,7 +6,6 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
 import com.puyue.www.qiaoge.helper.RestHelper;
 import com.puyue.www.qiaoge.model.AccountDetailModel;
-
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;

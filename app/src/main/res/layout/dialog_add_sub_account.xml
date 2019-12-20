@@ -30,7 +30,6 @@
             android:layout_weight="1"
             android:background="@null"
             android:hint="请输入姓名"
-
             android:singleLine="true"
             android:textColor="#232131"
             android:textColorHint="#D5D5D5"

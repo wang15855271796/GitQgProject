@@ -1,4 +1,4 @@
-package com.puyue.www.qiaoge.model.home;
+package com.puyue.www.qiaoge.model;
 
 import java.util.List;
 

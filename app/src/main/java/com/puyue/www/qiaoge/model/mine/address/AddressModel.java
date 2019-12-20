@@ -29,6 +29,7 @@ public class AddressModel extends BaseModel {
          */
 
         public int id;
+        String sendType;
         public int userId;
         public String userName;
         public String contactPhone;

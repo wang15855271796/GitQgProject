@@ -27,7 +27,15 @@ public class AppInterfaceAddress {
     public static final String LOG_OUT = "user/loginOut";
     public static final String CHANGE_LOGIN_PASSWORD = "auth/resetPwd";
     public static final String CHANGE_PAY_PASSWORD = "pay/updatePayPwd";
-    public static final String GET_SUB_USER = "user/getSubUser";
+
+    /**
+     * 子账户详情
+     */
+    public static final String GET_SUB_ACCOUNT = "user/appUserGetSubAccountDetail";
+    /**
+     * 子账户列表
+     */
+    public static final String GET_SUB_USER = "user/appGetUserSubAccountList";
     public static final String SEARCHEQUIPMENT = " equipment/searchEquipment?";
     public static final String CHECKMESSAGE = "auth/checkRegisterCode";
     /**
@@ -58,9 +66,22 @@ public class AppInterfaceAddress {
     public static final String MARKET_GOODS = "common/product/getProductByClassifyId";
     public static final String DISABLE_SUB_USER = "user/disableSubUser";
     public static final String CHECK_COMMON_CODE = "auth/CommonCheckResetPwd";
-    public static final String ADD_SUB_USER = "user/addSubUser";
-    public static final String DELETE_SUB_USER = "user/deleteSubUser";
+    /**
+     * 添加子账户
+     */
+    public static final String ADD_SUB_USER = "user/appUserAddSubAccount";
+    /**
+     * 编辑子账户 Edit_SUB_USER
+     */
+    public static final String Edit_SUB_USER = "user/appUserEditSubAccount";
+    /**
+     * 删除子账户
+     */
+    public static final String DELETE_SUB_USER = "user/appUserDelSubAccount";
     public static final String RECOVER_SUB_USER = "user/recoverSubUser";
+    /**
+     * 获取地址列表
+     */
     public static final String GET_ADDRESS_LIST = "address/getAddressList";
     public static final String GET_COLLECTION_LIST = "commonCollect/myCollectProd";
     public static final String GET_ORDER_LIST = "commonOrder/getCommonOrderListByPage";
@@ -334,9 +355,9 @@ public class AppInterfaceAddress {
     public static final String UPDATEDELIVERTIME = "commonOrder/updateDeliverTime";
 
     /**
-     * 切换城市
+     * 获取开放城市列表
      */
-    public static final String MODIFYCITY = "common/getCompanyList";
+    public static final String MODIFYCITY = "common/getAreaOpenList";
 
 
     /**

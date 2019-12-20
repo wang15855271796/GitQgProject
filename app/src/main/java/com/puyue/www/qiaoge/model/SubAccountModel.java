@@ -1,4 +1,4 @@
-package com.puyue.www.qiaoge.model.mine;
+package com.puyue.www.qiaoge.model;
 
 import com.puyue.www.qiaoge.base.BaseModel;
 

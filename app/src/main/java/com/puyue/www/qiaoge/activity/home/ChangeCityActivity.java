@@ -4,17 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.adapter.home.CityChangeAdapter;
 import com.puyue.www.qiaoge.api.home.CityChangeAPI;
 import com.puyue.www.qiaoge.base.BaseActivity;
 import com.puyue.www.qiaoge.helper.AppHelper;
-import com.puyue.www.qiaoge.helper.DividerItemDecoration;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.home.CityChangeModel;
 
@@ -36,7 +33,7 @@ public class ChangeCityActivity extends BaseActivity {
     private RecyclerView rl_city_change;
     private CityChangeAdapter mAdapter;
 
-    private List<String> listCity =new ArrayList<>();
+    private List<CityChangeModel.DataBean> listCity =new ArrayList<>();
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
@@ -59,38 +56,24 @@ public class ChangeCityActivity extends BaseActivity {
 
         rl_city_change.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new CityChangeAdapter(R.layout.city_item, listCity);
-
-
         rl_city_change.setAdapter(mAdapter);
-
-
-
-        //添加分隔线
-        DividerItemDecoration dividerItemDecorationMRvGroup = new DividerItemDecoration(mActivity,
-                DividerItemDecoration.VERTICAL_LIST);
-        dividerItemDecorationMRvGroup.setDivider(R.drawable.app_divider);
-        rl_city_change.addItemDecoration(dividerItemDecorationMRvGroup);
 
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                UserInfoHelper.saveCity(mContext, listCity.get(position));
+                UserInfoHelper.saveCity(mContext, listCity.get(position).getProvinceName());
                 Intent intent = new Intent();//跳回首页
                 setResult(104,intent);
                 finish();
             }
         });
 
-
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-getCityList();
+        getCityList();
     }
 
     @Override
@@ -126,8 +109,8 @@ getCityList();
 
                         if (cityChangeModel.isSuccess()) {
                             listCity.clear();
-
-                            listCity.addAll(cityChangeModel.getData());
+                            List<CityChangeModel.DataBean> data = cityChangeModel.getData();
+                            listCity.addAll(data);
 
                             mAdapter.notifyDataSetChanged();
                         } else {

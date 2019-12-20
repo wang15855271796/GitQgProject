@@ -159,7 +159,6 @@
         <!--  -->
         <activity android:name=".activity.mine.account.AccountCenterActivity" />
         <!--  -->
-        <activity android:name=".activity.mine.account.SubAccountActivity" />
         <!--  -->
         <activity android:name=".activity.mine.MessageCenterActivity" />
         <!--  -->
@@ -305,6 +304,8 @@
         <activity android:name=".activity.mine.order.ReturnGoodActivity"
 
             ></activity>
+
+        <activity android:name=".activity.mine.ModifyActivity"/>
 
 
         <provider

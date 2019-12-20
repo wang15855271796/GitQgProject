@@ -18,8 +18,8 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CommonH5Activity;
 import com.puyue.www.qiaoge.activity.mine.FeedBackActivity;
 import com.puyue.www.qiaoge.activity.mine.MyCollectionActivity;
+import com.puyue.www.qiaoge.activity.mine.SubAccountActivity;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListActivity;
-import com.puyue.www.qiaoge.activity.mine.account.SubAccountActivity;
 import com.puyue.www.qiaoge.activity.mine.coupons.MyCouponsActivity;
 import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
@@ -30,7 +30,6 @@ import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.mine.order.MyOrderNumModel;
 import com.puyue.www.qiaoge.view.SuperTextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

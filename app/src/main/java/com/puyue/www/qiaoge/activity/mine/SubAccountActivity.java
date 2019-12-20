@@ -1,5 +1,6 @@
-package com.puyue.www.qiaoge.activity.mine.account;
+package com.puyue.www.qiaoge.activity.mine;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -151,50 +152,26 @@ public class SubAccountActivity extends BaseSwipeActivity {
             public void onNoDoubleClick(View view) {
                 if (flag.equals("disable")) {
                     //禁用该子账号,将点击的这个item的手机号传给后台
-                    requestDisableSubAccount(mList.get(position).loginPhone);
+//                    requestDisableSubAccount(mList.get(position).loginPhone);
                 } else if (flag.equals("delete")) {
                     //删除该子账号
-                    requestDeleteSubAccount(mList.get(position).loginPhone);
+                    requestDeleteSubAccount(String.valueOf(mModelSubAccount.data.get(position).subId));
                 } else if (flag.equals("enable")) {
                     //恢复被禁用的子账号
-                    requestEnableSubAccount(mList.get(position).loginPhone);
+//                    requestEnableSubAccount(mList.get(position).loginPhone);
                 }
                 alertDialog.dismiss();
             }
         });
     }
 
-    private void requestEnableSubAccount(String phone) {
-        SubAccountEnableAPI.requestEnableSubAccount(mContext, phone)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<BaseModel>() {
-                    @Override
-                    public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(BaseModel baseModel) {
-                        mModelEnableSubAccount = baseModel;
-                        if (mModelEnableSubAccount.success) {
-                            //恢复某个已禁用的账号成功
-                            AppHelper.showMsg(mContext, "启用成功");
-                            mPtr.autoRefresh();
-                        } else {
-                            AppHelper.showMsg(mContext, mModelEnableSubAccount.message);
-                        }
-                    }
-                });
-    }
-
-    private void requestDeleteSubAccount(String phone) {
-        SubAccountDeleteAPI.requestDeleteSubAccount(mContext, phone)
+    /**
+     * 删除子账户
+     * @param subId
+     */
+    private void requestDeleteSubAccount(String subId) {
+        SubAccountDeleteAPI.requestDeleteSubAccount(mContext, subId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<BaseModel>() {
@@ -222,35 +199,9 @@ public class SubAccountActivity extends BaseSwipeActivity {
                 });
     }
 
-    private void requestDisableSubAccount(String phone) {
-        SubAccountDisableAPI.requestDisableSubAccount(mContext, phone)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<BaseModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(BaseModel baseModel) {
-                        mModelDisableSubAccount = baseModel;
-                        if (mModelDisableSubAccount.success) {
-                            //禁用某个子账号成功
-                            AppHelper.showMsg(mContext, "禁用成功");
-                            mPtr.autoRefresh();
-                        } else {
-                            AppHelper.showMsg(mContext, mModelDisableSubAccount.message);
-                        }
-                    }
-                });
-    }
-
+    /**
+     * 子账户列表
+     */
     private void requestSubAccountList() {
         SubAccountListAPI.requestSubAccountList(mContext)
                 .subscribeOn(Schedulers.io())
@@ -269,7 +220,6 @@ public class SubAccountActivity extends BaseSwipeActivity {
                     @Override
                     public void onNext(SubAccountModel subAccountModel) {
                         mPtr.refreshComplete();
-                        logoutAndToHome(mContext, subAccountModel.code);
                         mModelSubAccount = subAccountModel;
                         if (mModelSubAccount.success) {
                             updateSubAccountList();
@@ -306,7 +256,9 @@ public class SubAccountActivity extends BaseSwipeActivity {
         mBtnAdd.setOnClickListener(new NoDoubleClickListener() {
             @Override
             public void onNoDoubleClick(View view) {
-                showAddAccountDialog();
+//                showAddAccountDialog();
+                Intent intent = new Intent(mContext,AddSubAccountActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -366,7 +318,7 @@ public class SubAccountActivity extends BaseSwipeActivity {
                             if (StringHelper.isLetterDigit(mEditPasswordOnce.getText().toString())) {
 
                                 //添加一个子账号,添加子账号会默认注册一个账号
-                                requestAddSubAccount(mEditPhone.getText().toString(), mEditRemarks.getText().toString(), mEditPasswordOnce.getText().toString(), mEtGetCode.getText().toString(), version);
+//                                requestAddSubAccount(mEditPhone.getText().toString(), mEditRemarks.getText().toString(), mEditPasswordOnce.getText().toString(), mEtGetCode.getText().toString(), version);
                                 //alertDialog.dismiss();
                             } else {
                                 AppHelper.showMsg(mContext, "密码由6-16位数字与字母组成");
@@ -390,35 +342,35 @@ public class SubAccountActivity extends BaseSwipeActivity {
         });
     }
 
-    private void requestAddSubAccount(String phone, String name, String pwd, String gsc, String ver) {
-        SubAccountAddAPI.requestAddSubAccount(mContext, phone, name, pwd, gsc, ver)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<BaseModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(BaseModel baseModel) {
-                        mModelAddSubAccount = baseModel;
-                        if (mModelAddSubAccount.success) {
-                            //添加子账号成功,刷新列表
-                            AppHelper.showMsg(mContext, "添加成功");
-                            alertDialog.dismiss();
-                            mPtr.autoRefresh();
-                        } else {
-                            AppHelper.showMsg(mContext, mModelAddSubAccount.message);
-                        }
-                    }
-                });
-    }
+//    private void requestAddSubAccount(String phone, String name, String pwd, String gsc, String ver) {
+//        SubAccountAddAPI.requestAddSubAccount(mContext, phone, name, pwd, gsc, ver)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<BaseModel>() {
+//                    @Override
+//                    public void onCompleted() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(BaseModel baseModel) {
+//                        mModelAddSubAccount = baseModel;
+//                        if (mModelAddSubAccount.success) {
+//                            //添加子账号成功,刷新列表
+//                            AppHelper.showMsg(mContext, "添加成功");
+//                            alertDialog.dismiss();
+//                            mPtr.autoRefresh();
+//                        } else {
+//                            AppHelper.showMsg(mContext, mModelAddSubAccount.message);
+//                        }
+//                    }
+//                });
+//    }
 
     /**
      * 发送验证码

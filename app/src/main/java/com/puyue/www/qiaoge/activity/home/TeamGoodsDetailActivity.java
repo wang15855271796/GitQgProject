@@ -107,17 +107,15 @@ import rx.schedulers.Schedulers;
  */
 
 public class TeamGoodsDetailActivity extends BaseSwipeActivity {
-    private LinearLayout mIvBack;
+    private ImageView mIvBack;
     private Banner mBanner;
     private TextView mTvTitle;
-    private TextView mTvPrice;
+    private TextView tv_price;
     private TextView mTvInve;
     private TextView mTvVolume;
-
-    private TextView mTvSpec;
-    private TextView mTvPlace;
+    TextView tv_spec;
     private TextView mTvDesc;
-
+    TextView tv_title;
     private LinearLayout mLlSingle;
 
     private TextView mTvGroupPrice;
@@ -168,9 +166,7 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
     private RecyclerView recyclerViewImage;
     private GoodsDetailAdapter mAdapterImage;
     private List<GoodsDetailModel> mListDetailImage = new ArrayList<>();
-    private TextView textSpec;
     private AppBarLayout appBarLayout;
-    private Toolbar toolbar;
     private TextView textViewTitle;
     private CollapsingToolbarLayoutStateHelper state;
     // 分享
@@ -225,13 +221,11 @@ private String productName;
     public void findViewById() {
         mIvBack = FVHelper.fv(this, R.id.iv_activity_back);
         mBanner = FVHelper.fv(this, R.id.banner_activity_team);
-        mTvTitle = FVHelper.fv(this, R.id.tv_activity_team_title);
-        mTvPrice = FVHelper.fv(this, R.id.tv_activity_team_price);
+        tv_title = FVHelper.fv(this, R.id.tv_title);
+        tv_price = FVHelper.fv(this, R.id.tv_price);
         mTvInve = FVHelper.fv(this, R.id.tv_activity_team_inve);
         mTvVolume = FVHelper.fv(this, R.id.tv_activity_team_volume);
-
-        mTvSpec = FVHelper.fv(this, R.id.tv_activity_team_spec);
-        mTvPlace = FVHelper.fv(this, R.id.tv_activity_team_place);
+        tv_spec = FVHelper.fv(this, R.id.tv_spec);
         mTvDesc = FVHelper.fv(this, R.id.tv_activity_team_desc);
         mLlSingle = FVHelper.fv(this, R.id.ll_activity_team_single_buy);
 
@@ -270,9 +264,7 @@ private String productName;
 
         recyclerViewRecommend = (RecyclerView) findViewById(R.id.recyclerViewRecommend);
         recyclerViewImage = (RecyclerView) findViewById(R.id.recyclerViewImage);
-        textSpec = (TextView) findViewById(R.id.textSpec);
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         textViewTitle = (TextView) findViewById(R.id.textViewTitleSpike);
         ImageViewShare = (ImageView) findViewById(R.id.ImageViewShare);
 
@@ -339,8 +331,6 @@ private String productName;
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                toolbar.setBackgroundColor(changeAlpha(getResources().getColor(R.color.app_color_white), Math.abs(verticalOffset * 1.0f) / appBarLayout.getTotalScrollRange()));
-                toolbar.getBackground().setAlpha((int) (Math.abs(verticalOffset * 1.0f) / appBarLayout.getTotalScrollRange() * 255));
 
                 // 展开折叠改变状态
                 if (state != CollapsingToolbarLayoutStateHelper.EXPANDED) { //展开的状态
@@ -602,14 +592,12 @@ private String productName;
     }
 
     private void setText(TeamActiveQueryByIdModel model) {
-        mTvTitle.setText(model.data.activeTitle);
-        mTvPrice.setText("￥" + model.data.price);
+        tv_title.setText(model.data.activeTitle);
+        tv_price.setText("￥" + model.data.price);
         mTvInve.setText("余量：" + model.data.inventory);
         mTvVolume.setText("销量：" + model.data.monthSalesVolume);
-        mTvSpec.setText(model.data.specification);
-        mTvPlace.setText(model.data.origin);
+        tv_spec.setText("规格："+model.data.specification);
         mTvDesc.setText(model.data.instructions);
-        textSpec.setText(model.data.unitName);
 
         if (model.data.prodList != null) {
             setSingleBuyDate(model.data.prodList);

@@ -206,7 +206,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
             if (!TextUtils.isEmpty(bundle.getString("equipment"))) {
                 businessType = 7;
             }
-            Log.d("sswdqqqqqqqqddddddd,,,",productId+"");
         }
         return false;
     }
@@ -427,10 +426,9 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                     @Override
                     public void onNext(GetProductDetailModel model) {
                         if (model.isSuccess()) {
+                            detailList.clear();
                             detailList.addAll(model.getData().getDetailPic());
-                            Log.d("swffsdfdssfsfdsfs...",detailList.size()+"");
                             imageViewAdapter.notifyDataSetChanged();
-//                            getDetailImage(model);
                             productId1 = model.getData().getProductId();
                             productName = model.getData().getProductName();
                             mTvTitle.setText(productName);
