@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.os.Build;
@@ -32,6 +33,7 @@ import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,6 +82,7 @@ import com.puyue.www.qiaoge.model.home.GetProductListModel;
 import com.puyue.www.qiaoge.model.home.HasCollectModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.model.home.SecKillOrTeamProductModel;
+import com.puyue.www.qiaoge.model.home.SpecialGoodModel;
 import com.puyue.www.qiaoge.model.home.TeamActiveQueryByIdModel;
 import com.puyue.www.qiaoge.model.market.GoodsDetailModel;
 import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
@@ -114,10 +117,13 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
     private TextView mTvInve;
     private TextView mTvVolume;
     TextView tv_spec;
+    TextView tv_num;
+    TextView old_price;
+    TextView tv_old_price;
     private TextView mTvDesc;
     TextView tv_title;
     private LinearLayout mLlSingle;
-
+    TextView tv_name;
     private TextView mTvGroupPrice;
     private ImageView mTvSub;
     private TextView mTvAmount;
@@ -175,11 +181,11 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
     private String mShareIcon;
     private String mShareUrl;
     private ImageView ImageViewShare;
-
+    Toolbar toolbar;
     private ImageView buyImg;
-
-    private LinearLayout linearLayoutShare;
-private String productName;
+    TextView tv_limit_num;
+    private RelativeLayout rl_share;
+    private String productName;
     private GoodsRecommendAdapter adapterRecommend;
     SearchResultsModel searchResultsModel;
     //搜索集合
@@ -219,6 +225,12 @@ private String productName;
 
     @Override
     public void findViewById() {
+        toolbar = FVHelper.fv(this, R.id.toolbar);
+        tv_old_price = FVHelper.fv(this, R.id.tv_old_price);
+        old_price = FVHelper.fv(this, R.id.old_price);
+        tv_limit_num = FVHelper.fv(this, R.id.tv_limit_num);
+        tv_name = FVHelper.fv(this, R.id.tv_name);
+        tv_num = FVHelper.fv(this, R.id.tv_num);
         mIvBack = FVHelper.fv(this, R.id.iv_activity_back);
         mBanner = FVHelper.fv(this, R.id.banner_activity_team);
         tv_title = FVHelper.fv(this, R.id.tv_title);
@@ -236,7 +248,7 @@ private String productName;
         mTvTotalAmount = FVHelper.fv(this, R.id.tv_activity_team_group_amount);
         mTvTotalMoney = FVHelper.fv(this, R.id.tv_activity_team_total_money);
 
-      linearLayoutShare=  FVHelper.fv(this, R.id.linearLayout_share);
+        rl_share=  FVHelper.fv(this, R.id.rl_share);
         mLlCustomer = FVHelper.fv(this, R.id.ll_include_common_customer);
         // mLlCollection = FVHelper.fv(this, R.id.ll_include_common_collection);
         mTvCollection = FVHelper.fv(this, R.id.tv_include_common_collection);
@@ -325,27 +337,26 @@ private String productName;
         mLlCustomer.setOnClickListener(noDoubleClickListener);
         mTvSub.setOnClickListener(noDoubleClickListener);
         mTvAdd.setOnClickListener(noDoubleClickListener);
-        linearLayoutShare.setOnClickListener(noDoubleClickListener);
+        rl_share.setOnClickListener(noDoubleClickListener);
 
         state = CollapsingToolbarLayoutStateHelper.EXPANDED;
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                toolbar.setBackgroundColor(changeAlpha(getResources().getColor(R.color.app_color_white), Math.abs(verticalOffset * 1.0f) / appBarLayout.getTotalScrollRange()));
+                toolbar.getBackground().setAlpha((int) (Math.abs(verticalOffset * 1.0f) / appBarLayout.getTotalScrollRange() * 255));
 
                 // 展开折叠改变状态
                 if (state != CollapsingToolbarLayoutStateHelper.EXPANDED) { //展开的状态
                     state = CollapsingToolbarLayoutStateHelper.EXPANDED;//修改状态标记为展开
-                  //  textViewTitle.setVisibility(View.GONE);
                 } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
                     if (state != CollapsingToolbarLayoutStateHelper.INTERNEDIATE) {
-                    //    textViewTitle.setVisibility(View.VISIBLE);
                         state = CollapsingToolbarLayoutStateHelper.INTERNEDIATE;
                     }
 
                 }
             }
         });
-
     }
 
     public int changeAlpha(int color, float fraction) {
@@ -418,7 +429,7 @@ private String productName;
                 } else {
                     startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
                 }
-            } else if (view == linearLayoutShare) {
+            } else if (view == rl_share) {
                 requestGoodsList();
             }
         }
@@ -444,6 +455,7 @@ private String productName;
 
                     @Override
                     public void onNext(SearchResultsModel recommendModel) {
+                        searchList.clear();
                         if (recommendModel.isSuccess()) {
                             searchResultsModel = recommendModel;
                             if(recommendModel.getData().getSearchProd()!=null) {
@@ -514,7 +526,7 @@ private String productName;
         TeamActiveQueryByIdAPI.requestData(mContext, activeId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<TeamActiveQueryByIdModel>() {
+                .subscribe(new Subscriber<SpecialGoodModel>() {
                     @Override
                     public void onCompleted() {
 
@@ -526,18 +538,18 @@ private String productName;
                     }
 
                     @Override
-                    public void onNext(TeamActiveQueryByIdModel model) {
-                        logoutAndToHome(mContext, model.code);
-                        if (model.success) {
-                            productName=model.data.activeTitle;
+                    public void onNext(SpecialGoodModel model) {
+                        if (model.isSuccess()) {
+                            productName=model.getData().getActiveName();
                             //填充banner
-                            if (model.data.picCarousel != null) {
+                            images.clear();
+                            if (model.getData().getTopPics() != null) {
                                 //设置banner样式
                                 mBanner.setBannerStyle(BannerConfig.NUM_INDICATOR);
                                 //设置图片加载器
                                 mBanner.setImageLoader(new GlideImageLoader());
                                 //设置图片集合
-                                images.addAll(model.data.picCarousel);
+                                images.addAll(model.getData().getTopPics());
                                 mBanner.setImages(images);
                                 //设置banner动画效果
                                 mBanner.setBannerAnimation(Transformer.DepthPage);
@@ -557,58 +569,44 @@ private String productName;
                                     AppHelper.showPhotoDetailDialog(mContext, images, position);
                                 }
                             });
+
                             getProductList();
                             //填充详情
                             mListDetail.clear();
-                            if (model.data.picDetail != null) {
-                                for (int i = 0; i < model.data.picDetail.size(); i++) {
-                                    GoodsDetailModel goodsDetailModel = new GoodsDetailModel(GoodsDetailModel.typeIv);
-                                    goodsDetailModel.content = model.data.picDetail.get(i);
-                                    mListDetailImage.add(goodsDetailModel);
-                                }
 
-
-                                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false) {
-                                    @Override
-                                    public boolean canScrollVertically() {
-                                        return false;
-                                    }
-                                };
-                                mAdapterImage = new GoodsDetailAdapter(mListDetailImage);
-                                recyclerViewImage.setLayoutManager(linearLayoutManager);
-                                recyclerViewImage.setAdapter(mAdapterImage);
-
-                            }
                             setText(model);
 
                             mAdapterDetail.notifyDataSetChanged();
 
                         } else {
-                            AppHelper.showMsg(mContext, model.message);
+                            AppHelper.showMsg(mContext, model.getMessage());
                         }
 
                     }
                 });
     }
 
-    private void setText(TeamActiveQueryByIdModel model) {
-        tv_title.setText(model.data.activeTitle);
-        tv_price.setText("￥" + model.data.price);
-        mTvInve.setText("余量：" + model.data.inventory);
-        mTvVolume.setText("销量：" + model.data.monthSalesVolume);
-        tv_spec.setText("规格："+model.data.specification);
-        mTvDesc.setText(model.data.instructions);
-
-        if (model.data.prodList != null) {
-            setSingleBuyDate(model.data.prodList);
-        }
-        price = Double.parseDouble(model.data.price);
+    private void setText(SpecialGoodModel model) {
+        old_price.setText(model.getData().getShowOldPrice());
+        tv_num.setText(model.getData().getCartNum());
+        tv_title.setText(model.getData().getActiveName());
+        tv_price.setText(model.getData().getShowPrice());
+        mTvInve.setText(model.getData().getRemainNum());
+        mTvVolume.setText(model.getData().getSaleVolume());
+        tv_spec.setText("规格："+model.getData().getSpec());
+        mTvDesc.setText(model.getData().getIntroduction());
+        tv_limit_num.setText(model.getData().getLimitNum());
+        tv_name.setText(model.getData().getActTypeName());
+        tv_old_price.setText(model.getData().getOldPrice());
+        tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
+//        price = Double.parseDouble(model.data.price);
         amount = 1;
-        mTvGroupPrice.setText(model.data.combinationPrice);
+        mTvGroupPrice.setText(model.getData().getPrice());
         mTvAmount.setText(String.valueOf(amount));
         mTvTotalAmount.setText("共" + amount + "箱");
         mTvTotalMoney.setText("￥" + BigDecimalUtils.mul(price, amount, 2));
-        inventory = Integer.parseInt(model.data.inventory);
+//        inventory = Integer.parseInt(model.data.inventory);
         if (inventory <= 0) {
             mTvAddCar.setEnabled(false);
             mTvAddCar.setBackgroundResource(R.drawable.app_car);
@@ -617,55 +615,6 @@ private String productName;
             mTvAddCar.setBackgroundResource(R.drawable.selector_once_buy);
 
         }
-    }
-
-    /*
-     * 动态设置单件购买的视图
-     * **/
-    private void setSingleBuyDate(List<TeamActiveQueryByIdModel.DataBean.ProdListBean> mList) {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);       //LayoutInflater inflater1=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        for (int i = 0; i < mList.size() - 1; i++) {
-            View view = inflater.inflate(R.layout.item_team_single_buy, null);
-            view.setLayoutParams(lp);
-            mLlSingle.addView(view);
-            setViewDataClick(view, mList.get(i));
-            //下划线
-            View viewLine = inflater.inflate(R.layout.view_line, null);
-            viewLine.setLayoutParams(lp);
-            mLlSingle.addView(viewLine);
-        }
-        View view = inflater.inflate(R.layout.item_team_single_buy, null);
-        view.setLayoutParams(lp);
-        mLlSingle.addView(view);
-        setViewDataClick(view, mList.get(mList.size() - 1));
-    }
-
-    /*
-     * 设置数据和监听
-     * **/
-    private void setViewDataClick(View view, final TeamActiveQueryByIdModel.DataBean.ProdListBean bean) {
-        ImageView mIvImg = FVHelper.fv(view, R.id.iv_item_team);
-        GlideModel.disPlayErrorPlace(mContext,bean.imgUrl,mIvImg);
-      //  Glide.with(mContext).load(bean.imgUrl).crossFade().placeholder(R.mipmap.icon_default_rec).error(R.mipmap.icon_default_rec).into(mIvImg);
-        TextView mTvItem = FVHelper.fv(view, R.id.tv_item_team_title);
-        mTvItem.setText(bean.productName);
-        mTvItem = FVHelper.fv(view, R.id.tv_item_team_spec);
-        mTvItem.setText(bean.spec);
-        mTvItem = FVHelper.fv(view, R.id.tv_item_team_price);
-        mTvItem.setText(bean.price);
-        mTvItem = FVHelper.fv(view, R.id.tv_item_team_volume);
-        mTvItem.setText(bean.monthSalesVolume);
-        mTvItem = FVHelper.fv(view, R.id.tv_item_team_inven);
-        mTvItem.setText(bean.inventory);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, CommonGoodsDetailActivity.class);
-                intent.putExtra(AppConstant.ACTIVEID, bean.productId);
-                startActivity(intent);
-            }
-        });
     }
 
     /**

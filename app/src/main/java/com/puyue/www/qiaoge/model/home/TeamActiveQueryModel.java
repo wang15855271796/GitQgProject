@@ -9,97 +9,200 @@ import java.util.List;
 
 public class TeamActiveQueryModel {
 
+
     /**
      * code : 1
      * message : 成功
-     * data : {"pageNum":1,"pageSize":10,"startRow":0,"pages":1,"total":3,"list":[{"activeId":22,"productId":797,"activeTitle":"大团购啊","defaultPic":"https://barbecue-img.oss-cn-hangzhou.aliyuncs.com/sellPlace/51c9b43296d349d1abe72c24cbf85003.jpg","picCarousel":[],"picDetail":[],"oldPrice":"","price":"￥3000.00/组","inventory":"库存：0","monthSalesVolume":"月售：0","intrduction":null,"originPlace":null,"currentTime":null,"startTime":null,"endTime":null,"type":"","progress":"","specification":"","origin":"","instructions":"","combinationPrice":"￥3000.00/组","prodList":[],"saleDoneUrl":"https://barbecue-img.oss-cn-hangzhou.aliyuncs.com/staticImg/collection_icon_soldout.png","saleFinshUrl":"","flag":false,"available":false}],"hasPrePage":false,"hasNextPage":false}
-     * success : true
+     * data : [{"currentTime":1577092580232,"startTime":0,"endTime":0,"actives":[{"activeId":614,"activeType":11,"activeName":"脚本测试商品（无动）","defaultPic":"https://barbecue-img.oss-cn-hangzhou.aliyuncs.com/common-img/5103acef0de94f9b967e6220cbe754bf2.png","spec":"500g","price":"￥10.25","oldPrice":"11.28","progress":"0","remainNum":"剩余9587箱"}]}]
      * error : false
+     * success : true
      */
 
-    public int code;
-    public String message;
-    public DataBean data;
-    public boolean success;
-    public boolean error;
+    private int code;
+    private String message;
+    private boolean error;
+    private boolean success;
+    private List<DataBean> data;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public boolean isError() {
+        return error;
+    }
+
+    public void setError(boolean error) {
+        this.error = error;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public List<DataBean> getData() {
+        return data;
+    }
+
+    public void setData(List<DataBean> data) {
+        this.data = data;
+    }
 
     public static class DataBean {
         /**
-         * pageNum : 1
-         * pageSize : 10
-         * startRow : 0
-         * pages : 1
-         * total : 3
-         * list : [{"activeId":22,"productId":797,"activeTitle":"大团购啊","defaultPic":"https://barbecue-img.oss-cn-hangzhou.aliyuncs.com/sellPlace/51c9b43296d349d1abe72c24cbf85003.jpg","picCarousel":[],"picDetail":[],"oldPrice":"","price":"￥3000.00/组","inventory":"库存：0","monthSalesVolume":"月售：0","intrduction":null,"originPlace":null,"currentTime":null,"startTime":null,"endTime":null,"type":"","progress":"","specification":"","origin":"","instructions":"","combinationPrice":"￥3000.00/组","prodList":[],"saleDoneUrl":"https://barbecue-img.oss-cn-hangzhou.aliyuncs.com/staticImg/collection_icon_soldout.png","saleFinshUrl":"","flag":false,"available":false}]
-         * hasPrePage : false
-         * hasNextPage : false
+         * currentTime : 1577092580232
+         * startTime : 0
+         * endTime : 0
+         * actives : [{"activeId":614,"activeType":11,"activeName":"脚本测试商品（无动）","defaultPic":"https://barbecue-img.oss-cn-hangzhou.aliyuncs.com/common-img/5103acef0de94f9b967e6220cbe754bf2.png","spec":"500g","price":"￥10.25","oldPrice":"11.28","progress":"0","remainNum":"剩余9587箱"}]
          */
 
-        public int pageNum;
-        public int pageSize;
-        public int startRow;
-        public int pages;
-        public int total;
-        public boolean hasPrePage;
-        public boolean hasNextPage;
-        public List<ListBean> list;
+        private long currentTime;
+        private int startTime;
+        private int endTime;
+        private List<ActivesBean> actives;
 
-        public static class ListBean {
+        public long getCurrentTime() {
+            return currentTime;
+        }
+
+        public void setCurrentTime(long currentTime) {
+            this.currentTime = currentTime;
+        }
+
+        public int getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(int startTime) {
+            this.startTime = startTime;
+        }
+
+        public int getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(int endTime) {
+            this.endTime = endTime;
+        }
+
+        public List<ActivesBean> getActives() {
+            return actives;
+        }
+
+        public void setActives(List<ActivesBean> actives) {
+            this.actives = actives;
+        }
+
+        public static class ActivesBean {
             /**
-             * activeId : 22
-             * productId : 797
-             * activeTitle : 大团购啊
-             * defaultPic : https://barbecue-img.oss-cn-hangzhou.aliyuncs.com/sellPlace/51c9b43296d349d1abe72c24cbf85003.jpg
-             * picCarousel : []
-             * picDetail : []
-             * oldPrice :
-             * price : ￥3000.00/组
-             * inventory : 库存：0
-             * monthSalesVolume : 月售：0
-             * intrduction : null
-             * originPlace : null
-             * currentTime : null
-             * startTime : null
-             * endTime : null
-             * type :
-             * progress :
-             * specification :
-             * origin :
-             * instructions :
-             * combinationPrice : ￥3000.00/组
-             * prodList : []
-             * saleDoneUrl : https://barbecue-img.oss-cn-hangzhou.aliyuncs.com/staticImg/collection_icon_soldout.png
-             * saleFinshUrl :
-             * flag : false
-             * available : false
+             * activeId : 614
+             * activeType : 11
+             * activeName : 脚本测试商品（无动）
+             * defaultPic : https://barbecue-img.oss-cn-hangzhou.aliyuncs.com/common-img/5103acef0de94f9b967e6220cbe754bf2.png
+             * spec : 500g
+             * price : ￥10.25
+             * oldPrice : 11.28
+             * progress : 0
+             * remainNum : 剩余9587箱
              */
 
-            public int activeId;
-            public int productId;
-            public String activeTitle;
-            public String defaultPic;
-            public String oldPrice;
-            public String price;
-            public String inventory;
-            public String monthSalesVolume;
-            public Object intrduction;
-            public Object originPlace;
-            public Object currentTime;
-            public Object startTime;
-            public Object endTime;
-            public String type;
-            public String progress;
-            public String specification;
-            public String origin;
-            public String instructions;
-            public String combinationPrice;
-            public String saleDoneUrl;
-            public String saleFinshUrl;
-            public boolean flag;
-            public boolean available;
-            public List<?> picCarousel;
-            public List<?> picDetail;
-            public List<?> prodList;
+            private int activeId;
+            private int activeType;
+            private String activeName;
+            private String defaultPic;
+            private String spec;
+            private String price;
+            private String oldPrice;
+            private String progress;
+            private String remainNum;
+
+            public int getActiveId() {
+                return activeId;
+            }
+
+            public void setActiveId(int activeId) {
+                this.activeId = activeId;
+            }
+
+            public int getActiveType() {
+                return activeType;
+            }
+
+            public void setActiveType(int activeType) {
+                this.activeType = activeType;
+            }
+
+            public String getActiveName() {
+                return activeName;
+            }
+
+            public void setActiveName(String activeName) {
+                this.activeName = activeName;
+            }
+
+            public String getDefaultPic() {
+                return defaultPic;
+            }
+
+            public void setDefaultPic(String defaultPic) {
+                this.defaultPic = defaultPic;
+            }
+
+            public String getSpec() {
+                return spec;
+            }
+
+            public void setSpec(String spec) {
+                this.spec = spec;
+            }
+
+            public String getPrice() {
+                return price;
+            }
+
+            public void setPrice(String price) {
+                this.price = price;
+            }
+
+            public String getOldPrice() {
+                return oldPrice;
+            }
+
+            public void setOldPrice(String oldPrice) {
+                this.oldPrice = oldPrice;
+            }
+
+            public String getProgress() {
+                return progress;
+            }
+
+            public void setProgress(String progress) {
+                this.progress = progress;
+            }
+
+            public String getRemainNum() {
+                return remainNum;
+            }
+
+            public void setRemainNum(String remainNum) {
+                this.remainNum = remainNum;
+            }
         }
     }
 }

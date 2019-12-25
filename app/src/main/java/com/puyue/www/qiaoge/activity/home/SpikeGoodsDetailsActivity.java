@@ -33,6 +33,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,9 +77,11 @@ import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetProductListModel;
 import com.puyue.www.qiaoge.model.home.HasCollectModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
+import com.puyue.www.qiaoge.model.home.SpecialGoodModel;
 import com.puyue.www.qiaoge.model.home.SpikeActiveQueryByIdModel;
 import com.puyue.www.qiaoge.model.market.GoodsDetailModel;
 import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
+import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 import com.puyue.www.qiaoge.view.StarBarView;
 import com.umeng.socialize.ShareAction;
@@ -91,7 +94,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import rx.Subscriber;
@@ -105,7 +110,7 @@ import rx.schedulers.Schedulers;
  */
 
 public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
-    private LinearLayout mIvBack;
+    private ImageView mIvBack;
     private Banner banner;
     private SnapUpCountDownTimerView mSvTime;
     private TextView mTvTitle;
@@ -113,23 +118,14 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
     private TextView mTvOldPrice;
     private TextView mTvInven;
     private TextView mTvVolume;
-
-    private LinearLayout mLlType;
-    private TextView mTvType;
-    private TextView mTvSales;
-    private ProgressBar mPbSpike;
-
-    private TextView mTvSpec;
-    private TextView mTvPlace;
+    TextView tv_prices;
     private TextView mTvDesc;
-
-    private TextView mTvGroupPrice;
     private ImageView mTvSub;
     private TextView mTvAmount;
     private ImageView mTvAdd;
     private TextView mTvGroupAmount;
     private TextView mTvTotalMoney;
-
+    TextView old_price;
     private LinearLayout mLlCustomer;
     //  private LinearLayout mLlCollection;
     private TextView mTvCollection;
@@ -140,9 +136,8 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
     private TextView mTvCarAmount;
     private TextView mTvFee;
     private TextView mTvAddCar;
-    private TextView purchase;
     private ImageView buyImg;
-
+    ProgressBar pb;
 
     private List<View> mListView = new ArrayList<>();
     private List<String> images = new ArrayList<>();
@@ -170,7 +165,7 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
     private List<GetProductListModel.DataBean.ListBean> mListRecommend = new ArrayList<>();
 
     private DataAdapter mAdapterView;
-
+    TextView tv_limit_num;
     private int activeId;
     private byte businessType = 2;
     private int pageNum = 1;
@@ -182,13 +177,11 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
     private int Inventory = 0;
 
     private String cell;
-
-
+    TextView tv_num;
+    TextView tv_name;
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
-    private TextView textViewTitle;
     private CollapsingToolbarLayoutStateHelper state;
-    private TextView textViewSpe;
     SearchResultsModel searchResultsModel;
     //搜索集合
     private List<SearchResultsModel.DataBean.SearchProdBean.ListBean> searchList = new ArrayList<>();
@@ -207,9 +200,14 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
     private String mShareDesc;
     private String mShareIcon;
     private String mShareUrl;
-
-    private LinearLayout linearLayoutShare;
-
+    TextView tv_spec;
+    TextView tv_total;
+    private RelativeLayout linearLayoutShare;
+    private String current;
+    private String start;
+    private boolean time;
+    TextView tv_time;
+    private Date date;
 
     class MyHandler extends Handler {
         @Override
@@ -243,34 +241,31 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
-        mIvBack = FVHelper.fv(this, R.id.iv_goods_details_back);
+        tv_total = FVHelper.fv(this, R.id.tv_total);
+        tv_num = FVHelper.fv(this, R.id.tv_num);
+        tv_name = FVHelper.fv(this, R.id.tv_name);
+        tv_spec = FVHelper.fv(this, R.id.tv_spec);
+        tv_time = FVHelper.fv(this, R.id.tv_time);
+        tv_limit_num = FVHelper.fv(this, R.id.tv_limit_num);
+        mIvBack = FVHelper.fv(this, R.id.iv_activity_back);
         mSvTime = FVHelper.fv(this, R.id.view_details_seckill);
-        banner = FVHelper.fv(this, R.id.banner_activity_goods);
-
-        mTvTitle = FVHelper.fv(this, R.id.tv_activity_spike_title);
-        mTvPrice = FVHelper.fv(this, R.id.tv_activity_spike_price);
+        banner = FVHelper.fv(this, R.id.banner);
+        tv_prices = FVHelper.fv(this, R.id.tv_prices);
+        mTvTitle = FVHelper.fv(this, R.id.tv_title);
+        mTvPrice = FVHelper.fv(this, R.id.tv_price);
+        old_price = FVHelper.fv(this, R.id.old_price);
         mTvOldPrice = FVHelper.fv(this, R.id.tv_activity_spike_old_price);
         mTvInven = FVHelper.fv(this, R.id.tv_activity_spike_inve);
         mTvVolume = FVHelper.fv(this, R.id.tv_activity_spike_volume);
-
-        mLlType = FVHelper.fv(this, R.id.ll_activity_spike_type);
-        mTvType = FVHelper.fv(this, R.id.tv_activity_spike_type);
-        mTvSales = FVHelper.fv(this, R.id.tv_activity_spike_sale);
-        mPbSpike = FVHelper.fv(this, R.id.pb_activity_spike);
-
-        mTvSpec = FVHelper.fv(this, R.id.tv_activity_spike_spec);
-        mTvPlace = FVHelper.fv(this, R.id.tv_activity_spike_place);
+        pb = FVHelper.fv(this, R.id.pb);
         mTvDesc = FVHelper.fv(this, R.id.tv_activity_spike_desc);
-
-        mTvGroupPrice = FVHelper.fv(this, R.id.tv_activity_spike_group_price);
-
         mTvSub = FVHelper.fv(this, R.id.tv_activity_spike_sub);
         mTvAmount = FVHelper.fv(this, R.id.tv_activity_spike_amount);
         mTvAdd = FVHelper.fv(this, R.id.tv_activity_spike_add);
-        mTvGroupAmount = FVHelper.fv(this, R.id.tv_activity_spike_group_amount);
-        mTvTotalMoney = FVHelper.fv(this, R.id.tv_activity_spike_total_money);
+//        mTvGroupAmount = FVHelper.fv(this, R.id.tv_activity_spike_group_amount);
+//        mTvTotalMoney = FVHelper.fv(this, R.id.tv_activity_spike_total_money);
 
-        linearLayoutShare = FVHelper.fv(this, R.id.linearLayout_share);
+        linearLayoutShare = FVHelper.fv(this, R.id.rl_share);
         mLlCustomer = FVHelper.fv(this, R.id.ll_include_common_customer);
         //mLlCollection = FVHelper.fv(this, R.id.ll_include_common_collection);
         mTvCollection = FVHelper.fv(this, R.id.tv_include_common_collection);
@@ -281,7 +276,6 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
         mTvCarAmount = FVHelper.fv(this, R.id.tv_include_common_amount);
         mTvFee = FVHelper.fv(this, R.id.tv_include_common_fee);
         mTvAddCar = FVHelper.fv(this, R.id.tv_add_car);
-        purchase = FVHelper.fv(this, R.id.purchase);
         //详情
         View viewDetail = LayoutInflater.from(this).inflate(R.layout.item_viewpager, null);
         mRvDetail = FVHelper.fv(viewDetail, R.id.rv_item_viewpager);
@@ -295,17 +289,11 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
         View viewRecommend = LayoutInflater.from(this).inflate(R.layout.item_viewpager, null);
         mRvRecommend = FVHelper.fv(viewRecommend, R.id.rv_item_viewpager);
         mListView.add(viewRecommend);
-
         recyclerViewRecommend = (RecyclerView) findViewById(R.id.recyclerViewRecommend);
         recyclerViewImage = (RecyclerView) findViewById(R.id.recyclerViewImage);
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        textViewTitle = (TextView) findViewById(R.id.textViewTitleDetail);
         ImageViewShare = (ImageView) findViewById(R.id.ImageViewShare);
-        textViewSpe = (TextView) findViewById(R.id.textViewSpe);
-
-
-
         sbv_star_bar = findViewById(R.id.sbv_star_bar);
         tv_status = findViewById(R.id.tv_status);
 
@@ -680,7 +668,7 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
         SpikeActiveQueryByIdAPI.requestData(mContext, activeId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SpikeActiveQueryByIdModel>() {
+                .subscribe(new Subscriber<SpecialGoodModel>() {
                     @Override
                     public void onCompleted() {
 
@@ -689,42 +677,80 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
                     @Override
                     public void onError(Throwable e) {
 //                        AppHelper.showMsg(mContext, "错误");
+
                     }
 
                     @Override
-                    public void onNext(SpikeActiveQueryByIdModel spikeActiveQueryByIdModel) {
-                        logoutAndToHome(mContext, spikeActiveQueryByIdModel.code);
-                        if (spikeActiveQueryByIdModel.success) {
-
-                           productName =  spikeActiveQueryByIdModel.data.activeTitle;
-                          mTvTitle.setText(spikeActiveQueryByIdModel.data.activeTitle);
-                            mTvPrice.setText("￥" + spikeActiveQueryByIdModel.data.price);
-                            mTvOldPrice.setText(spikeActiveQueryByIdModel.data.oldPrice);
-                            textViewSpe.setText("/" + spikeActiveQueryByIdModel.data.unitName);
+                    public void onNext(SpecialGoodModel spikeActiveQueryByIdModel) {
+                        Log.d("swssssssddd...",spikeActiveQueryByIdModel.getData().getActiveName());
+                        if (spikeActiveQueryByIdModel.isSuccess()) {
+                            productName =  spikeActiveQueryByIdModel.getData().getActiveName();
+                            mTvTitle.setText(spikeActiveQueryByIdModel.getData().getActiveName());
+                            mTvPrice.setText(spikeActiveQueryByIdModel.getData().getShowPrice());
+                            tv_total.setText("总计"+spikeActiveQueryByIdModel.getData().getTotalNum());
+                            mTvOldPrice.setText(spikeActiveQueryByIdModel.getData().getOldPrice());
                             mTvOldPrice.getPaint().setAntiAlias(true);//抗锯齿
+                            tv_num.setText(spikeActiveQueryByIdModel.getData().getCartNum());
                             mTvOldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);  // 设置中划线并加清晰
-                            mTvInven.setText("余量：" + spikeActiveQueryByIdModel.data.inventory);
-                            mTvVolume.setText("销量：" + spikeActiveQueryByIdModel.data.monthSalesVolume);
-                            mTvSpec.setText(spikeActiveQueryByIdModel.data.specification);
-                            mTvPlace.setText(spikeActiveQueryByIdModel.data.origin);
-                            mTvDesc.setText(spikeActiveQueryByIdModel.data.instructions);
-                            purchase.setText(spikeActiveQueryByIdModel.data.purchaseLimit);
+                            mTvInven.setText(spikeActiveQueryByIdModel.getData().getRemainNum());
+                            old_price.setText(spikeActiveQueryByIdModel.getData().getShowOldPrice());
+                            old_price.getPaint().setAntiAlias(true);//抗锯齿
+                            old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+                            mTvVolume.setText(spikeActiveQueryByIdModel.getData().getSaleVolume());
+                            pb.setProgress(Integer.parseInt(spikeActiveQueryByIdModel.getData().getProgress()));
+                            tv_spec.setText(spikeActiveQueryByIdModel.getData().getSpec());
+                            tv_limit_num.setText(spikeActiveQueryByIdModel.getData().getLimitNum());
+                            tv_name.setText(spikeActiveQueryByIdModel.getData().getActTypeName());
+                            mTvDesc.setText(spikeActiveQueryByIdModel.getData().getIntroduction());
+                            tv_prices.setText(spikeActiveQueryByIdModel.getData().getPrice());
+                            long currentTime = spikeActiveQueryByIdModel.getData().getCurrentTime();
+                            long startTime = spikeActiveQueryByIdModel.getData().getStartTime();
 
+                            try {
+                                current = Utils.longToString(currentTime, "M-d HH:mm:ss");
+                                start = Utils.longToString(startTime, "M-d HH:mm:ss");
+
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+//
+                            try {
+                                time = Utils.getTime(current, start);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            if(time) {
+                                //大于24小时
+
+                            }else {
+                                //小于24小时
+                                try {
+                                    date = Utils.stringToDate(current, "M-d HH:mm:ss");
+                                    Log.d("rtrgfsdsdsdddd....",date+"");
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                tv_time.setText(date+"开始");
+
+                            }
                             //设置进度条
                             //倒计时设置
                             mSvTime.setBackTheme(true);
-                            mSvTime.setTime(true, spikeActiveQueryByIdModel.data.currentTime, spikeActiveQueryByIdModel.data.startTime, spikeActiveQueryByIdModel.data.endTime);
-                            Log.e("Home", "onNext: " + spikeActiveQueryByIdModel.data.currentTime + spikeActiveQueryByIdModel.data.startTime + spikeActiveQueryByIdModel.data.endTime);
+//                            mSvTime.setTime(true, spikeActiveQueryByIdModel.data.currentTime, spikeActiveQueryByIdModel.data.startTime, spikeActiveQueryByIdModel.data.endTime);
+//                            Log.e("Home", "onNext: " + spikeActiveQueryByIdModel.data.currentTime + spikeActiveQueryByIdModel.data.startTime + spikeActiveQueryByIdModel.data.endTime);
                             mSvTime.changeTypeColor(Color.WHITE);
                             mSvTime.start();
                             //填充banner
-                            if (spikeActiveQueryByIdModel.data.picCarousel != null) {
+                            if (spikeActiveQueryByIdModel.getData().getTopPics() != null) {
                                 //设置banner样式
                                 banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
                                 //设置图片加载器
                                 banner.setImageLoader(new GlideImageLoader());
                                 //设置图片集合
-                                images.addAll(spikeActiveQueryByIdModel.data.picCarousel);
+                                images.addAll(spikeActiveQueryByIdModel.getData().getTopPics());
                                 banner.setImages(images);
                                 //设置banner动画效果
                                 banner.setBannerAnimation(Transformer.DepthPage);
@@ -747,69 +773,59 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
                             getProductList();
                             //填充详情
                             mListDetail.clear();
-                            if (spikeActiveQueryByIdModel.data.picDetail != null) {
-                                for (int i = 0; i < spikeActiveQueryByIdModel.data.picDetail.size(); i++) {
-                                    GoodsDetailModel goodsDetailModel = new GoodsDetailModel(GoodsDetailModel.typeIv);
-                                    goodsDetailModel.content = spikeActiveQueryByIdModel.data.picDetail.get(i);
-                                    mListDetailImage.add(goodsDetailModel);
-                                }
-
-                                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false) {
-                                    @Override
-                                    public boolean canScrollVertically() {
-                                        return false;
-                                    }
-                                };
-                                mAdapterImage = new GoodsDetailAdapter(mListDetailImage);
-                                recyclerViewImage.setLayoutManager(linearLayoutManager);
-                                recyclerViewImage.setAdapter(mAdapterImage);
-
-
-                            }
+//                            if (spikeActiveQueryByIdModel.getData().picDetail != null) {
+//                                for (int i = 0; i < spikeActiveQueryByIdModel.data.picDetail.size(); i++) {
+//                                    GoodsDetailModel goodsDetailModel = new GoodsDetailModel(GoodsDetailModel.typeIv);
+//                                    goodsDetailModel.content = spikeActiveQueryByIdModel.data.picDetail.get(i);
+//                                    mListDetailImage.add(goodsDetailModel);
+//                                }
+//
+//                                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false) {
+//                                    @Override
+//                                    public boolean canScrollVertically() {
+//                                        return false;
+//                                    }
+//                                };
+//                                mAdapterImage = new GoodsDetailAdapter(mListDetailImage);
+//                                recyclerViewImage.setLayoutManager(linearLayoutManager);
+//                                recyclerViewImage.setAdapter(mAdapterImage);
+//
+//
+//                            }
                             mAdapterDetail.notifyDataSetChanged();
                             //判断秒杀情况显示
-                            Inventory = Integer.parseInt(spikeActiveQueryByIdModel.data.inventory);
+//                            Inventory = Integer.parseInt(spikeActiveQueryByIdModel.data.inventory);
                             //先判断有没有卖完,还有没有库存
-                            if (Inventory > 0) {
-                                //商品还有库存
-                                if ("NOT_START".equals(spikeActiveQueryByIdModel.data.type)) {
-                                    // NOT_START("未开始"
-                                    mLlType.setVisibility(View.VISIBLE);
-                                    mTvType.setVisibility(View.GONE);
-                                    mTvAddCar.setEnabled(false);
-                                    mTvAddCar.setBackgroundResource(R.drawable.app_car);
-                                } else if ("STARTED".equals(spikeActiveQueryByIdModel.data.type)) {
-                                    // STARTED("进行中"
-                                    mLlType.setVisibility(View.VISIBLE);
-                                    mTvType.setVisibility(View.GONE);
-                                    mTvAddCar.setEnabled(true);
-                                    mTvAddCar.setBackgroundResource(R.drawable.selector_once_buy);
-
-                                } else if ("OVER".equals(spikeActiveQueryByIdModel.data.type)) {
-                                    //  OVER("已结束"
-                                    mLlType.setVisibility(View.GONE);
-                                    mTvType.setVisibility(View.VISIBLE);
-                                    mTvType.setText("秒杀已售完");
-                                    mTvAddCar.setEnabled(false);
-                                    mTvAddCar.setBackgroundResource(R.drawable.app_car);
-                                }
-                            } else {
-                                //没有库存了,商品已售完
-                                mLlType.setVisibility(View.GONE);
-                                mTvType.setVisibility(View.VISIBLE);
-                                mTvType.setText("秒杀已结束");
-                                mTvAddCar.setEnabled(false);
-                                mTvAddCar.setBackgroundResource(R.drawable.app_car);
-                            }
-                            mTvSales.setText("已售" + spikeActiveQueryByIdModel.data.progress + "%");
-                            mPbSpike.setProgress(Integer.parseInt(spikeActiveQueryByIdModel.data.progress));
-                            price = Double.parseDouble(spikeActiveQueryByIdModel.data.price);
-                            mTvGroupPrice.setText(spikeActiveQueryByIdModel.data.combinationPrice);
-                            unit = spikeActiveQueryByIdModel.data.combinationPrice.replaceAll("[^\u4e00-\u9fa5]", "");
+//                            if (Inventory > 0) {
+//                                //商品还有库存
+//                                if ("NOT_START".equals(spikeActiveQueryByIdModel.data.type)) {
+//                                    // NOT_START("未开始"
+//
+//                                    mTvAddCar.setEnabled(false);
+//                                    mTvAddCar.setBackgroundResource(R.drawable.app_car);
+//                                } else if ("STARTED".equals(spikeActiveQueryByIdModel.data.type)) {
+//                                    // STARTED("进行中"
+//
+//                                    mTvAddCar.setEnabled(true);
+//                                    mTvAddCar.setBackgroundResource(R.drawable.selector_once_buy);
+//
+//                                } else if ("OVER".equals(spikeActiveQueryByIdModel.data.type)) {
+//                                    //  OVER("已结束"
+//
+//                                    mTvAddCar.setEnabled(false);
+//                                    mTvAddCar.setBackgroundResource(R.drawable.app_car);
+//                                }
+//                            } else {
+//                                //没有库存了,商品已售完
+//                                mTvAddCar.setEnabled(false);
+//                                mTvAddCar.setBackgroundResource(R.drawable.app_car);
+//                            }
+//                            price = Double.parseDouble(spikeActiveQueryByIdModel.data.price);
+//                            unit = spikeActiveQueryByIdModel.data.combinationPrice.replaceAll("[^\u4e00-\u9fa5]", "");
                             mTvGroupAmount.setText(amount + unit);
                             mTvTotalMoney.setText("￥" + BigDecimalUtils.mul(price, amount, 2));
                         } else {
-                            AppHelper.showMsg(mContext, spikeActiveQueryByIdModel.message);
+                            AppHelper.showMsg(mContext, spikeActiveQueryByIdModel.getMessage());
                         }
 
                     }

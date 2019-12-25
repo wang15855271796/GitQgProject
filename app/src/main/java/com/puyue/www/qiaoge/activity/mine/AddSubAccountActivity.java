@@ -1,5 +1,6 @@
 package com.puyue.www.qiaoge.activity.mine;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,7 +59,7 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
     @BindView(R.id.swipe2)
     SwitchCompat swipe2;
     @BindView(R.id.ll_yzm)
-    LinearLayout ll_yzm;
+    RelativeLayout ll_yzm;
     @BindView(R.id.tv_yzm)
     TextView tv_yzm;
     private BaseModel mModelAddSubAccount;
@@ -128,9 +130,14 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
                                 && et_sure_psd.getText().toString().length() >= 6) {
                             if (StringHelper.isLetterDigit(et_set_psd.getText().toString())) {
                                 //添加一个子账号,添加子账号会默认注册一个账号
+                                String inPonit = SharedPreferencesUtil.getString(mActivity, "inPonit");
+                                int inPonits = Integer.parseInt(inPonit);
+                                String inBalance = SharedPreferencesUtil.getString(mActivity, "inBalance");
+                                int inBalances = Integer.parseInt(inPonit);
+                                String inGift = SharedPreferencesUtil.getString(mActivity, "inGift");
+                                int inGifts = Integer.parseInt(inPonit);
                                 requestAddSubAccount(et_phone.getText().toString(), et_name.getText().toString(),
-                                        et_set_psd.getText().toString(), et_yzm.getText().toString(),SharedPreferencesUtil.getString(mActivity,"inPonit")
-                                ,SharedPreferencesUtil.getString(mActivity,"inBalance"),SharedPreferencesUtil.getString(mActivity,"inGift"));
+                                        et_set_psd.getText().toString(), et_yzm.getText().toString(),inPonits,inBalances,inGifts);
                             } else {
                                 AppHelper.showMsg(mContext, "密码由6-16位数字与字母组成");
                             }
@@ -148,9 +155,9 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
     }
 
     /**
-     * 添加子账户
+     * 添加子账户  SubAccountAddAPI.requestAddSubAccount(mContext, phone, name, pwd, yzm, inPonit,inBalance,inGift)
      */
-    private void requestAddSubAccount(String phone, String name, String pwd, String yzm, String inPonit, String inBalance, String inGift) {
+    private void requestAddSubAccount(String phone, String name, String pwd, String yzm, int inPonit, int inBalance, int inGift) {
         SubAccountAddAPI.requestAddSubAccount(mContext, phone, name, pwd, yzm, inPonit,inBalance,inGift)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

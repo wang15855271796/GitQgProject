@@ -234,11 +234,6 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
         Log.d("wojiafsgkg;fgg...","ssdwdsd");
-//        newList.clear();
-//        skillList.clear();
-//        skillAdvList.clear();
-//        getNewProductList(1+"", PageSize+"");
-//        getBaseList("version","1");
 
     }
 
@@ -830,6 +825,7 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
                                 teamList.clear();
                                 ll_team.setVisibility(View.VISIBLE);
                                 teamList.addAll(homeBaseModel.getData().getTeamList());
+                                Log.d("swddwddddsdweeee...",teamList.size()+"");
                                 teamAdapter.notifyDataSetChanged();
                                 tv_team.setText(homeBaseModel.getData().getTeamTitle());
                                 tv_team_desc.setText(homeBaseModel.getData().getTeamDesc());

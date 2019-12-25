@@ -40,6 +40,7 @@ import android.widget.Toast;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CartActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
+import com.puyue.www.qiaoge.adapter.cart.ImageViewAdapter;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
 import com.puyue.www.qiaoge.adapter.market.GoodsDetailAdapter;
 import com.puyue.www.qiaoge.adapter.market.GoodsRecommendAdapter;
@@ -109,26 +110,17 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by ${王文博} on 2019/4/11
+ * 折扣详情
  */
 public class SpecialGoodDetailActivity extends BaseSwipeActivity {
-    private LinearLayout mIvBack;
+    private ImageView mIvBack;
     private Banner mBanner;
-    private TextView mTvTitle;
-    private TextView mTvPrice;
     private TextView mTvInven;
-    private TextView mTvVolume;
-
     private ImageView buyImg;
     private int mount;
-
     private TextView mTvSpec;
-    private TextView mTvPlace;
-    private TextView mTvDesc;
-
-    private LinearLayout mLlChoice;
-    private RelativeLayout ll_text;
-
-
+    private TextView tv_desc;
+    TextView tv_title;
     private LinearLayout mLlCustomer;
     // private LinearLayout mLlCollection;
     private TextView mTvCollection;
@@ -140,6 +132,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     private TextView mTvFee;
     private TextView mTvAddCar;
     private TextView tvOldPrice;
+    private TextView tv_old_price;
     private List<String> images = new ArrayList<>();
 
     private int productId;
@@ -149,7 +142,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     private byte productType = 1;
     private boolean isCollection = false;
     private int inventory = 0;
-    private double price = 0;
     private int amount = 0;
 
     SearchResultsModel searchResultsModel;
@@ -180,36 +172,32 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     // 商品详情
     private RecyclerView recyclerViewImage;
     private GoodsDetailAdapter mAdapterImage;
-    private List<GoodsDetailModel> mListDetailImage = new ArrayList<>();
 
     private LinearLayout linearLayoutEvaluation;// 评价布局
     private LinearLayout linearLayoutEvaluationNoData;
-    private ImageView ImageViewShare; //分享
     private String mShareTitle;
     private String mShareDesc;
     private String mShareIcon;
     private String mShareUrl;
     private int typeIntent;
-    private LinearLayout linearLayoutOnclick;
-
     private TextView textSpec;
-
+    TextView tv_name;
+    //图片详情集合
+    private List<String> detailList = new ArrayList<>();
     private ImageView mTvSub;
     private TextView mAmount;
     private ImageView mTvAdd;
-    private LinearLayout linearLayoutShare;
-
+    private RelativeLayout rl_share;
+    TextView tv_sale;
+    TextView tv_price;
+    TextView tv_limit_num;
+    TextView tv_time;
     private TextView mTvGroupPrice;
-    private TextView mTvPurchase;
-
+    TextView tv_num;
     private String  productName;
-
-
-
+    TextView tv_spec;
+    private ImageViewAdapter imageViewAdapter;
     private List<GetRegisterShopModel.DataBean> list = new ArrayList<>();
-
-
-
     int isSelected;
     int shopTypeId;
     boolean isChecked = false;
@@ -249,19 +237,22 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+        tv_time = (TextView) findViewById(R.id.tv_time);
+        tv_limit_num = (TextView) findViewById(R.id.tv_limit_num);
+        tv_price = (TextView) findViewById(R.id.tv_price);
+        tv_name = (TextView) findViewById(R.id.tv_name);
+        tv_num = (TextView) findViewById(R.id.tv_num);
+        tv_sale = (TextView) findViewById(R.id.tv_sale);
+        tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_spec = (TextView) findViewById(R.id.tv_spec);
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         textViewTitle = FVHelper.fv(this, R.id.textViewTitle);
         toolbar = FVHelper.fv(this, R.id.toolbar);
         mIvBack = FVHelper.fv(this, R.id.iv_activity_back);
         mBanner = FVHelper.fv(this, R.id.banner_activity_common);
-        mTvTitle = FVHelper.fv(this, R.id.tv_activity_common_title);
-        mTvPrice = FVHelper.fv(this, R.id.tv_activity_common_price);
         mTvInven = FVHelper.fv(this, R.id.tv_activity_common_inven);
-        mTvVolume = FVHelper.fv(this, R.id.tv_activity_common_volume);
         mTvSpec = FVHelper.fv(this, R.id.tv_activity_common_spec);
-        mTvPlace = FVHelper.fv(this, R.id.tv_activity_common_place);
-        mTvDesc = FVHelper.fv(this, R.id.tv_activity_common_desc);
-        mLlChoice = FVHelper.fv(this, R.id.ll_activity_common_choice);
+        tv_desc = FVHelper.fv(this, R.id.tv_desc);
         mLlCustomer = FVHelper.fv(this, R.id.ll_include_common_customer);
         mTvCollection = FVHelper.fv(this, R.id.tv_include_common_collection);
         mIvCollection = FVHelper.fv(this, R.id.iv_include_common_collection);
@@ -271,10 +262,8 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         mTvAmount = FVHelper.fv(this, R.id.tv_include_common_amount);
         mTvFee = FVHelper.fv(this, R.id.tv_include_common_fee);
         mTvAddCar = FVHelper.fv(this, R.id.tv_add_car);
-        linearLayoutShare = FVHelper.fv(this, R.id.linearLayout_share);
+        rl_share = FVHelper.fv(this, R.id.rl_share);
         mTvGroupPrice = FVHelper.fv(this, R.id.tv_activity_special_group_price);
-        mTvPurchase = FVHelper.fv(this, R.id.purchase);
-        ll_text = FVHelper.fv(this, R.id.ll_text);
 
         userEvaluationNum = (TextView) findViewById(R.id.userEvaluationNum);
         goodsEvaluationNumber = (TextView) findViewById(R.id.goodsEvaluationNumber);
@@ -282,13 +271,11 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         goodsEvaluationContent = (TextView) findViewById(R.id.goodsEvaluationContent);
         goodsEvaluationReply = (TextView) findViewById(R.id.goodsEvaluationReply);
         tvOldPrice = (TextView) findViewById(R.id.old_price);
-
+        tv_old_price = (TextView) findViewById(R.id.tv_old_price);
         recyclerViewRecommend = (RecyclerView) findViewById(R.id.recyclerViewRecommend);
         recyclerViewImage = (RecyclerView) findViewById(R.id.recyclerViewImage);
         linearLayoutEvaluation = (LinearLayout) findViewById(R.id.linearLayoutEvaluation);
         linearLayoutEvaluationNoData = (LinearLayout) findViewById(R.id.linearLayoutEvaluationNoData);
-        ImageViewShare = (ImageView) findViewById(R.id.ImageViewShare);
-        linearLayoutOnclick = (LinearLayout) findViewById(R.id.linearLayoutOnclick);
         textSpec = (TextView) findViewById(R.id.textSpec);
         mTvSub = FVHelper.fv(this, R.id.tv_activity_special_sub);//jianhao
         mAmount = FVHelper.fv(this, R.id.tv_activity_special_amount);
@@ -312,6 +299,10 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         LinearLayoutManager linearLayoutManagerCoupons = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerViewRecommend.setLayoutManager(linearLayoutManagerCoupons);
         recyclerViewRecommend.setAdapter(adapterRecommend);
+
+        imageViewAdapter = new ImageViewAdapter(mContext,R.layout.item_imageview,detailList);
+        recyclerViewImage.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerViewImage.setAdapter(imageViewAdapter);
     }
 
     @Override
@@ -334,8 +325,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         mTvAddCar.setOnClickListener(noDoubleClickListener);
         mLlCar.setOnClickListener(noDoubleClickListener);
         mLlCustomer.setOnClickListener(noDoubleClickListener);
-        linearLayoutOnclick.setOnClickListener(noDoubleClickListener);
-        linearLayoutShare.setOnClickListener(noDoubleClickListener);
+        rl_share.setOnClickListener(noDoubleClickListener);
         state = CollapsingToolbarLayoutStateHelper.EXPANDED;
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -349,9 +339,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                   //  textViewTitle.setText("");
                 } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
                     if (state != CollapsingToolbarLayoutStateHelper.INTERNEDIATE) {
-                        ll_text.setVisibility(View.VISIBLE);
-                      //  textViewTitle.setVisibility(View.VISIBLE);
-                     //   textViewTitle.setText("商品详情");
                         state = CollapsingToolbarLayoutStateHelper.INTERNEDIATE;
                     }
 
@@ -487,13 +474,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                 } else {
                     AppHelper.showMsg(mContext, "获取客服号码失败");
                 }
-            } else if (view == linearLayoutOnclick) {
-                Intent intent = new Intent(SpecialGoodDetailActivity.this, EvaluationActivity.class);
-                intent.putExtra("productId", productId);
-                intent.putExtra("businessType", businessType);
-                startActivity(intent);
-
-            } else if (view == linearLayoutShare) {
+            }  else if (view == rl_share) {
                 requestGoodsList();
 
 
@@ -516,32 +497,37 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
 
                     @Override
                     public void onError(Throwable e) {
-//                        Toast.makeText(CommonGoodsDetailActivity.this, "错误", Toast.LENGTH_SHORT).show();
                     }
 
 
                     @Override
                     public void onNext(SpecialGoodModel model) {
-                        //  logoutAndToHome(mContext, model.code);
                         if (model.isSuccess()) {
                             //  addViewForChoice(model);
-                            productName =model.getData().getActiveTitle();
-                            mTvTitle.setText(model.getData().getActiveTitle());
-                            mTvPrice.setText("￥" + model.getData().getPrice());
-                            price = Double.parseDouble(model.getData().getPrice());
-                            textSpec.setText("/" + model.getData().getUnitName());
-                            tvOldPrice.setText(model.getData().getOldPrice());
-                            mTvGroupPrice.setText(model.getData().getCombinationPrice());
-                            mTvPurchase.setText(model.getData().getPurchaseLimit());
-
-                            mTvInven.setText("余量："+model.getData().getInventory());
+                            detailList.clear();
+                            detailList.addAll(model.getData().getDetailPics());
+                            imageViewAdapter.notifyDataSetChanged();
+                            tv_num.setText(model.getData().getCartNum());
+                            tv_limit_num.setText(model.getData().getLimitNum());
+                            tv_sale.setText(model.getData().getSaleVolume());
+                            productName =model.getData().getActiveName();
+                            tv_price.setText(model.getData().getShowPrice());
+                            tv_old_price.setText("原价："+model.getData().getOldPrice());
+                            tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                            tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
+                            tv_name.setText(model.getData().getActTypeName());
+                            tvOldPrice.setText(model.getData().getShowOldPrice());
+                            tv_title.setText(model.getData().getActiveName());
+                            mTvGroupPrice.setText(model.getData().getPrice());
+                            tv_time.setText(model.getData().getStartTime()+"");
+                            tv_spec.setText("规格："+model.getData().getSpec());
+                            mTvInven.setText(model.getData().getRemainNum());
+                            tv_desc.setText(model.getData().getIntroduction());
                             tvOldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
-                            inventory = Integer.parseInt(model.getData().getInventory());
                             mTvSub.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                                        if (price != 0) {
                                             //价格不为0表示获取数据成功
                                             if (amount > 1) {
                                                 amount--;
@@ -549,7 +535,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                                                 //  mTvGroupAmount.setText(amount + unit);
                                                 //  mTvTotalMoney.setText("￥" + BigDecimalUtils.mul(price, amount, 2));
                                             }
-                                        }
+
                                     } else {
                                         AppHelper.showMsg(mContext, "请先登录");
                                         startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
@@ -561,20 +547,20 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                                 public void onClick(View v) {
                                     //增加
                                     if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                                        if (price != 0) {
+
                                             //价格不为0表示获取数据成功
                                             amount++;
                                             mAmount.setText(String.valueOf(amount));
                                             // mTvGroupAmount.setText(amount + unit);
                                             //mTvTotalMoney.setText("￥" + BigDecimalUtils.mul(price, amount, 2));
-                                        }
+
                                     } else {
                                         AppHelper.showMsg(mContext, "请先登录");
                                         startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
                                     }
                                 }
                             });
-                            if (inventory <= 0) {
+                            if (model.getData().getSaleDone() == 0) {
                                 mTvAddCar.setEnabled(false);
                                 mTvAddCar.setBackgroundResource(R.drawable.app_car);
                             } else {
@@ -582,21 +568,14 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                                 mTvAddCar.setBackgroundResource(R.drawable.selector_once_buy);
                             }
 
-
-                            mTvVolume.setText("销量:" + model.getData().getMonthSalesVolume());
-                            mTvSpec.setText(model.getData().getSpecification());
-                            mTvPlace.setText(model.getData().getOriginPlace());
-                            mTvDesc.setText(String.valueOf(model.getData().getIntrduction()));
-
-                            //填充banner
                             images.clear();
-                            if (model.getData().getPicCarousel() != null) {
+                            if (model.getData().getTopPics() != null) {
                                 //设置banner样式
                                 mBanner.setBannerStyle(BannerConfig.NUM_INDICATOR);
                                 //设置图片加载器
                                 mBanner.setImageLoader(new GlideImageLoader());
                                 //设置图片集合
-                                images.addAll(model.getData().getPicCarousel());
+                                images.addAll(model.getData().getTopPics());
                                 mBanner.setImages(images);
                                 //设置banner动画效果
                                 mBanner.setBannerAnimation(Transformer.DepthPage);
@@ -618,36 +597,31 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                                 }
                             });
 
-                            //动态添加view
-                         /*   if (model.data.productCombinationPriceList != null) {
-                                addViewForChoice(model.data.productCombinationPriceList);
-                            }*/
                             getProductList();
                             //填充详情
-                            mListDetailImage.clear();
-                            if (model.getData().getPicDetail() != null) {
-
-                                for (int i = 0; i < model.getData().getPicDetail().size(); i++) {
-                                    GoodsDetailModel goodsDetailModel = new GoodsDetailModel(GoodsDetailModel.typeIv);
-                                    goodsDetailModel.content = model.getData().getPicDetail().get(i);
-                                    mListDetailImage.add(goodsDetailModel);
-                                }
-
-                                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false) {
-                                    @Override
-                                    public boolean canScrollVertically() {
-                                        return false;
-                                    }
-                                };
-                                mAdapterImage = new GoodsDetailAdapter(mListDetailImage);
-                                recyclerViewImage.setLayoutManager(linearLayoutManager);
-                                recyclerViewImage.setAdapter(mAdapterImage);
-                            }
-                            type = model.getData().getType();
+//                            if (model.getData().getDetailPics() != null) {
+//
+//                                for (int i = 0; i < model.getData().getDetailPics().size(); i++) {
+//                                    GoodsDetailModel goodsDetailModel = new GoodsDetailModel(GoodsDetailModel.typeIv);
+//                                    goodsDetailModel.content = model.getData().getDetailPics().get(i);
+//                                    mListDetailImage.add(goodsDetailModel);
+//                                }
+//
+//                                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false) {
+//                                    @Override
+//                                    public boolean canScrollVertically() {
+//                                        return false;
+//                                    }
+//                                };
+//                                mAdapterImage = new GoodsDetailAdapter(mListDetailImage);
+//                                recyclerViewImage.setLayoutManager(linearLayoutManager);
+//                                recyclerViewImage.setAdapter(mAdapterImage);
+//                            }
+//                            type = model.getData().getType();
 
 
                         } else {
-//                            AppHelper.showMsg(mContext, model.message);
+                            AppHelper.showMsg(mContext, model.getMessage());
                         }
 
                     }
@@ -664,7 +638,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
 
         View view = inflater.inflate(R.layout.item_choice_spec, null);
         view.setLayoutParams(lp);
-        mLlChoice.addView(view);
+//        mLlChoice.addView(view);
 
 
         //setViewDataAndCount(view,model);

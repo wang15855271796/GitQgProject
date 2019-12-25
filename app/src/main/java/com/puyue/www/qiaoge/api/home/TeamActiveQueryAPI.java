@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
 import com.puyue.www.qiaoge.helper.RestHelper;
+import com.puyue.www.qiaoge.model.home.TabModel;
 import com.puyue.www.qiaoge.model.home.TeamActiveQueryModel;
 
 import retrofit2.http.Field;
@@ -22,11 +23,23 @@ public class TeamActiveQueryAPI {
     private interface TeamActiveQueryService {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.TEAMACTIVEQUERY)
-        Observable<TeamActiveQueryModel> getData(@Field("clientType") String clientType, @Field("version") String version);
+        Observable<TeamActiveQueryModel> getData(@Field("activeType") String activeType,
+                                                 @Field("tabId")String tabId);
     }
 
-    public static Observable<TeamActiveQueryModel> requestData(Context context,String version,String clientType) {
+    public static Observable<TeamActiveQueryModel> requestData(Context context,String activeType,String tabId) {
         TeamActiveQueryService service = RestHelper.getBaseRetrofit(context).create(TeamActiveQueryService.class);
-        return service.getData(version,clientType);
+        return service.getData(activeType,tabId);
+    }
+
+    private interface TeamActiveService {
+        @FormUrlEncoded
+        @POST(AppInterfaceAddress.TEAMTab)
+        Observable<TabModel> getData(@Field("activeType") String activeType);
+    }
+
+    public static Observable<TabModel> changeTab(Context context,String activeType) {
+        TeamActiveService service = RestHelper.getBaseRetrofit(context).create(TeamActiveService.class);
+        return service.getData(activeType);
     }
 }

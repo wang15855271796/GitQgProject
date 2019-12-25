@@ -53,7 +53,14 @@ public class AppInterfaceAddress {
     public static final String SEARCHSCENICSPOT = "place/searchScenicSpot?";
     public static final String SPIKEACTIVEQUERY = "auth/spikeActiveQuery?";
     public static final String SECKILLISTQUERY = "auth/secKillMoreList?";
-    public static final String TEAMACTIVEQUERY = "auth/teamActiveQuery?";
+    /**
+     * 团购tan
+     */
+    public static final String TEAMTab = "common/getActiveTab";
+    /**
+     * 团购列表
+     */
+    public static final String TEAMACTIVEQUERY = "common/getActiveInfoList";
     public static final String SPIKEACTIVEQUERYBYID = "auth/spikeActiveQueryById?";
     public static final String COMMENTORDERQUERY = "auth/commentOrderQuery?";
     public static final String SEARCHMASTERWORKDER = "master/searchMasterWorkder?";
@@ -192,9 +199,9 @@ public class AppInterfaceAddress {
      */
     public static final String SPECIALGOOD = "auth/specialOfferMore";
     /**
-     * 特惠详情
+     * 公用详情
      */
-    public static final String SPECIALOFFERDETAIL = "auth/appSpecialOfferDetail";
+    public static final String SPECIALOFFERDETAIL = "common/getActiveInfoDetail";
     /**
      * 新秒杀专区更多
      */

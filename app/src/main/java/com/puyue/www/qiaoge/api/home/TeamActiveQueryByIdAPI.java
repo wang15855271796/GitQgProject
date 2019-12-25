@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
 import com.puyue.www.qiaoge.helper.RestHelper;
+import com.puyue.www.qiaoge.model.home.SpecialGoodModel;
 import com.puyue.www.qiaoge.model.home.TeamActiveQueryByIdModel;
 
 import retrofit2.http.Field;
@@ -21,10 +22,10 @@ import rx.Observable;
 public class TeamActiveQueryByIdAPI {
     private interface TeamActiveQueryByIdService{
         @FormUrlEncoded
-        @POST(AppInterfaceAddress.TEAMACTIVEQUERYBYID)
-        Observable<TeamActiveQueryByIdModel> getData(@Field("activeId") int activeId );
+        @POST(AppInterfaceAddress.SPECIALOFFERDETAIL)
+        Observable<SpecialGoodModel> getData(@Field("activeId") int activeId );
     }
-    public static Observable<TeamActiveQueryByIdModel> requestData(Context context,int activeId){
+    public static Observable<SpecialGoodModel> requestData(Context context,int activeId){
         TeamActiveQueryByIdService service = RestHelper.getBaseRetrofit(context).create(TeamActiveQueryByIdService.class);
         return service.getData(activeId);
     }

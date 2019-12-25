@@ -15,155 +15,155 @@
     </LinearLayout>
 
     <com.puyue.www.qiaoge.view.CompatToolbar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/app_mine_toolbar_bg">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/app_mine_toolbar_bg">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@drawable/app_mine_toolbar_bg">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="7dp"
+                android:padding="10dp"
+                android:src="@mipmap/ic_back_arrow" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                tools:text="标题"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:textColor="@color/app_top_bar_text"
+                android:textSize="18dp" />
+
 
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:id="@+id/rl_good_cart"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/app_mine_toolbar_bg">
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/size_10dp">
+
 
                 <ImageView
-                    android:id="@+id/iv_back"
+                    android:id="@+id/iv_cart"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="7dp"
-                    android:padding="10dp"
-                    android:src="@mipmap/ic_back_arrow" />
+                    android:src="@mipmap/ic_home_good_cart" />
 
-                <TextView
-                    android:id="@+id/tv_title"
-                    tools:text="标题"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:textColor="@color/app_top_bar_text"
-                    android:textSize="18dp" />
+                <com.puyue.www.qiaoge.view.SuperTextView
+                    android:id="@+id/text_cart_num"
+                    android:layout_width="@dimen/size_13dp"
+                    android:layout_height="@dimen/size_13dp"
+                    android:layout_toRightOf="@id/iv_cart"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="9dp"
 
+                    android:visibility="gone"
+                    app:corner="7.5dp"
+                    app:solid="#ff0000" />
 
-                <RelativeLayout
-                    android:id="@+id/rl_good_cart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/size_10dp">
-
-
-                    <ImageView
-                        android:id="@+id/iv_cart"
-                        android:visibility="gone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_home_good_cart" />
-
-                    <com.puyue.www.qiaoge.view.SuperTextView
-                        android:id="@+id/text_cart_num"
-                        android:layout_width="@dimen/size_13dp"
-                        android:layout_height="@dimen/size_13dp"
-                        android:layout_toRightOf="@id/iv_cart"
-                        android:gravity="center"
-                        android:text=""
-                        android:textColor="@color/white"
-                        android:textSize="9dp"
-
-                        android:visibility="gone"
-                        app:corner="7.5dp"
-                        app:solid="#ff0000" />
-
-
-                </RelativeLayout>
-
-
-                <TextView
-                    android:id="@+id/tv_activity_goods_title_screen"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:padding="10dp"
-                    android:text="筛选"
-
-                    android:textColor="@color/app_front_black"
-                    android:textSize="15dp"
-                    android:visibility="gone" />
 
             </RelativeLayout>
 
 
-            <LinearLayout
-                android:id="@+id/ll_activity_goods_list_search_view"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tv_activity_goods_title_screen"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="10dp"
-                android:visibility="gone">
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:padding="10dp"
+                android:text="筛选"
 
-                <LinearLayout
-                    android:id="@+id/ll_activity_goods_list_search_click"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_gray_box"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                android:textColor="@color/app_front_black"
+                android:textSize="15dp"
+                android:visibility="gone" />
 
-                    <TextView
-                        android:id="@+id/tv_activity_result"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="请输入商品名称"
-                        android:padding="10dp"
-                        android:textColor="@color/app_cancle_gray"
-                        android:textSize="15dp" />
+        </RelativeLayout>
 
-                    <View
-                        android:layout_width="@dimen/app_line_size"
-                        android:layout_height="20dp"
-                        android:background="@color/app_cancle_gray"></View>
 
-                    <ImageView
-                        android:layout_width="55dp"
-                        android:layout_height="35dp"
-                        android:paddingLeft="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="20dp"
-                        android:paddingBottom="10dp"
-                        android:src="@mipmap/icon_search" />
+        <LinearLayout
+            android:id="@+id/ll_activity_goods_list_search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:visibility="gone">
 
-                </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_activity_goods_list_search_click"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_weight="1"
+                android:background="@drawable/shape_gray_box"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tv_activity_goods_list_search_screen"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_activity_result"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="请输入商品名称"
                     android:padding="10dp"
-                    android:text="筛选"
-                    android:textColor="@color/app_front_black"
-                    android:textSize="15dp"
-                    android:visibility="gone" />
+                    android:textColor="@color/app_cancle_gray"
+                    android:textSize="15dp" />
+
+                <View
+                    android:layout_width="@dimen/app_line_size"
+                    android:layout_height="20dp"
+                    android:background="@color/app_cancle_gray"></View>
+
+                <ImageView
+                    android:layout_width="55dp"
+                    android:layout_height="35dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="10dp"
+                    android:src="@mipmap/icon_search" />
+
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tv_activity_goods_list_search_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="筛选"
+                android:textColor="@color/app_front_black"
+                android:textSize="15dp"
+                android:visibility="gone" />
         </LinearLayout>
 
+    </LinearLayout>
 
-    </com.puyue.www.qiaoge.view.CompatToolbar>
+
+</com.puyue.www.qiaoge.view.CompatToolbar>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"

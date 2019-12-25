@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="136dp">
+
+        <ImageView
+            android:id="@+id/iv_pic"
+            android:layout_centerVertical="true"
+            tools:src="@mipmap/icon_baidu"
+            android:layout_marginLeft="@dimen/size_12dp"
+            android:layout_width="105dp"
+            android:layout_height="105dp" />
+
+        <TextView
+            tools:text="标题"
+            android:id="@+id/tv_name"
+            android:textSize="@dimen/size_14dp"
+            android:textColor="#333333"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/size_20dp"
+            android:layout_toRightOf="@+id/iv_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            tools:text="规格"
+            android:id="@+id/tv_spec"
+            android:textSize="@dimen/size_12dp"
+            android:textColor="#999999"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_below="@+id/tv_name"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/iv_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            tools:text="100"
+            android:id="@+id/tv_price"
+            android:textSize="@dimen/size_18dp"
+            android:textColor="#FF703C"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_below="@+id/tv_spec"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/iv_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            tools:text="100"
+            android:layout_toRightOf="@+id/tv_price"
+            android:id="@+id/tv_old_price"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_below="@+id/tv_spec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ProgressBar
+            android:id="@+id/pb"
+            android:layout_toRightOf="@+id/iv_pic"
+            android:layout_below="@+id/tv_old_price"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_marginTop="@dimen/size_13dp"
+            android:layout_width="100dp"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_height="10dp"
+            android:progressDrawable="@drawable/layerlist_goods_progress" />
+
+
+        <TextView
+            android:id="@+id/tv_total"
+            tools:text="剩余"
+            android:layout_below="@+id/tv_old_price"
+            android:textColor="#999999"
+            android:layout_toRightOf="@+id/pb"
+            android:textSize="@dimen/size_13dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="@dimen/size_15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+</LinearLayout>

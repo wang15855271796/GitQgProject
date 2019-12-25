@@ -137,6 +137,7 @@
 
             />
 
+        <activity android:name=".activity.mine.SubAccountActivity"/>
 
         <activity android:name=".activity.mine.login.RegisterStep1Activity"/>
         <activity android:name=".activity.mine.login.RegisterMessageActivity"/>
@@ -158,6 +159,7 @@
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <!--  -->
         <activity android:name=".activity.mine.account.AccountCenterActivity" />
+        <activity android:name=".activity.mine.AddSubAccountActivity"/>
         <!--  -->
         <!--  -->
         <activity android:name=".activity.mine.MessageCenterActivity" />

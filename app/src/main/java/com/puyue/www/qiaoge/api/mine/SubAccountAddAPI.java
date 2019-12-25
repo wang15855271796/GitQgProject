@@ -27,7 +27,7 @@ public class SubAccountAddAPI {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.ADD_SUB_USER)
         Observable<BaseModel> setParams(@Field("subLoginPhone") String subLoginPhone,
-                                        @Field("subLoginUserName") String subLoginUserName,
+                                        @Field("name") String subLoginUserName,
                                         @Field("subLoginPwd") String subLoginPwd,
                                         @Field("verifyCode") String verifyCode,
                                         @Field("inPoint") String inPoint,

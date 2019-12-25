@@ -25,11 +25,11 @@ import java.util.List;
  * Created by WinSinMin on 2018/4/18.
  */
 
-public class TeamActiveQueryAdapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean.ListBean, BaseViewHolder> {
+public class TeamActiveQueryAdapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean, BaseViewHolder> {
 
     private  ImageView addCar;
    private   OnClick onClick;
-    public TeamActiveQueryAdapter(int layoutResId, List<TeamActiveQueryModel.DataBean.ListBean> data, OnClick onClick) {
+    public TeamActiveQueryAdapter(int layoutResId, List<TeamActiveQueryModel.DataBean> data, OnClick onClick) {
         super(layoutResId, data);
         this.onClick=onClick;
     }
@@ -39,19 +39,19 @@ public class TeamActiveQueryAdapter extends BaseQuickAdapter<TeamActiveQueryMode
     }
 
     @Override
-    protected void convert(final BaseViewHolder helper, TeamActiveQueryModel.DataBean.ListBean model) {
+    protected void convert(final BaseViewHolder helper, TeamActiveQueryModel.DataBean model) {
         addCar=helper.getView(R.id.addCar);
         ImageView iv_type = helper.getView(R.id.iv_type);
-        if(model.available==true) {
-            iv_type.setVisibility(View.GONE);
-
-        }else {
-            Glide.with(mContext).load(model.saleDoneUrl).into(iv_type);
-            iv_type.setVisibility(View.VISIBLE);
-        }
-        helper.setText(R.id.tv_item_goods_name, model.activeTitle);
-        helper.setText(R.id.tv_item_goods_price, model.price);
-        GlideModel.disPlayError(mContext,model.defaultPic,helper.getView(R.id.iv_item_goods_img));
+//        if(model.available==true) {
+//            iv_type.setVisibility(View.GONE);
+//
+//        }else {
+//            Glide.with(mContext).load(model.saleDoneUrl).into(iv_type);
+//            iv_type.setVisibility(View.VISIBLE);
+//        }
+//        helper.setText(R.id.tv_item_goods_name, model.activeTitle);
+//        helper.setText(R.id.tv_item_goods_price, model.price);
+//        GlideModel.disPlayError(mContext,model.defaultPic,helper.getView(R.id.iv_item_goods_img));
        /* Glide.with(mContext).load(model.defaultPic).crossFade().transform(new GlideRoundTransform(mContext, 3)).
                 error(R.mipmap.icon_default_rec).into((ImageView) helper.getView(R.id.iv_item_goods_img));*/
 
@@ -62,14 +62,14 @@ public class TeamActiveQueryAdapter extends BaseQuickAdapter<TeamActiveQueryMode
             }
         });
 
-        helper.getView(R.id.ll_team).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext,TeamGoodsDetailActivity.class);
-                intent.putExtra(AppConstant.ACTIVEID, model.activeId);
-                mContext.startActivity(intent);
-            }
-        });
+//        helper.getView(R.id.ll_team).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext,TeamGoodsDetailActivity.class);
+//                intent.putExtra(AppConstant.ACTIVEID, model.activeId);
+//                mContext.startActivity(intent);
+//            }
+//        });
 
 
     }
