@@ -49,7 +49,7 @@ public class TeamFragment extends BaseFragment {
     @Override
     public void initViews(View view) {
         bind = ButterKnife.bind(this, view);
-        team1Adapter = new Team1Adapter(R.layout.item_team_list, teamList, new Team1Adapter.Onclick() {
+        team1Adapter = new Team1Adapter(R.layout.item_coupon_list, teamList, new Team1Adapter.Onclick() {
             @Override
             public void addDialog() {
 

@@ -47,7 +47,12 @@ public class TeamFragment1 extends BaseFragment {
     @Override
     public void initViews(View view) {
         bind = ButterKnife.bind(this, view);
-        team2Adapter = new Team2Adapter(R.layout.item_team_list,teamList);
+        team2Adapter = new Team2Adapter(R.layout.item_team_list, teamList, new Team2Adapter.Onclick() {
+            @Override
+            public void addDialog() {
+
+            }
+        });
         recycleView.setLayoutManager(new GridLayoutManager(mActivity,2));
         recycleView.setAdapter(team2Adapter);
 

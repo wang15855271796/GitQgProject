@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
@@ -86,7 +87,10 @@ import com.puyue.www.qiaoge.model.home.SpecialGoodModel;
 import com.puyue.www.qiaoge.model.home.TeamActiveQueryByIdModel;
 import com.puyue.www.qiaoge.model.market.GoodsDetailModel;
 import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
+import com.puyue.www.qiaoge.utils.DateUtils;
+import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.GlideModel;
+import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -97,7 +101,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import rx.Subscriber;
@@ -167,13 +173,18 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
     private String cell;
     //推荐
     private RecyclerView recyclerViewRecommend;
-
+    SnapUpCountDownTimerView tv_cut_down;
     // 商品详情
     private RecyclerView recyclerViewImage;
     private GoodsDetailAdapter mAdapterImage;
     private List<GoodsDetailModel> mListDetailImage = new ArrayList<>();
     private AppBarLayout appBarLayout;
     private TextView textViewTitle;
+    private Date currents;
+    private Date starts;
+    private Date ends;
+    TextView tv_time;
+    TextView tv_total;
     private CollapsingToolbarLayoutStateHelper state;
     // 分享
     private String mShareTitle;
@@ -225,6 +236,9 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+        tv_total = FVHelper.fv(this, R.id.tv_total);
+        tv_time = FVHelper.fv(this, R.id.tv_time);
+        tv_cut_down = FVHelper.fv(this, R.id.tv_cut_down);
         toolbar = FVHelper.fv(this, R.id.toolbar);
         tv_old_price = FVHelper.fv(this, R.id.tv_old_price);
         old_price = FVHelper.fv(this, R.id.old_price);
@@ -597,6 +611,7 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
         mTvDesc.setText(model.getData().getIntroduction());
         tv_limit_num.setText(model.getData().getLimitNum());
         tv_name.setText(model.getData().getActTypeName());
+        tv_total.setText(model.getData().getTotalNum());
         tv_old_price.setText(model.getData().getOldPrice());
         tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
@@ -615,6 +630,45 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
             mTvAddCar.setBackgroundResource(R.drawable.selector_once_buy);
 
         }
+
+        long currentTime = model.getData().getCurrentTime();
+        long startTime = model.getData().getStartTime();
+        long endTime = model.getData().getEndTime();
+        String current = DateUtils.formatDate(currentTime, "MM月dd日HH时mm分ss秒");
+        String start = DateUtils.formatDate(startTime, "MM月dd日HH时mm分ss秒");
+        String end = DateUtils.formatDate(endTime, "MM月dd日HH时mm分ss秒");
+        try {
+            currents = Utils.stringToDate(current, "MM月dd日HH时mm分ss秒");
+            starts = Utils.stringToDate(start, "MM月dd日HH时mm分ss秒");
+            ends = Utils.stringToDate(end, "MM月dd日HH时mm分ss秒");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        boolean exceed24 = DateUtils.isExceed24(currents, starts);
+        Log.d("wsddddddddd...",start+"");
+        Log.d("wsddddddddd........",current+"");
+        if(exceed24) {
+            //大于24
+            tv_time.setText(start+"开抢");
+        }else {
+            //小于24
+            if(startTime!=0) {
+                tv_cut_down.setTime(true,currentTime,startTime,endTime);
+                tv_cut_down.changeBackGrounds(ContextCompat.getColor(mContext, R.color.color_F6551A));
+                tv_cut_down.changeTypeColor(Color.WHITE);
+                tv_time.setVisibility(View.INVISIBLE);
+                tv_cut_down.start();
+                tv_cut_down.setVisibility(View.VISIBLE);
+
+
+            }else {
+                tv_time.setVisibility(View.INVISIBLE);
+                tv_cut_down.setVisibility(View.INVISIBLE);
+            }
+//
+        }
+
     }
 
     /**

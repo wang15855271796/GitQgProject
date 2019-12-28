@@ -65,6 +65,15 @@ public class MyOrderNumModel extends BaseModel {
         private int day;
         private String giftNo;
         private String phone;
+        int inviteOpen;
+
+        public int getInviteOpen() {
+            return inviteOpen;
+        }
+
+        public void setInviteOpen(int inviteOpen) {
+            this.inviteOpen = inviteOpen;
+        }
 
         public int getPoint() {
             return point;

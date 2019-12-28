@@ -1,15 +1,27 @@
 package com.puyue.www.qiaoge.activity.home;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.api.home.TeamActiveQueryAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
+import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.model.home.TeamActiveQueryModel;
+import com.puyue.www.qiaoge.utils.DateUtils;
+import com.puyue.www.qiaoge.utils.Utils;
+import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -26,7 +38,7 @@ public class CouponFragment1 extends BaseFragment {
     private Unbinder bind;
     @BindView(R.id.recyclerView)
     RecyclerView recycleView;
-
+    TeamActiveQueryModel teamActiveQueryModels;
     //折扣集合
     List<TeamActiveQueryModel.DataBean> couponList = new ArrayList<>();
     private Coupon1Adapter coupon1Adapter;
@@ -45,13 +57,13 @@ public class CouponFragment1 extends BaseFragment {
     public void initViews(View view) {
 
         bind = ButterKnife.bind(this, view);
-        coupon1Adapter = new Coupon1Adapter(R.layout.item_coupon_list, couponList, new Coupon1Adapter.Onclick() {
+        coupon1Adapter = new Coupon1Adapter(R.layout.item_coupons_list, couponList, new Coupon1Adapter.Onclick() {
             @Override
             public void addDialog() {
 
             }
         });
-        recycleView.setLayoutManager(new GridLayoutManager(mActivity,2));
+        recycleView.setLayoutManager(new LinearLayoutManager(mActivity));
         recycleView.setAdapter(coupon1Adapter);
         getCouponList();
 
@@ -61,10 +73,11 @@ public class CouponFragment1 extends BaseFragment {
      * 获取折扣列表
      */
     private void getCouponList() {
-        TeamActiveQueryAPI.requestData(mActivity,11+"",0+"")
+        TeamActiveQueryAPI.requestData(mActivity,11+"",1+"")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<TeamActiveQueryModel>() {
+
                     @Override
                     public void onCompleted() {
 
@@ -77,6 +90,7 @@ public class CouponFragment1 extends BaseFragment {
 
                     @Override
                     public void onNext(TeamActiveQueryModel teamActiveQueryModel) {
+                        teamActiveQueryModels = teamActiveQueryModel;
                         if (teamActiveQueryModel.isSuccess()) {
                             couponList.clear();
                             if (teamActiveQueryModel.getData() != null) {

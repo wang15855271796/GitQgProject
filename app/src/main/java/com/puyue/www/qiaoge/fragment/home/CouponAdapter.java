@@ -50,9 +50,9 @@ public class CouponAdapter extends BaseQuickAdapter<HomeBaseModel.DataBean.Offer
             ll.setVisibility(View.INVISIBLE);
         }else {
             helper.setText(R.id.tv_old_price,item.getOldPrice());
+            tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
             tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             ll.setVisibility(View.VISIBLE);
-            tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
         }
         helper.getView(R.id.iv_cart).setOnClickListener(new View.OnClickListener() {
             @Override

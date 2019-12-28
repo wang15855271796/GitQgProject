@@ -55,7 +55,7 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
 
-    CommonAdapter adapterNewArrival;
+    CommonsAdapter adapterNewArrival;
     int pageNum = 1;
     int pageSize = 10;
     @BindView(R.id.iv_back)
@@ -91,7 +91,7 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
     public void findViewById() {
         ButterKnife.bind(this);
         setTranslucentStatus();
-        adapterNewArrival = new CommonAdapter(R.layout.item_noresult_recommend, list, new CommonAdapter.Onclick() {
+        adapterNewArrival = new CommonsAdapter(R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {

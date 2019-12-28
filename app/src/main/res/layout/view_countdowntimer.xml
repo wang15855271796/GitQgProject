@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/size_35dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center"
-    android:orientation="horizontal"
- >
+    android:orientation="horizontal">
 
 
     <TextView
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingRight="5dp"
-        android:text="订单将在"
+        tools:text="订单将在"
         android:textColor="@color/white"
         android:textSize="@dimen/size_12dp"
         android:textStyle="bold"
@@ -20,21 +20,20 @@
 
     <TextView
         android:id="@+id/tv_state"
+        android:gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
         android:text="秒杀中"
-        android:textColor="#232131"
+        android:textColor="#333333"
         android:textSize="12dp"
         android:textStyle="bold"
         android:visibility="gone" />
 
     <LinearLayout
-        android:layout_marginTop="1dp"
         android:id="@+id/ll_hour_bg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:background="@drawable/bg_snap_up"
         android:padding="2dp">
 
@@ -45,7 +44,7 @@
             android:layout_height="wrap_content"
             android:text="0"
             android:textColor="@color/app_color_white"
-            android:textSize="10dp" />
+            android:textSize="14dp" />
 
         <TextView
             android:id="@+id/tv_hour_unit"
@@ -54,7 +53,7 @@
             android:layout_marginLeft="1dp"
             android:text="0"
             android:textColor="@color/app_color_white"
-            android:textSize="10dp" />
+            android:textSize="14dp" />
     </LinearLayout>
 
 
@@ -71,7 +70,6 @@
         android:textStyle="bold" />
 
     <LinearLayout
-        android:layout_marginTop="1dp"
         android:id="@+id/ll_min_bg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -84,7 +82,7 @@
             android:layout_height="wrap_content"
             android:text="0"
             android:textColor="@color/app_color_white"
-            android:textSize="10dp" />
+            android:textSize="14dp" />
 
         <TextView
             android:id="@+id/tv_min_unit"
@@ -93,7 +91,7 @@
             android:layout_marginLeft="1dp"
             android:text="0"
             android:textColor="@color/app_color_white"
-            android:textSize="10dp" />
+            android:textSize="14dp" />
     </LinearLayout>
 
 
@@ -111,7 +109,6 @@
 
 
     <LinearLayout
-        android:layout_marginTop="1dp"
         android:id="@+id/ll_sec_bg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -124,7 +121,7 @@
             android:layout_height="wrap_content"
             android:text="0"
             android:textColor="@color/app_color_white"
-            android:textSize="10dp" />
+            android:textSize="14dp" />
 
         <TextView
             android:id="@+id/tv_sec_unit"
@@ -133,7 +130,7 @@
             android:layout_marginLeft="1dp"
             android:text="0"
             android:textColor="@color/app_color_white"
-            android:textSize="10dp" />
+            android:textSize="14dp" />
     </LinearLayout>
 
 

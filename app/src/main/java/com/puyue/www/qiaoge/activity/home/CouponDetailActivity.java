@@ -96,66 +96,10 @@ public class CouponDetailActivity extends BaseSwipeActivity {
     @Override
     public void setViewData() {
 
-
-        //团购
-//        teamActiveQueryAdapter = new TeamActiveQueryAdapter(R.layout.item_teame_adapter, teamList, new TeamActiveQueryAdapter.OnClick() {
-//            @Override
-//            public void addCarOnclick(int position) {
-//                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
-//                    TeamActiveQueryModel.DataBean.ListBean listBean = teamList.get(position);
-//                    addCar(listBean.activeId, "", 11, "1");
-//                } else {
-//                    AppHelper.showMsg(mActivity, "请先登录");
-//                    startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
-//                }
-//
-//                teamActiveQueryAdapter.notifyDataSetChanged();
-//            }
-//        });
-
-//        rv_detail.setLayoutManager(new LinearLayoutManager(mContext));
-//        rv_detail.setAdapter(teamActiveQueryAdapter);
-
     }
 
     @Override
     public void setClickEvent() {
 
-    }
-
-    /**
-     * 添加购物车
-     * @param businessId
-     * @param productCombinationPriceVOList
-     * @param businessType
-     * @param totalNum
-     */
-    private void addCar(int businessId, String productCombinationPriceVOList, int businessType, String totalNum) {
-        AddCartAPI.requestData(mActivity, businessId, productCombinationPriceVOList, businessType, String.valueOf(totalNum))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<AddCartModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(AddCartModel addCartModel) {
-                        if (addCartModel.success) {
-                            AppHelper.showMsg(mActivity, "成功加入购物车");
-//                            getCartNum();
-                        } else {
-                            AppHelper.showMsg(mActivity, addCartModel.message);
-                            Log.e("Crash", "onNext: " + addCartModel.message);
-                        }
-
-                    }
-                });
     }
 }

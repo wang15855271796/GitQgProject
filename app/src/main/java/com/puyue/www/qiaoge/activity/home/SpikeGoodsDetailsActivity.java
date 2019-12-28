@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -81,9 +82,11 @@ import com.puyue.www.qiaoge.model.home.SpecialGoodModel;
 import com.puyue.www.qiaoge.model.home.SpikeActiveQueryByIdModel;
 import com.puyue.www.qiaoge.model.market.GoodsDetailModel;
 import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
+import com.puyue.www.qiaoge.utils.DateUtils;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 import com.puyue.www.qiaoge.view.StarBarView;
+import com.puyue.www.qiaoge.view.scrollview.Util;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -103,6 +106,8 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.puyue.www.qiaoge.utils.DateUtils.DATE_FORMAT_Second_CHINESE;
+
 /**
  * If I become novel would you like ?
  * Created by WinSinMin on 2018/4/12.
@@ -112,7 +117,7 @@ import rx.schedulers.Schedulers;
 public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
     private ImageView mIvBack;
     private Banner banner;
-    private SnapUpCountDownTimerView mSvTime;
+//    private SnapUpCountDownTimerView mSvTime;
     private TextView mTvTitle;
     private TextView mTvPrice;
     private TextView mTvOldPrice;
@@ -175,7 +180,7 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
     private String unit;
     private boolean isCollection = false;
     private int Inventory = 0;
-
+    SnapUpCountDownTimerView tv_cut_down;
     private String cell;
     TextView tv_num;
     TextView tv_name;
@@ -208,6 +213,8 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
     private boolean time;
     TextView tv_time;
     private Date date;
+    private Date currents;
+    private Date starts;
 
     class MyHandler extends Handler {
         @Override
@@ -241,6 +248,7 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+        tv_cut_down = FVHelper.fv(this, R.id.tv_cut_down);
         tv_total = FVHelper.fv(this, R.id.tv_total);
         tv_num = FVHelper.fv(this, R.id.tv_num);
         tv_name = FVHelper.fv(this, R.id.tv_name);
@@ -248,7 +256,7 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
         tv_time = FVHelper.fv(this, R.id.tv_time);
         tv_limit_num = FVHelper.fv(this, R.id.tv_limit_num);
         mIvBack = FVHelper.fv(this, R.id.iv_activity_back);
-        mSvTime = FVHelper.fv(this, R.id.view_details_seckill);
+//        mSvTime = FVHelper.fv(this, R.id.view_details_seckill);
         banner = FVHelper.fv(this, R.id.banner);
         tv_prices = FVHelper.fv(this, R.id.tv_prices);
         mTvTitle = FVHelper.fv(this, R.id.tv_title);
@@ -698,6 +706,7 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
                             old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
                             mTvVolume.setText(spikeActiveQueryByIdModel.getData().getSaleVolume());
                             pb.setProgress(Integer.parseInt(spikeActiveQueryByIdModel.getData().getProgress()));
+                            pb.setProgressDrawable(mContext.getResources().getDrawable(R.drawable.shape_progress2));
                             tv_spec.setText(spikeActiveQueryByIdModel.getData().getSpec());
                             tv_limit_num.setText(spikeActiveQueryByIdModel.getData().getLimitNum());
                             tv_name.setText(spikeActiveQueryByIdModel.getData().getActTypeName());
@@ -705,44 +714,74 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
                             tv_prices.setText(spikeActiveQueryByIdModel.getData().getPrice());
                             long currentTime = spikeActiveQueryByIdModel.getData().getCurrentTime();
                             long startTime = spikeActiveQueryByIdModel.getData().getStartTime();
-
+                            long endTime = spikeActiveQueryByIdModel.getData().getEndTime();
+                            String current = DateUtils.formatDate(currentTime, "MM月dd日HH时mm分ss秒");
+                            String start = DateUtils.formatDate(startTime, "MM月dd日HH时mm分ss秒");
                             try {
-                                current = Utils.longToString(currentTime, "M-d HH:mm:ss");
-                                start = Utils.longToString(startTime, "M-d HH:mm:ss");
-
-
+                                currents = Utils.stringToDate(current, "MM月dd日HH时mm分ss秒");
+                                starts = Utils.stringToDate(start, "MM月dd日HH时mm分ss秒");
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-//
-                            try {
-                                time = Utils.getTime(current, start);
 
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            if(time) {
-                                //大于24小时
-
+                            boolean exceed24 = DateUtils.isExceed24(currents, starts);
+                            if(exceed24) {
+                                //大于24
+                                tv_time.setText(start+"开抢");
                             }else {
-                                //小于24小时
-                                try {
-                                    date = Utils.stringToDate(current, "M-d HH:mm:ss");
-                                    Log.d("rtrgfsdsdsdddd....",date+"");
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                tv_time.setText(date+"开始");
+                                //小于24
+                                if(startTime!=0&&endTime!=0) {
+                                    tv_cut_down.setTime(true,currentTime,startTime,endTime);
+                                    tv_cut_down.changeBackGrounds(ContextCompat.getColor(mContext, R.color.color_F6551A));
+                                    tv_cut_down.changeTypeColor(Color.WHITE);
+                                    tv_time.setVisibility(View.INVISIBLE);
+                                    tv_cut_down.start();
+                                    tv_cut_down.setVisibility(View.VISIBLE);
 
+
+                                }else {
+                                    tv_time.setVisibility(View.INVISIBLE);
+                                    tv_cut_down.setVisibility(View.INVISIBLE);
+                                }
+//
                             }
+//                            try {
+//                                current = Utils.longToString(currentTime, "M-d HH:mm:ss");
+//                                start = Utils.longToString(startTime, "M-d HH:mm:ss");
+//
+//
+//                            } catch (ParseException e) {
+//                                e.printStackTrace();
+//                            }
+////
+//                            try {
+//                                time = Utils.getTime(current, start);
+//
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                            if(time) {
+//                                //大于24小时
+//
+//                            }else {
+//                                //小于24小时
+//                                try {
+//                                    date = Utils.stringToDate(current, "M-d HH:mm:ss");
+//                                    Log.d("rtrgfsdsdsdddd....",date+"");
+//                                } catch (ParseException e) {
+//                                    e.printStackTrace();
+//                                }
+//                                tv_time.setText(date+"开始");
+//
+//                            }
                             //设置进度条
                             //倒计时设置
-                            mSvTime.setBackTheme(true);
+//                            mSvTime.setBackTheme(true);
 //                            mSvTime.setTime(true, spikeActiveQueryByIdModel.data.currentTime, spikeActiveQueryByIdModel.data.startTime, spikeActiveQueryByIdModel.data.endTime);
 //                            Log.e("Home", "onNext: " + spikeActiveQueryByIdModel.data.currentTime + spikeActiveQueryByIdModel.data.startTime + spikeActiveQueryByIdModel.data.endTime);
-                            mSvTime.changeTypeColor(Color.WHITE);
-                            mSvTime.start();
+//                            mSvTime.changeTypeColor(Color.WHITE);
+//                            mSvTime.start();
                             //填充banner
                             if (spikeActiveQueryByIdModel.getData().getTopPics() != null) {
                                 //设置banner样式

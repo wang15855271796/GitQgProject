@@ -13,7 +13,7 @@
         android:background="@drawable/app_border_bottom_bg">
 
         <ImageView
-            android:id="@+id/iv_sub_account_back"
+            android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -74,7 +74,7 @@
                         android:textSize="@dimen/size_15dp"
                         android:textColor="#333333"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/size_50dp"
+                        android:layout_marginLeft="@dimen/size_65dp"
                         android:layout_toRightOf="@+id/tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -121,6 +121,7 @@
                     android:text="是否共享积分"
                     android:textColor="#333333"
                     android:textStyle="bold"
+                    android:textSize="@dimen/size_15dp"
                     android:layout_marginLeft="@dimen/size_20dp"
                     android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
@@ -146,6 +147,7 @@
                     android:text="是否共享余额"
                     android:textColor="#333333"
                     android:textStyle="bold"
+                    android:textSize="@dimen/size_15dp"
                     android:layout_marginLeft="@dimen/size_20dp"
                     android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
@@ -171,6 +173,7 @@
                     android:text="是否共享优惠券"
                     android:textColor="#333333"
                     android:textStyle="bold"
+                    android:textSize="@dimen/size_15dp"
                     android:layout_marginLeft="@dimen/size_20dp"
                     android:layout_centerVertical="true"
                     android:layout_width="wrap_content"

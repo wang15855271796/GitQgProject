@@ -38,7 +38,7 @@ public class SeckillListModel {
         public long startTime;
         public long endTime;
         public int flag;
-        public Object activeId;
+        public int activeId;
         public int businessType;
         public List<KillsBean> kills;
 
@@ -54,7 +54,7 @@ public class SeckillListModel {
              * sales : 销量：2
              * progress : 5
              */
-
+            public int warnMe;
             public String title;
             public String price;
             public String oldPrice;

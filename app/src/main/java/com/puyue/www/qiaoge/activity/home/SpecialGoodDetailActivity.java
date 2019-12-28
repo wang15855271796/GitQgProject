@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -85,6 +86,9 @@ import com.puyue.www.qiaoge.model.home.SpecialGoodModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
 import com.puyue.www.qiaoge.model.market.GoodsDetailModel;
 import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
+import com.puyue.www.qiaoge.utils.DateUtils;
+import com.puyue.www.qiaoge.utils.Utils;
+import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 import com.puyue.www.qiaoge.view.StarBarView;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
@@ -101,7 +105,9 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import rx.Subscriber;
@@ -117,12 +123,9 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     private Banner mBanner;
     private TextView mTvInven;
     private ImageView buyImg;
-    private int mount;
-    private TextView mTvSpec;
     private TextView tv_desc;
     TextView tv_title;
     private LinearLayout mLlCustomer;
-    // private LinearLayout mLlCollection;
     private TextView mTvCollection;
     private ImageView mIvCollection;
     private LinearLayout mLlCar;
@@ -134,7 +137,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     private TextView tvOldPrice;
     private TextView tv_old_price;
     private List<String> images = new ArrayList<>();
-
+    SnapUpCountDownTimerView tv_cut_down;
     private int productId;
     private int pageNum = 1;
     private int pageSize = 10;
@@ -143,7 +146,9 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     private boolean isCollection = false;
     private int inventory = 0;
     private int amount = 0;
-
+    private Date currents;
+    private Date starts;
+    private Date ends;
     SearchResultsModel searchResultsModel;
     //搜索集合
     private List<SearchResultsModel.DataBean.SearchProdBean.ListBean> searchList = new ArrayList<>();
@@ -156,6 +161,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     private CollapsingToolbarLayoutStateHelper state;
     private Toolbar toolbar;
     private TextView textViewTitle;
+    TextView tv_total;
     //用户评论
     private TextView userEvaluationNum;
     private TextView goodsEvaluationNumber;
@@ -237,7 +243,9 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+        tv_cut_down = FVHelper.fv(this, R.id.tv_cut_down);
         tv_time = (TextView) findViewById(R.id.tv_time);
+        tv_total = (TextView) findViewById(R.id.tv_total);
         tv_limit_num = (TextView) findViewById(R.id.tv_limit_num);
         tv_price = (TextView) findViewById(R.id.tv_price);
         tv_name = (TextView) findViewById(R.id.tv_name);
@@ -251,7 +259,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         mIvBack = FVHelper.fv(this, R.id.iv_activity_back);
         mBanner = FVHelper.fv(this, R.id.banner_activity_common);
         mTvInven = FVHelper.fv(this, R.id.tv_activity_common_inven);
-        mTvSpec = FVHelper.fv(this, R.id.tv_activity_common_spec);
         tv_desc = FVHelper.fv(this, R.id.tv_desc);
         mLlCustomer = FVHelper.fv(this, R.id.ll_include_common_customer);
         mTvCollection = FVHelper.fv(this, R.id.tv_include_common_collection);
@@ -264,7 +271,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         mTvAddCar = FVHelper.fv(this, R.id.tv_add_car);
         rl_share = FVHelper.fv(this, R.id.rl_share);
         mTvGroupPrice = FVHelper.fv(this, R.id.tv_activity_special_group_price);
-
         userEvaluationNum = (TextView) findViewById(R.id.userEvaluationNum);
         goodsEvaluationNumber = (TextView) findViewById(R.id.goodsEvaluationNumber);
         goodsEvaluationTime = (TextView) findViewById(R.id.goodsEvaluationTime);
@@ -336,7 +342,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                 // 展开折叠改变状态
                 if (state != CollapsingToolbarLayoutStateHelper.EXPANDED) { //展开的状态
                     state = CollapsingToolbarLayoutStateHelper.EXPANDED;//修改状态标记为展开
-                  //  textViewTitle.setText("");
                 } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
                     if (state != CollapsingToolbarLayoutStateHelper.INTERNEDIATE) {
                         state = CollapsingToolbarLayoutStateHelper.INTERNEDIATE;
@@ -518,11 +523,49 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                             tv_name.setText(model.getData().getActTypeName());
                             tvOldPrice.setText(model.getData().getShowOldPrice());
                             tv_title.setText(model.getData().getActiveName());
+                            tv_total.setText(model.getData().getTotalNum());
                             mTvGroupPrice.setText(model.getData().getPrice());
                             tv_time.setText(model.getData().getStartTime()+"");
                             tv_spec.setText("规格："+model.getData().getSpec());
                             mTvInven.setText(model.getData().getRemainNum());
                             tv_desc.setText(model.getData().getIntroduction());
+                            long currentTime = model.getData().getCurrentTime();
+                            long startTime = model.getData().getStartTime();
+                            long endTime = model.getData().getEndTime();
+                            String current = DateUtils.formatDate(currentTime, "MM月dd日HH时mm分ss秒");
+                            String start = DateUtils.formatDate(startTime, "MM月dd日HH时mm分ss秒");
+                            String end = DateUtils.formatDate(endTime, "MM月dd日HH时mm分ss秒");
+                            try {
+                                currents = Utils.stringToDate(current, "MM月dd日HH时mm分ss秒");
+                                starts = Utils.stringToDate(start, "MM月dd日HH时mm分ss秒");
+                                ends = Utils.stringToDate(end, "MM月dd日HH时mm分ss秒");
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            boolean exceed24 = DateUtils.isExceed24(currents, starts);
+                            if(exceed24) {
+                                //大于24
+                                tv_time.setText(start+"开抢");
+                            }else {
+                                //小于24
+                                if(startTime!=0&&endTime!=0) {
+                                    tv_cut_down.setTime(true,currentTime,startTime,endTime);
+                                    tv_cut_down.changeBackGrounds(ContextCompat.getColor(mContext, R.color.color_F6551A));
+                                    tv_cut_down.changeTypeColor(Color.WHITE);
+                                    tv_time.setVisibility(View.INVISIBLE);
+                                    tv_cut_down.start();
+                                    tv_cut_down.setVisibility(View.VISIBLE);
+
+
+                                }else {
+                                    tv_time.setVisibility(View.INVISIBLE);
+                                    tv_cut_down.setVisibility(View.INVISIBLE);
+                                }
+//
+                            }
+
+
                             tvOldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
                             mTvSub.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -794,15 +837,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
             }
         });
     }
-/*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 15) {
-            account.clear();
-        }
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }*/
+
 
 private float star;
     /**

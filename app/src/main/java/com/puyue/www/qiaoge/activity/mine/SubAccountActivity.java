@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -27,11 +28,17 @@ import com.puyue.www.qiaoge.api.mine.subaccount.SubAccountEnableAPI;
 import com.puyue.www.qiaoge.api.mine.subaccount.SubAccountListAPI;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
+import com.puyue.www.qiaoge.event.BackEvent;
+import com.puyue.www.qiaoge.event.GoToMineEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.mine.SubAccountModel;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,10 +58,9 @@ import rx.schedulers.Schedulers;
 public class SubAccountActivity extends BaseSwipeActivity {
 
     private ImageView mIvBack;
-    private TextView mTvNone;
     private RecyclerView mRvSubAccount;
     private Button mBtnAdd;
-
+    ImageView iv_no_data;
     private List<SubAccountModel.DataBean> mList = new ArrayList<>();
     private SubAccountAdapter mAdapterSubAccount;
     private PtrClassicFrameLayout mPtr;
@@ -82,7 +88,7 @@ public class SubAccountActivity extends BaseSwipeActivity {
     @Override
     public void findViewById() {
         mIvBack = (ImageView) findViewById(R.id.iv_sub_account_back);
-        mTvNone = (TextView) findViewById(R.id.tv_sub_account_none);//没有子账号的显示
+        iv_no_data = findViewById(R.id.iv_no_data);
         mRvSubAccount = (RecyclerView) findViewById(R.id.rv_sub_account);//有子账号的显示
         mBtnAdd = (Button) findViewById(R.id.btn_sub_account_add);//增加子账号
         mPtr = (PtrClassicFrameLayout) findViewById(R.id.ptr_sub_account);
@@ -90,8 +96,20 @@ public class SubAccountActivity extends BaseSwipeActivity {
 
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getMessageEvent(BackEvent backEvent) {
+        requestSubAccountList();
+    }
     @Override
     public void setViewData() {
+        EventBus.getDefault().register(this);
         mPtr.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
@@ -150,16 +168,9 @@ public class SubAccountActivity extends BaseSwipeActivity {
         mTvConfirm.setOnClickListener(new NoDoubleClickListener() {
             @Override
             public void onNoDoubleClick(View view) {
-                if (flag.equals("disable")) {
-                    //禁用该子账号,将点击的这个item的手机号传给后台
-//                    requestDisableSubAccount(mList.get(position).loginPhone);
-                } else if (flag.equals("delete")) {
                     //删除该子账号
-                    requestDeleteSubAccount(String.valueOf(mModelSubAccount.data.get(position).subId));
-                } else if (flag.equals("enable")) {
-                    //恢复被禁用的子账号
-//                    requestEnableSubAccount(mList.get(position).loginPhone);
-                }
+                Log.d("woshidajiashudd....",mModelSubAccount.data.get(position).subId+"");
+                requestDeleteSubAccount(mModelSubAccount.data.get(position).subId+"");
                 alertDialog.dismiss();
             }
         });
@@ -232,14 +243,14 @@ public class SubAccountActivity extends BaseSwipeActivity {
 
     private void updateSubAccountList() {
         if (mModelSubAccount.data.size() > 0 && mModelSubAccount.data != null) {
-            mTvNone.setVisibility(View.GONE);
+            iv_no_data.setVisibility(View.GONE);
             mRvSubAccount.setVisibility(View.VISIBLE);
             mPtr.setVisibility(View.VISIBLE);
             mList.clear();
             mList.addAll(mModelSubAccount.data);
             mAdapterSubAccount.notifyDataSetChanged();
         } else {
-            mTvNone.setVisibility(View.VISIBLE);
+            iv_no_data.setVisibility(View.VISIBLE);
             mRvSubAccount.setVisibility(View.GONE);
             mPtr.setVisibility(View.GONE);
         }

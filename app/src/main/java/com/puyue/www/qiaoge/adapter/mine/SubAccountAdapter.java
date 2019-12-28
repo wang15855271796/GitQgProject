@@ -3,6 +3,7 @@ package com.puyue.www.qiaoge.adapter.mine;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,7 @@ public class SubAccountAdapter extends RecyclerView.Adapter<SubAccountAdapter.Su
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context,ModifyActivity.class);
-                intent.putExtra("subId",mListData.get(position).subId);
+                intent.putExtra("subId",mListData.get(position).subId+"");
                 context.startActivity(intent);
             }
         });

@@ -2,8 +2,10 @@ package com.puyue.www.qiaoge.activity.mine;
 
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
@@ -26,7 +28,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ${王涛} on 2019/12/18
  */
-public class ModifyActivity extends BaseSwipeActivity {
+public class ModifyActivity extends BaseSwipeActivity implements View.OnClickListener {
     @BindView(R.id.swipe)
     SwitchCompat swipe;
     @BindView(R.id.swipe1)
@@ -39,16 +41,39 @@ public class ModifyActivity extends BaseSwipeActivity {
     TextView tv_name;
     @BindView(R.id.tv_phone)
     TextView tv_phone;
+    @BindView(R.id.iv_back)
+    ImageView iv_back;
     private String subId;
+    private String inPoint;
+    private String inBalance;
+    private String inGift;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        handleExtra(savedInstanceState);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
+        if(getIntent().getStringExtra("subId")!=null) {
+            subId = getIntent().getStringExtra("subId");
+            Log.d("sswsweeeeee....",subId);
+
+
+        }
         return false;
     }
+
+
+
 
     @Override
     public void setContentView() {
         setContentView(R.layout.modify);
+        if(subId!=null) {
+            getSubDetail();
+        }
     }
 
     @Override
@@ -58,14 +83,36 @@ public class ModifyActivity extends BaseSwipeActivity {
 
     @Override
     public void setViewData() {
+
         ButterKnife.bind(this);
-        subId = getIntent().getStringExtra("subId");
+        iv_back.setOnClickListener(this);
 
-        SharedPreferencesUtil.getString(mActivity,"inPoint");
-        SharedPreferencesUtil.getString(mActivity,"inBalance");
-        SharedPreferencesUtil.getString(mActivity,"inGift");
 
-        getSubDetail();
+        String inPoints = SharedPreferencesUtil.getString(mActivity, "inPoint");
+        String inBalances = SharedPreferencesUtil.getString(mActivity, "inBalance");
+        String inGifts = SharedPreferencesUtil.getString(mActivity, "inGift");
+        Log.d("swddddddddds....",inPoints);
+        Log.d("swdddddddddss....",inBalances);
+        Log.d("swdddddddddsss....",inGifts);
+//
+//
+        if(inPoints=="1") {
+            swipe.setChecked(false);
+        }else {
+            swipe.setChecked(true);
+        }
+
+        if(inBalances=="1") {
+            swipe1.setChecked(false);
+        }else {
+            swipe1.setChecked(true);
+        }
+
+        if(inGifts=="1") {
+            swipe2.setChecked(false);
+        }else {
+            swipe2.setChecked(true);
+        }
 
         swipe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -86,6 +133,7 @@ public class ModifyActivity extends BaseSwipeActivity {
                     SharedPreferencesUtil.saveString(mActivity,"inBalance","0");
                 }else {
                     SharedPreferencesUtil.saveString(mActivity,"inBalance","1");
+
                 }
             }
         });
@@ -95,6 +143,7 @@ public class ModifyActivity extends BaseSwipeActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
                     SharedPreferencesUtil.saveString(mActivity,"inGift","0");
+
                 }else {
                     SharedPreferencesUtil.saveString(mActivity,"inGift","1");
                 }
@@ -104,12 +153,17 @@ public class ModifyActivity extends BaseSwipeActivity {
         tv_commit.setOnClickListener(new NoDoubleClickListener() {
             @Override
             public void onNoDoubleClick(View view) {
-                editSubAccount(subId,SharedPreferencesUtil.getString(mActivity,"inPonit")
-                        ,SharedPreferencesUtil.getString(mActivity,"inBalance"),SharedPreferencesUtil.getString(mActivity,"inGift"));
+
+                String inPoint = SharedPreferencesUtil.getString(mActivity, "inPoint");
+                String inBalance = SharedPreferencesUtil.getString(mActivity, "inBalance");
+                String inGift = SharedPreferencesUtil.getString(mActivity, "inGift");
+                editSubAccount(subId,inPoint,inBalance,inGift);
 
             }
         });
 
+
+        getSubDetail();
     }
 
     /**
@@ -145,8 +199,8 @@ public class ModifyActivity extends BaseSwipeActivity {
     /**
      *编辑子账户
      */
-    private void editSubAccount(String subId, String inPonit, String inBalance, String inGift) {
-        SubAccountAddAPI.editAccount(mContext, subId,inPonit,inBalance,inGift)
+    private void editSubAccount(String subId, String inPoints, String inBalances, String inGifts) {
+        SubAccountAddAPI.editAccount(mContext, subId,inPoints,inBalances,inGifts)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<BaseModel>() {
@@ -164,6 +218,8 @@ public class ModifyActivity extends BaseSwipeActivity {
                     public void onNext(BaseModel baseModel) {
                         if (baseModel.success) {
                             AppHelper.showMsg(mContext, "修改成功");
+
+                            finish();
                         } else {
                             AppHelper.showMsg(mContext, baseModel.message);
                         }
@@ -174,5 +230,14 @@ public class ModifyActivity extends BaseSwipeActivity {
     @Override
     public void setClickEvent() {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.puyue.www.qiaoge.adapter.home;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,9 +49,9 @@ public class SpikeActiveNewAdapter extends RecyclerView.Adapter<SpikeActiveNewAd
             holder.mTvTime.setTextColor(Color.parseColor("#FFFFFF"));
             holder.mTvSanjiao.setBackgroundResource(R.drawable.bg_daosanjiao);
         } else {
-            holder.linearLayoutNewSpike.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            holder.mTvTitle.setTextColor(Color.parseColor("#F56D23"));
-            holder.mTvTime.setTextColor(Color.parseColor("#F56D23"));
+            holder.linearLayoutNewSpike.setBackgroundColor(Color.parseColor("#333333"));
+            holder.mTvTitle.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.mTvTime.setTextColor(Color.parseColor("#FFFFFF"));
             holder.mTvSanjiao.setBackgroundResource(R.drawable.bg_dao_san_jiao_two);
         }
         if (onItemClickListener != null) {

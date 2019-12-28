@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.api.home;
 
 import android.content.Context;
 
+import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
 import com.puyue.www.qiaoge.helper.RestHelper;
 import com.puyue.www.qiaoge.model.home.SpikeActiveQueryModel;
@@ -22,14 +23,11 @@ public class SpikeActiveQueryAPI {
     private interface SpikeActiveQueryService {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.SPIKEACTIVEQUERY)
-        Observable<SpikeActiveQueryModel> getData(@Field("pageNum") int pageNum, @Field("pageSize") int pageSize,
-                                                  @Field("firstKindId") String firstKindId, @Field("secondKindId") String secondKindId,
-                                                  @Field("sales") byte sales, @Field("proName")String proName);
-        //默认0不选，  1销售量 ，2价格升序,3价格降序
+        Observable<BaseModel> getData(@Field("activeId") int pageNum);
     }
 
-    public static Observable<SpikeActiveQueryModel> requestData(Context context, int pageNum, int pageSize, String firstKindId, String secondKindId, byte sales,String proName) {
+    public static Observable<BaseModel> requestData(Context context, int activeId) {
         SpikeActiveQueryService spikeActiveQueryService = RestHelper.getBaseRetrofit(context).create(SpikeActiveQueryService.class);
-        return spikeActiveQueryService.getData(pageNum, pageSize, firstKindId, secondKindId, sales,proName);
+        return spikeActiveQueryService.getData(activeId);
     }
 }

@@ -31,12 +31,12 @@ public class SubAccountAddAPI {
                                         @Field("name") String name,
                                         @Field("pwd") String subLoginPwd,
                                         @Field("verifyCode") String verifyCode,
-                                        @Field("inPoint") int inPoint,
-                                        @Field("inBalance") int inBalance,
-                                        @Field("inGift") int inGift);
+                                        @Field("inPoint") String inPoint,
+                                        @Field("inBalance") String inBalance,
+                                        @Field("inGift") String inGift);
     }
 
-    public static Observable<BaseModel> requestAddSubAccount(Context context, String phone, String name, String pwd, String verifyCode,int inPoint,int inBalance,int inGift) {
+    public static Observable<BaseModel> requestAddSubAccount(Context context, String phone, String name, String pwd, String verifyCode,String inPoint,String inBalance,String inGift) {
         Observable<BaseModel> addSubAccountObservable = RestHelper.getBaseRetrofit(context).create(SubAccountAddService.class).setParams(phone, name, pwd,verifyCode,inPoint,inBalance,inGift);
         return addSubAccountObservable;
     }
@@ -48,7 +48,7 @@ public class SubAccountAddAPI {
     public interface EditService {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.Edit_SUB_USER)
-        Observable<BaseModel> setParams(@Field("verifyCode") String subId,
+        Observable<BaseModel> setParams(@Field("subId") String subId,
                                         @Field("inPoint") String inPoint,
                                         @Field("inBalance") String inBalance,
                                         @Field("inGift") String inGift);

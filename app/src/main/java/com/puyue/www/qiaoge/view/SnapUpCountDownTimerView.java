@@ -363,6 +363,38 @@ public class SnapUpCountDownTimerView extends LinearLayout {
 
     }
 
+    public void changeBackGrounds(int color) {
+        ll_hour_bg.setBackgroundColor(color);
+        ll_min_bg.setBackgroundColor(color);
+        ll_sec_bg.setBackgroundColor(color);
+
+        tv_hour_decade.setTextColor(Color.parseColor("#ffffff"));
+        tv_hour_unit.setTextColor(Color.parseColor("#ffffff"));
+        tv_min_decade.setTextColor(Color.parseColor("#ffffff"));
+        tv_min_unit.setTextColor(Color.parseColor("#ffffff"));
+        tv_sec_decade.setTextColor(Color.parseColor("#ffffff"));
+        tv_sec_unit.setTextColor(Color.parseColor("#ffffff"));
+        tv_hour.setTextColor(Color.parseColor("#ffffff"));
+        tv_min.setTextColor(Color.parseColor("#ffffff"));
+
+    }
+
+    public void changeBackGroundss(int color) {
+        ll_hour_bg.setBackgroundColor(color);
+        ll_min_bg.setBackgroundColor(color);
+        ll_sec_bg.setBackgroundColor(color);
+
+        tv_hour_decade.setTextColor(Color.parseColor("#333333"));
+        tv_hour_unit.setTextColor(Color.parseColor("#333333"));
+        tv_min_decade.setTextColor(Color.parseColor("#333333"));
+        tv_min_unit.setTextColor(Color.parseColor("#333333"));
+        tv_sec_decade.setTextColor(Color.parseColor("#333333"));
+        tv_sec_unit.setTextColor(Color.parseColor("#333333"));
+        tv_hour.setTextColor(Color.parseColor("#333333"));
+        tv_min.setTextColor(Color.parseColor("#333333"));
+
+    }
+
     public void changeTypeColor(int color) {
         tv_state.setTextColor(color);
     }

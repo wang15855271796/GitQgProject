@@ -73,9 +73,18 @@ public class TeamActiveQueryModel {
          */
 
         private long currentTime;
-        private int startTime;
-        private int endTime;
+        private long startTime;
+        private long endTime;
+        String title;
         private List<ActivesBean> actives;
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
         public long getCurrentTime() {
             return currentTime;
@@ -85,7 +94,7 @@ public class TeamActiveQueryModel {
             this.currentTime = currentTime;
         }
 
-        public int getStartTime() {
+        public long getStartTime() {
             return startTime;
         }
 
@@ -93,7 +102,7 @@ public class TeamActiveQueryModel {
             this.startTime = startTime;
         }
 
-        public int getEndTime() {
+        public long getEndTime() {
             return endTime;
         }
 
@@ -121,7 +130,7 @@ public class TeamActiveQueryModel {
              * progress : 0
              * remainNum : 剩余9587箱
              */
-
+            private int saleDone;
             private int activeId;
             private int activeType;
             private String activeName;
@@ -131,6 +140,14 @@ public class TeamActiveQueryModel {
             private String oldPrice;
             private String progress;
             private String remainNum;
+
+            public int getSaleDone() {
+                return saleDone;
+            }
+
+            public void setSaleDone(int saleDone) {
+                this.saleDone = saleDone;
+            }
 
             public int getActiveId() {
                 return activeId;

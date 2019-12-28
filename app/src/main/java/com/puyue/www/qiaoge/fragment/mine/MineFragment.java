@@ -797,6 +797,12 @@ public class MineFragment extends BaseFragment {
                             // updateOrderNum(myOrderNumModel);
 
 
+                                    if(myOrderNumModel.getData().getInviteOpen()==1) {
+                                        ll_inviteAward.setVisibility(View.GONE);
+                                    }else {
+                                        ll_inviteAward.setVisibility(View.VISIBLE);
+                                    }
+
                             if (myOrderNumModel.getData().isVipUser()) {
                                 tv_vip.setText("翘歌会员");
                             } else {

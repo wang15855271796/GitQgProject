@@ -26,16 +26,15 @@ import java.util.List;
  */
 
 public class SpikeActiveAdapter extends BaseQuickAdapter<SpikeActiveQueryModel.DataBean.ListBean, BaseViewHolder> {
-    private SnapUpCountDownTimerView mSvTime;
     private RelativeLayout mRlOnce;
     private ProgressBar mPbSale;
     private TextView mTvSales;
     private ImageView mIvSold;
-    private ImageView mIvSoldOut;
+    private TextView mIvSoldOut;
     private TextView mTvPrice;
 
     private ImageView imageOver;
-    private ImageView addCar;
+    private TextView addCar;
     private Onclick onclick;
 
     public SpikeActiveAdapter(int layoutResId, List<SpikeActiveQueryModel.DataBean.ListBean> data, Onclick onclick) {
@@ -47,17 +46,11 @@ public class SpikeActiveAdapter extends BaseQuickAdapter<SpikeActiveQueryModel.D
     @Override
     protected void convert(final BaseViewHolder helper, SpikeActiveQueryModel.DataBean.ListBean model) {
         GlideModel.displayTransForms(mContext,model.defaultPic,helper.getView(R.id.iv_item_spike_img));
-      //  Glide.with(mContext).load(model.defaultPic).crossFade().placeholder(R.mipmap.icon_default_rec).error(R.mipmap.icon_default_rec).into((ImageView) helper.getView(R.id.iv_item_spike_img));
+
         helper.setText(R.id.tv_item_spike_title, model.activeTitle);
         addCar = helper.getView(R.id.addCar);
-        mIvSoldOut = helper.getView(R.id.sold_out);
+        mIvSoldOut = helper.getView(R.id.tv_sold_out);
         imageOver = helper.getView(R.id.imageOver);
-        mSvTime = helper.getView(R.id.view_item_spike_time);
-        mSvTime.setBackTheme(false);
-        mSvTime.setTime(true, model.currentTime, model.startTime, model.endTime);
-        mSvTime.changeTextColor(ContextCompat.getColor(mContext, R.color.app_color_white));
-        mSvTime.changeColon(ContextCompat.getColor(mContext, R.color.app_bg_colon));
-        mSvTime.start();
         mTvSales = helper.getView(R.id.tv_item_spike_sales);
         mTvSales.setText("已售" + model.progress + "%");
         mRlOnce = helper.getView(R.id.rl_item_spike_once);
@@ -68,7 +61,6 @@ public class SpikeActiveAdapter extends BaseQuickAdapter<SpikeActiveQueryModel.D
             if ("NOT_START".equals(model.type)) {
                 // NOT_START("未开始"
                 mIvSold.setVisibility(View.GONE);
-                mSvTime.setVisibility(View.VISIBLE);
                 mRlOnce.setVisibility(View.VISIBLE);
                 mTvSales.setVisibility(View.VISIBLE);
                 imageOver.setVisibility(View.GONE);
@@ -80,7 +72,6 @@ public class SpikeActiveAdapter extends BaseQuickAdapter<SpikeActiveQueryModel.D
             } else if ("STARTED".equals(model.type)) {
                 // STARTED("进行中"
                 mIvSold.setVisibility(View.GONE);
-                mSvTime.setVisibility(View.VISIBLE);
                 mRlOnce.setVisibility(View.VISIBLE);
                 mTvSales.setVisibility(View.VISIBLE);
                 imageOver.setVisibility(View.GONE);
@@ -91,7 +82,6 @@ public class SpikeActiveAdapter extends BaseQuickAdapter<SpikeActiveQueryModel.D
             } else if ("OVER".equals(model.type)) {
                 //  OVER("已结束"
                 mIvSold.setVisibility(View.VISIBLE);
-                mSvTime.setVisibility(View.GONE);
                 mRlOnce.setVisibility(View.GONE);
                 mTvSales.setVisibility(View.VISIBLE);
                 imageOver.setVisibility(View.VISIBLE);
@@ -104,7 +94,7 @@ public class SpikeActiveAdapter extends BaseQuickAdapter<SpikeActiveQueryModel.D
         } else {
             //没有库存了,直接显示已售完
             mIvSold.setVisibility(View.VISIBLE);
-            mSvTime.setVisibility(View.VISIBLE);
+
             mRlOnce.setVisibility(View.GONE);
             mTvSales.setVisibility(View.GONE);
             addCar.setVisibility(View.GONE);

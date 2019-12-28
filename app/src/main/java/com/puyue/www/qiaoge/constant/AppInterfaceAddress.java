@@ -51,7 +51,11 @@ public class AppInterfaceAddress {
     public static final String GETPRODUCTLIST = "common/product/getProductList?";
     public static final String GETSELLPLACELISTBYIDANDDATE = "place/getSellPlaceListByIdAndDate?";
     public static final String SEARCHSCENICSPOT = "place/searchScenicSpot?";
-    public static final String SPIKEACTIVEQUERY = "auth/spikeActiveQuery?";
+    /**
+     * 活动订阅取消
+     */
+    public static final String SPIKEACTIVEQUERY = "common/saveOrCancelActive";
+
     public static final String SECKILLISTQUERY = "auth/secKillMoreList?";
     /**
      * 团购tan
@@ -203,7 +207,7 @@ public class AppInterfaceAddress {
      */
     public static final String SPECIALOFFERDETAIL = "common/getActiveInfoDetail";
     /**
-     * 新秒杀专区更多
+     * 秒杀-更多-顶部
      */
     public static final String SECKILLMORE = "auth/secKillMore";
     /**

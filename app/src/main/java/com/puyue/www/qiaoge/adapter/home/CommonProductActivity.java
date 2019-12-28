@@ -3,6 +3,7 @@ package com.puyue.www.qiaoge.adapter.home;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,7 +53,7 @@ import rx.schedulers.Schedulers;
 public class CommonProductActivity extends BaseSwipeActivity implements View.OnClickListener {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    CommonAdapter commonAdapter;
+    CommonsAdapter commonAdapter;
     int pageNum = 1;
     int pageSize = 10;
     @BindView(R.id.iv_back)
@@ -91,7 +92,7 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
     public void findViewById() {
         ButterKnife.bind(this);
         setTranslucentStatus();
-        commonAdapter = new CommonAdapter(R.layout.item_noresult_recommend, list, new CommonAdapter.Onclick() {
+        commonAdapter = new CommonsAdapter(R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {

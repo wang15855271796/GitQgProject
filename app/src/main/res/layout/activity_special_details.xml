@@ -120,7 +120,7 @@
                                 tools:text="限购20"
                                 android:textColor="#ffffff"
                                 android:textSize="12sp"
-                                android:layout_marginTop="7dp"
+                                android:layout_alignBaseline="@+id/tv_name"
                                 android:layout_marginLeft="@dimen/size_15dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
@@ -132,7 +132,7 @@
                                 android:textColor="#ffffff"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
-                                android:layout_marginTop="5dp"
+                                android:layout_alignBaseline="@+id/tv_name"
                                 android:layout_alignParentRight="true"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
@@ -141,8 +141,8 @@
                                 android:visibility="gone"
                                 android:layout_alignParentRight="true"
                                 android:layout_marginRight="@dimen/size_15dp"
-                                android:layout_marginTop="@dimen/size_10dp"
-                                android:id="@+id/view_details_seckill"
+                                android:layout_marginTop="@dimen/size_5dp"
+                                android:id="@+id/tv_cut_down"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp" />
@@ -193,7 +193,7 @@
                                     android:textColor="#ffffff"
                                     android:layout_toRightOf="@+id/pb"
                                     android:textSize="@dimen/size_13dp"
-                                    android:layout_marginTop="5dp"
+                                    android:layout_marginTop="7dp"
                                     android:layout_marginLeft="@dimen/size_15dp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />

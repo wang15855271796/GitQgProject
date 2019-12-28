@@ -6,16 +6,6 @@
     android:background="#f8f8f8"
     android:layout_height="match_parent">
 
-    <TextView
-        android:text="2019"
-        android:id="@+id/tv_time"
-        android:textColor="#333333"
-        android:textSize="@dimen/size_15dp"
-        android:layout_marginTop="@dimen/size_15dp"
-        android:layout_marginLeft="@dimen/size_20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

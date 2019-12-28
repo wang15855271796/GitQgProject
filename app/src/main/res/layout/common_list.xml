@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rootview"
-    android:background="#f8f8f8"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,14 +14,13 @@
 
     </LinearLayout>
 
+
     <com.puyue.www.qiaoge.view.CompatToolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:background="@color/white">
 
         <LinearLayout
-            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -29,10 +28,10 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-               >
+                >
 
                 <ImageView
-                    android:id="@+id/iv_activity_back"
+                    android:id="@+id/iv_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -42,32 +41,32 @@
                     android:src="@mipmap/ic_back_arrow" />
 
                 <TextView
-                    android:text="限时秒杀"
-                    android:id="@+id/tv_activity_goods_list_title"
+                    android:id="@+id/tv_title"
+                    android:text="超值组合"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"
-                    android:textColor="@color/app_top_bar_text"
-                    android:textSize="18dp" />
+                    android:textColor="#333333"
+                    android:textSize="18sp" />
 
+                <ImageView
+                    android:layout_marginRight="@dimen/size_20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/ic_tab_cart_enable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
                 <RelativeLayout
-                    android:visibility="gone"
                     android:id="@+id/rl_good_cart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/size_10dp">
-
-
-                    <ImageView
-                        android:id="@+id/iv_cart"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_home_good_cart" />
 
                     <com.puyue.www.qiaoge.view.SuperTextView
                         android:id="@+id/text_cart_num"
@@ -82,7 +81,6 @@
                         app:corner="7.5dp"
                         app:solid="#ff0000" />
 
-
                 </RelativeLayout>
 
             </RelativeLayout>
@@ -92,62 +90,27 @@
 
     </com.puyue.www.qiaoge.view.CompatToolbar>
 
-    <LinearLayout
-
-        android:id="@+id/linearLayout_spike"
+    <com.flyco.tablayout.SlidingTabLayout
+        android:background="@color/white"
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="48dp"
+        tl:tl_indicator_color="#FF680A"
+        tl:tl_indicator_margin_bottom="10dp"
+        tl:tl_indicator_width="18dp"
+        tl:tl_textAllCaps="true"
+        app:tl_tab_space_equal="true"
+        tl:tl_textBold="BOTH"
+        tl:tl_textSelectColor="#FF680A"
+        tl:tl_textUnselectColor="#666666"
+        tl:tl_textsize="@dimen/size_16dp" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview_spike_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-        </android.support.v7.widget.RecyclerView>
-
-        <RelativeLayout
-            android:visibility="gone"
-            android:id="@+id/rl_spike"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#f8f8f8"
-            android:paddingTop="10dp"
-            android:paddingBottom="8dp">
-
-            <TextView
-                android:id="@+id/tv_spike_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="秒杀抢购中"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <FrameLayout
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-       >
-
-        <in.srain.cube.views.ptr.PtrClassicFrameLayout
-            android:id="@+id/ptr_activity_goods_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:descendantFocusability="blocksDescendants">
+        android:layout_height="match_parent">
 
 
-            <android.support.v7.widget.RecyclerView
+    </android.support.v4.view.ViewPager>
 
-                android:id="@+id/rv_activity_goods_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-
-        </in.srain.cube.views.ptr.PtrClassicFrameLayout>
-
-    </FrameLayout>
 </LinearLayout>

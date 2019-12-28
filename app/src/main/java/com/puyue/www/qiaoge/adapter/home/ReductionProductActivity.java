@@ -54,7 +54,7 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
     RecyclerView recyclerView;
     @BindView(R.id.smart)
     SmartRefreshLayout refreshLayout;
-    CommonAdapter commonAdapter;
+    CommonsAdapter commonAdapter;
     int pageNum = 1;
     @BindView(R.id.iv_back)
     ImageView iv_back;
@@ -91,7 +91,7 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
     public void findViewById() {
         ButterKnife.bind(this);
         setTranslucentStatus();
-        commonAdapter = new CommonAdapter(R.layout.item_noresult_recommend, list, new CommonAdapter.Onclick() {
+        commonAdapter = new CommonsAdapter(R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {

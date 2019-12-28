@@ -5,6 +5,22 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+        tools:text="2019"
+        android:id="@+id/tv_time"
+        android:textColor="#333333"
+        android:padding="10dp"
+        android:textSize="@dimen/size_15dp"
+        android:layout_marginLeft="@dimen/size_10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/rl_root"
+        android:layout_below="@+id/tv_time"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="136dp">
@@ -56,6 +72,7 @@
 
         <TextView
             tools:text="100"
+
             android:layout_toRightOf="@+id/tv_price"
             android:id="@+id/tv_old_price"
             android:layout_marginTop="10dp"
@@ -73,7 +90,7 @@
             android:layout_width="100dp"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_height="10dp"
-            android:progressDrawable="@drawable/layerlist_goods_progress" />
+            android:progressDrawable="@drawable/layer_coupon_progress" />
 
 
         <TextView
@@ -82,11 +99,30 @@
             android:layout_below="@+id/tv_old_price"
             android:textColor="#999999"
             android:layout_toRightOf="@+id/pb"
-            android:textSize="@dimen/size_13dp"
-            android:layout_marginTop="7dp"
+            android:textSize="8dp"
+            android:layout_alignBaseline="@+id/pb"
+            android:layout_marginTop="12dp"
             android:layout_marginLeft="@dimen/size_15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_add"
+            android:text="立即加购"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:paddingBottom="@dimen/size_3dp"
+            android:paddingTop="@dimen/size_3dp"
+            android:textColor="@color/white"
+            android:layout_marginTop="@dimen/size_5dp"
+            android:background="@drawable/shape_detail_grey"
+            android:layout_below="@+id/tv_old_price"
+            android:layout_marginRight="@dimen/size_15dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 
     </RelativeLayout>
 </LinearLayout>

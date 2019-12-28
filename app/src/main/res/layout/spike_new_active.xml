@@ -2,15 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="100dp"
     android:layout_height="85dp"
-    android:background="@color/white"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <LinearLayout
-
         android:id="@+id/linearLayout_spike_new"
-
         android:layout_width="100dp"
         android:layout_height="75dp"
+        android:background="@color/black"
         android:orientation="vertical"
         android:paddingTop="5dp">
 
@@ -20,8 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="时间"
-            android:textColor="#F56D23"
+            tools:text="时间"
+            android:textColor="@color/white"
             android:textSize="13dp" />
 
         <TextView
@@ -31,7 +30,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="抢购中"
-            android:textColor="#F56D23" />
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <TextView

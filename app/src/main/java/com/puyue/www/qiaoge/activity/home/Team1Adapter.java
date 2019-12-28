@@ -1,7 +1,12 @@
 package com.puyue.www.qiaoge.activity.home;
 
+import android.content.Intent;
+import android.graphics.Paint;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -9,6 +14,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.adapter.market.MarketGoodsAdapter;
+import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.model.home.TeamActiveQueryModel;
 
 import java.util.List;
@@ -18,46 +24,62 @@ import java.util.List;
  */
 public class Team1Adapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean,BaseViewHolder> {
 
-    private ImageView iv_pic;
-    private ImageView iv_icon;
-    private ImageView iv_sale_done;
-    private TeamActiveQueryModel.DataBean.ActivesBean activesBean;
-    private TextView tv_price;
-
     Onclick onclick;
-    public Team1Adapter(int layoutResId, List<TeamActiveQueryModel.DataBean> teamList,Onclick onclick) {
-        super(layoutResId, teamList);
+    private ImageView iv_pic;
+    TextView tv_old_price;
+    private TeamActiveQueryModel.DataBean.ActivesBean activesBean;
+    private TextView tv_total;
+    ProgressBar pb;
+    private TextView tv_add;
+    private RelativeLayout rl_root;
+
+    public Team1Adapter(int layoutResId, @Nullable List<TeamActiveQueryModel.DataBean> data, Onclick onclick) {
+        super(layoutResId, data);
         this.onclick = onclick;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, TeamActiveQueryModel.DataBean item) {
+        tv_old_price = helper.getView(R.id.tv_old_price);
         iv_pic = helper.getView(R.id.iv_pic);
-        activesBean = item.getActives().get(0);
-        Glide.with(mContext).load(activesBean.getDefaultPic()).into(iv_pic);
+        rl_root = helper.getView(R.id.rl_root);
+        tv_add = helper.getView(R.id.tv_add);
+        tv_total = helper.getView(R.id.tv_total);
+        pb = helper.getView(R.id.pb);
+        tv_total.setText(item.getActives().get(helper.getAdapterPosition()).getRemainNum());
+        helper.setText(R.id.tv_time,item.getTitle());
+        for (int i = 0; i <item.getActives().size() ; i++) {
+            activesBean = item.getActives().get(i);
 
-        TextView tv_name = helper.getView(R.id.tv_name);
-        tv_name.setText(item.getActives().get(0).getActiveName());
-        tv_price = helper.getView(R.id.tv_price);
-        ImageView iv_add = helper.getView(R.id.iv_add);
-        iv_add.setOnClickListener(new View.OnClickListener() {
+        }
+
+        Glide.with(mContext).load(activesBean.getDefaultPic()).into(iv_pic);
+        helper.setText(R.id.tv_name,activesBean.getActiveName());
+        helper.setText(R.id.tv_spec,activesBean.getSpec());
+        helper.setText(R.id.tv_price,activesBean.getPrice());
+        helper.setText(R.id.tv_old_price,activesBean.getOldPrice());
+        pb.setProgress(Integer.parseInt(activesBean.getProgress()));
+        tv_total.setText(activesBean.getRemainNum());
+
+
+        if(activesBean.getSaleDone()==0) {
+            tv_add.setText("立即加购");
+            tv_add.setBackgroundResource(R.drawable.shape_orange);
+        }else {
+            tv_add.setText("已售罄");
+            tv_add.setBackgroundResource(R.drawable.shape_detail_grey);
+        }
+        tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
+        tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+
+        rl_root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(mContext,TeamGoodsDetailActivity.class);
+                intent.putExtra(AppConstant.ACTIVEID,activesBean.getActiveId());
+                mContext.startActivity(intent);
             }
         });
-        tv_price.setText(item.getActives().get(0).getPrice());
-//        iv_icon = helper.getView(R.id.iv_icon);
-//        Glide.with(mContext).load(activesBean.get).into(iv_pic);
-//
-//        iv_sale_done = helper.getView(R.id.iv_sale_done);
-//
-//        if(item.available) {
-//            iv_sale_done.setVisibility(View.VISIBLE);
-//            Glide.with(mContext).load(item.saleDoneUrl).into(iv_sale_done);
-//        }else {
-//            iv_sale_done.setVisibility(View.GONE);
-//        }
     }
 
     public interface Onclick {

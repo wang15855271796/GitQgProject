@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import com.puyue.www.qiaoge.api.mine.login.SendCodeAPI;
 import com.puyue.www.qiaoge.api.mine.subaccount.SubAccountAddAPI;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
+import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -28,6 +30,8 @@ import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.utils.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,6 +66,8 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
     RelativeLayout ll_yzm;
     @BindView(R.id.tv_yzm)
     TextView tv_yzm;
+    @BindView(R.id.iv_back)
+    ImageView iv_back;
     private BaseModel mModelAddSubAccount;
     private String phone;
     boolean isSendingCode;
@@ -81,6 +87,10 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
     public void findViewById() {
         ButterKnife.bind(this);
         ll_yzm.setOnClickListener(this);
+        iv_back.setOnClickListener(this);
+        SharedPreferencesUtil.saveString(mActivity,"inPoint","1");
+        SharedPreferencesUtil.saveString(mActivity,"inBalance","1");
+        SharedPreferencesUtil.saveString(mActivity,"inGift","1");
         swipe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -117,7 +127,9 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
         tv_add.setOnClickListener(new NoDoubleClickListener() {
             @Override
             public void onNoDoubleClick(View view) {
-
+                String inPoint = SharedPreferencesUtil.getString(mActivity, "inPoint");
+                String inBalance = SharedPreferencesUtil.getString(mActivity, "inBalance");
+                String inGift = SharedPreferencesUtil.getString(mActivity, "inGift");
                 if (StringHelper.notEmptyAndNull(et_name.getText().toString())
                         && StringHelper.notEmptyAndNull(et_phone.getText().toString())
                         && StringHelper.notEmptyAndNull(et_set_psd.getText().toString())
@@ -130,14 +142,9 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
                                 && et_sure_psd.getText().toString().length() >= 6) {
                             if (StringHelper.isLetterDigit(et_set_psd.getText().toString())) {
                                 //添加一个子账号,添加子账号会默认注册一个账号
-                                String inPonit = SharedPreferencesUtil.getString(mActivity, "inPonit");
-                                int inPonits = Integer.parseInt(inPonit);
-                                String inBalance = SharedPreferencesUtil.getString(mActivity, "inBalance");
-                                int inBalances = Integer.parseInt(inPonit);
-                                String inGift = SharedPreferencesUtil.getString(mActivity, "inGift");
-                                int inGifts = Integer.parseInt(inPonit);
+
                                 requestAddSubAccount(et_phone.getText().toString(), et_name.getText().toString(),
-                                        et_set_psd.getText().toString(), et_yzm.getText().toString(),inPonits,inBalances,inGifts);
+                                        et_set_psd.getText().toString(), et_yzm.getText().toString(),inPoint,inBalance,inGift);
                             } else {
                                 AppHelper.showMsg(mContext, "密码由6-16位数字与字母组成");
                             }
@@ -150,6 +157,8 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
                 } else {
                     AppHelper.showMsg(mContext, "数据不全!");
                 }
+
+                finish();
             }
         });
     }
@@ -157,8 +166,8 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
     /**
      * 添加子账户  SubAccountAddAPI.requestAddSubAccount(mContext, phone, name, pwd, yzm, inPonit,inBalance,inGift)
      */
-    private void requestAddSubAccount(String phone, String name, String pwd, String yzm, int inPonit, int inBalance, int inGift) {
-        SubAccountAddAPI.requestAddSubAccount(mContext, phone, name, pwd, yzm, inPonit,inBalance,inGift)
+    private void requestAddSubAccount(String phone, String name, String pwd, String yzm, String inPoint, String inBalance, String inGift) {
+        SubAccountAddAPI.requestAddSubAccount(mContext, phone, name, pwd, yzm, inPoint,inBalance,inGift)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<BaseModel>() {
@@ -177,7 +186,9 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
                         mModelAddSubAccount = baseModel;
                         if (mModelAddSubAccount.success) {
                             //添加子账号成功,刷新列表
-                            AppHelper.showMsg(mContext, "添加成功");
+                            ToastUtil.showSuccessMsg(mContext,"添加成功");
+                            EventBus.getDefault().post(new BackEvent());
+
                         } else {
                             AppHelper.showMsg(mContext, baseModel.message);
                         }
@@ -211,6 +222,10 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
                     Log.d("woshisdagfdsg.....",phone);
                     requestSendCode(phone);
                 }
+                break;
+
+            case R.id.iv_back:
+                finish();
                 break;
         }
     }

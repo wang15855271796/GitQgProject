@@ -21,11 +21,11 @@ public class SubAccountDeleteAPI {
     public interface SubAccountDeleteService {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.DELETE_SUB_USER)
-        Observable<BaseModel> setParams(@Field("subLoginPhone") String subLoginPhone);
+        Observable<BaseModel> setParams(@Field("subId") String subLoginPhone);
     }
 
-    public static Observable<BaseModel> requestDeleteSubAccount(Context context, String subLoginPhone) {
-        Observable<BaseModel> deleteSubAccountObservable = RestHelper.getBaseRetrofit(context).create(SubAccountDeleteService.class).setParams(subLoginPhone);
+    public static Observable<BaseModel> requestDeleteSubAccount(Context context, String subId) {
+        Observable<BaseModel> deleteSubAccountObservable = RestHelper.getBaseRetrofit(context).create(SubAccountDeleteService.class).setParams(subId);
         return deleteSubAccountObservable;
     }
 }
