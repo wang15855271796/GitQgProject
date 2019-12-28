@@ -211,7 +211,6 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
 
         judgePageType();//进行差异性的设置。
         judgeRefreshData();
-        getCustomerPhone();
 
     }
 
@@ -445,55 +444,6 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
         super.onDestroy();
         SelectBean.cleanDate();
     }
-
-
-    /**
-     * 获取购物车角标数据
-     */
-    private void getCartNum() {
-        PublicRequestHelper.getCartNum(mContext, new OnHttpCallBack<GetCartNumModel>() {
-            @Override
-            public void onSuccessful(GetCartNumModel getCartNumModel) {
-                if (getCartNumModel.isSuccess()) {
-                    if (Integer.valueOf(getCartNumModel.getData().getNum()) > 0) {
-                        text_cart_num.setVisibility(View.VISIBLE);
-                        text_cart_num.setText(getCartNumModel.getData().getNum());
-                    } else {
-                        text_cart_num.setVisibility(View.GONE);
-                    }
-                } else {
-                    AppHelper.showMsg(mContext, getCartNumModel.getMessage());
-                }
-            }
-
-            @Override
-            public void onFaild(String errorMsg) {
-
-            }
-        });
-    }
-
-    /**
-     * 获取客服电话
-     */
-    private void getCustomerPhone() {
-        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
-            @Override
-            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
-                if (getCustomerPhoneModel.isSuccess()) {
-                    cell = getCustomerPhoneModel.getData();
-                } else {
-                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
-                }
-            }
-
-            @Override
-            public void onFaild(String errorMsg) {
-            }
-        });
-    }
-
-
 
     @Override
     protected void onResume() {
