@@ -5,10 +5,13 @@ import android.content.Context;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
 import com.puyue.www.qiaoge.helper.RestHelper;
+import com.puyue.www.qiaoge.model.mine.SubAccountModel;
+import com.puyue.www.qiaoge.model.mine.order.IntellGencyModel;
 import com.puyue.www.qiaoge.model.mine.order.MineCenterModel;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import rx.Observable;
 
@@ -29,5 +32,15 @@ public class MineAccountAPI {
         return addSubAccountObservable;
     }
 
+
+    public interface IntellGencyService {
+        @GET(AppInterfaceAddress.IntellGency)
+        Observable<IntellGencyModel> setParams();
+    }
+
+    public static Observable<IntellGencyModel> getData(Context context) {
+        Observable<IntellGencyModel> intellGencyModelObservable = RestHelper.getBaseRetrofit(context).create(IntellGencyService.class).setParams();
+        return intellGencyModelObservable;
+    }
 
 }

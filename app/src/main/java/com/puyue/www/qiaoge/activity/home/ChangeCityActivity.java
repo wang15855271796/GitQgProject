@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -33,7 +34,7 @@ public class ChangeCityActivity extends BaseActivity {
     private RecyclerView rl_city_change;
     private CityChangeAdapter mAdapter;
 
-    private List<CityChangeModel.DataBean> listCity =new ArrayList<>();
+    private List<CityChangeModel> listCity =new ArrayList<>();
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
@@ -55,16 +56,16 @@ public class ChangeCityActivity extends BaseActivity {
     public void setViewData() {
 
         rl_city_change.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new CityChangeAdapter(R.layout.city_item, listCity);
+        mAdapter = new CityChangeAdapter(R.layout.item_city,R.layout.city_item, listCity);
         rl_city_change.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                UserInfoHelper.saveCity(mContext, listCity.get(position).getProvinceName());
-                Intent intent = new Intent();//跳回首页
-                setResult(104,intent);
-                finish();
+//                UserInfoHelper.saveCity(mContext, listCity.get(position).getProvinceName());
+//                Intent intent = new Intent();//跳回首页
+//                setResult(104,intent);
+//                finish();
             }
         });
 
@@ -101,16 +102,16 @@ public class ChangeCityActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.d("sdddddddddddddddd",e.getMessage()+"");
                     }
 
                     @Override
                     public void onNext(CityChangeModel cityChangeModel) {
-
+                        Log.d("sdddddddddddddddd00",cityChangeModel.getData()+"");
                         if (cityChangeModel.isSuccess()) {
                             listCity.clear();
                             List<CityChangeModel.DataBean> data = cityChangeModel.getData();
-                            listCity.addAll(data);
+                            listCity.add(cityChangeModel);
 
                             mAdapter.notifyDataSetChanged();
                         } else {

@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -95,6 +96,7 @@ public class CouponFragment1 extends BaseFragment {
                             couponList.clear();
                             if (teamActiveQueryModel.getData() != null) {
                                 couponList.addAll(teamActiveQueryModel.getData());
+                                Log.d("sdfdfdfgdgdfgd.....",couponList.size()+"");
                                 coupon1Adapter.notifyDataSetChanged();
 
                             }

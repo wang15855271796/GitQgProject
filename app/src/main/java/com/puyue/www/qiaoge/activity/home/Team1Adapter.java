@@ -32,6 +32,7 @@ public class Team1Adapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean
     ProgressBar pb;
     private TextView tv_add;
     private RelativeLayout rl_root;
+    private int activeId;
 
     public Team1Adapter(int layoutResId, @Nullable List<TeamActiveQueryModel.DataBean> data, Onclick onclick) {
         super(layoutResId, data);
@@ -46,13 +47,14 @@ public class Team1Adapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean
         tv_add = helper.getView(R.id.tv_add);
         tv_total = helper.getView(R.id.tv_total);
         pb = helper.getView(R.id.pb);
-        tv_total.setText(item.getActives().get(helper.getAdapterPosition()).getRemainNum());
+
         helper.setText(R.id.tv_time,item.getTitle());
         for (int i = 0; i <item.getActives().size() ; i++) {
             activesBean = item.getActives().get(i);
 
         }
 
+        tv_total.setText(activesBean.getRemainNum());
         Glide.with(mContext).load(activesBean.getDefaultPic()).into(iv_pic);
         helper.setText(R.id.tv_name,activesBean.getActiveName());
         helper.setText(R.id.tv_spec,activesBean.getSpec());
@@ -62,7 +64,7 @@ public class Team1Adapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean
         tv_total.setText(activesBean.getRemainNum());
 
 
-        if(activesBean.getSaleDone()==0) {
+        if(activesBean.getSaleDone()==1) {
             tv_add.setText("立即加购");
             tv_add.setBackgroundResource(R.drawable.shape_orange);
         }else {
@@ -76,7 +78,10 @@ public class Team1Adapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,TeamGoodsDetailActivity.class);
-                intent.putExtra(AppConstant.ACTIVEID,activesBean.getActiveId());
+                for (int i = 0; i <item.getActives().size() ; i++) {
+                    activeId = item.getActives().get(i).getActiveId();
+                }
+                intent.putExtra(AppConstant.ACTIVEID,activeId);
                 mContext.startActivity(intent);
             }
         });

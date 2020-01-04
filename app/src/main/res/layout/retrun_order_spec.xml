@@ -16,6 +16,18 @@
         android:textSize="12dp" />
 
     <TextView
+        android:id="@+id/tv_coupon_price"
+        android:layout_width="70dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="1dp"
+        android:gravity="center"
+        android:padding="3dp"
+        android:text="23"
+        android:textColor="#F6551A"
+        android:textSize="12dp" />
+
+
+    <TextView
         android:id="@+id/tv_return_price"
         android:layout_width="70dp"
         android:layout_height="24dp"

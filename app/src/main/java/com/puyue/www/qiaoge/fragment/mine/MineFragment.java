@@ -37,6 +37,7 @@ import com.puyue.www.qiaoge.activity.mine.coupons.MyCouponsActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
+import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletDetailActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletNewActivity;
 import com.puyue.www.qiaoge.api.mine.AccountCenterAPI;
@@ -84,7 +85,6 @@ public class MineFragment extends BaseFragment {
     private LinearLayout mLlDelivery;
     private LinearLayout mLlReturnGoods;
     private LinearLayout mLlReceived;
-    private RelativeLayout mRlWallet;
     private RelativeLayout mRlCollection;
     // private RelativeLayout mRlReturnRent;
     private RelativeLayout mRlContact;
@@ -148,7 +148,7 @@ public class MineFragment extends BaseFragment {
     private LinearLayout ll_setting;//设置
     private TextView tv_use_deduct;//使用优惠券
     private ImageView iv_use_deduct;//使用优惠券
-
+    RelativeLayout rl_zizhi;
 
     private int day;
     private String giftNo;
@@ -194,7 +194,7 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void findViewById(View view) {
-
+        rl_zizhi = (view.findViewById(R.id.rl_zizhi));
         mIvAvatar = (view.findViewById(R.id.iv_mine_avatar));//头像
         mineIntegral = (view.findViewById(R.id.mineIntegral));//积分
         mTvPhone = (view.findViewById(R.id.tv_mine_phone));
@@ -208,7 +208,6 @@ public class MineFragment extends BaseFragment {
         mLlReceived = (view.findViewById(R.id.ll_mine_tips_received));//待收货
 
         mRlMyOrders = (view.findViewById(R.id.rl_mine_orders));//我的订单
-        mRlWallet = (view.findViewById(R.id.rl_mine_wallet));//我的钱包
         mRlCollection = (view.findViewById(R.id.rl_mine_collection));//我的收藏
 
         mRlContact = (view.findViewById(R.id.rl_mine_contact));//联系客服
@@ -279,7 +278,13 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void setClickEvent() {
-
+        rl_zizhi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mActivity,IntelliGencyActivity.class);
+                startActivity(intent);
+            }
+        });
         mIvAvatar.setOnClickListener(noDoubleClickListener);
         rl_return_order.setOnClickListener(noDoubleClickListener);//售后
         mLlPayment.setOnClickListener(noDoubleClickListener);//待付款
@@ -287,7 +292,6 @@ public class MineFragment extends BaseFragment {
         mLlDelivery.setOnClickListener(noDoubleClickListener);//待发货
         mLlReturnGoods.setOnClickListener(noDoubleClickListener);//退货
         mLlReceived.setOnClickListener(noDoubleClickListener);//待收货
-        mRlWallet.setOnClickListener(noDoubleClickListener);//我的钱包
         mRlCollection.setOnClickListener(noDoubleClickListener);//我的收藏
         //mRlReturnRent.setOnClickListener(noDoubleClickListener);
         mRlContact.setOnClickListener(noDoubleClickListener);//联系客服
@@ -427,19 +431,8 @@ public class MineFragment extends BaseFragment {
             {
                 //待收货
                 startActivity(MyOrdersActivity.getIntent(getContext(), MyOrdersActivity.class, AppConstant.RECEIVED));
-            } else if (view == mRlWallet||view ==ll_amount)
 
-            {
-                //我的钱包
-                if (mModelAccountCenter == null) {
-                    requestUserInfo();
-                } else {
-                    startActivity(MyWalletNewActivity.getIntent(getContext(), MyWalletNewActivity.class));
-
-                }
-            } else if (view == rl_return_order)
-
-            {
+            }  else if (view == rl_return_order) {
                 //我的账单
                 Intent intent =new Intent(mActivity,MyWalletDetailActivity.class);
 
@@ -568,7 +561,7 @@ public class MineFragment extends BaseFragment {
                 ll_expiredInfo.setVisibility(View.GONE);
                 isChecked = false;
                 useAccount();
-            } /*else if (view == ll_amount)
+            } else if (view == ll_amount)
 
             {
                 String num = "0";
@@ -576,7 +569,7 @@ public class MineFragment extends BaseFragment {
 
                 UserInfoHelper.saveUserWalletNum(getContext(), num);
                 startActivity(intent);
-            }*/ else if (view == ll_inviteAward)
+            } else if (view == ll_inviteAward)
 
             {
 

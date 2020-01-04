@@ -8,21 +8,23 @@
   >
 
     <TextView
-        android:id="@+id/tv_city"
+        android:id="@+id/tv_province"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/size_10dp"
         android:paddingTop="@dimen/size_12dp"
-        tools:text="杭州"
+        tools:text="浙江"
         android:textColor="#ff1c1c1c"
         android:textSize="@dimen/size_15dp" />
 
     <com.puyue.www.qiaoge.view.FlowLayout
+        android:visibility="gone"
         android:id="@+id/fl_container"
         android:layout_marginBottom="@dimen/size_15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     </com.puyue.www.qiaoge.view.FlowLayout>
+
 
 </LinearLayout>

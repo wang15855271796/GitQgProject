@@ -69,9 +69,7 @@ public class ChooseDialogs extends Dialog implements View.OnClickListener {
     int productId;
     public List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs;
     private List<GetProductDetailModel.DataBean.ProdPricesBean> prodPrices;
-    int productCombinationId;
     private ChooseSpecAdapters chooseSpecAdapter;
-    private List<ChoiceSpecModel> account = new ArrayList<>();
 
     public ChooseDialogs(Context context,int productId) {
         super(context, R.style.dialog);

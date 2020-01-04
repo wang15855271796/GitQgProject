@@ -631,8 +631,11 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
 
         }
 
-        long currentTime = model.getData().getCurrentTime();
+
+        long currentTime = System.currentTimeMillis();
         long startTime = model.getData().getStartTime();
+        Log.d("swddddddddddd",startTime+"");
+        Log.d("swddddddddddd.....",currentTime+"");
         long endTime = model.getData().getEndTime();
         String current = DateUtils.formatDate(currentTime, "MM月dd日HH时mm分ss秒");
         String start = DateUtils.formatDate(startTime, "MM月dd日HH时mm分ss秒");
@@ -645,29 +648,102 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
             e.printStackTrace();
         }
 
-        boolean exceed24 = DateUtils.isExceed24(currents, starts);
-        Log.d("wsddddddddd...",start+"");
-        Log.d("wsddddddddd........",current+"");
-        if(exceed24) {
-            //大于24
-            tv_time.setText(start+"开抢");
+        if(currentTime<startTime) {
+            mTvAddCar.setText("未开始");
+            mTvAddCar.setBackgroundResource(R.drawable.app_car);
+
         }else {
-            //小于24
-            if(startTime!=0) {
-                tv_cut_down.setTime(true,currentTime,startTime,endTime);
-                tv_cut_down.changeBackGrounds(ContextCompat.getColor(mContext, R.color.color_F6551A));
-                tv_cut_down.changeTypeColor(Color.WHITE);
-                tv_time.setVisibility(View.INVISIBLE);
-                tv_cut_down.start();
-                tv_cut_down.setVisibility(View.VISIBLE);
-
-
-            }else {
-                tv_time.setVisibility(View.INVISIBLE);
-                tv_cut_down.setVisibility(View.INVISIBLE);
+            if (model.getData().getSaleDone() == 0) {
+                mTvAddCar.setEnabled(false);
+                mTvAddCar.setText("已售罄");
+                mTvAddCar.setBackgroundResource(R.drawable.app_car);
+            } else {
+                mTvAddCar.setEnabled(true);
+                mTvAddCar.setText("加入购物车");
+                mTvAddCar.setBackgroundColor(Color.parseColor("#F6551A"));
             }
-//
         }
+
+        if(startTime == 0) {
+            tv_time.setVisibility(View.VISIBLE);
+            if (model.getData().getSaleDone() == 0) {
+                tv_time.setText("折扣已售罄");
+            }else {
+                tv_time.setText("折扣进行中");
+            }
+        }else {
+//            long abs = Math.abs(startTime - currentTime);
+//            int s = (int) (abs/1000);
+//            int hours = s/ 3600;
+            boolean hours = DateUtils.isExceed24(currents, starts);
+            if(hours) {
+                //大于24
+                tv_time.setText(start+"开抢");
+            }else {
+                //小于24
+                if(startTime!=0) {
+                    if(startTime < currentTime) {
+                        tv_time.setVisibility(View.VISIBLE);
+                        if (model.getData().getSaleDone() == 0) {
+                            tv_time.setText("折扣已售罄");
+                        }else {
+                            tv_time.setText("折扣进行中");
+                        }
+                    }else {
+                        tv_cut_down.setTime(true,currentTime,startTime,endTime);
+                        tv_cut_down.changeBackGrounds(ContextCompat.getColor(mContext, R.color.color_F6551A));
+                        tv_cut_down.changeTypeColor(Color.WHITE);
+                        tv_time.setVisibility(View.INVISIBLE);
+                        tv_cut_down.start();
+                        tv_cut_down.setVisibility(View.VISIBLE);
+                    }
+
+                }else {
+                    tv_time.setVisibility(View.INVISIBLE);
+                    tv_cut_down.setVisibility(View.INVISIBLE);
+                }
+            }
+
+        }
+
+
+//        long currentTime = model.getData().getCurrentTime();
+//        long startTime = model.getData().getStartTime();
+//        long endTime = model.getData().getEndTime();
+//        String current = DateUtils.formatDate(currentTime, "MM月dd日HH时mm分ss秒");
+//        String start = DateUtils.formatDate(startTime, "MM月dd日HH时mm分ss秒");
+//        String end = DateUtils.formatDate(endTime, "MM月dd日HH时mm分ss秒");
+//        try {
+//            currents = Utils.stringToDate(current, "MM月dd日HH时mm分ss秒");
+//            starts = Utils.stringToDate(start, "MM月dd日HH时mm分ss秒");
+//            ends = Utils.stringToDate(end, "MM月dd日HH时mm分ss秒");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//        boolean exceed24 = DateUtils.isExceed24(currents, starts);
+//        Log.d("wsddddddddd...",start+"");
+//        Log.d("wsddddddddd........",current+"");
+//        if(exceed24) {
+//            //大于24
+//            tv_time.setText(start+"开抢");
+//        }else {
+//            //小于24
+//            if(startTime!=0) {
+//                tv_cut_down.setTime(true,currentTime,startTime,endTime);
+//                tv_cut_down.changeBackGrounds(ContextCompat.getColor(mContext, R.color.color_F6551A));
+//                tv_cut_down.changeTypeColor(Color.WHITE);
+//                tv_time.setVisibility(View.INVISIBLE);
+//                tv_cut_down.start();
+//                tv_cut_down.setVisibility(View.VISIBLE);
+//
+//
+//            }else {
+//                tv_time.setVisibility(View.INVISIBLE);
+//                tv_cut_down.setVisibility(View.INVISIBLE);
+//            }
+////
+//        }
 
     }
 

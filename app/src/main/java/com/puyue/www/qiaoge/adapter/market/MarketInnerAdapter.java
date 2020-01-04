@@ -121,43 +121,84 @@ public class MarketInnerAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
                 tv_ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(businessType==11) {
+                            if (et_num.getText().toString() != null && StringHelper.notEmptyAndNull(et_num.getText().toString())) {
 
-                        if (et_num.getText().toString() != null && StringHelper.notEmptyAndNull(et_num.getText().toString())) {
+                                AddMountChangeTwoAPI.AddMountChangeService(mContext, businessType, activeId, Integer.parseInt(et_num.getText().toString()), item.getPriceId())
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(new Subscriber<AddCartGoodModel>() {
+                                            @Override
+                                            public void onCompleted() {
 
-                            AddMountChangeTwoAPI.AddMountChangeService(mContext, businessType, productId, Integer.parseInt(et_num.getText().toString()), item.getPriceId())
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(new Subscriber<AddCartGoodModel>() {
-                                        @Override
-                                        public void onCompleted() {
-
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable e) {
-
-                                        }
-
-
-                                        @Override
-                                        public void onNext(AddCartGoodModel addMountReduceModel) {
-
-                                            if (addMountReduceModel.isSuccess()) {
-                                                tv_num.setText(et_num.getText().toString());
-                                                alertDialog.dismiss();
-                                                EventBus.getDefault().post(new UpDateNumEvent());
-                                            } else {
-                                                ToastUtil.showSuccessMsg(mContext, addMountReduceModel.getMessage());
-                                                tv_num.setText(addMountReduceModel.data.toString());
-                                                alertDialog.dismiss();
                                             }
-                                        }
-                                    });
+
+                                            @Override
+                                            public void onError(Throwable e) {
+
+                                            }
 
 
-                        } else {
-                            ToastUtil.showSuccessMsg(mContext, "请输入数量");
+                                            @Override
+                                            public void onNext(AddCartGoodModel addMountReduceModel) {
+
+                                                if (addMountReduceModel.isSuccess()) {
+                                                    tv_num.setText(et_num.getText().toString());
+                                                    alertDialog.dismiss();
+                                                    EventBus.getDefault().post(new UpDateNumEvent());
+                                                    ToastUtil.showSuccessMsg(mContext,"成功");
+                                                } else {
+                                                    ToastUtil.showSuccessMsg(mContext, addMountReduceModel.getMessage());
+                                                    tv_num.setText(addMountReduceModel.data.toString());
+                                                    alertDialog.dismiss();
+                                                }
+                                            }
+                                        });
+
+
+                            } else {
+                                ToastUtil.showSuccessMsg(mContext, "请输入数量");
+                            }
+                        }else {
+                            if (et_num.getText().toString() != null && StringHelper.notEmptyAndNull(et_num.getText().toString())) {
+
+                                AddMountChangeTwoAPI.AddMountChangeService(mContext, businessType, productId, Integer.parseInt(et_num.getText().toString()), item.getPriceId())
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(new Subscriber<AddCartGoodModel>() {
+                                            @Override
+                                            public void onCompleted() {
+
+                                            }
+
+                                            @Override
+                                            public void onError(Throwable e) {
+
+                                            }
+
+
+                                            @Override
+                                            public void onNext(AddCartGoodModel addMountReduceModel) {
+
+                                                if (addMountReduceModel.isSuccess()) {
+                                                    tv_num.setText(et_num.getText().toString());
+                                                    alertDialog.dismiss();
+                                                    EventBus.getDefault().post(new UpDateNumEvent());
+                                                    ToastUtil.showSuccessMsg(mContext,"成功");
+                                                } else {
+                                                    ToastUtil.showSuccessMsg(mContext, addMountReduceModel.getMessage());
+                                                    tv_num.setText(addMountReduceModel.data.toString());
+                                                    alertDialog.dismiss();
+                                                }
+                                            }
+                                        });
+
+
+                            } else {
+                                ToastUtil.showSuccessMsg(mContext, "请输入数量");
+                            }
                         }
+
                     }
                 });
 

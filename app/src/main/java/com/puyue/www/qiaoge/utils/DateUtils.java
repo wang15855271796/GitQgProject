@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 /**
  * 
@@ -416,6 +417,7 @@ public class DateUtils {
 			int hours = 0;
 			try {
 				long m = endDate.getTime() - beginDate.getTime();
+
 				int s = (int) (m / 1000);
 				hours = s / 3600;
 			} catch (Exception e) {
@@ -423,6 +425,7 @@ public class DateUtils {
 				e.printStackTrace();
 			}
 			if (hours > 24) {
+
 				return true;
 			} else {
 				return false;
@@ -430,6 +433,64 @@ public class DateUtils {
 		}
 		return false;
 	}
+
+	/**
+	 * 判断两个时间是否超过24个小时
+	 *
+	 * @param
+	 * @param
+	 * @return
+	 */
+//	public static boolean isExceed24(long current, long start) {
+//		if (current != 0 && start != 0) {
+//			int hours = 0;
+//			try {
+////				long m = endDate.getTime() - beginDate.getTime();
+//
+////				int s = (int) (m / 1000);
+//				hours = s / 3600;
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			if (hours > 24) {
+//
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		}
+//		return false;
+//	}
+
+
+	/**
+	 * 判断两个时间是否超过2个小时
+	 *
+	 * @param beginDate
+	 * @param endDate
+	 * @return
+	 */
+	public static boolean isExceed2(Date beginDate, Date endDate) {
+		if (endDate != null && beginDate != null) {
+			int hours = 0;
+			try {
+				long m = endDate.getTime() - beginDate.getTime();
+				int s = (int) (m / 1000);
+				hours = s / 3600;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (hours > 2) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+
 
 	/**
 	 * 判断某一时间是否在指定的时间之后(包含与指定时间相等的情况)

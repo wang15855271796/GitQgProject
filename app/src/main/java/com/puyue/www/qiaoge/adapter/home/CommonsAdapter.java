@@ -2,15 +2,18 @@ package com.puyue.www.qiaoge.adapter.home;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
 import com.puyue.www.qiaoge.adapter.market.ChoosesDialog;
 import com.puyue.www.qiaoge.constant.AppConstant;
@@ -27,34 +30,71 @@ public class CommonsAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean
 
     private ImageView iv_pic;
     List<ProductNormalModel.DataBean.ListBean> activesBean;
-    private TextView iv_add;
+    private ImageView iv_add;
     Onclick onclick;
     private CommonDialog commonDialog;
-    private LinearLayout ll_group;
-
-    public CommonsAdapter(int layoutResId, @Nullable List<ProductNormalModel.DataBean.ListBean> activeList, Onclick onclick) {
+    private RelativeLayout rl_group;
+    String flag;
+    private TextView tv_sale;
+    ImageView iv_flag;
+    public CommonsAdapter(String flag,int layoutResId, @Nullable List<ProductNormalModel.DataBean.ListBean> activeList, Onclick onclick) {
         super(layoutResId, activeList);
         this.activesBean = activeList;
         this.onclick = onclick;
+        this.flag = flag;
+
     }
 
     @Override
     protected void convert(BaseViewHolder helper, ProductNormalModel.DataBean.ListBean item) {
         iv_pic = helper.getView(R.id.iv_pic);
+        iv_flag = helper.getView(R.id.iv_flag);
         iv_add = helper.getView(R.id.iv_add);
-        ll_group = helper.getView(R.id.ll_group);
+        rl_group = helper.getView(R.id.rl_group);
+        tv_sale = helper.getView(R.id.tv_sale);
         Glide.with(mContext).load(item.getDefaultPic()).into(iv_pic);
         helper.setText(R.id.tv_name,item.getProductName());
         helper.setText(R.id.tv_price,item.getMinMaxPrice());
 
-        ll_group.setOnClickListener(new View.OnClickListener() {
+        if(flag.equals("hot")&&!item.getSalesVolume().equals("")) {
+            tv_sale.setVisibility(View.VISIBLE);
+            Log.d("SWDDDDDDDD......",item.getSalesVolume());
+            tv_sale.setText(item.getSalesVolume());
+            tv_sale.setBackgroundResource(R.drawable.shape_orange);
+        }else {
+            tv_sale.setVisibility(View.GONE);
+
+        }
+
+        if(flag.equals("common")) {
+            tv_sale.setVisibility(View.GONE);
+            tv_sale.setText(item.getSalesVolume());
+            iv_flag.setVisibility(View.VISIBLE);
+
+            Glide.with(mContext).load(item.getTypeUrl()).into(iv_flag);
+        }else {
+            iv_flag.setVisibility(View.GONE);
+        }
+
+
+        if(flag.equals("reduce")&&item.getDeductAmount().equals("")) {
+            tv_sale.setVisibility(View.GONE);
+
+        }else if(flag.equals("reduce")&&!item.getDeductAmount().equals("")){
+            tv_sale.setText(item.getDeductAmount()+"");
+            tv_sale.setVisibility(View.VISIBLE);
+            tv_sale.setBackgroundResource(R.drawable.shape_orange);
+        }
+
+        rl_group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext,SpecialGoodDetailActivity.class);
-                intent.putExtra(AppConstant.ACTIVEID,item.getProductId());
+                Intent intent = new Intent(mContext,CommonGoodsDetailActivity.class);
+                intent.putExtra(AppConstant.ACTIVEID,item.getProductMainId());
                 mContext.startActivity(intent);
             }
         });
+
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

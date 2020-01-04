@@ -115,6 +115,7 @@ import rx.schedulers.Schedulers;
 /**
  * If I become novel would you like ?
  * Created by WinSinMin on 2018/4/19.
+ * 常用清单详情
  */
 
 public class CommonGoodsDetailActivity extends BaseSwipeActivity {
@@ -444,12 +445,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                             tv_sale.setText(model.getData().getSalesVolume());
                             prodSpecs = model.getData().getProdSpecs();
                             tv_desc.setText("产品说明："+model.getData().getIntroduction());
-                            //                                        if(chooseDialog==null){
-//                                            productMainId = model.getData().getProductMainId();
-//                                            chooseDialog = new ChooseDialog(mContext, productMainId);
-//
-//                                        }
-//                                        chooseDialog.show();
                             chooseSpecAdapter = new ChooseSpecAdapter(mContext,prodSpecs, new ChooseSpecAdapter.Onclick() {
                                 @Override
                                 public void addDialog(int position) {

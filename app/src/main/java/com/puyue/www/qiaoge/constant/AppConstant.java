@@ -52,15 +52,15 @@ public class AppConstant {
       */
     public static final String SPECIAL="special";
     public static final String RETAIL = "retail";
-    public static final String CONSULT ="quest";
+    public static final String CONSULT ="messageNews";
     public static final String NEWTYPE = "new";
     public static final String SECONDTYPE = "second";
-    public static final String HOTTYPE = "hot";
+    public static final String HOTTYPE = "hotProd";
     public static final String GROUPTYPE = "group";
     public static final String VIPTYPE = "vip";
     public static final String SHARETYPE = "share";
-    public static final String REDUCTIONTYPE = "reduction";
-    public static final String COMMONTYPE = "common";
+    public static final String REDUCTIONTYPE = "reductProd";
+    public static final String COMMONTYPE = "commonBuy";
     public static final String RECOMMEND = "recommend";
     public static final String ACTIVEID = "activeId";
     public static final String ORDERID = "orderId";

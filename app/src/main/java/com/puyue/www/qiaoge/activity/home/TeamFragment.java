@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.activity.home;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -55,7 +56,7 @@ public class TeamFragment extends BaseFragment {
 
             }
         });
-        recycleView.setLayoutManager(new GridLayoutManager(mActivity,2));
+        recycleView.setLayoutManager(new LinearLayoutManager(mActivity));
         recycleView.setAdapter(team1Adapter);
         getTeamList();
 
@@ -67,7 +68,7 @@ public class TeamFragment extends BaseFragment {
      * @param
      */
     private void getTeamList() {
-        TeamActiveQueryAPI.requestData(mActivity,11+"",0+"")
+        TeamActiveQueryAPI.requestData(mActivity,3+"",0+"")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<TeamActiveQueryModel>() {

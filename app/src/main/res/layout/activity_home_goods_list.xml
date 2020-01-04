@@ -93,7 +93,6 @@
     </com.puyue.www.qiaoge.view.CompatToolbar>
 
     <LinearLayout
-
         android:id="@+id/linearLayout_spike"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

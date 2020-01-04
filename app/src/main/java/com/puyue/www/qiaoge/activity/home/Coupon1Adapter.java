@@ -46,6 +46,7 @@ public class Coupon1Adapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBe
     private TextView tv_old_price;
     private RelativeLayout rl_root;
     TextView tv_total;
+    private int activeId;
 
     public Coupon1Adapter(int layoutResId, @Nullable List<TeamActiveQueryModel.DataBean> data, Onclick onclick) {
         super(layoutResId, data);
@@ -117,7 +118,10 @@ public class Coupon1Adapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBe
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,SpecialGoodDetailActivity.class);
-                intent.putExtra(AppConstant.ACTIVEID,activesBean.getActiveId());
+                for (int i = 0; i <item.getActives().size() ; i++) {
+                    activeId = item.getActives().get(i).getActiveId();
+                }
+                intent.putExtra(AppConstant.ACTIVEID,activeId);
                 mContext.startActivity(intent);
             }
         });

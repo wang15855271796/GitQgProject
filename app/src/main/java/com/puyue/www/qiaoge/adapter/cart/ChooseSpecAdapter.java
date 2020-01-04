@@ -76,15 +76,7 @@ public class ChooseSpecAdapter extends BaseAdapter {
             }
         });
 
-//        if (onItemClickListener != null) {
-//            holder.ll.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    onItemClickListener.onItemClick(v,position);
-//
-//                }
-//            });
-//        }
+
 
 
 

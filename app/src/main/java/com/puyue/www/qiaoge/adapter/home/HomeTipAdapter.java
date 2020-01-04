@@ -87,7 +87,7 @@ public class HomeTipAdapter extends RecyclerView.Adapter<HomeTipAdapter.HomeTipV
                 }else if(AppConstant.VIPTYPE.equals(mList.get(position).remark)) {
                     //VIP会员
                     setIntent(mList.get(position).url);
-                }else if(AppConstant.CONSULT.equals(mList.get(position).remark)) {
+                }else if(AppConstant.CONSULT.equals(mList.get(position))) {
                     //行业资讯
                     setIntentConsult(mList.get(position).url);
                 }

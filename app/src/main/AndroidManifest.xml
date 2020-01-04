@@ -151,6 +151,7 @@
         <activity android:name=".adapter.home.CommonProductActivity"/>
 
         <activity android:name=".adapter.home.ReductionProductActivity"/>
+        <activity android:name=".fragment.mine.IntelliGencyActivity"/>
 
         <activity android:name=".activity.mine.login.DcloudActvity" />
         <!-- android:screenOrientation="portrait" -->
@@ -160,6 +161,7 @@
         <!--  -->
         <activity android:name=".activity.mine.account.AccountCenterActivity" />
         <activity android:name=".activity.mine.AddSubAccountActivity"/>
+        <activity android:name=".activity.home.ChooseAddressActivity"/>
         <!--  -->
         <!--  -->
         <activity android:name=".activity.mine.MessageCenterActivity" />

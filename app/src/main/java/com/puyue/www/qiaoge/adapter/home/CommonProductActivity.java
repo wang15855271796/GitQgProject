@@ -13,21 +13,25 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
+import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
 import com.puyue.www.qiaoge.api.home.ProductListAPI;
 import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
+import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.OnItemClickListener;
+import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
@@ -36,6 +40,10 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +70,10 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
     TextView tv_title;
     @BindView(R.id.smart)
     SmartRefreshLayout refreshLayout;
+    @BindView(R.id.rl_num)
+    RelativeLayout rl_num;
+    @BindView(R.id.tv_num)
+    TextView tv_num;
     ProductNormalModel productNormalModel;
     int PageNum;
     private String cell; // 客服电话
@@ -70,6 +82,7 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
     int isSelected;
     boolean isChecked = false;
     int shopTypeId;
+    String flag = "common";
     //常用清单集合
     private List<ProductNormalModel.DataBean.ListBean> list = new ArrayList<>();
     @Override
@@ -91,8 +104,9 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
     @Override
     public void findViewById() {
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         setTranslucentStatus();
-        commonAdapter = new CommonsAdapter(R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
+        commonAdapter = new CommonsAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
@@ -120,7 +134,8 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
 
             }
         });
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+
+        recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
         recyclerView.setAdapter(commonAdapter);
         iv_back.setOnClickListener(this);
         tv_title.setText("常用清单");
@@ -306,8 +321,54 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
         getCustomerPhone();
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
         mTypedialog.setCancelable(false);
-
+        getCartNum();
     }
+
+    /**
+     * 购物车数量
+     */
+    private void getCartNum() {
+        GetCartNumAPI.requestData(mContext)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<GetCartNumModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(GetCartNumModel getCartNumModel) {
+                        if (getCartNumModel.isSuccess()) {
+                            if(getCartNumModel.getData().getNum().equals("0")) {
+                                tv_num.setVisibility(View.GONE);
+                            }else {
+                                tv_num.setVisibility(View.VISIBLE);
+
+                                tv_num.setText(getCartNumModel.getData().getNum());
+                            }
+                        } else {
+                            AppHelper.showMsg(mContext, getCartNumModel.getMessage());
+                        }
+                    }
+                });
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getCartNum(UpDateNumEvent event) {
+        getCartNum();
+    }
+
 
     /**
      * 获取客服电话

@@ -270,6 +270,15 @@ public class GetProductDetailModel {
 
             private int productId;
             private String spec;
+            int prodDeduct;
+
+            public int getProdDeduct() {
+                return prodDeduct;
+            }
+
+            public void setProdDeduct(int prodDeduct) {
+                this.prodDeduct = prodDeduct;
+            }
 
             @Override
             public String toString() {

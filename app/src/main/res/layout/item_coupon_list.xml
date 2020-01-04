@@ -18,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+
     <RelativeLayout
         android:id="@+id/rl_root"
         android:layout_below="@+id/tv_time"
@@ -44,6 +45,31 @@
             android:layout_toRightOf="@+id/iv_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:id="@+id/rl_coupon"
+            android:background="@drawable/shape_ring"
+            android:layout_width="40dp"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/size_70dp"
+            android:layout_marginLeft="@dimen/size_70dp"
+            android:gravity="center_vertical"
+            android:layout_height="40dp"
+            >
+
+            <TextView
+                tools:text="30"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_centerInParent="true"
+                android:id="@+id/tv_coupon"
+                android:textSize="9dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_back_arrow" />
+
+        </RelativeLayout>
+
 
         <TextView
             tools:text="规格"
@@ -123,6 +149,7 @@
             android:layout_height="wrap_content" />
 
     </RelativeLayout>
+
 
     </RelativeLayout>
 </LinearLayout>

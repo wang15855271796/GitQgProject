@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.activity.home;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -47,13 +48,13 @@ public class TeamFragment1 extends BaseFragment {
     @Override
     public void initViews(View view) {
         bind = ButterKnife.bind(this, view);
-        team2Adapter = new Team2Adapter(R.layout.item_team_list, teamList, new Team2Adapter.Onclick() {
+        team2Adapter = new Team2Adapter(R.layout.item_coupons_list, teamList, new Team2Adapter.Onclick() {
             @Override
             public void addDialog() {
 
             }
         });
-        recycleView.setLayoutManager(new GridLayoutManager(mActivity,2));
+        recycleView.setLayoutManager(new LinearLayoutManager(mActivity));
         recycleView.setAdapter(team2Adapter);
 
         getTeamList();
@@ -66,7 +67,7 @@ public class TeamFragment1 extends BaseFragment {
      * @param
      */
     private void getTeamList() {
-        TeamActiveQueryAPI.requestData(mActivity,11+"",1+"")
+        TeamActiveQueryAPI.requestData(mActivity,3+"",1+"")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<TeamActiveQueryModel>() {

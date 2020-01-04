@@ -52,6 +52,7 @@ import com.puyue.www.qiaoge.api.cart.RecommendApI;
 import com.puyue.www.qiaoge.api.home.ClickCollectionAPI;
 import com.puyue.www.qiaoge.api.home.CommentOrderQueryAPI;
 import com.puyue.www.qiaoge.api.home.GetCustomerPhoneAPI;
+import com.puyue.www.qiaoge.api.home.SpikeActiveQueryAPI;
 import com.puyue.www.qiaoge.api.home.SpikeActiveQueryByIdAPI;
 import com.puyue.www.qiaoge.api.mine.GetShareInfoAPI;
 import com.puyue.www.qiaoge.banner.Banner;
@@ -59,6 +60,7 @@ import com.puyue.www.qiaoge.banner.BannerConfig;
 import com.puyue.www.qiaoge.banner.GlideImageLoader;
 import com.puyue.www.qiaoge.banner.Transformer;
 import com.puyue.www.qiaoge.banner.listener.OnBannerListener;
+import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
@@ -83,6 +85,8 @@ import com.puyue.www.qiaoge.model.home.SpikeActiveQueryByIdModel;
 import com.puyue.www.qiaoge.model.market.GoodsDetailModel;
 import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
 import com.puyue.www.qiaoge.utils.DateUtils;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 import com.puyue.www.qiaoge.view.StarBarView;
@@ -115,9 +119,9 @@ import static com.puyue.www.qiaoge.utils.DateUtils.DATE_FORMAT_Second_CHINESE;
  */
 
 public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
+
     private ImageView mIvBack;
     private Banner banner;
-//    private SnapUpCountDownTimerView mSvTime;
     private TextView mTvTitle;
     private TextView mTvPrice;
     private TextView mTvOldPrice;
@@ -143,10 +147,8 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
     private TextView mTvAddCar;
     private ImageView buyImg;
     ProgressBar pb;
-
     private List<View> mListView = new ArrayList<>();
     private List<String> images = new ArrayList<>();
-
     private String productName;
     //详情
     private RecyclerView mRvDetail;
@@ -157,19 +159,12 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
     private NestedScrollView mSvEmpty;
     private GoodsEvaluationAdapter mAdapterEvaluation;
     private List<CommentOrderQueryModel.DataBean.ListBean> mListEvaluation = new ArrayList<>();
-
-
     private StarBarView sbv_star_bar;
     private TextView tv_status;
-
-
 
     //推荐
     private RecyclerView mRvRecommend;
     private GoodsRecommendAdapter mAdapterRecommend;
-    private List<GetProductListModel.DataBean.ListBean> mListRecommend = new ArrayList<>();
-
-    private DataAdapter mAdapterView;
     TextView tv_limit_num;
     private int activeId;
     private byte businessType = 2;
@@ -215,6 +210,10 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
     private Date date;
     private Date currents;
     private Date starts;
+    private long currentTime;
+    private long startTime;
+    private long endTime;
+    private int warnMe;
 
     class MyHandler extends Handler {
         @Override
@@ -243,7 +242,7 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
     @Override
     public void setContentView() {
         settranslucentStatus();
-        setContentView(R.layout.activity_goods_details);
+        setContentView(R.layout.activity_spike_detail);
     }
 
     @Override
@@ -270,9 +269,6 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
         mTvSub = FVHelper.fv(this, R.id.tv_activity_spike_sub);
         mTvAmount = FVHelper.fv(this, R.id.tv_activity_spike_amount);
         mTvAdd = FVHelper.fv(this, R.id.tv_activity_spike_add);
-//        mTvGroupAmount = FVHelper.fv(this, R.id.tv_activity_spike_group_amount);
-//        mTvTotalMoney = FVHelper.fv(this, R.id.tv_activity_spike_total_money);
-
         linearLayoutShare = FVHelper.fv(this, R.id.rl_share);
         mLlCustomer = FVHelper.fv(this, R.id.ll_include_common_customer);
         //mLlCollection = FVHelper.fv(this, R.id.ll_include_common_collection);
@@ -284,6 +280,7 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
         mTvCarAmount = FVHelper.fv(this, R.id.tv_include_common_amount);
         mTvFee = FVHelper.fv(this, R.id.tv_include_common_fee);
         mTvAddCar = FVHelper.fv(this, R.id.tv_add_car);
+
         //详情
         View viewDetail = LayoutInflater.from(this).inflate(R.layout.item_viewpager, null);
         mRvDetail = FVHelper.fv(viewDetail, R.id.rv_item_viewpager);
@@ -358,6 +355,40 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
         recyclerViewRecommend.setLayoutManager(linearLayoutManagerCoupons);
         recyclerViewRecommend.setAdapter(adapterRecommend);
 
+    }
+
+    /**
+     * 获取订阅状态
+     * @param activeId
+     */
+    private void getState(int activeId,int warnMe) {
+        SpikeActiveQueryAPI.requestData(mContext,activeId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<BaseModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(BaseModel seckillListModel) {
+                        if(seckillListModel.success) {
+                            if(warnMe==0) {
+                                mTvAddCar.setText("添加提醒");
+                            }else {
+                                mTvAddCar.setText("取消提醒");
+                            }
+                        }else {
+                            ToastUtil.showSuccessMsg(mContext,seckillListModel.message);
+                        }
+                    }
+                });
     }
 
     @Override
@@ -460,7 +491,16 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
                 }
             } else if (view == mTvAddCar) {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    addCar();
+                    if(currentTime>startTime) {
+                        //秒杀开始
+                        addCar();
+                        mTvAddCar.setText("加入购物车");
+                        mTvAddCar.setBackgroundResource(R.drawable.selector_once_buy);
+                    }else {
+                        //未开始
+                        getState(activeId,warnMe);
+                    }
+
                 } else {
                     AppHelper.showMsg(mContext, "请先登录");
                     startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
@@ -712,9 +752,21 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
                             tv_name.setText(spikeActiveQueryByIdModel.getData().getActTypeName());
                             mTvDesc.setText(spikeActiveQueryByIdModel.getData().getIntroduction());
                             tv_prices.setText(spikeActiveQueryByIdModel.getData().getPrice());
-                            long currentTime = spikeActiveQueryByIdModel.getData().getCurrentTime();
-                            long startTime = spikeActiveQueryByIdModel.getData().getStartTime();
-                            long endTime = spikeActiveQueryByIdModel.getData().getEndTime();
+                            warnMe = spikeActiveQueryByIdModel.getData().getWarnMe();
+                            if(currentTime>startTime) {
+                                //秒杀开始
+                                addCar();
+                                mTvAddCar.setText("加入购物车");
+                                mTvAddCar.setBackgroundResource(R.drawable.selector_once_buy);
+                            }else {
+                                //未开始
+                                getState(activeId,warnMe);
+                            }
+
+
+                            currentTime = spikeActiveQueryByIdModel.getData().getCurrentTime();
+                            startTime = spikeActiveQueryByIdModel.getData().getStartTime();
+                            endTime = spikeActiveQueryByIdModel.getData().getEndTime();
                             String current = DateUtils.formatDate(currentTime, "MM月dd日HH时mm分ss秒");
                             String start = DateUtils.formatDate(startTime, "MM月dd日HH时mm分ss秒");
                             try {
@@ -730,9 +782,9 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
                                 tv_time.setText(start+"开抢");
                             }else {
                                 //小于24
-                                if(startTime!=0&&endTime!=0) {
-                                    tv_cut_down.setTime(true,currentTime,startTime,endTime);
-                                    tv_cut_down.changeBackGrounds(ContextCompat.getColor(mContext, R.color.color_F6551A));
+                                if(startTime !=0&& endTime !=0) {
+                                    tv_cut_down.setTime(true, currentTime, startTime, endTime);
+                                    tv_cut_down.changeBackGrounds(ContextCompat.getColor(mContext, R.color.color333333));
                                     tv_cut_down.changeTypeColor(Color.WHITE);
                                     tv_time.setVisibility(View.INVISIBLE);
                                     tv_cut_down.start();
@@ -743,46 +795,8 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
                                     tv_time.setVisibility(View.INVISIBLE);
                                     tv_cut_down.setVisibility(View.INVISIBLE);
                                 }
-//
                             }
-//                            try {
-//                                current = Utils.longToString(currentTime, "M-d HH:mm:ss");
-//                                start = Utils.longToString(startTime, "M-d HH:mm:ss");
-//
-//
-//                            } catch (ParseException e) {
-//                                e.printStackTrace();
-//                            }
-////
-//                            try {
-//                                time = Utils.getTime(current, start);
-//
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                            if(time) {
-//                                //大于24小时
-//
-//                            }else {
-//                                //小于24小时
-//                                try {
-//                                    date = Utils.stringToDate(current, "M-d HH:mm:ss");
-//                                    Log.d("rtrgfsdsdsdddd....",date+"");
-//                                } catch (ParseException e) {
-//                                    e.printStackTrace();
-//                                }
-//                                tv_time.setText(date+"开始");
-//
-//                            }
-                            //设置进度条
-                            //倒计时设置
-//                            mSvTime.setBackTheme(true);
-//                            mSvTime.setTime(true, spikeActiveQueryByIdModel.data.currentTime, spikeActiveQueryByIdModel.data.startTime, spikeActiveQueryByIdModel.data.endTime);
-//                            Log.e("Home", "onNext: " + spikeActiveQueryByIdModel.data.currentTime + spikeActiveQueryByIdModel.data.startTime + spikeActiveQueryByIdModel.data.endTime);
-//                            mSvTime.changeTypeColor(Color.WHITE);
-//                            mSvTime.start();
-                            //填充banner
+
                             if (spikeActiveQueryByIdModel.getData().getTopPics() != null) {
                                 //设置banner样式
                                 banner.setBannerStyle(BannerConfig.NUM_INDICATOR);

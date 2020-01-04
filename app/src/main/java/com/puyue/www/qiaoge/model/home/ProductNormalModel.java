@@ -164,7 +164,7 @@ public class ProductNormalModel {
              * inventory : 0c
              * prodPrices : [{"price":"￥11/c","oldPrice":"","priceId":1406,"productUnit":649,"unitDesc":""}]
              */
-
+            String deductAmount;
             private String type;
             private int productMainId;
             private int productId;
@@ -179,6 +179,35 @@ public class ProductNormalModel {
             private String inventory;
             private List<ProdSpecsBean> prodSpecs;
             private List<ProdPricesBean> prodPrices;
+
+            @Override
+            public String toString() {
+                return "ListBean{" +
+                        "deductAmount='" + deductAmount + '\'' +
+                        ", type='" + type + '\'' +
+                        ", productMainId=" + productMainId +
+                        ", productId=" + productId +
+                        ", productName='" + productName + '\'' +
+                        ", defaultPic='" + defaultPic + '\'' +
+                        ", flag=" + flag +
+                        ", typeUrl='" + typeUrl + '\'' +
+                        ", spec='" + spec + '\'' +
+                        ", salesVolume='" + salesVolume + '\'' +
+                        ", minMaxPrice='" + minMaxPrice + '\'' +
+                        ", specialOffer='" + specialOffer + '\'' +
+                        ", inventory='" + inventory + '\'' +
+                        ", prodSpecs=" + prodSpecs +
+                        ", prodPrices=" + prodPrices +
+                        '}';
+            }
+
+            public String getDeductAmount() {
+                return deductAmount;
+            }
+
+            public void setDeductAmount(String deductAmount) {
+                this.deductAmount = deductAmount;
+            }
 
             public String getType() {
                 return type;

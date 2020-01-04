@@ -227,16 +227,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-
-
-            <ListView
-                android:id="@+id/list_view"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:visibility="gone">
-
-            </ListView>
-
             <TextView
                 android:id="@+id/tv_target"
                 android:layout_marginTop="5dp"

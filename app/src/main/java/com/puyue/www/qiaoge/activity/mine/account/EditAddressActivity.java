@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -41,13 +42,17 @@ import com.lljjcoder.bean.ProvinceBean;
 import com.lljjcoder.citywheel.CityConfig;
 import com.lljjcoder.style.citypickerview.CityPickerView;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.mine.login.LoginEvent;
 import com.puyue.www.qiaoge.adapter.mine.SuggestAdressAdapter;
 import com.puyue.www.qiaoge.api.mine.address.AddAddressAPI;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
+import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +99,6 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
     private LinearLayout mLlDefault;
     private CheckBox mCbDefault;
     private Button mBtnConfirm;
-    private ListView list_view;
     private NestedScrollView mLlEditAddress;
     private TextView mTvTitle;
     //申明对象
@@ -165,6 +169,7 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
             mUserPhone = savedInstanceState.getString(USER_PHONE);
             mStoreName = savedInstanceState.getString(STORE_NAME);
             mArea = savedInstanceState.getString(AREA);
+
             mAddress = savedInstanceState.getString(ADDRESS);
             mDefault = savedInstanceState.getString(DEFAULT);
             mAddressId = savedInstanceState.getString(ADDRESS_ID);
@@ -195,7 +200,6 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
         mBtnConfirm = (Button) findViewById(R.id.btn_edit_address_confirm);
         //  mLlEditAddress = (NestedScrollView) findViewById(R.id.ll_edit_address);
         mTvTitle = (TextView) findViewById(R.id.tv_edit_address_title);
-        list_view = (ListView) findViewById(R.id.list_view);
         ry_suggest = (RecyclerView) findViewById(R.id.ry_suggest);
         tv_target = (TextView) findViewById(R.id.tv_target);
     }
@@ -204,7 +208,8 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
     public void setViewData() {
         //   setTranslucentStatus();
         mSuggestionSearch = SuggestionSearch.newInstance();
-cityName=mArea;
+        cityName=mArea;
+
         //  mSuggestionSearch = SuggestionSearch.newInstance();
         mPicker.init(mContext);
         if (StringHelper.notEmptyAndNull(mType)) {
@@ -285,6 +290,7 @@ cityName=mArea;
 
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                Log.d("sddddddd......",cs.length()+"");
                 if (cs.length() <= 0) {
                     ry_suggest.setVisibility(View.GONE);
                     tv_target.setVisibility(View.GONE);
@@ -489,6 +495,7 @@ cityName=mArea;
                         if (mModelAddAddress.success) {
                             AppHelper.showMsg(mContext, "新增地址成功!");
                             Intent intent = new Intent();
+                            EventBus.getDefault().post(new BackEvent());
                             intent.putExtra("type", "add");
                             EditAddressActivity.this.setResult(11, intent);
                             finish();
@@ -531,7 +538,8 @@ cityName=mArea;
                 areaCode = district.getId();
 
 
-            cityName=    city.getName();
+                cityName = city.getName();
+                Log.d("swwwsssssssss",cityName);
             /*    if (city.getName().contains("杭州市")) {
                     mTvArea.setText(province.getName() + " " + city.getName() + " " + district.getName());
                     mTvArea.setTextColor(Color.parseColor("#232131"));
@@ -674,6 +682,7 @@ cityName=mArea;
      */
     @Override
     public void onGetSuggestionResult(SuggestionResult res) {
+        Log.d("sddddddeedeee....","ssss");
         if (res == null || res.getAllSuggestions() == null) {
             //permission_unfinished
             return;
@@ -688,6 +697,7 @@ cityName=mArea;
         }
         ry_suggest.setVisibility(View.VISIBLE);
         tv_target.setVisibility(View.VISIBLE);
+
         //adressAdapter=new SuggestAdressAdapter(R.layout.suggest_address,suggest);
         adressAdapter = new SuggestAdressAdapter(suggest, mContext, new SuggestAdressAdapter.onClick() {
             @Override

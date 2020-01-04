@@ -230,7 +230,6 @@ public class ExchangeProductModel {
              * productId : 405
              * spec : 60
              */
-
             private int productId;
             private String spec;
 
@@ -249,6 +248,7 @@ public class ExchangeProductModel {
             public void setSpec(String spec) {
                 this.spec = spec;
             }
+
         }
 
 

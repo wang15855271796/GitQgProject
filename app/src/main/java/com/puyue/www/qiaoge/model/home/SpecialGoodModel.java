@@ -85,7 +85,7 @@ public class SpecialGoodModel {
          * cartNum :
          * saleDone : 1
          */
-
+        int warnMe;
         private int activityType;
         private String actTypeName;
         private int activeId;
@@ -108,6 +108,14 @@ public class SpecialGoodModel {
         private int saleDone;
         private List<String> topPics;
         private List<String> detailPics;
+
+        public int getWarnMe() {
+            return warnMe;
+        }
+
+        public void setWarnMe(int warnMe) {
+            this.warnMe = warnMe;
+        }
 
         public int getActivityType() {
             return activityType;

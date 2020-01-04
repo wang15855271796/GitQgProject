@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.adapter.home;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,8 +14,16 @@ import android.widget.TextView;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.listener.OnItemClickListener;
 import com.puyue.www.qiaoge.model.home.SpikeNewQueryModel;
+import com.puyue.www.qiaoge.utils.DateUtils;
+import com.puyue.www.qiaoge.utils.Utils;
+import com.puyue.www.qiaoge.view.Snap;
+import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
+
+import static cn.com.chinatelecom.account.api.CtAuth.mContext;
 
 /**
  * Created by ${王文博} on 2019/4/12
@@ -26,10 +35,21 @@ public class SpikeActiveNewAdapter extends RecyclerView.Adapter<SpikeActiveNewAd
 
     private Context context;
     private List<SpikeNewQueryModel.DataBean> data;
+    private int flag;
+    private long startTime;
+    private long endTime;
+    private long currentTime;
+    private Date currents;
+    private Date starts;
+    private Date ends;
+    private boolean exceed2;
 
-    public SpikeActiveNewAdapter(Context context, List<SpikeNewQueryModel.DataBean> data) {
+    public SpikeActiveNewAdapter(Context context, List<SpikeNewQueryModel.DataBean> data, long currentTime, long endTime, long startTime) {
         this.context = context;
         this.data = data;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.currentTime = currentTime;
     }
 
     @Override
@@ -40,18 +60,68 @@ public class SpikeActiveNewAdapter extends RecyclerView.Adapter<SpikeActiveNewAd
 
     @Override
     public void onBindViewHolder(SpikeActiveNewAdapter.MarketViewHolder holder, final int position) {
+        flag = data.get(position).getFlag();
+        long l = System.currentTimeMillis();
+        String current = DateUtils.formatDate(currentTime, "MM月dd日HH时mm分ss秒");
+        String start = DateUtils.formatDate(startTime, "MM月dd日HH时mm分ss秒");
+        String end = DateUtils.formatDate(endTime, "MM月dd日HH时mm分ss秒");
+        try {
+            currents = Utils.stringToDate(current, "MM月dd日HH时mm分ss秒");
+            starts = Utils.stringToDate(start, "MM月dd日HH时mm分ss秒");
+            ends = Utils.stringToDate(end, "MM月dd日HH时mm分ss秒");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        holder.mTvTime.setText(data.get(position).getDateDesc());
-        holder.mTvTitle.setText(data.get(position).getTimeDesc());
+        if(flag==0) {
+            //未开始
+            holder.snap.setVisibility(View.GONE);
+            holder.tv.setVisibility(View.GONE);
+            holder.tv.setText("距离开始");
+
+            exceed2 = DateUtils.isExceed2(currents, starts);
+
+            if(exceed2) {
+                holder.tv_time.setVisibility(View.VISIBLE);
+                holder.tv_time.setText(data.get(position).getTimeDesc());
+                holder.tv_today.setVisibility(View.VISIBLE);
+                holder.tv_today.setText(data.get(position).getDateDesc());
+
+                holder.snap.setVisibility(View.GONE);
+                holder.tv.setVisibility(View.GONE);
+
+            }else {
+                holder.tv_time.setVisibility(View.GONE);
+                holder.tv_today.setVisibility(View.GONE);
+
+                holder.tv.setText("距离开始");
+                holder.snap.setVisibility(View.VISIBLE);
+                holder.tv.setVisibility(View.VISIBLE);
+                holder.snap.setTime(true,currentTime,startTime,endTime);
+                holder.snap.start();
+            }
+
+        }else {
+            //已开始
+            holder.tv.setText("距离结束");
+            holder.snap.setVisibility(View.VISIBLE);
+            holder.tv.setVisibility(View.VISIBLE);
+            Log.d("swsssdddddd...",l+"");
+            holder.snap.setTime(true,l,startTime,endTime);
+            holder.snap.start();
+        }
+
         if (selectPosition == position) {
             holder.linearLayoutNewSpike.setBackgroundColor(Color.parseColor("#F56D23"));
             holder.mTvTitle.setTextColor(Color.parseColor("#FFFFFF"));
             holder.mTvTime.setTextColor(Color.parseColor("#FFFFFF"));
             holder.mTvSanjiao.setBackgroundResource(R.drawable.bg_daosanjiao);
+            holder.snap.changeBackGrounds(ContextCompat.getColor(context, R.color.wallet_bg));
         } else {
             holder.linearLayoutNewSpike.setBackgroundColor(Color.parseColor("#333333"));
             holder.mTvTitle.setTextColor(Color.parseColor("#FFFFFF"));
             holder.mTvTime.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.snap.changeBackGrounds(ContextCompat.getColor(context, R.color.color333333));
             holder.mTvSanjiao.setBackgroundResource(R.drawable.bg_dao_san_jiao_two);
         }
         if (onItemClickListener != null) {
@@ -62,6 +132,7 @@ public class SpikeActiveNewAdapter extends RecyclerView.Adapter<SpikeActiveNewAd
                 }
             });
         }
+
     }
 
     @Override
@@ -78,13 +149,21 @@ public class SpikeActiveNewAdapter extends RecyclerView.Adapter<SpikeActiveNewAd
 
         public TextView mTvTime;
         public TextView mTvTitle;
+        public TextView tv_today;
+        public TextView tv_time;
         public LinearLayout linearLayoutNewSpike;
         public TextView mTvSanjiao;
+        Snap snap;
+        TextView tv;
 
         public MarketViewHolder(View itemView) {
             super(itemView);
+            snap = ((Snap) itemView.findViewById(R.id.snap));
+            tv = ((TextView) itemView.findViewById(R.id.tv));
             mTvTime = ((TextView) itemView.findViewById(R.id.tv_spike_time));
             mTvTitle = ((TextView) itemView.findViewById(R.id.tv_spike_title));
+            tv_today = ((TextView) itemView.findViewById(R.id.tv_today));
+            tv_time = ((TextView) itemView.findViewById(R.id.tv_time));
             linearLayoutNewSpike = ((LinearLayout) itemView.findViewById(R.id.linearLayout_spike_new));
 
             mTvSanjiao = itemView.findViewById(R.id.tv_dao_san_jiao);
@@ -93,7 +172,5 @@ public class SpikeActiveNewAdapter extends RecyclerView.Adapter<SpikeActiveNewAd
 
     public void selectPosition(int position) {
         this.selectPosition = position;
-
-        notifyDataSetChanged();
     }
 }

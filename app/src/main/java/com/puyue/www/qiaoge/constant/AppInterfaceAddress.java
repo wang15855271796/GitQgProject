@@ -36,6 +36,12 @@ public class AppInterfaceAddress {
      * 子账户列表
      */
     public static final String GET_SUB_USER = "user/appGetUserSubAccountList";
+
+    /**
+     * 资质信息
+     */
+    public static final String IntellGency = "common/getCompanyQualification";
+
     public static final String SEARCHEQUIPMENT = " equipment/searchEquipment?";
     public static final String CHECKMESSAGE = "auth/checkRegisterCode";
     /**
@@ -47,6 +53,14 @@ public class AppInterfaceAddress {
      */
     public static final String NORMALLIST = "common/queryProductPageByType";
 
+    /**
+     * 首页banner
+     */
+    public static final String BANNER = "common/product/getTopBanner";
+    /**
+     * 首页其他信息
+     */
+    public static final String INDEXINFO = "common/getAreaHomeBasicInfo";
     public static final String HOMENEW = "common/prodHomeIndexInfo";
     public static final String GETPRODUCTLIST = "common/product/getProductList?";
     public static final String GETSELLPLACELISTBYIDANDDATE = "place/getSellPlaceListByIdAndDate?";

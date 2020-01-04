@@ -14,13 +14,20 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.api.home.SpikeActiveQueryAPI;
+import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.home.SeckillListModel;
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.GlideModel;
 
 import java.util.List;
+
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by ${王文博} on 2019/4/12
@@ -44,10 +51,12 @@ public class SpikeActiveQueryAdapter extends BaseQuickAdapter<SeckillListModel.D
     private long startTime;
     Onclick onclick;
     private ProgressBar mProgressBar;
-    SeckillListModel.DataBean dataBean;
-    public SpikeActiveQueryAdapter(int layoutResId, @Nullable List<SeckillListModel.DataBean.KillsBean> data, SeckillListModel.DataBean dataBean,Onclick onclick) {
+    private int activedId;
+
+    public SpikeActiveQueryAdapter(int layoutResId, @Nullable List<SeckillListModel.DataBean.KillsBean> data,int activedId,Onclick onclick) {
         super(layoutResId, data);
-        this.dataBean = dataBean;
+        this.activedId = activedId;
+
         this.onclick = onclick;
     }
 
@@ -77,22 +86,23 @@ public class SpikeActiveQueryAdapter extends BaseQuickAdapter<SeckillListModel.D
         tvOldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); //中划线
         tvSoldSale.setText("已抢购" + item.progress + "%");
         String spikeFlag = UserInfoHelper.getSpikePosition(mContext);
-        Log.i("vvvv", "convert: " + spikeFlag);
         GlideModel.disPlayError(mContext,item.pic,ivSpike);
-        currentTime = dataBean.currentTime;
-        startTime = dataBean.startTime;
+
+//        currentTime = dataBean.currentTime;
+//        startTime = dataBean.startTime;
         if(Integer.parseInt(spikeFlag)==0) {
             //未开始
             if(item.warnMe==0) {
-                tv_add_remind.setText("取消提醒");
+                tv_add_remind.setText("添加提醒");
                 SharedPreferencesUtil.saveInt(mContext,"warnMe",0);
             }else {
-                tv_add_remind.setText("添加提醒");
+                tv_add_remind.setText("取消提醒");
                 SharedPreferencesUtil.saveInt(mContext,"warnMe",1);
             }
             tv_add_remind.setVisibility(View.VISIBLE);
         }else {
             // 已开始
+
             ivAdd.setVisibility(View.GONE);
             ivSoldOut.setVisibility(View.GONE);
 
@@ -138,17 +148,55 @@ public class SpikeActiveQueryAdapter extends BaseQuickAdapter<SeckillListModel.D
         tv_add_remind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onclick!=null) {
-                    onclick.addRemind(v);
-                }
-                if(item.warnMe==0) {
-                    tv_add_remind.setText("添加提醒");
-
-                }else {
-                    tv_add_remind.setText("取消提醒");
-                }
+                getStat(activedId,item);
+//                if(onclick!=null) {
+//                    onclick.addRemind(v);
+//                }
+//                if(item.warnMe==0) {
+//                    tv_add_remind.setText("添加提醒");
+//
+//                }else {
+//                    tv_add_remind.setText("取消提醒");
+//                }
             }
         });
+    }
+
+    /**
+     * 获取提醒状态  SpikeActiveQueryAPI
+     * @param activeId
+     * @param item
+     */
+    private void getStat(int activeId, SeckillListModel.DataBean.KillsBean item) {
+        SpikeActiveQueryAPI.requestData(mContext, activeId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<BaseModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(BaseModel seckillListModel) {
+                        if(seckillListModel.success) {
+                            if(SharedPreferencesUtil.getInt(mContext,"warnMe")==0) {
+                                tv_add_remind.setText("添加提醒");
+                                SharedPreferencesUtil.saveInt(mContext,"warnMe",1);
+                            }else {
+                                tv_add_remind.setText("取消提醒");
+                                SharedPreferencesUtil.saveInt(mContext,"warnMe",0);
+                            }
+                        }else {
+                            ToastUtil.showSuccessMsg(mContext,seckillListModel.message);
+                        }
+                    }
+                });
     }
 
     public interface Onclick {

@@ -43,7 +43,7 @@ public class ReturnSpecAdapter extends BaseQuickAdapter<ReturnOrderDetailModel.D
     @Override
     protected void convert(BaseViewHolder helper, ReturnOrderDetailModel.DataBean.ProductsBean.DetailsBean item) {
         helper.setIsRecyclable(false);
-
+        //tv_coupon_price
         mTvPrice = helper.getView(R.id.tv_return_price);
         mTvSpec = helper.getView(R.id.tv_return_spec);
         mTvPrice.setText("¥" + item.getTotalPrice());

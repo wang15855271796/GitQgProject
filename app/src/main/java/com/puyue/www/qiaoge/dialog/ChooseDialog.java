@@ -109,7 +109,7 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
                         if (model.isSuccess()) {
                             productName = model.getData().getProductName();
                             tv_name.setText(productName);
-                            Log.d("duoguigemingcheng...",productName);
+
                             tv_price.setText(model.getData().getMinMaxPrice());
                             salesVolume = model.getData().getSalesVolume();
                             tv_sale.setText(salesVolume);
@@ -125,7 +125,6 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                     chooseSpecAdapter.selectPosition(position);
                                     int productId2 = prodSpecs.get(position).getProductId();
-//                                    exchangeList(productId2);
                                     GetProductDetailAPI.getExchangeList(context,productId2,1)
                                             .subscribeOn(Schedulers.io())
                                             .observeOn(AndroidSchedulers.mainThread())

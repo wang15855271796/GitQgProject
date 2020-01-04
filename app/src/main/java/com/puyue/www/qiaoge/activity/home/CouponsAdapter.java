@@ -18,6 +18,7 @@ import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.model.home.TeamActiveQueryModel;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by ${王涛} on 2019/12/25
@@ -32,10 +33,19 @@ public class CouponsAdapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBe
     ProgressBar pb;
     private TextView tv_add;
     private RelativeLayout rl_root;
+    private RelativeLayout rl_coupon;
+    private int activeId;
+    List<TeamActiveQueryModel.DataBean>  data;
+    private TeamActiveQueryModel.DataBean dataBean;
+    private TeamActiveQueryModel.DataBean.ActivesBean activesBean1;
+    private List<TeamActiveQueryModel.DataBean.ActivesBean> actives;
+    private int activeId1;
+
 
     public CouponsAdapter(int layoutResId, @Nullable List<TeamActiveQueryModel.DataBean> data,Onclick onclick) {
         super(layoutResId, data);
         this.onclick = onclick;
+        this.data = data;
     }
 
     @Override
@@ -46,40 +56,52 @@ public class CouponsAdapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBe
         tv_add = helper.getView(R.id.tv_add);
         tv_total = helper.getView(R.id.tv_total);
         pb = helper.getView(R.id.pb);
-        tv_total.setText(item.getActives().get(helper.getAdapterPosition()).getRemainNum());
+        rl_coupon = helper.getView(R.id.rl_coupon);
+
         helper.setText(R.id.tv_time,item.getTitle());
+
         for (int i = 0; i <item.getActives().size() ; i++) {
-            activesBean = item.getActives().get(i);
-
+            activesBean1 = item.getActives().get(i);
         }
-
-        Glide.with(mContext).load(activesBean.getDefaultPic()).into(iv_pic);
-        helper.setText(R.id.tv_name,activesBean.getActiveName());
-        helper.setText(R.id.tv_spec,activesBean.getSpec());
-        helper.setText(R.id.tv_price,activesBean.getPrice());
-        helper.setText(R.id.tv_old_price,activesBean.getOldPrice());
-        pb.setProgress(Integer.parseInt(activesBean.getProgress()));
-        tv_total.setText(activesBean.getRemainNum());
-
-
-        if(activesBean.getSaleDone()==0) {
-            tv_add.setText("立即加购");
-            tv_add.setBackgroundResource(R.drawable.shape_orange);
+        if(!activesBean1.getDiscount().equals("")) {
+            helper.setText(R.id.tv_coupon,activesBean1.getDiscount());
+            rl_coupon.setVisibility(View.VISIBLE);
         }else {
-            tv_add.setText("已售罄");
-            tv_add.setBackgroundResource(R.drawable.shape_detail_grey);
+            rl_coupon.setVisibility(View.GONE);
         }
-        tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
-        tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
         rl_root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,SpecialGoodDetailActivity.class);
-                intent.putExtra(AppConstant.ACTIVEID,activesBean.getActiveId());
+                for (int i = 0; i <item.getActives().size() ; i++) {
+                    activeId = item.getActives().get(i).getActiveId();
+                }
+                intent.putExtra(AppConstant.ACTIVEID,activeId);
                 mContext.startActivity(intent);
             }
         });
+
+        tv_total.setText(activesBean1.getRemainNum());
+        Glide.with(mContext).load(activesBean1.getDefaultPic()).into(iv_pic);
+        helper.setText(R.id.tv_name,activesBean1.getActiveName());
+        helper.setText(R.id.tv_spec,activesBean1.getSpec());
+        helper.setText(R.id.tv_price,activesBean1.getPrice());
+        helper.setText(R.id.tv_old_price,activesBean1.getOldPrice());
+        pb.setProgress(Integer.parseInt(activesBean1.getProgress()));
+        tv_total.setText(activesBean1.getRemainNum());
+
+        if(activesBean1.getSaleDone()==0) {
+            //已售完
+            tv_add.setText("已售罄");
+            tv_add.setBackgroundResource(R.drawable.shape_detail_grey);
+        }else {
+            tv_add.setText("立即加购");
+            tv_add.setBackgroundResource(R.drawable.shape_orange);
+        }
+        tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
+        tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+
     }
 
     public interface Onclick {

@@ -48,13 +48,7 @@ public class ReturnGoodDetailChangeAdapter extends RecyclerView.Adapter<ReturnGo
     public ReturnGoodDetailChangeAdapter(List<ReturnOrderDetailModel.DataBean.ProductsBean> mListProduct, Context context) {
         this.mListProduct = mListProduct;
         this.context = context;
-//        for (int i = 0; i < mListProduct.size(); i++) {
-//            for (int j = 0; j < mListProduct.get(i).getDetails().size(); j++) {
-//                mListProduct.get(i).getDetails().get(j).setBusinessId(mListProduct.get(i).getBusinessId());
-//                mListProduct.get(i).getDetails().get(j).setBusinessType(mListProduct.get(i).getBusinessType());
-//
-//            }
-//        }
+
     }
 
     @NonNull

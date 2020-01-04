@@ -17,6 +17,7 @@ import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.adapter.home.CommonProductActivity;
 import com.puyue.www.qiaoge.adapter.home.HotProductActivity;
 import com.puyue.www.qiaoge.adapter.home.ReductionProductActivity;
+import com.puyue.www.qiaoge.api.home.IndexInfoModel;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -25,18 +26,18 @@ import com.puyue.www.qiaoge.model.mine.order.HomeBaseModel;
 
 import java.util.List;
 
-public class RvIconAdapter extends BaseQuickAdapter<HomeBaseModel.DataBean.IconListBean,BaseViewHolder> {
+public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.IconsBean,BaseViewHolder> {
 
-    public RvIconAdapter(int item_home_icon, List<HomeBaseModel.DataBean.IconListBean> iconList) {
+    public RvIconAdapter(int item_home_icon, List<IndexInfoModel.DataBean.IconsBean> iconList) {
         super(item_home_icon, iconList);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, HomeBaseModel.DataBean.IconListBean item) {
+    protected void convert(BaseViewHolder helper, IndexInfoModel.DataBean.IconsBean item) {
         helper.setText(R.id.tv_desc,item.getConfigDesc());
         ImageView iv_icon = helper.getView(R.id.iv_icon);
         Glide.with(mContext)
-                .load(item.getConfigCode())
+                .load(item.getUrl())
                 .apply(new RequestOptions().placeholder(R.mipmap.ic_launcher))
                 .apply(new RequestOptions().placeholder(iv_icon.getDrawable()).skipMemoryCache(false).dontAnimate())
                 .into(iv_icon);
@@ -49,12 +50,12 @@ public class RvIconAdapter extends BaseQuickAdapter<HomeBaseModel.DataBean.IconL
                     Intent newIntent = new Intent(mContext,NewProductActivity.class);
                     mContext.startActivity(newIntent);
 
-                }else if(AppConstant.HOTTYPE.equals(item.getRemark())) {
+                }else if(AppConstant.HOTTYPE.equals(item.getConfigCode())) {
                     //热销
                     Intent newIntent = new Intent(mContext,HotProductActivity.class);
                     mContext.startActivity(newIntent);
 
-                }else if(AppConstant.COMMONTYPE.equals(item.getRemark())) {
+                }else if(AppConstant.COMMONTYPE.equals(item.getConfigCode())) {
                     //常用清单
                     if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
                         Intent newIntent = new Intent(mContext, CommonProductActivity.class);
@@ -65,7 +66,7 @@ public class RvIconAdapter extends BaseQuickAdapter<HomeBaseModel.DataBean.IconL
                         mContext.startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
                     }
 
-                }else if(AppConstant.REDUCTIONTYPE.equals(item.getRemark())) {
+                }else if(AppConstant.REDUCTIONTYPE.equals(item.getConfigCode())) {
                     //降价
                     Intent newIntent = new Intent(mContext, ReductionProductActivity.class);
                     mContext.startActivity(newIntent);
@@ -87,10 +88,10 @@ public class RvIconAdapter extends BaseQuickAdapter<HomeBaseModel.DataBean.IconL
                     //分享有礼
                     setIntent(item.getUrl());
 
-                }else if(AppConstant.VIPTYPE.equals(item.getRemark())) {
+                }else if(AppConstant.VIPTYPE.equals(item.getConfigCode())) {
                     //VIP会员
                     setIntent(item.getUrl());
-                }else if(AppConstant.CONSULT.equals(item.getRemark())) {
+                }else if(AppConstant.CONSULT.equals(item.getConfigCode())) {
                     //行业资讯
                     setIntentConsult(item.getUrl());
                 }

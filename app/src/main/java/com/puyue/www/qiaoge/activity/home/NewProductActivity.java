@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.adapter.home.CommonAdapter;
+import com.puyue.www.qiaoge.adapter.home.CommonsAdapter;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
 import com.puyue.www.qiaoge.api.home.ProductListAPI;
@@ -57,7 +58,9 @@ public class NewProductActivity extends BaseSwipeActivity implements View.OnClic
     TextView tv_title;
     @BindView(R.id.smart)
     SmartRefreshLayout refreshLayout;
-    CommonAdapter adapterNewArrival;
+    @BindView(R.id.tv_num)
+    TextView tv_num;
+    CommonsAdapter adapterNewArrival;
     int pageNum = 1;
     int pageSize = 10;
     ProductNormalModel productNormalModel;
@@ -67,6 +70,7 @@ public class NewProductActivity extends BaseSwipeActivity implements View.OnClic
     int isSelected;
     boolean isChecked = false;
     int shopTypeId;
+    String flag = "new";
     //新品集合
     private List<ProductNormalModel.DataBean.ListBean> list = new ArrayList<>();
     @Override
@@ -90,7 +94,7 @@ public class NewProductActivity extends BaseSwipeActivity implements View.OnClic
     public void findViewById() {
         ButterKnife.bind(this);
         setTranslucentStatus();
-        adapterNewArrival = new CommonAdapter(R.layout.item_noresult_recommend, list, new CommonAdapter.Onclick() {
+        adapterNewArrival = new CommonsAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
@@ -119,7 +123,7 @@ public class NewProductActivity extends BaseSwipeActivity implements View.OnClic
 
             }
         });
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
         recyclerView.setAdapter(adapterNewArrival);
         iv_back.setOnClickListener(this);
         tv_title.setText("新品分类");

@@ -1120,11 +1120,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/size_15dp"
-                                android:paddingBottom="@dimen/size_10dp"
-                                android:visibility="gone">
+                                android:paddingBottom="@dimen/size_10dp">
 
                                 <RelativeLayout
-                                    android:id="@+id/rl_mine_wallet"
+                                    android:id="@+id/rl_zizhi"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1.2">
@@ -1135,7 +1134,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_centerHorizontal="true"
                                         android:layout_marginTop="10dp"
-                                        android:src="@mipmap/ic_pay_mine_bag" />
+                                        android:src="@mipmap/zizhi" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -1143,7 +1142,7 @@
                                         android:layout_below="@+id/image"
                                         android:layout_centerHorizontal="true"
                                         android:layout_marginTop="10dp"
-                                        android:text="@string/textTheWallet"
+                                        android:text="资质信息"
                                         android:textColor="@color/color_252525"
                                         android:textSize="@dimen/size_11dp" />
 
@@ -1161,6 +1160,7 @@
                                 </RelativeLayout>
 
                                 <RelativeLayout
+                                    android:visibility="invisible"
                                     android:id="@+id/mineIntegral"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -1189,6 +1189,7 @@
                                 </RelativeLayout>
 
                                 <RelativeLayout
+                                    android:visibility="invisible"
                                     android:id="@+id/couponsLayout"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -1265,12 +1266,6 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
-                <!--
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/size_5dp"
-                                    android:background="@color/color_F9F9F9" />-->
 
 
                 <ImageView

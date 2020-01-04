@@ -30,6 +30,7 @@ import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.ChangeCityActivity;
+import com.puyue.www.qiaoge.activity.home.ChooseAddressActivity;
 import com.puyue.www.qiaoge.activity.home.CouponDetailActivity;
 import com.puyue.www.qiaoge.activity.home.HomeGoodsListActivity;
 import com.puyue.www.qiaoge.activity.home.NoticeListActivity;
@@ -43,6 +44,7 @@ import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
 import com.puyue.www.qiaoge.api.cart.AddCartAPI;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
 import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
+import com.puyue.www.qiaoge.api.home.IndexInfoModel;
 import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.api.mine.UpdateAPI;
 import com.puyue.www.qiaoge.api.mine.order.MyOrderNumAPI;
@@ -172,7 +174,7 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
 //    @BindView(R.id.smart)
 //    com.scwang.smartrefresh.layout.SmartRefreshLayout SmartRefreshLayout;
     //八个icon集合
-    List<HomeBaseModel.DataBean.IconListBean> iconList = new ArrayList<>();
+    List<IndexInfoModel.DataBean.IconsBean> iconList = new ArrayList<>();
     //秒杀集合
     List<HomeBaseModel.DataBean.SecKillListBean.KillsBean> skillList = new ArrayList<>();
     //秒杀预告集合
@@ -227,7 +229,7 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
     @Override
     public int setLayoutId() {
         setTranslucentStatus();
-        return R.layout.fragment_homes;
+        return R.layout.home_fragmentss;
     }
 
     @Override
@@ -805,7 +807,7 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
 
                             //八个icon
                             iconList.clear();
-                            iconList.addAll(homeBaseModel.getData().getIconList());
+//                            iconList.addAll(homeBaseModel.getData().getIconList());
                             rvIconAdapter.notifyDataSetChanged();
 
                             //特惠
@@ -1176,8 +1178,11 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
 
             case R.id.rl_message:
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(getActivity()))) {
-                    Intent messageIntent = new Intent(getActivity(), MessageCenterActivity.class);
-                    startActivityForResult(messageIntent, 101);
+
+//                    Intent messageIntent = new Intent(getActivity(), MessageCenterActivity.class);
+                    Intent messageIntents = new Intent(getActivity(), ChooseAddressActivity.class);
+                    startActivity(messageIntents);
+//                    startActivityForResult(messageIntents, 101);
 
                 } else {
                     AppHelper.showMsg(getActivity(), "请先登录");

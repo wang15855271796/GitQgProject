@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/layer_top_line"
     android:orientation="horizontal">
 
@@ -94,6 +95,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/tv_include_common_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -119,11 +121,11 @@
         android:id="@+id/tv_add_car"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@drawable/selector_once_buy"
+        tools:background="#F6551A"
         android:gravity="center"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="加入购物车"
+        tools:text="加入购物车"
         android:textColor="@color/app_color_white"
         android:textSize="18dp" />
 </LinearLayout>

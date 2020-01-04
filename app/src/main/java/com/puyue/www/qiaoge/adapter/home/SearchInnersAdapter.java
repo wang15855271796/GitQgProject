@@ -181,6 +181,7 @@ public class SearchInnersAdapter extends BaseQuickAdapter<ExchangeProductModel.D
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num+"");
                             ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
+                            Log.d("wooooooooo.....","ssss");
                             EventBus.getDefault().post(new UpDateNumEvent());
                         } else {
                             ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());

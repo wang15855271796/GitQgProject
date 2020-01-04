@@ -143,7 +143,6 @@
                                 android:visibility="gone"
                                 android:layout_alignParentRight="true"
                                 android:layout_marginRight="@dimen/size_15dp"
-                                android:layout_marginTop="@dimen/size_5dp"
                                 android:id="@+id/tv_cut_down"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

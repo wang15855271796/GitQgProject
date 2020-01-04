@@ -1,6 +1,7 @@
 package com.puyue.www.qiaoge.activity.home;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
@@ -54,6 +56,7 @@ public class CouponFragment extends BaseFragment {
     //折扣集合
     List<TeamActiveQueryModel.DataBean> couponList = new ArrayList<>();
     private CouponsAdapter couponsAdapter;
+    private List<TeamActiveQueryModel.DataBean.ActivesBean> actives;
 
     public static CouponFragment getInstance() {
         CouponFragment fragment = new CouponFragment();
@@ -98,6 +101,15 @@ public class CouponFragment extends BaseFragment {
         });
         recycleView.setLayoutManager(new LinearLayoutManager(mActivity));
         recycleView.setAdapter(couponsAdapter);
+
+//        couponsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                Intent intent = new Intent(mActivity,SpecialGoodDetailActivity.class);
+//                intent.putExtra(AppConstant.ACTIVEID,633);
+//                mActivity.startActivity(intent);
+//            }
+//        });
         getCouponList();
 //        getCustomerPhone();
     }
@@ -208,17 +220,25 @@ public class CouponFragment extends BaseFragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("ffdddddd.......",e.getMessage());
+
                     }
 
                     @Override
                     public void onNext(TeamActiveQueryModel teamActiveQueryModel) {
-
+                        Log.d("ffdddddd.......",teamActiveQueryModel.getData()+"");
+//                        Log.d("ffdddddd.......",teamActiveQueryModel+"");
                         if (teamActiveQueryModel.isSuccess()) {
                             couponList.clear();
 
+
+
+
                             if (teamActiveQueryModel.getData() != null) {
                                 couponList.addAll(teamActiveQueryModel.getData());
+                                for (int i = 0; i <couponList.size() ; i++) {
+                                    actives = couponList.get(i).getActives();
+                                    Log.d("ssddddddd......",couponList.size()+"");
+                                }
                                 couponsAdapter.notifyDataSetChanged();
 
                             }

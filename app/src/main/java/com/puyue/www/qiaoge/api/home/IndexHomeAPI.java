@@ -6,6 +6,7 @@ import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
 import com.puyue.www.qiaoge.helper.RestHelper;
 import com.puyue.www.qiaoge.model.home.HomeNewRecommendModel;
 import com.puyue.www.qiaoge.model.home.IndexHomeModel;
+import com.puyue.www.qiaoge.model.home.SpikeNewQueryModel;
 import com.puyue.www.qiaoge.model.mine.order.HomeBaseModel;
 
 
@@ -61,5 +62,35 @@ public class IndexHomeAPI {
     public static Observable<HomeNewRecommendModel> getRecommendData(Context context,  String pageNum, String pageSize) {
         IndexRecommendService service = RestHelper.getBaseRetrofit(context).create(IndexRecommendService.class);
         return service.getData(pageNum, pageSize);
+    }
+
+    /**U
+     * 首页banner
+     */
+
+    private interface BannerService {
+        @POST(AppInterfaceAddress.BANNER)
+        Observable<BannerModel> getData();
+
+    }
+
+    public static Observable<BannerModel> getBanner(Context context) {
+        BannerService spikeActiveQueryService = RestHelper.getBaseRetrofit(context).create(BannerService.class);
+        return spikeActiveQueryService.getData();
+    }
+
+
+    /**
+     * 首页其他信息
+     */
+    private interface RecommendService {
+        @POST(AppInterfaceAddress.INDEXINFO)
+        Observable<IndexInfoModel> getData();
+
+    }
+
+    public static Observable<IndexInfoModel> getIndexInfo(Context context) {
+        RecommendService spikeActiveQueryService = RestHelper.getBaseRetrofit(context).create(RecommendService.class);
+        return spikeActiveQueryService.getData();
     }
 }

@@ -1395,7 +1395,6 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
                 DefaultSliderView defaultSliderView = new DefaultSliderView(getContext());
                 defaultSliderView.image(mListBanner.get(i).getPic());
                 defaultSliderView.setScaleType(BaseSliderView.ScaleType.Fit);
-
                 defaultSliderView.setOnSliderClickListener(this);
                 defaultSliderView.bundle(new Bundle());
                 defaultSliderView.getBundle().putString("banner_url", mListBanner.get(i).getUrl());

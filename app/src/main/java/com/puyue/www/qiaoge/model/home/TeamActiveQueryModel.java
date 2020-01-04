@@ -78,6 +78,17 @@ public class TeamActiveQueryModel {
         String title;
         private List<ActivesBean> actives;
 
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "currentTime=" + currentTime +
+                    ", startTime=" + startTime +
+                    ", endTime=" + endTime +
+                    ", title='" + title + '\'' +
+                    ", actives=" + actives +
+                    '}';
+        }
+
         public String getTitle() {
             return title;
         }
@@ -140,6 +151,32 @@ public class TeamActiveQueryModel {
             private String oldPrice;
             private String progress;
             private String remainNum;
+            String discount;
+
+            @Override
+            public String toString() {
+                return "ActivesBean{" +
+                        "saleDone=" + saleDone +
+                        ", activeId=" + activeId +
+                        ", activeType=" + activeType +
+                        ", activeName='" + activeName + '\'' +
+                        ", defaultPic='" + defaultPic + '\'' +
+                        ", spec='" + spec + '\'' +
+                        ", price='" + price + '\'' +
+                        ", oldPrice='" + oldPrice + '\'' +
+                        ", progress='" + progress + '\'' +
+                        ", remainNum='" + remainNum + '\'' +
+                        ", discount='" + discount + '\'' +
+                        '}';
+            }
+
+            public String getDiscount() {
+                return discount;
+            }
+
+            public void setDiscount(String discount) {
+                this.discount = discount;
+            }
 
             public int getSaleDone() {
                 return saleDone;

@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +37,8 @@ import com.puyue.www.qiaoge.api.mine.RechargeAPI;
 import com.puyue.www.qiaoge.api.mine.coupon.MyCouponsAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.PromptDialog;
+import com.puyue.www.qiaoge.dialog.XieYiDialog;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.WeChatPayEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -87,7 +91,7 @@ public class MyWalletActivity extends BaseSwipeActivity {
     private static final int SDK_PAY_FLAG = 1;
     private static final int SDK_AUTH_FLAG = 2;
     private String mEtAmount;
-
+    CheckBox checkBox;
     private String num;
 
     private EditText et_amount;
@@ -96,6 +100,7 @@ public class MyWalletActivity extends BaseSwipeActivity {
     private TextView tv_account;
 
     private String url;
+    private XieYiDialog promptDialog;
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
@@ -112,6 +117,7 @@ public class MyWalletActivity extends BaseSwipeActivity {
     @Override
     public void findViewById() {
         textRules = (TextView) findViewById(R.id.textRules);
+        checkBox = (CheckBox) findViewById(R.id.checkbox);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         textDetail = (TextView) findViewById(R.id.textDetail);
         myPrice = (TextView) findViewById(R.id.myPrice);
@@ -127,8 +133,8 @@ public class MyWalletActivity extends BaseSwipeActivity {
         ll_account = (LinearLayout) findViewById(R.id.ll_account);
         tv_cz = (TextView) findViewById(R.id.tv_cz);
         tv_account = (TextView) findViewById(R.id.tv_account);
-
     }
+
 
     @Override
     public void setViewData() {
@@ -263,32 +269,86 @@ public class MyWalletActivity extends BaseSwipeActivity {
                     popuWindow.showAtLocation(view, Gravity.NO_GRAVITY, 0, 0);
                     break;
                 case R.id.commonButton:
-                    Log.d("---->", mEtAmount + "");
-                    if (TextUtils.isEmpty(mEtAmount)) {
+                    if(!TextUtils.isEmpty(mEtAmount)) {
+                        if(radioButtonAliPay.isChecked()) {
+                            if (Double.parseDouble(mEtAmount)>0){
+
+                                if(!checkBox.isChecked()) {
+                                    Log.d("isCheck....",checkBox.isChecked()+"");
+                                    promptDialog = new XieYiDialog(mActivity) {
+                                        @Override
+                                        public void Confirm() {
+                                            dismiss();
+                                        }
+                                    };
+                                    promptDialog.show();
+                                }else {
+                                    Log.d("isCheck...........",checkBox.isChecked()+"");
+                                    recharge(Double.parseDouble(mEtAmount), (byte) 2);
+                                }
+
+                            }else {
+                                AppHelper.showMsg(mContext,"充值金额不能为0");
+                            }
+                        }
+                        else if (radioButtonWeChat.isChecked()) {
+                            if (Double.parseDouble(mEtAmount)>0){
+                                if(!checkBox.isChecked()) {
+                                    promptDialog = new XieYiDialog(mActivity) {
+                                        @Override
+                                        public void Confirm() {
+                                            dismiss();
+                                        }
+                                    };
+                                    promptDialog.show();
+                                }else {
+                                    recharge(Double.parseDouble(mEtAmount), (byte) 3);
+                                }
+
+                            }else {
+                                AppHelper.showMsg(mContext,"充值金额不能为0");
+                            }
+                        }
+                    }else {
                         AppHelper.showMsg(mContext, "请选择价格");
-                        return;
                     }
 
-                    if (radioButtonAliPay.isChecked()) {
-                      //  commonButton.setEnabled(false);
-                        if (Double.parseDouble(mEtAmount)>0){
-                            recharge(Double.parseDouble(mEtAmount), (byte) 2);
-                        }else {
-                            AppHelper.showMsg(mContext,"充值金额不能为0");
-                        }
-
-                    } else if (radioButtonWeChat.isChecked()) {
-                  //      commonButton.setEnabled(false);
-                        if (Double.parseDouble(mEtAmount)>0){
-                            recharge(Double.parseDouble(mEtAmount), (byte) 3);
-                        }else {
-                            AppHelper.showMsg(mContext,"充值金额不能为0");
-                        }
 
 
-                    } else {
-                        AppHelper.showMsg(mContext, "请选择渠道");
-                    }
+                    //--------------
+//                    if (TextUtils.isEmpty(mEtAmount)) {
+//
+//                        return;
+//                    }
+//
+//                    if (radioButtonAliPay.isChecked()) {
+//                        if (Double.parseDouble(mEtAmount)>0){
+//                            recharge(Double.parseDouble(mEtAmount), (byte) 2);
+//                        }else {
+//                            AppHelper.showMsg(mContext,"充值金额不能为0");
+//                        }
+//
+//                    } else if (radioButtonWeChat.isChecked()) {
+//                        if (Double.parseDouble(mEtAmount)>0){
+//                            recharge(Double.parseDouble(mEtAmount), (byte) 3);
+//                        }else {
+//                            AppHelper.showMsg(mContext,"充值金额不能为0");
+//                        }
+//                    } else if(!checkBox.isChecked()){
+//                            promptDialog = new XieYiDialog(mActivity) {
+//                                @Override
+//                                public void Confirm() {
+//                                    dismiss();
+//                                }
+//                            };
+//
+//                            promptDialog.show();
+//
+//                    }else {
+//                        AppHelper.showMsg(mContext, "请选择渠道");
+//                    }
+
+
                     break;
             }
         }

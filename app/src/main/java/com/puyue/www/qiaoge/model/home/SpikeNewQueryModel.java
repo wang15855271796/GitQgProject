@@ -83,7 +83,34 @@ public class SpikeNewQueryModel {
         private String dateDesc;
         private String timeDesc;
         private int flag;
+        private long currentTime;
+        private long startTime;
+        private long endTime;
         private int activeId;
+
+        public long getCurrentTime() {
+            return currentTime;
+        }
+
+        public void setCurrentTime(long currentTime) {
+            this.currentTime = currentTime;
+        }
+
+        public long getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(long startTime) {
+            this.startTime = startTime;
+        }
+
+        public long getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(long endTime) {
+            this.endTime = endTime;
+        }
 
         public int getActiveId() {
             return activeId;

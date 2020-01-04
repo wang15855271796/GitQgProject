@@ -46,6 +46,7 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
     int businessType;
     List<ExchangeProductModel.DataBean.ProdPricesBean> data;
     com.puyue.www.qiaoge.listener.OnItemClickListener onItemClickListener;
+    private TextView tv_reduce;
 
     public ItemChooseAdapter(int businessType,int productId,int layoutResId, @Nullable List<ExchangeProductModel.DataBean.ProdPricesBean> data) {
         super(layoutResId, data);
@@ -58,15 +59,22 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
     protected void convert(BaseViewHolder helper, ExchangeProductModel.DataBean.ProdPricesBean item) {
         tv_price = helper.getView(R.id.tv_price);
         tv_price.setText(item.getPrice());
+        tv_reduce = helper.getView(R.id.tv_reduce);
         helper.setText(R.id.tv_unit, item.getUnitDesc());
         TextView tv_old_price = helper.getView(R.id.tv_old_price);
         tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         helper.setText(R.id.tv_old_price,item.getOldPrice());
         TextView tv_num = helper.getView(R.id.tv_num);
+        if(item.getOldPrice().equals("")) {
+            tv_reduce.setVisibility(View.GONE);
+        }else {
+            tv_reduce.setBackgroundResource(R.drawable.shape_orange);
+            tv_reduce.setVisibility(View.VISIBLE);
+        }
+
         tv_num.setText(item.getCartNum()+"");
         iv_cut = helper.getView(R.id.iv_cut);
         iv_add = helper.getView(R.id.iv_add);
-
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +125,7 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                 tv_ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.d("swswswqqqq00........",productId+"");
                         if (et_num.getText().toString() != null && StringHelper.notEmptyAndNull(et_num.getText().toString())) {
                             AddMountChangeTwoAPI.AddMountChangeService(mContext, businessType, productId, Integer.parseInt(et_num.getText().toString()), item.getPriceId())
                                     .subscribeOn(Schedulers.io())

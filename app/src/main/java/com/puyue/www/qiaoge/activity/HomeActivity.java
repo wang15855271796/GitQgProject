@@ -43,6 +43,7 @@ import com.puyue.www.qiaoge.fragment.cart.CartFragment;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.fragment.home.HomeFragment;
 import com.puyue.www.qiaoge.fragment.home.HomeFragments;
+import com.puyue.www.qiaoge.fragment.home.HomeFragmentss;
 import com.puyue.www.qiaoge.fragment.market.MarketsFragment;
 import com.puyue.www.qiaoge.fragment.mine.MineFragment;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -434,7 +435,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         switch (tab) {
             case TAB_HOME:
                 if (mTabHome == null || isGet) {
-                    mTabHome = new HomeFragments();
+                    mTabHome = new HomeFragmentss();
                     mFragmentTransaction.add(R.id.layout_home_container, mTabHome);
                     isGet = false;
                 } else {

@@ -44,7 +44,7 @@ public class Team2Adapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean
     private TextView tv_old_price;
     private RelativeLayout rl_root;
     TextView tv_total;
-
+    int activeId;
     public Team2Adapter(int layoutResId, @Nullable List<TeamActiveQueryModel.DataBean> data, Onclick onclick) {
         super(layoutResId, data);
         this.onclick = onclick;
@@ -110,12 +110,14 @@ public class Team2Adapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean
         tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         helper.setText(R.id.tv_name, activesBean.getActiveName());
 
-
         rl_root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,TeamGoodsDetailActivity.class);
-                intent.putExtra(AppConstant.ACTIVEID,activesBean.getActiveId());
+                for (int i = 0; i <item.getActives().size(); i++) {
+                    activeId = item.getActives().get(i).getActiveId();
+                }
+                intent.putExtra(AppConstant.ACTIVEID,activeId);
                 mContext.startActivity(intent);
             }
         });
