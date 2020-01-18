@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:background="@color/white">
 
     </LinearLayout>
@@ -51,8 +51,9 @@
 
                 <ImageView
                     android:id="@+id/iv_carts"
+                    android:padding="5dp"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_tab_cart_enable"
+                    android:src="@mipmap/ic_tab_cart_unable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -62,11 +63,10 @@
                     android:layout_height="15dp"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@+id/iv_carts"
-                    android:layout_marginRight="@dimen/size_15dp"
+                    android:visibility="gone"
                     android:background="@drawable/shape_car_num"
                     android:gravity="center"
                     tools:text="9"
-                    android:visibility="gone"
                     android:textColor="@color/white"
                     android:textSize="7dp" />
 
@@ -182,10 +182,12 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
+            android:layout_marginRight="@dimen/dp_10"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
+
         <com.scwang.smartrefresh.layout.footer.ClassicsFooter
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

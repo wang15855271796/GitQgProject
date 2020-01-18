@@ -1,11 +1,12 @@
 package com.puyue.www.qiaoge.model.home;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by ${王涛} on 2019/11/4
  */
-public class ProductNormalModel {
+public class ProductNormalModel implements Serializable {
 
 
     /**
@@ -62,7 +63,7 @@ public class ProductNormalModel {
         this.success = success;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
          * pageNum : 1
          * pageSize : 6

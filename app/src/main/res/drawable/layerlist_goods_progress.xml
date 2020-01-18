@@ -5,17 +5,16 @@
     <!--背景色-->
     <item android:id="@android:id/background">
         <shape>
-            <corners android:radius="5dip" />
-            <stroke android:color="@color/app_color_white" android:width="0.5dp"/>
+            <corners android:radius="500dip" />
+            <solid android:color="#F6551A" />
         </shape>
     </item>
 
     <item android:id="@android:id/progress">
         <clip>
             <shape>
-                <corners android:radius="5dip" />
-                <solid android:color="#fbae67" />
-                <stroke android:color="@color/app_color_white" android:width="0.5dp"/>
+                <corners android:radius="500dip" />
+                <solid android:color="#ffffff" />
             </shape>
         </clip>
     </item>

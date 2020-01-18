@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_more"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:textColor="#FF680A"
+            android:textSize="@dimen/sp_14"
+            android:layout_marginLeft="@dimen/size_15dp"
+            android:layout_centerVertical="true"
+            tools:text="精选"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_desc"
+            android:textColor="#FF680A"
+            android:visibility="gone"
+            android:textSize="@dimen/sp_14"
+            android:layout_marginRight="@dimen/size_10dp"
+            android:layout_toLeftOf="@+id/tv_more"
+            android:layout_centerVertical="true"
+            tools:text="精选冻品，秒到就是赚到!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:text="2019.3.2开抢"
+            android:visibility="gone"
+            android:layout_marginLeft="@dimen/size_15dp"
+            android:layout_toRightOf="@+id/tv_title"
+            android:layout_centerVertical="true"
+            android:textColor="#FF680A"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.puyue.www.qiaoge.view.SnapUpCountDownTimerView
+            android:visibility="gone"
+            android:id="@+id/snap"
+            android:layout_marginLeft="@dimen/size_15dp"
+            android:layout_toRightOf="@+id/tv_title"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </com.puyue.www.qiaoge.view.SnapUpCountDownTimerView>
+
+        <TextView
+            android:text="更多"
+            android:id="@+id/tv_more"
+            android:drawableRight="@mipmap/fenlei_rigth_huangse"
+            android:layout_centerVertical="true"
+            android:textColor="#FF680A"
+            android:layout_marginRight="@dimen/size_15dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginTop="@dimen/size_10dp"
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

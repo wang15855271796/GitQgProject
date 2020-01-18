@@ -229,7 +229,7 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
     @Override
     public int setLayoutId() {
         setTranslucentStatus();
-        return R.layout.home_fragmentss;
+        return R.layout.fragments_home;
     }
 
     @Override

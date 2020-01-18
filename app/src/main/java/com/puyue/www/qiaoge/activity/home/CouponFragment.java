@@ -49,6 +49,7 @@ public class CouponFragment extends BaseFragment {
     private Unbinder bind;
     @BindView(R.id.recyclerView)
     RecyclerView recycleView;
+
     private String cell; // 客服电话
     private AlertDialog mTypedialog;
     int isSelected;
@@ -70,35 +71,8 @@ public class CouponFragment extends BaseFragment {
 
     @Override
     public void initViews(View view) {
-
         bind = ButterKnife.bind(this, view);
-        couponsAdapter = new CouponsAdapter(R.layout.item_coupon_list, couponList, new CouponsAdapter.Onclick() {
-            @Override
-            public void addDialog() {
-//                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
-//                    if(UserInfoHelper.getUserType(getActivity()).equals(AppConstant.USER_TYPE_RETAIL)) {
-//                        if (StringHelper.notEmptyAndNull(cell)) {
-//                            AppHelper.showAuthorizationDialog(getActivity(), cell, new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-//
-//                                    if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode()) && AppHelper.getAuthorizationCode().length() == 6) {
-//                                        AppHelper.hideAuthorizationDialog();
-//                                        showSelectType(AppHelper.getAuthorizationCode());
-//
-//                                    } else {
-//                                        AppHelper.showMsg(getActivity(), "请输入完整授权码");
-//                                    }
-//                                }
-//                            });
-//                        }
-//                    }
-//                }else {
-//                    AppHelper.showMsg(mActivity, "请先登录");
-//                    startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
-//                }
-            }
-        });
+        couponsAdapter = new CouponsAdapter(R.layout.item_coupon_list, couponList);
         recycleView.setLayoutManager(new LinearLayoutManager(mActivity));
         recycleView.setAdapter(couponsAdapter);
 
@@ -225,20 +199,10 @@ public class CouponFragment extends BaseFragment {
 
                     @Override
                     public void onNext(TeamActiveQueryModel teamActiveQueryModel) {
-                        Log.d("ffdddddd.......",teamActiveQueryModel.getData()+"");
-//                        Log.d("ffdddddd.......",teamActiveQueryModel+"");
                         if (teamActiveQueryModel.isSuccess()) {
                             couponList.clear();
-
-
-
-
                             if (teamActiveQueryModel.getData() != null) {
                                 couponList.addAll(teamActiveQueryModel.getData());
-                                for (int i = 0; i <couponList.size() ; i++) {
-                                    actives = couponList.get(i).getActives();
-                                    Log.d("ssddddddd......",couponList.size()+"");
-                                }
                                 couponsAdapter.notifyDataSetChanged();
 
                             }

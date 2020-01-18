@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootview"
     android:background="#f8f8f8"
     android:layout_width="match_parent"
@@ -17,7 +18,6 @@
     <com.puyue.www.qiaoge.view.CompatToolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:background="@color/white">
 
         <LinearLayout
@@ -27,6 +27,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:layout_marginTop="@dimen/dp_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                >
@@ -52,38 +53,34 @@
                     android:textColor="@color/app_top_bar_text"
                     android:textSize="18dp" />
 
-
                 <RelativeLayout
-                    android:visibility="gone"
                     android:id="@+id/rl_good_cart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/size_10dp">
-
+                    android:layout_width="@dimen/size_60dp"
+                    android:layout_height="@dimen/size_48dp">
 
                     <ImageView
                         android:id="@+id/iv_cart"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/ic_tab_cart_unable"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_home_good_cart" />
+                        android:layout_height="wrap_content" />
 
-                    <com.puyue.www.qiaoge.view.SuperTextView
-                        android:id="@+id/text_cart_num"
-                        android:layout_width="@dimen/size_13dp"
-                        android:layout_height="@dimen/size_13dp"
-                        android:layout_toRightOf="@id/iv_cart"
-                        android:gravity="center"
-                        android:text=""
-                        android:textColor="@color/white"
-                        android:textSize="9dp"
+                    <TextView
+                        android:id="@+id/tv_num"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/iv_cart"
                         android:visibility="gone"
-                        app:corner="7.5dp"
-                        app:solid="#ff0000" />
-
+                        android:background="@drawable/shape_car_num"
+                        android:gravity="center"
+                        tools:text="9"
+                        android:textColor="@color/white"
+                        android:textSize="7dp" />
 
                 </RelativeLayout>
+
 
             </RelativeLayout>
 
@@ -127,26 +124,38 @@
 
     </LinearLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
        >
 
-        <in.srain.cube.views.ptr.PtrClassicFrameLayout
-            android:id="@+id/ptr_activity_goods_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:descendantFocusability="blocksDescendants">
-
 
             <android.support.v7.widget.RecyclerView
-
                 android:id="@+id/rv_activity_goods_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:layout_height="@dimen/size_60dp">
+
+            <TextView
+                android:id="@+id/tv_call"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingLeft="@dimen/size_65dp"
+                android:paddingRight="@dimen/size_65dp"
+                android:background="@drawable/shape_orange"
+                android:layout_centerInParent="true"
+                android:text="添加本场秒杀提醒"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </RelativeLayout>
 
 
-        </in.srain.cube.views.ptr.PtrClassicFrameLayout>
-
-    </FrameLayout>
 </LinearLayout>

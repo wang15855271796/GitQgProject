@@ -1,6 +1,7 @@
 package com.puyue.www.qiaoge.fragment.home;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -36,6 +37,7 @@ public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.Icon
     protected void convert(BaseViewHolder helper, IndexInfoModel.DataBean.IconsBean item) {
         helper.setText(R.id.tv_desc,item.getConfigDesc());
         ImageView iv_icon = helper.getView(R.id.iv_icon);
+        Log.d("ggffasfsfeerre.....",item.getConfigCode());
         Glide.with(mContext)
                 .load(item.getUrl())
                 .apply(new RequestOptions().placeholder(R.mipmap.ic_launcher))

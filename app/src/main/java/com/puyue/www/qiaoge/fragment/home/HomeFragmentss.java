@@ -8,19 +8,30 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -31,20 +42,35 @@ import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.ChangeCityActivity;
 import com.puyue.www.qiaoge.activity.home.ChooseAddressActivity;
+import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.activity.home.CouponDetailActivity;
 import com.puyue.www.qiaoge.activity.home.HomeGoodsListActivity;
 import com.puyue.www.qiaoge.activity.home.NoticeListActivity;
+import com.puyue.www.qiaoge.activity.home.SearchReasultActivity;
 import com.puyue.www.qiaoge.activity.home.SearchStartActivity;
 import com.puyue.www.qiaoge.activity.home.SelectionGoodActivity;
+import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
 import com.puyue.www.qiaoge.activity.home.TeamDetailActivity;
+import com.puyue.www.qiaoge.activity.home.TeamGoodsDetailActivity;
+import com.puyue.www.qiaoge.activity.mine.MessageCenterActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginEvent;
+import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
+import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
+import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletPointActivity;
+import com.puyue.www.qiaoge.adapter.home.CommonAdapter;
+import com.puyue.www.qiaoge.adapter.home.CommonProductActivity;
+import com.puyue.www.qiaoge.adapter.home.HotProductActivity;
+import com.puyue.www.qiaoge.adapter.home.ReductionProductActivity;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
+import com.puyue.www.qiaoge.adapter.home.SeckillGoodActivity;
 import com.puyue.www.qiaoge.api.cart.AddCartAPI;
 import com.puyue.www.qiaoge.api.home.BannerModel;
+import com.puyue.www.qiaoge.api.home.DriverInfo;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
 import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
 import com.puyue.www.qiaoge.api.home.IndexInfoModel;
+import com.puyue.www.qiaoge.api.home.ProductListAPI;
 import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.api.mine.UpdateAPI;
 import com.puyue.www.qiaoge.api.mine.order.MyOrderNumAPI;
@@ -52,8 +78,10 @@ import com.puyue.www.qiaoge.banner.Banner;
 import com.puyue.www.qiaoge.banner.BannerConfig;
 import com.puyue.www.qiaoge.banner.GlideImageLoader;
 import com.puyue.www.qiaoge.banner.Transformer;
+import com.puyue.www.qiaoge.banner.listener.OnBannerListener;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
@@ -62,12 +90,18 @@ import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.OnItemClickListener;
 import com.puyue.www.qiaoge.model.cart.AddCartModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
+import com.puyue.www.qiaoge.model.home.CouponModel;
+import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.HomeNewRecommendModel;
+import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
 import com.puyue.www.qiaoge.model.mine.UpdateModel;
 import com.puyue.www.qiaoge.model.mine.order.HomeBaseModel;
 import com.puyue.www.qiaoge.model.mine.order.MyOrderNumModel;
+import com.puyue.www.qiaoge.utils.DateUtils;
+import com.puyue.www.qiaoge.utils.Utils;
+import com.puyue.www.qiaoge.view.AutoScrollRecyclerView;
 import com.puyue.www.qiaoge.view.MarqueeView;
 import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 import com.puyue.www.qiaoge.view.StatusBarUtil;
@@ -75,21 +109,30 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.taobao.library.VerticalBannerView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import static java.sql.DriverManager.getDrivers;
 
 /**
  * Created by ${王涛} on 2020/1/4
@@ -98,28 +141,6 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
     Unbinder binder;
     @BindView(R.id.rv_icon)
     RecyclerView rv_icon;
-    @BindView(R.id.rv_skill)
-    RecyclerView rv_skill;
-    @BindView(R.id.rv_coupon)
-    RecyclerView rv_coupon;
-    @BindView(R.id.rv_team)
-    RecyclerView rv_team;
-    @BindView(R.id.rv_new)
-    RecyclerView rv_new;
-    @BindView(R.id.iv1)
-    ImageView iv1;
-    @BindView(R.id.iv2)
-    ImageView iv2;
-    @BindView(R.id.iv3)
-    ImageView iv3;
-    @BindView(R.id.iv4)
-    ImageView iv4;
-    @BindView(R.id.iv5)
-    ImageView iv5;
-    @BindView(R.id.iv6)
-    ImageView iv6;
-    @BindView(R.id.ll_classify)
-    LinearLayout ll_classify;
     @BindView(R.id.tv_city)
     TextView tv_city;
     @BindView(R.id.tv_search)
@@ -128,62 +149,87 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
     TextView tv_num;
     @BindView(R.id.banner)
     Banner banner;
+    @BindView(R.id.ll_driver)
+    LinearLayout ll_driver;
     @BindView(R.id.iv_pic)
     ImageView iv_pic;
-    @BindView(R.id.notice)
-    MarqueeView notice;
-    @BindView(R.id.ll_notice)
-    LinearLayout ll_notice;
-    @BindView(R.id.tv_skill)
-    TextView tv_skill;
-    @BindView(R.id.tv_desc)
-    TextView tv_desc;
-    @BindView(R.id.ll_skill)
-    LinearLayout ll_skill;
-    @BindView(R.id.tv_coupon)
-    TextView tv_coupon;
-    @BindView(R.id.tv_coupon_desc)
-    TextView tv_coupon_desc;
-    @BindView(R.id.ll_coupon)
-    LinearLayout ll_coupon;
-    @BindView(R.id.tv_team)
-    TextView tv_team;
-    @BindView(R.id.tv_team_desc)
-    TextView tv_team_desc;
-    @BindView(R.id.ll_team)
-    LinearLayout ll_team;
-    @BindView(R.id.ll_new)
-    LinearLayout ll_new;
-    @BindView(R.id.time_start)
-    SnapUpCountDownTimerView time_start;
-    @BindView(R.id.time_end)
-    SnapUpCountDownTimerView time_end;
     @BindView(R.id.smart)
     SmartRefreshLayout refreshLayout;
-    @BindView(R.id.tv_new)
-    TextView tv_new;
-    @BindView(R.id.tv_adv)
-    TextView tv_adv;
-    @BindView(R.id.rv_skill_adv)
-    RecyclerView rv_skill_adv;
     @BindView(R.id.rl_message)
     RelativeLayout rl_message;
     @BindView(R.id.homeMessage)
     ImageView homeMessage;
-    @BindView(R.id.tv_inner_classify)
-    TextView tv_inner_classify;
-    @BindView(R.id.tv_inner_new)
-    TextView tv_inner_new;
-    @BindView(R.id.ll_skill_progress)
-    LinearLayout ll_skill_progress;
-    @BindView(R.id.ll_skill_adv)
-    LinearLayout ll_skill_adv;
     @BindView(R.id.rv_type)
     RecyclerView rv_type;
-    @BindView(R.id.rv_distribute)
-    RecyclerView rv_distribute;
-    //    @BindView(R.id.smart)
-//    com.scwang.smartrefresh.layout.SmartRefreshLayout SmartRefreshLayout;
+    @BindView(R.id.fl_content)
+    FrameLayout fl_content;
+    @BindView(R.id.rg_group)
+    RadioGroup rg_group;
+    @BindView(R.id.rb_1)
+    RadioButton rb_1;
+    @BindView(R.id.rb_2)
+    RadioButton rb_2;
+    @BindView(R.id.rb_3)
+    RadioButton rb_3;
+    @BindView(R.id.content)
+    FrameLayout frameLayout;
+    @BindView(R.id.rg_new)
+    RadioGroup rg_new;
+    @BindView(R.id.rb_new)
+    RadioButton rb_new;
+    @BindView(R.id.rb_must_common)
+    RadioButton rb_must_common;
+    @BindView(R.id.rb_info)
+    RadioButton rb_info;
+    @BindView(R.id.rb_common)
+    RadioButton rb_common;
+    @BindView(R.id.ll_line)
+    LinearLayout ll_line;
+    @BindView(R.id.v1)
+    View v1;
+    @BindView(R.id.v2)
+    View v2;
+    @BindView(R.id.v3)
+    View v3;
+    @BindView(R.id.v4)
+    View v4;
+    @BindView(R.id.tv_title1)
+    TextView tv_title1;
+    @BindView(R.id.tv_title2)
+    TextView tv_title2;
+    @BindView(R.id.tv_title3)
+    TextView tv_title3;
+    @BindView(R.id.tv_title4)
+    TextView tv_title4;
+    @BindView(R.id.appbar)
+    AppBarLayout appbar;
+    @BindView(R.id.ll_small_title)
+    LinearLayout ll_small_title;
+    @BindView(R.id.ll_active)
+    LinearLayout ll_active;
+    @BindView(R.id.recyclerViewTest)
+    RecyclerView recyclerViewTest;
+    @BindView(R.id.tv_more)
+    TextView tv_more;
+    @BindView(R.id.snap)
+    SnapUpCountDownTimerView snap;
+    @BindView(R.id.tv_time)
+    TextView tv_time;
+    @BindView(R.id.tv_desc2)
+    TextView tv_desc2;
+    @BindView(R.id.tv_desc3)
+    TextView tv_desc3;
+    @BindView(R.id.rl_more)
+    RelativeLayout rl_more;
+    @BindView(R.id.rl_more2)
+    RelativeLayout rl_more2;
+    @BindView(R.id.rl_more3)
+    RelativeLayout rl_more3;
+    @BindView(R.id.verticalBanner)
+    VerticalBannerView verticalBanner;
+    private String cell; // 客服电话
+    //司机信息
+    List<DriverInfo.DataBean> driverList = new ArrayList<>();
     //八个icon集合
     List<IndexInfoModel.DataBean.IconsBean> iconList = new ArrayList<>();
     //秒杀集合
@@ -198,32 +244,11 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
     List<HomeNewRecommendModel.DataBean.ListBean> newList = new ArrayList<>();
     //banner集合
     private List<String> bannerList = new ArrayList<>();
-    //公告
-    private List<String> noticeList = new ArrayList<>();
     private RvIconAdapter rvIconAdapter;
-    private SkillAdapter skillAdapter;
-    private CouponAdapter couponAdapter;
-    private TeamAdapter teamAdapter;
-    private NewAdapter newAdapter;
     Context context;
     int PageNum = 1;
-    int PageSize = 12;
-    HomeNewRecommendModel homeNewRecommendModels;
     private MyOrderNumModel mModelMyOrderNum;
-    HomeBaseModel homeBaseModels;
     private String token;
-    private int id0;
-    private String title0;
-    private int id1;
-    private String title1;
-    private int id2;
-    private String title2;
-    private int id3;
-    private String title3;
-    private int id4;
-    private String title4;
-    private int id5;
-    private String title5;
     private UpdateModel mModelUpdate;
     private boolean update;
     private boolean forceUpdate;
@@ -236,177 +261,226 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
     int isSelected;
     boolean isChecked = false;
     int shopTypeId;
-    SkillAdvAdapter skillAdvAdapter;
+    boolean flag;
     //banner集合
     List<String> list = new ArrayList<>();
     private IndexInfoModel.DataBean data;
     //分类列表
     private List<IndexInfoModel.DataBean.ClassifyListBean> classifyList = new ArrayList<>();
     private TypesAdapter typeAdapter;
+    private DriverAdapter driverAdapter;
+    SpikeFragment spikeFragment;
+    CouponsFragment couponsFragment;
+    TeamsFragment teamsFragment;
+    boolean isFirsts = false;
+    NewFragment newFragment;
+    MustFragment mustFragment;
+    InfoFragment infoFragment;
+    CommonFragment commonFragment;
+    private String questUrl;
+    private CouponModel.DataBean data1;
+    private CouponModel.DataBean data2;
+    private CouponModel.DataBean data3;
+    private int showType;
+    private CommonAdapter commonAdapter;
+    private LinearLayoutManager linearLayoutManager;
+    private List<CouponModel.DataBean.ActivesBean> actives = new ArrayList<>();
+    private View view;
+    private int spikeNum;
+    private int teamNum;
+    private int specialNum;
+    private long currentTime;
+    private long startTime;
+    private long endTime;
+
+    private Date currents;
+    private Date starts;
+    private CouponModel.DataBean data4;
+    private VerticalBannerAdapter verticalBannerAdapter;
 
     @Override
     public int setLayoutId() {
-//        setTranslucentStatus();
         return R.layout.home_fragmentss;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("wojiafsgkg;fgg...","ssdwdsd");
 
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public void initViews(View view) {
-        initStatusBarWhiteColor();
-        binder = ButterKnife.bind(this, view);
-
-        EventBus.getDefault().register(this);
-        context = getActivity();
-        token = UserInfoHelper.getUserId(mActivity);
-
-
-
-        //八个icon Adapter
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity,LinearLayoutManager.VERTICAL,true);
-        rvIconAdapter = new RvIconAdapter(R.layout.item_home_icon,iconList);
-        rv_icon.setLayoutManager(new GridLayoutManager(context,4));
-        rv_icon.setAdapter(rvIconAdapter);
-
-        //六个品种点击
-        typeAdapter = new TypesAdapter(R.layout.item_type,classifyList);
-        rv_type.setLayoutManager(new GridLayoutManager(context,2));
-        rv_type.setAdapter(typeAdapter);
-
-        //秒杀 Adapter
-        skillAdapter = new SkillAdapter(R.layout.item_skill,skillList);
-        rv_skill.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
-        rv_skill.setAdapter(skillAdapter);
-
-        skillAdapter.notifyDataSetChanged();
-        skillAdapter.setOnclick(new SkillAdapter.OnClick() {
-            @Override
-            public void shoppingCartOnClick(int position) {
-                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
-                    int activeId = skillList.get(position).getActiveId();
-                    addCar(activeId, "", 2, "1");
-                } else {
-                    AppHelper.showMsg(mActivity, "请先登录");
-                    startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
-                }
-                skillAdapter.notifyDataSetChanged();
-            }
-        });
-
-        //秒杀预告
-        skillAdvAdapter = new SkillAdvAdapter(R.layout.item_skill,skillAdvList);
-        rv_skill_adv.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
-        rv_skill_adv.setAdapter(skillAdvAdapter);
-        skillAdvAdapter.notifyDataSetChanged();
-        skillAdvAdapter.setOnclick(new SkillAdvAdapter.OnClick() {
-            @Override
-            public void shoppingCartOnClick(int position) {
-                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
-                    int activeId = skillAdvList.get(position).getActiveId();
-                    addCar(activeId, "", 2, "1");
-                } else {
-                    AppHelper.showMsg(mActivity, "请先登录");
-                    startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
-                }
-                skillAdvAdapter.notifyDataSetChanged();
-            }
-        });
-        //特惠
-        couponAdapter = new CouponAdapter(R.layout.item_skill,couponList);
-        rv_coupon.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
-        rv_coupon.setAdapter(couponAdapter);
-
-        couponAdapter.setOnclick(new CouponAdapter.OnClick() {
-            @Override
-            public void shoppingCartOnClick(int position) {
-                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
-                    int activeId = couponList.get(position).getActiveId();
-                    addCar(activeId, "", 11, "1");
-                } else {
-                    AppHelper.showMsg(mActivity, "请先登录");
-                    startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
-                }
-                couponAdapter.notifyDataSetChanged();
-            }
-        });
-
-
-        //组合
-        teamAdapter = new TeamAdapter(R.layout.item_skill,teamList);
-        rv_team.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
-        rv_team.setAdapter(teamAdapter);
-        teamAdapter.setOnclick(new TeamAdapter.OnClick() {
-            @Override
-            public void shoppingCartOnClick(int position) {   //超值组合(团购)
-                int activeId = teamList.get(position).getActiveId();
-
-                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
-                    addCar(activeId, "", 3, "1");
-                } else {
-                    AppHelper.showMsg(mActivity, "请先登录");
-                    startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
-                }
-                teamAdapter.notifyDataSetChanged();
-            }
-        });
-
-
-        //新品
-        newAdapter = new NewAdapter(R.layout.item_skill,newList);
-        rv_new.setLayoutManager(new GridLayoutManager(context,3));
-        rv_new.setAdapter(newAdapter);
-
-        ll_skill.setOnClickListener(this);
-        ll_coupon.setOnClickListener(this);
-        ll_team.setOnClickListener(this);
-        tv_search.setOnClickListener(this);
-        iv1.setOnClickListener(this);
-        iv2.setOnClickListener(this);
-        iv3.setOnClickListener(this);
-        iv4.setOnClickListener(this);
-        iv5.setOnClickListener(this);
-        iv6.setOnClickListener(this);
-        rl_message.setOnClickListener(this);
-        tv_city.setOnClickListener(this);
-
-        notice.setOnItemClickListener(new MarqueeView.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, TextView textView) {
-                //跳转公告列表
-                Log.d("sdwdwddddd..","swwcfff");
-                startActivity(NoticeListActivity.getIntent(getContext(), NoticeListActivity.class));
-            }
-        });
-    }
-
-    protected void initStatusBarWhiteColor() {
-        //设置状态栏颜色为白色，状态栏图标为黑色
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getActivity().getWindow().setStatusBarColor(Color.WHITE);
-            StatusBarUtil.setStatusBarLightMode(getActivity());
+        switchRb4();
+        if(!isFirsts) {
+            refreshLayout.autoRefresh();
+            isFirsts = true;
         }
     }
-    /**
-     * 添加购物车
-     * @param
-     * @param
-     * @param
-     * @param
-     */
+
+    private void getSpikeList(int type) {
+        IndexHomeAPI.getCouponList(mActivity,type+"")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<CouponModel>() {
+
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(CouponModel couponModel) {
+                        if(couponModel.isSuccess()) {
+                            actives.clear();
+                            data4 = couponModel.getData();
+                            if(type==2) {
+                                data1 = couponModel.getData();
+                                if(data1!=null) {
+                                    Log.d("dseeeeeeeeeeee.....","222222");
+                                    rl_more.setVisibility(View.VISIBLE);
+                                    rl_more2.setVisibility(View.GONE);
+                                    rl_more3.setVisibility(View.GONE);
+                                    actives.addAll(data1.getActives());
+                                    rb_1.setVisibility(View.VISIBLE);
+                                    currentTime = couponModel.getData().getCurrentTime();
+                                    startTime = couponModel.getData().getStartTime();
+                                    recyclerViewTest.setAdapter(commonAdapter);
+                                    commonAdapter.setOnclick(new CommonAdapter.OnClick() {
+                                        @Override
+                                        public void shoppingCartOnClick(int position) {
+                                            if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
+                                                int activeId = actives.get(position).getActiveId();
+                                                addCar(activeId, "", 2, "1");
+                                            } else {
+                                                AppHelper.showMsg(mActivity, "请先登录");
+                                                startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                                            }
+                                        }
+                                    });
+                                    endTime = couponModel.getData().getEndTime();
+                                    String current = DateUtils.formatDate(currentTime, "MM月dd日HH时mm分ss秒");
+                                    String start = DateUtils.formatDate(startTime, "MM月dd日HH时mm分ss秒");
+                                    try {
+                                        currents = Utils.stringToDate(current, "MM月dd日HH时mm分ss秒");
+                                        starts = Utils.stringToDate(start, "MM月dd日HH时mm分ss秒");
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                                    if(currentTime>startTime) {
+                                        //秒杀开始
+                                        if(startTime !=0&& endTime !=0) {
+                                            snap.setVisibility(View.VISIBLE);
+                                            snap.setTime(true, currentTime, startTime, endTime);
+                                            snap.changeBackGround(ContextCompat.getColor(mActivity, R.color.white));
+                                            snap.changeTypeColor(ContextCompat.getColor(mActivity, R.color.color_F6551A));
+                                            tv_time.setVisibility(View.GONE);
+                                            snap.start();
+                                        }else {
+                                            tv_time.setVisibility(View.GONE);
+                                            snap.setVisibility(View.GONE);
+                                        }
+                                    }else {
+                                        //未开始
+                                        boolean exceed2 = DateUtils.isExceed2(currents, starts);
+                                        if(exceed2) {
+                                            //大于2
+                                            tv_time.setText(start+"开抢");
+                                            tv_time.setVisibility(View.VISIBLE);
+                                            snap.setVisibility(View.GONE);
+                                        }else {
+                                            //小于2
+                                            if(startTime !=0&& endTime !=0) {
+                                                snap.setVisibility(View.VISIBLE);
+                                                snap.setTime(true, currentTime, startTime, endTime);
+                                                snap.changeBackGround(ContextCompat.getColor(mActivity, R.color.white));
+                                                snap.changeTypeColor(ContextCompat.getColor(mActivity, R.color.color_F6551A));
+                                                tv_time.setVisibility(View.GONE);
+                                                snap.start();
+                                            }else {
+                                                tv_time.setVisibility(View.GONE);
+                                                snap.setVisibility(View.GONE);
+                                            }
+                                        }
+                                    }
+
+                                }else {
+                                    rb_1.setVisibility(View.GONE);
+                                    rl_more.setVisibility(View.GONE);
+                                }
+
+                            }
+                            else if(type==11) {
+                                data1 = couponModel.getData();
+                                if(data1!=null) {
+                                    Log.d("dseeeeeeeeeeee.....","000000");
+                                    rb_2.setVisibility(View.VISIBLE);
+                                    rl_more3.setVisibility(View.GONE);
+                                    rl_more.setVisibility(View.GONE);
+                                    actives.addAll(data1.getActives());
+                                    recyclerViewTest.setAdapter(commonAdapter);
+                                    commonAdapter.setOnclick(new CommonAdapter.OnClick() {
+                                        @Override
+                                        public void shoppingCartOnClick(int position) {
+                                            if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
+                                                int activeId = actives.get(position).getActiveId();
+                                                addCar(activeId, "", 3, "1");
+                                            } else {
+                                                AppHelper.showMsg(mActivity, "请先登录");
+                                                startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                                            }
+                                        }
+                                    });
+
+                                    rl_more2.setVisibility(View.VISIBLE);
+                                    tv_desc2.setText(data1.getDesc());
+                                }else {
+                                    rb_2.setVisibility(View.GONE);
+
+                                    rl_more2.setVisibility(View.GONE);
+                                }
+                            }
+
+                            else if(type==3) {
+                                data1 = couponModel.getData();
+                                if(data1!=null) {
+                                    Log.d("dseeeeeeeeeeee.....","111111");
+                                    rb_3.setVisibility(View.VISIBLE);
+                                    actives.addAll(data1.getActives());
+                                    recyclerViewTest.setAdapter(commonAdapter);
+                                    commonAdapter.setOnclick(new CommonAdapter.OnClick() {
+                                        @Override
+                                        public void shoppingCartOnClick(int position) {
+                                            if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
+                                                int activeId = actives.get(position).getActiveId();
+                                                addCar(activeId, "", 11, "1");
+                                            } else {
+                                                AppHelper.showMsg(mActivity, "请先登录");
+                                                startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                                            }
+                                        }
+                                    });
+                                    rl_more.setVisibility(View.GONE);
+                                    rl_more2.setVisibility(View.GONE);
+                                    tv_desc3.setText(data1.getDesc());
+                                    rl_more3.setVisibility(View.VISIBLE);
+                                }else {
+                                    rb_3.setVisibility(View.GONE);
+                                }
+
+
+                            }
+                            commonAdapter.notifyDataSetChanged();
+
+
+                        }
+                    }
+                });
+    }
+
     private void addCar(int businessId, String productCombinationPriceVOList, int businessType, String totalNum) {
         AddCartAPI.requestData(mActivity, businessId, productCombinationPriceVOList, businessType, String.valueOf(totalNum))
                 .subscribeOn(Schedulers.io())
@@ -434,6 +508,367 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                     }
                 });
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        verticalBanner.stop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void initViews(View view) {
+        binder = ButterKnife.bind(this, view);
+        EventBus.getDefault().register(this);
+        context = getActivity();
+        initStatusBarWhiteColor();
+        token = UserInfoHelper.getUserId(mActivity);
+        rb_new.setChecked(true);
+
+
+        appbar.addOnOffsetChangedListener(new AppBarLayout.BaseOnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+                int totalScrollRange = appBarLayout.getTotalScrollRange();
+
+                if(totalScrollRange ==Math.abs(i)) {
+                    flag = true;
+                }else {
+                    flag = false;
+                }
+
+                if(flag) {
+                    ll_small_title.setVisibility(View.GONE);
+                    ll_line.setVisibility(View.VISIBLE);
+                }else {
+                    ll_small_title.setVisibility(View.VISIBLE);
+                    ll_line.setVisibility(View.GONE);
+
+                }
+            }
+        });
+
+        ll_small_title.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if(flag) {
+                    ll_small_title.setVisibility(View.GONE);
+                    ll_line.setVisibility(View.VISIBLE);
+                    if(rb_new.isChecked()) {
+                        v1.setVisibility(View.VISIBLE);
+                        v2.setVisibility(View.INVISIBLE);
+                        v3.setVisibility(View.INVISIBLE);
+                        v4.setVisibility(View.INVISIBLE);
+
+                    }else if(rb_must_common.isChecked()){
+                        v1.setVisibility(View.INVISIBLE);
+                        v2.setVisibility(View.VISIBLE);
+                        v3.setVisibility(View.INVISIBLE);
+                        v4.setVisibility(View.INVISIBLE);
+
+                    }else if(rb_info.isChecked()){
+                        v1.setVisibility(View.INVISIBLE);
+                        v2.setVisibility(View.INVISIBLE);
+                        v3.setVisibility(View.VISIBLE);
+                        v4.setVisibility(View.INVISIBLE);
+
+                    }else if(rb_common.isChecked()){
+                        v1.setVisibility(View.INVISIBLE);
+                        v2.setVisibility(View.INVISIBLE);
+                        v3.setVisibility(View.INVISIBLE);
+                        v4.setVisibility(View.VISIBLE);
+                    }
+                }else {
+                    ll_small_title.setVisibility(View.VISIBLE);
+                    ll_line.setVisibility(View.GONE);
+
+                }
+            }
+        });
+
+        linearLayoutManager = new LinearLayoutManager(mActivity);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerViewTest.setLayoutManager(linearLayoutManager);
+
+        commonAdapter = new CommonAdapter(2+"",R.layout.item_commons_list, actives);
+
+        rg_group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_1:
+                        rb_1.setTextColor(Color.parseColor("#ffffff"));
+                        rb_1.setBackgroundResource(R.drawable.shape_orange);
+
+                        rb_2.setTextColor(Color.parseColor("#333333"));
+                        rb_2.setBackgroundResource(R.drawable.shape_white);
+
+                        rb_3.setTextColor(Color.parseColor("#333333"));
+                        rb_3.setBackgroundResource(R.drawable.shape_white);
+                        getSpikeList(2);
+                        break;
+
+                    case R.id.rb_2:
+                        rb_2.setTextColor(Color.parseColor("#ffffff"));
+                        rb_2.setBackgroundResource(R.drawable.shape_orange);
+
+                        rb_1.setTextColor(Color.parseColor("#333333"));
+                        rb_1.setBackgroundResource(R.drawable.shape_white);
+
+                        rb_3.setTextColor(Color.parseColor("#333333"));
+                        rb_3.setBackgroundResource(R.drawable.shape_white);
+                        getSpikeList(11);
+                        break;
+
+                    case R.id.rb_3:
+                        rb_1.setTextColor(Color.parseColor("#333333"));
+                        rb_1.setBackgroundResource(R.drawable.shape_white);
+
+                        rb_2.setTextColor(Color.parseColor("#333333"));
+                        rb_2.setBackgroundResource(R.drawable.shape_white);
+
+                        rb_3.setTextColor(Color.parseColor("#ffffff"));
+                        rb_3.setBackgroundResource(R.drawable.shape_orange);
+                        getSpikeList(3);
+                        break;
+                }
+            }
+        });
+
+        rg_new.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_new:
+                        rb_info.setTextColor(Color.parseColor("#333333"));
+                        rb_common.setTextColor(Color.parseColor("#333333"));
+                        rb_must_common.setTextColor(Color.parseColor("#333333"));
+                        rb_new.setTextColor(Color.parseColor("#FF5000"));
+                        tv_title1.setTextColor(Color.parseColor("#ffffff"));
+                        tv_title1.setBackgroundResource(R.drawable.shape_orange);
+
+                        tv_title2.setTextColor(Color.parseColor("#999999"));
+                        tv_title2.setBackgroundResource(R.drawable.shape_white);
+
+                        tv_title3.setTextColor(Color.parseColor("#999999"));
+                        tv_title3.setBackgroundResource(R.drawable.shape_white);
+
+                        tv_title4.setTextColor(Color.parseColor("#999999"));
+                        tv_title4.setBackgroundResource(R.drawable.shape_white);
+
+                        switchRb4();
+                        break;
+
+                    case R.id.rb_must_common:
+
+                        rb_info.setTextColor(Color.parseColor("#333333"));
+                        rb_common.setTextColor(Color.parseColor("#333333"));
+                        rb_must_common.setTextColor(Color.parseColor("#333333"));
+                        rb_new.setTextColor(Color.parseColor("#333333"));
+
+                        rb_must_common.setTextColor(Color.parseColor("#FF5000"));
+                        tv_title2.setTextColor(Color.parseColor("#ffffff"));
+                        tv_title2.setBackgroundResource(R.drawable.shape_orange);
+
+                        tv_title1.setTextColor(Color.parseColor("#999999"));
+                        tv_title1.setBackgroundResource(R.drawable.shape_white);
+
+                        tv_title3.setTextColor(Color.parseColor("#999999"));
+                        tv_title3.setBackgroundResource(R.drawable.shape_white);
+
+                        tv_title4.setTextColor(Color.parseColor("#999999"));
+                        tv_title4.setBackgroundResource(R.drawable.shape_white);
+
+                        switchRb5();
+                        break;
+
+                    case R.id.rb_info:
+                        rb_info.setTextColor(Color.parseColor("#FF5000"));
+                        rb_common.setTextColor(Color.parseColor("#333333"));
+                        rb_must_common.setTextColor(Color.parseColor("#333333"));
+                        rb_new.setTextColor(Color.parseColor("#333333"));
+                        tv_title2.setTextColor(Color.parseColor("#999999"));
+                        tv_title2.setBackgroundResource(R.drawable.shape_white);
+
+                        tv_title1.setTextColor(Color.parseColor("#999999"));
+                        tv_title1.setBackgroundResource(R.drawable.shape_white);
+
+                        tv_title3.setTextColor(Color.parseColor("#ffffff"));
+                        tv_title3.setBackgroundResource(R.drawable.shape_orange);
+
+                        tv_title4.setTextColor(Color.parseColor("#999999"));
+                        tv_title4.setBackgroundResource(R.drawable.shape_white);
+
+                        switchRb6();
+                        break;
+
+                    case R.id.rb_common:
+                        rb_info.setTextColor(Color.parseColor("#333333"));
+                        rb_common.setTextColor(Color.parseColor("#FF5000"));
+                        rb_must_common.setTextColor(Color.parseColor("#333333"));
+                        rb_new.setTextColor(Color.parseColor("#333333"));
+                        rb_info.setTextColor(Color.parseColor("#333333"));
+
+                        tv_title2.setTextColor(Color.parseColor("#999999"));
+                        tv_title2.setBackgroundResource(R.drawable.shape_white);
+
+                        tv_title1.setTextColor(Color.parseColor("#999999"));
+                        tv_title1.setBackgroundResource(R.drawable.shape_white);
+
+                        tv_title3.setTextColor(Color.parseColor("#999999"));
+                        tv_title3.setBackgroundResource(R.drawable.shape_white);
+
+                        tv_title4.setTextColor(Color.parseColor("#ffffff"));
+                        tv_title4.setBackgroundResource(R.drawable.shape_orange);
+
+                        switchRb7();
+                        break;
+                }
+            }
+        });
+
+        //司机信息Adapter
+        driverAdapter = new DriverAdapter(R.layout.item_driver,driverList);
+
+        //八个icon Adapter
+        rvIconAdapter = new RvIconAdapter(R.layout.item_home_icon,iconList);
+        rv_icon.setLayoutManager(new GridLayoutManager(context,4));
+        rv_icon.setAdapter(rvIconAdapter);
+
+        //六个品种点击
+        typeAdapter = new TypesAdapter(R.layout.item_type,classifyList);
+        rv_type.setLayoutManager(new GridLayoutManager(context,2));
+        rv_type.setAdapter(typeAdapter);
+
+
+        tv_search.setOnClickListener(this);
+        rl_message.setOnClickListener(this);
+        tv_city.setOnClickListener(this);
+        rl_more.setOnClickListener(this);
+        rl_more2.setOnClickListener(this);
+        rl_more3.setOnClickListener(this);
+
+    }
+
+    /**
+     * 常用清单
+     */
+    private void switchRb7() {
+
+        fragmentTransaction = supportFragmentManager.beginTransaction();
+        if (commonFragment == null) {
+            commonFragment = new CommonFragment();
+            fragmentTransaction.add(R.id.content, commonFragment, CommonFragment.class.getCanonicalName());
+        }
+
+        fragmentTransaction.show(commonFragment);
+
+        if (infoFragment != null) {
+            fragmentTransaction.hide(infoFragment);
+        }
+
+        if (teamsFragment != null) {
+            fragmentTransaction.hide(teamsFragment);
+        }
+
+        if (newFragment != null) {
+            fragmentTransaction.hide(newFragment);
+        }
+
+        fragmentTransaction.commitAllowingStateLoss();
+    }
+
+    /**
+     * 咨讯
+     */
+    private void switchRb6() {
+        fragmentTransaction = supportFragmentManager.beginTransaction();
+        if (infoFragment == null) {
+            infoFragment = new InfoFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("url",questUrl);
+            bundle.putInt("TYPE",2);
+            bundle.putString("name","");
+            infoFragment.setArguments(bundle);
+            fragmentTransaction.add(R.id.content, infoFragment, InfoFragment.class.getCanonicalName());
+        }
+
+        fragmentTransaction.show(infoFragment);
+
+        if (mustFragment != null) {
+            fragmentTransaction.hide(mustFragment);
+        }
+
+        if (newFragment != null) {
+            fragmentTransaction.hide(newFragment);
+        }
+
+        if (commonFragment != null) {
+            fragmentTransaction.hide(commonFragment);
+        }
+
+        fragmentTransaction.commitAllowingStateLoss();
+    }
+
+    /**
+     * 必买
+     */
+    private void switchRb5() {
+        fragmentTransaction = supportFragmentManager.beginTransaction();
+        if (mustFragment == null) {
+            mustFragment = new MustFragment();
+            fragmentTransaction.add(R.id.content, mustFragment, MustFragment.class.getCanonicalName());
+        }
+
+        fragmentTransaction.show(mustFragment);
+
+        if (infoFragment != null) {
+            fragmentTransaction.hide(infoFragment);
+        }
+
+        if (newFragment != null) {
+            fragmentTransaction.hide(newFragment);
+        }
+
+        if (commonFragment != null) {
+            fragmentTransaction.hide(commonFragment);
+        }
+
+        fragmentTransaction.commitAllowingStateLoss();
+    }
+
+    /**
+     * 新品
+     */
+    private void switchRb4() {
+        fragmentTransaction = supportFragmentManager.beginTransaction();
+        if (newFragment == null) {
+            newFragment = new NewFragment();
+            fragmentTransaction.add(R.id.content, newFragment, NewFragment.class.getCanonicalName());
+        }
+        fragmentTransaction.show(newFragment);
+
+        if (infoFragment != null) {
+            fragmentTransaction.hide(infoFragment);
+        }
+
+        if (mustFragment != null) {
+            fragmentTransaction.hide(mustFragment);
+        }
+
+        if (commonFragment != null) {
+            fragmentTransaction.hide(commonFragment);
+        }
+
+        fragmentTransaction.commitAllowingStateLoss();
+    }
+
 
     /**
      * 更新购物车角标
@@ -475,10 +910,10 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
         newList.clear();
         skillList.clear();
         skillAdvList.clear();
-        getNewProductList(1+"", PageSize+"");
-        getBaseList("version","1");
-        getBanner();
+        driverList.clear();
+        getDriveInfo();
         getBaseLists();
+        getCustomerPhone();
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
         mTypedialog.setCancelable(false);
 
@@ -493,30 +928,71 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                 newList.clear();
                 skillList.clear();
                 skillAdvList.clear();
-                getNewProductList(1+"", PageSize+"");
-                getBaseList("version","1");
+                driverList.clear();
+                getBaseLists();
+                getDriveInfo();
+                EventBus.getDefault().post(new BackEvent());
                 refreshLayout.finishRefresh();
             }
         });
+    }
 
-        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
             @Override
-            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                if (homeNewRecommendModels.getData()!=null) {
-                    Log.d("swdwdsvgf.,","sss");
-                    if(homeNewRecommendModels.getData().isHasNextPage()) {
-                        PageNum++;
-                        getNewProductList(PageNum+"", PageSize+"");
-                        refreshLayout.finishLoadMore();      //加载完成
-
-                    }else {
-                        refreshLayout.finishLoadMoreWithNoMoreData();
-                    }
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
                 }
             }
+
+            @Override
+            public void onFaild(String errorMsg) {
+            }
         });
+    }
 
 
+    /**
+     * 获取司机信息
+     */
+    private void getDriveInfo() {
+        IndexHomeAPI.getDriverInfo(mActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<DriverInfo>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(DriverInfo driverInfo) {
+                        if(driverInfo.isSuccess()) {
+                            if(driverInfo.getData()!=null) {
+                                driverList.clear();
+                                driverList.addAll(driverInfo.getData());
+                                if(cell!=""&&cell!=null) {
+                                    verticalBannerAdapter = new VerticalBannerAdapter(cell,driverList,context);
+                                    verticalBanner.setAdapter(verticalBannerAdapter);
+                                    verticalBanner.start();
+                                }
+
+                                ll_driver.setVisibility(View.GONE);
+                            }else {
+                                ll_driver.setVisibility(View.GONE);
+                            }
+                        }
+
+                    }
+                });
     }
 
     /**
@@ -534,70 +1010,207 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("sssssssss,,,",e.getMessage());
+                        Log.d("asfsdfffgfggggg.....",e.getMessage());
                     }
 
                     @Override
                     public void onNext(IndexInfoModel indexInfoModel) {
                         data = indexInfoModel.getData();
+
+                        classifyList.clear();
                         classifyList.addAll(data.getClassifyList());
-                        if(indexInfoModel.isSuccess()) {
-                            Glide.with(mActivity).load(data.getOtherInfo()).into(iv_pic);
+                        if(classifyList.size()>0) {
+                            rv_type.setVisibility(View.VISIBLE);
+                        }else {
+                            rv_type.setVisibility(View.GONE);
+
                         }
+                        typeAdapter.notifyDataSetChanged();
+
+                        iconList.clear();
+
                         iconList.addAll(data.getIcons());
+                        if(iconList.size()>0) {
+                            rv_icon.setVisibility(View.VISIBLE);
+                        }else {
+                            rv_icon.setVisibility(View.GONE);
+                        }
 
-                        data.
-                    }
-                });
-    }
+                        spikeNum = indexInfoModel.getData().getSpikeNum();
+                        teamNum = indexInfoModel.getData().getTeamNum();
+                        specialNum = indexInfoModel.getData().getSpecialNum();
 
-    /**
-     * 分类banner获取
-     */
 
-    private void getBanner() {
-        IndexHomeAPI.getBanner(getContext())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<BannerModel>() {
-                    @Override
-                    public void onCompleted() {
+                        Log.d("ewgrgegrdggrgege.....",spikeNum+"");
+                        if(spikeNum!=0) {
+                            rb_1.setVisibility(View.VISIBLE);
+                            Log.d("ewgrgegrdggrgege.....","2222222");
+                            rb_1.setChecked(true);
+                            getSpikeList(2);
+                        }else {
+                            rb_1.setChecked(false);
+                            rb_1.setVisibility(View.GONE);
+                        }
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(BannerModel bannerModel) {
-                        if (mModelUpdate.success) {
-                            for (int i = 0; i < bannerModel.getData().size(); i++) {
-                                list.add(bannerModel.getData().get(i).getDefaultPic());
+                        if(spikeNum==0) {
+                            if(specialNum!=0) {
+                                rb_2.setChecked(true);
+                                getSpikeList(11);
+                                Log.d("ewgrgegrdggrgege.....","000000");
+                                rb_2.setVisibility(View.VISIBLE);
+                            }else {
+                                rb_2.setChecked(false);
+                                rb_2.setVisibility(View.GONE);
                             }
-                            if (bannerModel.getData().size() > 0) {
+
+                            if(specialNum==0) {
+                                if(teamNum!=0) {
+                                    getSpikeList(3);
+                                    Log.d("ewgrgegrdggrgege.....","111111");
+                                    rb_3.setVisibility(View.VISIBLE);
+                                    rb_3.setChecked(true);
+                                }else {
+                                    rb_3.setChecked(false);
+                                    rb_3.setVisibility(View.GONE);
+                                }
+                            }
+
+                            if(teamNum==0&&specialNum==0&&spikeNum==0) {
+                                ll_active.setVisibility(View.GONE);
+                            }else {
+                                ll_active.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                        if(teamNum==0) {
+                            rb_3.setVisibility(View.GONE);
+
+                        }else {
+                            rb_3.setVisibility(View.VISIBLE);
+                        }
+
+                        if(spikeNum==0) {
+                            rb_1.setVisibility(View.GONE);
+                        }else {
+                            rb_1.setVisibility(View.VISIBLE);
+                        }
+
+                        if(specialNum==0) {
+                            rb_2.setVisibility(View.GONE);
+                        }else {
+                            rb_2.setVisibility(View.VISIBLE);
+                        }
+
+                        rvIconAdapter.notifyDataSetChanged();
+                        questUrl = indexInfoModel.getData().getQuestUrl();
+                        if(indexInfoModel.isSuccess()) {
+                            tv_city.setText(data.getAddress());
+                            Glide.with(mActivity).load(data.getOtherInfo()).into(iv_pic);
+                            list.clear();
+                            for (int i = 0; i < indexInfoModel.getData().getBanners().size(); i++) {
+                                list.add(data.getBanners().get(i).getDefaultPic());
+                            }
+
+                            if (data.getBanners().size() > 0) {
                                 banner.setVisibility(View.VISIBLE);
-                                bannerList.clear();
                                 banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
                                 banner.setImageLoader(new GlideImageLoader());
+                                bannerList.clear();
                                 bannerList.addAll(list);
                                 banner.setImages(bannerList);
                                 banner.setBannerAnimation(Transformer.DepthPage);
                                 banner.isAutoPlay(true);
                                 banner.setDelayTime(3000);
                                 banner.setIndicatorGravity(BannerConfig.RIGHT);
+
+                                ClickBanner(data.getBanners());
+
+
                                 banner.start();
-                                Log.d("ddfdfffffffffff.....",bannerList.size()+"");
                             } else {
                                 banner.setVisibility(View.GONE);
                             }
-
-                        } else {
-                            AppHelper.showMsg(mActivity, bannerModel.getMessage());
                         }
                     }
                 });
+    }
+
+    private void ClickBanner(List<IndexInfoModel.DataBean.BannersBean> banners) {
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                showType = banners.get(position).getShowType();
+                if(showType==1|| banners.get(position).getLinkSrc()!=null) {
+                    //链接 banners.get(position).getLinkSrc()
+                    Intent intent = new Intent(getActivity(), NewWebViewActivity.class);
+                    intent.putExtra("URL", banners.get(position).getLinkSrc());
+                    intent.putExtra("TYPE", 2);
+                    intent.putExtra("name", "");
+                    startActivity(intent);
+                }
+                else if(showType == 2|| banners.get(position).getDetailPic()!=null) {
+                    //图片
+                    AppHelper.showPhotoDetailDialog(mActivity, bannerList, position);
+                }else if(showType == 3|| banners.get(position).getProdPage()!=null) {
+                    //H5页面
+                    if(AppConstant.KILL_PROD.equals(banners.get(position).getProdPage())) {
+                        Intent intent = new Intent(getActivity(), HomeGoodsListActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.HOT_PROD.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), HotProductActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.COMMON_PROD.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), CommonProductActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.DEDUCT_PROD.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), ReductionProductActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.SPECIAL_PROD.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), CouponDetailActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.TEAM_PROD.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.BALANCE.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), MyWalletPointActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.POINT.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), MinerIntegralActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.GIFT.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), MyOrdersActivity.class);
+                        startActivity(intent);
+                    }
+
+
+                }else if(showType ==4 ) {
+                    //商品
+                    int businessId = Integer.parseInt(banners.get(position).getBusinessId());
+                    Intent intent = new Intent(getActivity(), CommonGoodsDetailActivity.class);
+                    intent.putExtra(AppConstant.ACTIVEID, businessId);
+                    startActivity(intent);
+                }else if(showType ==5 ) {
+                    //活动
+                    String businessType = banners.get(position).getBusinessType();
+                    int businessId = Integer.parseInt(banners.get(position).getBusinessId());
+                    if(businessType.equals("2")) {
+                        Intent intent = new Intent(getActivity(), SeckillGoodActivity.class);
+                        intent.putExtra(AppConstant.ACTIVEID,businessId );
+                        startActivity(intent);
+                    }else if(businessType.equals("3")) {
+                        Intent intent = new Intent(getActivity(), TeamGoodsDetailActivity.class);
+                        intent.putExtra(AppConstant.ACTIVEID, businessId);
+                        startActivity(intent);
+                    }else if(businessType.equals("11")) {
+                        Intent intent = new Intent(getActivity(), SpecialGoodDetailActivity.class);
+                        intent.putExtra(AppConstant.ACTIVEID,businessId);
+                        startActivity(intent);
+                    }
+
+                }
+
+            }
+        });
     }
 
 
@@ -675,6 +1288,7 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                 mDialog.dismiss();
             }
         });
+
         mBtnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -745,457 +1359,6 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                 });
     }
 
-    /**
-     * 首页新品
-     * @param
-     * @param
-     */
-    private void getNewProductList(String PageNum, String PageSize) {
-        Log.d("swxdsdwwdswssasas...",PageNum+"");
-        IndexHomeAPI.getRecommendData(mActivity, PageNum+"",PageSize)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<HomeNewRecommendModel>() {
-                    @Override
-                    public void onCompleted() {
-//                        ptr.refreshComplete();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-//                        ptr.refreshComplete();
-                    }
-
-                    @Override
-                    public void onNext(HomeNewRecommendModel homeNewRecommendModel) {
-
-                        homeNewRecommendModels = homeNewRecommendModel;
-
-                        if(homeNewRecommendModel.getData().getList()!=null&&homeNewRecommendModel.getData().getList().size()>0) {
-                            ll_new.setVisibility(View.VISIBLE);
-                            newList.addAll(homeNewRecommendModel.getData().getList());
-                            newAdapter.notifyDataSetChanged();
-                        }else {
-                            ll_new.setVisibility(View.GONE);
-                        }
-                    }
-                });
-
-//        ptr.setVisibility(View.VISIBLE);
-    }
-
-
-    /**
-     * 获取首页基础信息（新品除外）
-     * @param version
-     * @param clientType
-     */
-    private void getBaseList(String version, String clientType) {
-        IndexHomeAPI.getBaseList(getActivity(), version, clientType)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<HomeBaseModel>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("dfdfweeffeyghfb...",e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(HomeBaseModel homeBaseModel) {
-                        if (homeBaseModel.getData().getCityName() != null && StringHelper.notEmptyAndNull(homeBaseModel.getData().getCityName())) {
-                            tv_city.setText(homeBaseModel.getData().getCityName());
-                        }else {
-                            if (UserInfoHelper.getCity(mActivity) != null && StringHelper.notEmptyAndNull(UserInfoHelper.getCity(mActivity))) {
-                                tv_city.setText(UserInfoHelper.getCity(mActivity));
-
-                            }
-                        }
-
-                        homeBaseModels = homeBaseModel;
-                        invitationCode = homeBaseModel.getData().getInvitationCode();
-                        if (homeBaseModel.isSuccess()) {
-
-                            //秒杀
-                            if(homeBaseModel.getData().getSecKillList()!=null&&homeBaseModel.getData().getSecKillList().size()>0) {
-                                long currentTime = 0;
-                                long startTime = 0;
-                                long endTime = 0;
-                                long currentTimePre = 0;
-                                long startTimePre = 0;
-                                long endTimePre = 0;
-
-                                //秒杀
-                                for (int i = 0; i <homeBaseModels.getData().getSecKillList().size() ; i++) {
-                                    ll_skill.setVisibility(View.VISIBLE);
-                                    //秒杀预告
-                                    if(homeBaseModels.getData().getSecKillList().get(i).getFlag()==0) {
-                                        if(skillList.size()==0) {
-                                            ll_skill_progress.setVisibility(View.GONE);
-                                        }else {
-                                            ll_skill_progress.setVisibility(View.VISIBLE);
-                                        }
-                                        skillAdvList.addAll(homeBaseModel.getData().getSecKillList().get(i).getKills());
-                                        Log.d("miaoshayugao.....",skillAdvList.size()+"");
-                                        skillAdvAdapter.notifyDataSetChanged();
-                                        tv_adv.setText(homeBaseModel.getData().getKillTrailDesc());
-                                        ll_skill_adv.setVisibility(View.VISIBLE);
-//                                        ll_skill_progress.setVisibility(View.GONE);
-                                        currentTimePre = homeBaseModel.getData().getSecKillList().get(i).getCurrentTime();
-                                        startTimePre = homeBaseModel.getData().getSecKillList().get(i).getStartTime();
-                                        endTimePre = homeBaseModel.getData().getSecKillList().get(i).getEndTime();
-                                        time_end.setBackTheme(false);
-                                        time_end.setTime(true, currentTimePre, startTimePre, endTimePre);
-                                        time_end.changeTextColor(ContextCompat.getColor(getContext(), R.color.app_color_white));
-                                        time_end.changeColon(ContextCompat.getColor(getContext(), R.color.app_bg_colon));
-                                        time_end.start();
-                                    }else {
-                                        if(skillAdvList.size()==0) {
-                                            ll_skill_adv.setVisibility(View.GONE);
-                                        }else {
-                                            ll_skill_adv.setVisibility(View.VISIBLE);
-                                        }
-                                        ll_skill_progress.setVisibility(View.VISIBLE);
-                                        skillList.addAll(homeBaseModels.getData().getSecKillList().get(i).getKills());
-                                        Log.d("miaoshayugao..........",skillList.size()+"");
-                                        skillAdapter.notifyDataSetChanged();
-                                        tv_desc.setText(homeBaseModels.getData().getKillDesc());
-                                        tv_skill.setText(homeBaseModels.getData().getKillTitle());
-                                        currentTime = homeBaseModels.getData().getSecKillList().get(i).getCurrentTime();
-                                        startTime = homeBaseModels.getData().getSecKillList().get(i).getStartTime();
-                                        endTime = homeBaseModels.getData().getSecKillList().get(i).getEndTime();
-
-                                        time_start.setBackTheme(false);
-                                        time_start.setTime(true, currentTime, startTime, endTime);
-                                        time_start.changeTextColor(ContextCompat.getColor(getContext(), R.color.app_color_white));
-                                        time_start.changeColon(ContextCompat.getColor(getContext(), R.color.app_bg_colon));
-                                        time_start.start();
-
-                                    }
-                                }
-
-                            }else {
-                                ll_skill.setVisibility(View.GONE);
-                            }
-//                            skillAdapter.notifyDataSetChanged();
-//                            skillAdvAdapter.notifyDataSetChanged();
-
-                            //判断是否弹店铺类型的弹窗
-                            if (homeBaseModel.getData().getShopFlag() == 1 && !isShowed) {
-                                isShowed = true;
-                                showSelectType();
-                            }
-//                            String city = UserInfoHelper.getCity(mActivity);
-
-//                            tv_city.setText(city);
-
-                            EventBus.getDefault().post(new CityEvent());
-
-                            if(homeBaseModel.getData().getClassicDesc()!=null) {
-                                tv_inner_classify.setText(homeBaseModel.getData().getClassicDesc());
-                            }
-                            if(homeBaseModel.getData().getRecommendDesc()!=null) {
-                                tv_inner_new.setText(homeBaseModel.getData().getRecommendDesc());
-                                tv_new.setText(homeBaseModel.getData().getRecommendTitle());
-                            }
-
-
-                            //公告
-                            if (homeBaseModel.getData().getIndexNoticeList().size() > 0) {
-                                ll_notice.setVisibility(View.VISIBLE);
-                                for (int i = 0; i < homeBaseModel.getData().getIndexNoticeList().size(); i++) {
-                                    noticeList.add(homeBaseModel.getData().getIndexNoticeList().get(i).getNoticeTitle());
-                                }
-                                notice.startWithList(noticeList);
-                            } else {
-                                ll_notice.setVisibility(View.GONE);
-                            }
-
-                            //八个icon
-//                            iconList.clear();
-//                            iconList.addAll(homeBaseModel.getData().getIconList());
-                            rvIconAdapter.notifyDataSetChanged();
-
-                            //特惠
-                            if(homeBaseModel.getData().getOfferList()!=null&&homeBaseModel.getData().getOfferList().size()>0) {
-                                couponList.clear();
-                                ll_coupon.setVisibility(View.VISIBLE);
-                                couponList.addAll(homeBaseModel.getData().getOfferList());
-                                couponAdapter.notifyDataSetChanged();
-                                tv_coupon.setText(homeBaseModel.getData().getOfferTitle());
-                                tv_coupon_desc.setText(homeBaseModel.getData().getOfferDesc());
-                            }else {
-                                ll_coupon.setVisibility(View.GONE);
-                            }
-
-                            //组合
-                            if(homeBaseModel.getData().getTeamList()!=null&&homeBaseModel.getData().getTeamList().size()>0) {
-                                teamList.clear();
-                                ll_team.setVisibility(View.VISIBLE);
-                                teamList.addAll(homeBaseModel.getData().getTeamList());
-                                Log.d("swddwddddsdweeee...",teamList.size()+"");
-                                teamAdapter.notifyDataSetChanged();
-                                tv_team.setText(homeBaseModel.getData().getTeamTitle());
-                                tv_team_desc.setText(homeBaseModel.getData().getTeamDesc());
-                            }else {
-                                ll_team.setVisibility(View.GONE);
-                            }
-
-                            //精选
-                            if (homeBaseModel.getData().getClassicList() != null && homeBaseModel.getData().getClassicList().size() > 0) {
-                                List<HomeBaseModel.DataBean.ClassicListBean> classicList = homeBaseModel.getData().getClassicList();
-                                ll_classify.setVisibility(View.VISIBLE);
-                                if (classicList.size() == 1) {
-                                    iv1.setVisibility(View.VISIBLE);
-                                    iv2.setVisibility(View.GONE);
-                                    iv3.setVisibility(View.GONE);
-                                    iv4.setVisibility(View.GONE);
-                                    iv5.setVisibility(View.GONE);
-                                    iv6.setVisibility(View.GONE);
-                                    Glide.with(context).load(classicList.get(0).getImg()).into(iv1);
-                                    id0 = classicList.get(0).getId();
-                                    title0 = classicList.get(0).getTitle();
-
-                                }
-
-                                if (classicList.size() == 2) {
-                                    iv1.setVisibility(View.VISIBLE);
-                                    iv2.setVisibility(View.VISIBLE);
-                                    iv3.setVisibility(View.GONE);
-                                    iv4.setVisibility(View.GONE);
-                                    iv5.setVisibility(View.GONE);
-                                    iv6.setVisibility(View.GONE);
-                                    Glide.with(context).load(classicList.get(0).getImg()).into(iv1);
-                                    Glide.with(context).load(classicList.get(1).getImg()).into(iv2);
-
-                                    id0 = classicList.get(0).getId();
-                                    title0 = classicList.get(0).getTitle();
-                                    id1 = classicList.get(1).getId();
-                                    title1 = classicList.get(1).getTitle();
-                                }
-
-                                if (classicList.size() == 3) {
-                                    iv1.setVisibility(View.VISIBLE);
-                                    iv2.setVisibility(View.VISIBLE);
-                                    iv3.setVisibility(View.VISIBLE);
-                                    iv4.setVisibility(View.GONE);
-                                    iv5.setVisibility(View.GONE);
-                                    iv6.setVisibility(View.GONE);
-                                    Glide.with(context).load(classicList.get(0).getImg()).into(iv1);
-                                    Glide.with(context).load(classicList.get(1).getImg()).into(iv2);
-                                    Glide.with(context).load(classicList.get(2).getImg()).into(iv3);
-
-                                    id0 = classicList.get(0).getId();
-                                    title0 = classicList.get(0).getTitle();
-                                    id1 = classicList.get(1).getId();
-                                    title1 = classicList.get(1).getTitle();
-                                    id2 = classicList.get(2).getId();
-                                    title2 = classicList.get(2).getTitle();
-                                }
-
-                                if (classicList.size() == 4) {
-                                    iv1.setVisibility(View.VISIBLE);
-                                    iv2.setVisibility(View.VISIBLE);
-                                    iv3.setVisibility(View.VISIBLE);
-                                    iv4.setVisibility(View.VISIBLE);
-                                    iv5.setVisibility(View.GONE);
-                                    iv6.setVisibility(View.GONE);
-                                    Glide.with(context).load(classicList.get(0).getImg()).into(iv1);
-                                    Glide.with(context).load(classicList.get(1).getImg()).into(iv2);
-                                    Glide.with(context).load(classicList.get(2).getImg()).into(iv3);
-                                    Glide.with(context).load(classicList.get(3).getImg()).into(iv4);
-
-                                    id0 = classicList.get(0).getId();
-                                    title0 = classicList.get(0).getTitle();
-                                    id1 = classicList.get(1).getId();
-                                    title1 = classicList.get(1).getTitle();
-                                    id2 = classicList.get(2).getId();
-                                    title2 = classicList.get(2).getTitle();
-                                    id3 = classicList.get(3).getId();
-                                    title3 = classicList.get(3).getTitle();
-
-
-                                }
-
-                                if (classicList.size() == 5) {
-                                    iv1.setVisibility(View.VISIBLE);
-                                    iv2.setVisibility(View.VISIBLE);
-                                    iv3.setVisibility(View.VISIBLE);
-                                    iv4.setVisibility(View.VISIBLE);
-                                    iv5.setVisibility(View.VISIBLE);
-                                    iv6.setVisibility(View.GONE);
-                                    Glide.with(context).load(classicList.get(0).getImg()).into(iv1);
-                                    Glide.with(context).load(classicList.get(1).getImg()).into(iv2);
-                                    Glide.with(context).load(classicList.get(2).getImg()).into(iv3);
-                                    Glide.with(context).load(classicList.get(3).getImg()).into(iv4);
-                                    Glide.with(context).load(classicList.get(4).getImg()).into(iv5);
-
-                                    id0 = classicList.get(0).getId();
-                                    title0 = classicList.get(0).getTitle();
-                                    id1 = classicList.get(1).getId();
-                                    title1 = classicList.get(1).getTitle();
-                                    id2 = classicList.get(2).getId();
-                                    title2 = classicList.get(2).getTitle();
-                                    id3 = classicList.get(3).getId();
-                                    title3 = classicList.get(3).getTitle();
-                                    id4 = classicList.get(4).getId();
-                                    title4 = classicList.get(4).getTitle();
-                                }
-
-                                if (classicList.size() == 6) {
-                                    iv1.setVisibility(View.VISIBLE);
-                                    iv2.setVisibility(View.VISIBLE);
-                                    iv3.setVisibility(View.VISIBLE);
-                                    iv4.setVisibility(View.VISIBLE);
-                                    iv5.setVisibility(View.VISIBLE);
-                                    iv6.setVisibility(View.VISIBLE);
-                                    Glide.with(context).load(classicList.get(0).getImg()).into(iv1);
-                                    Glide.with(context).load(classicList.get(1).getImg()).into(iv2);
-                                    Glide.with(context).load(classicList.get(2).getImg()).into(iv3);
-                                    Glide.with(context).load(classicList.get(3).getImg()).into(iv4);
-                                    Glide.with(context).load(classicList.get(4).getImg()).into(iv5);
-                                    Glide.with(context).load(classicList.get(5).getImg()).into(iv6);
-
-                                    id0 = classicList.get(0).getId();
-                                    title0 = classicList.get(0).getTitle();
-                                    id1 = classicList.get(1).getId();
-                                    title1 = classicList.get(1).getTitle();
-                                    id2 = classicList.get(2).getId();
-                                    title2 = classicList.get(2).getTitle();
-                                    id3 = classicList.get(3).getId();
-                                    title3 = classicList.get(3).getTitle();
-                                    id4 = classicList.get(4).getId();
-                                    title4 = classicList.get(4).getTitle();
-                                    id5 = classicList.get(5).getId();
-                                    title5 = classicList.get(5).getTitle();
-                                }
-
-                            }else {
-                                ll_classify.setVisibility(View.GONE);
-                            }
-                        }
-                    }
-                });
-    }
-
-    /**
-     * 选择店铺类型
-     */
-    private void showSelectType() {
-        GetRegisterShopAPI.requestData(mActivity, invitationCode)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GetRegisterShopModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i("ccca", e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(GetRegisterShopModel getRegisterShopModel) {
-                        UserInfoHelper.saveIsRegister(mActivity, "is_register_type");
-                        if (getRegisterShopModel.isSuccess()) {
-                            isFirst = true;
-                            List<GetRegisterShopModel.DataBean> mList = new ArrayList<>();
-                            mList.addAll(getRegisterShopModel.getData());
-                            mTypedialog.show();
-                            Window window = mTypedialog.getWindow();
-                            window.setContentView(R.layout.select_type);
-                            WindowManager.LayoutParams attributes = window.getAttributes();
-                            attributes.width = LinearLayout.LayoutParams.MATCH_PARENT;
-                            attributes.height = LinearLayout.LayoutParams.MATCH_PARENT;
-                            window.setAttributes(attributes);
-                            RecyclerView rl_type = window.findViewById(R.id.rl_type);
-                            TextView tv_ok = window.findViewById(R.id.tv_ok);
-                            rl_type.setLayoutManager(new GridLayoutManager(mActivity, 3));
-                            RegisterShopAdapterTwo mRegisterAdapterType = new RegisterShopAdapterTwo(mActivity, mList);
-                            rl_type.setAdapter(mRegisterAdapterType);
-                            mRegisterAdapterType.setOnItemClickListener(new OnItemClickListener() {
-                                @Override
-                                public void onItemClick(View view, int position) {
-                                    isSelected = position;
-                                    mRegisterAdapterType.selectPosition(position);
-
-                                    shopTypeId = mList.get(isSelected).getId();
-                                    isChecked = true;
-                                }
-
-                                @Override
-                                public void onItemLongClick(View view, int position) {
-
-                                }
-                            });
-
-
-                            tv_ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (isChecked) {
-                                        mTypedialog.dismiss();
-                                        updateUserInvitation(invitationCode, shopTypeId);
-                                    } else {
-                                        AppHelper.showMsg(mActivity, "请选择店铺类型");
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
-    }
-
-    /**
-     * 提交授权码
-     * @param
-     * @param
-     */
-    private void updateUserInvitation(String invitationCode, int shopTypeId) {
-        UpdateUserInvitationAPI.requestData(mActivity, invitationCode, shopTypeId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<UpdateUserInvitationModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(UpdateUserInvitationModel updateUserInvitationModel) {
-                        if (updateUserInvitationModel.isSuccess()) {
-                            UserInfoHelper.saveUserType(mActivity, AppConstant.USER_TYPE_WHOLESALE);
-                            UserInfoHelper.saveUserId(mActivity, updateUserInvitationModel.getData());
-                            PageNum = 1;
-                            requestOrderNum();
-                            getBaseList("version","1");
-                            getNewProductList(1+"",12+"");
-                            UserInfoHelper.saveUserHomeRefresh(getContext(), "home_has_refresh");
-                        } else {
-                            AppHelper.showMsg(mActivity, updateUserInvitationModel.getMessage());
-                        }
-                    }
-                });
-    }
-
-    /**
-     * 初始化banner
-     */
-    private void initBanner() {
-
-    }
-
-
 
     @Override
     public void setClickEvent() {
@@ -1219,52 +1382,13 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                 startActivity(intent);
                 break;
 
-            case R.id.ll_coupon:
-                Intent couponIntent = new Intent(getActivity(), CouponDetailActivity.class);
-                getActivity().startActivity(couponIntent);
-                break;
-
-            case R.id.ll_team:
-                Intent teamIntent = new Intent(getActivity(), TeamDetailActivity.class);
-                getActivity().startActivity(teamIntent);
-                break;
-
-            case R.id.ll_skill:
-                Intent skillIntent = new Intent(getActivity(), HomeGoodsListActivity.class);
-                skillIntent.putExtra(AppConstant.PAGETYPE, AppConstant.SECONDTYPE);
-                getActivity().startActivity(skillIntent);
-                break;
-
-            case R.id.iv1:
-                IntentClass(id0, title0);
-                break;
-
-            case R.id.iv2:
-                IntentClass(id1, title1);
-                break;
-
-            case R.id.iv3:
-                IntentClass(id2, title2);
-                break;
-
-            case R.id.iv4:
-                IntentClass(id3, title3);
-                break;
-
-            case R.id.iv5:
-                IntentClass(id4, title4);
-                break;
-
-            case R.id.iv6:
-                IntentClass(id5, title5);
-                break;
 
             case R.id.rl_message:
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(getActivity()))) {
 
-//                    Intent messageIntent = new Intent(getActivity(), MessageCenterActivity.class);
-                    Intent messageIntents = new Intent(getActivity(), ChooseAddressActivity.class);
-                    startActivity(messageIntents);
+                    Intent messageIntent = new Intent(getActivity(), MessageCenterActivity.class);
+//                    Intent messageIntents = new Intent(getActivity(), ChooseAddressActivity.class);
+                    startActivity(messageIntent);
 //                    startActivityForResult(messageIntents, 101);
 
                 } else {
@@ -1275,14 +1399,28 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
 
             case R.id.tv_city:
                 //选择城市
-                if (homeBaseModels.getData().getCityName() != null && StringHelper.notEmptyAndNull(homeBaseModels.getData().getCityName())) {
+                Intent messageIntent = new Intent(getActivity(), ChooseAddressActivity.class);
+                messageIntent.putExtra("cityName",data.getCityName());
+                messageIntent.putExtra("areaName",data.getAreaName());
+                startActivityForResult(messageIntent, 104);
+                break;
 
-                } else {
-//                    startActivity(new Intent(mActivity, ChangeCityActivity.class));
+            case R.id.rl_more:
+                //秒杀专区
+                Intent secIntent = new Intent(getActivity(), HomeGoodsListActivity.class);
+                startActivity(secIntent);
+                break;
 
-                    Intent messageIntent = new Intent(getActivity(), ChangeCityActivity.class);
-                    startActivityForResult(messageIntent, 104);
-                }
+            case R.id.rl_more2:
+                //精选折扣
+                Intent specialIntent = new Intent(getActivity(), CouponDetailActivity.class);
+                startActivity(specialIntent);
+                break;
+
+            case R.id.rl_more3:
+                //超值组合
+                Intent teamIntent = new Intent(getActivity(), TeamDetailActivity.class);
+                startActivity(teamIntent);
                 break;
 
         }
@@ -1303,22 +1441,16 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
             }
         }
 
-
         if (requestCode == 104) {
             newList.clear();
             skillList.clear();
             skillAdvList.clear();
-            getNewProductList(1+"", PageSize+"");
-            getBaseList("version","1");
+            getBaseLists();
+            EventBus.getDefault().post(new BackEvent());
+//            switchRb5();
+//            switchRb6();
+//            switchRb7();
         }
-    }
-
-    // 跳转精选分类传参
-    private void IntentClass(int productId, String title) {
-        Intent intent = new Intent(getActivity(), SelectionGoodActivity.class);
-        intent.putExtra("productId", productId);
-        intent.putExtra("title", title);
-        startActivity(intent);
     }
 
     @Override
@@ -1345,8 +1477,15 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
         newList.clear();
         skillList.clear();
         skillAdvList.clear();
-        getNewProductList(1+"", PageSize+"");
-        getBaseList("version","1");
-        Log.d("woshiwangtao....","sddwd");
     }
+
+    protected void initStatusBarWhiteColor() {
+        //设置状态栏颜色为白色，状态栏图标为黑色
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getActivity().getWindow().setStatusBarColor(Color.WHITE);
+            StatusBarUtil.setStatusBarLightMode(getActivity());
+        }
+    }
+
 }

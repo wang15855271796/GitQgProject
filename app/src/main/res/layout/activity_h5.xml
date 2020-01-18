@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <com.puyue.www.qiaoge.view.CompatToolbar
+        android:visibility="gone"
         android:layout_marginTop="@dimen/size_30dp"
         android:id="@+id/toolbar_h5"
         android:layout_width="match_parent"

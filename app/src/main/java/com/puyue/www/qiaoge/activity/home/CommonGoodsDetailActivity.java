@@ -78,6 +78,7 @@ import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
 import com.puyue.www.qiaoge.model.home.GetProductListModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
+import com.puyue.www.qiaoge.model.home.GuessModel;
 import com.puyue.www.qiaoge.model.home.HasCollectModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
@@ -188,9 +189,9 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     public List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs;
     private List<String> detailPic;
     private int productMainId;
-    SearchResultsModel searchResultsModel;
-    //搜索集合
-    private List<SearchResultsModel.DataBean.SearchProdBean.ListBean> searchList = new ArrayList<>();
+    GuessModel searchResultsModel;
+    //猜你喜欢集合
+    private List<GuessModel.DataBean> searchList = new ArrayList<>();
     //图片详情集合
     private List<String> detailList = new ArrayList<>();
 
@@ -204,6 +205,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         if (getIntent() != null && getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             productId = bundle.getInt(AppConstant.ACTIVEID);
+            Log.d("dsgfgrer........",productId+"");
             if (!TextUtils.isEmpty(bundle.getString("equipment"))) {
                 businessType = 7;
             }
@@ -284,6 +286,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
             hasCollectState(productId, businessType);
             getProductDetail(productId);
@@ -316,7 +319,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                     if (UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_RETAIL)) {
                         //这个用户是零售用户
 //                        if ("批发".equals(type)) {
-                            Log.d("woshidashuju....",cell);
+
                             if (StringHelper.notEmptyAndNull(cell)) {
                                 AppHelper.showAuthorizationDialog(mContext, cell, new View.OnClickListener() {
                                     @Override
@@ -440,6 +443,17 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                                 iv_flag.setVisibility(View.VISIBLE);
                                 Glide.with(mContext).load(model.getData().getTypeUrl()).into(iv_flag);
                             }
+                            Log.d("dsswedddddddd.....",model.getData().getSaleDone()+"");
+//                            if(model.getData().getSaleDone()==0) {
+                                //已售完
+//                                mTvAddCar.setText("已售罄");
+//                                mTvAddCar.setBackgroundResource(R.drawable.app_car);
+//                                mTvAddCar.setEnabled(false);
+//                            }else {
+                                mTvAddCar.setText("加入购物车");
+                                mTvAddCar.setEnabled(true);
+                                mTvAddCar.setBackgroundResource(R.drawable.selector_once_buy);
+//                            }
 
                             mTvSpec.setText("规格:"+model.getData().getSpec());
                             tv_sale.setText(model.getData().getSalesVolume());
@@ -715,33 +729,11 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
      * 推荐
      **/
     private void getProductList() {
-//        PublicRequestHelper.getProductList(mContext, 1, 12, "recommendNew", productName, null, null, null, null, new OnHttpCallBack<GetProductListModel>() {
-//            @Override
-//            public void onSuccessful(GetProductListModel getProductListModel) {
-//                if (getProductListModel.success) {
-//                    listRecommend.clear();
-//                    if (getProductListModel.data.list != null) {
-//                        adapterRecommend = new GoodsRecommendAdapter(R.layout.item_goods_recommend, listRecommend);
-//                        recyclerViewRecommend.setLayoutManager(new LinearLayoutManager(mContext, LinearLayout.HORIZONTAL, false));
-//                        recyclerViewRecommend.setAdapter(adapterRecommend);
-//                        listRecommend.addAll(getProductListModel.data.list);
-//                    } else {
-//                    }
-//                } else {
-//                    AppHelper.showMsg(mContext, getProductListModel.message);
-//                }
-//            }
-//
-//            @Override
-//            public void onFaild(String errorMsg) {
-//
-//            }
-//        });
 
-        RecommendApI.requestData(mContext,productName,pageNum,pageSize)
+        RecommendApI.getLikeList(mContext,productId+"")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SearchResultsModel>() {
+                .subscribe(new Subscriber<GuessModel>() {
                     @Override
                     public void onCompleted() {
 
@@ -753,11 +745,11 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                     }
 
                     @Override
-                    public void onNext(SearchResultsModel recommendModel) {
+                    public void onNext(GuessModel recommendModel) {
                         if (recommendModel.isSuccess()) {
                             searchResultsModel = recommendModel;
-                            if(recommendModel.getData().getSearchProd()!=null) {
-                                searchList.addAll(recommendModel.getData().getSearchProd().getList());
+                            if(recommendModel.getData()!=null) {
+                                searchList.addAll(recommendModel.getData());
                                 adapterRecommend.notifyDataSetChanged();
                                 Log.d("weorishssss....",searchList.size()+"");
                             }

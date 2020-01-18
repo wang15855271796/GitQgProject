@@ -27,6 +27,12 @@ public class AppInterfaceAddress {
     public static final String LOG_OUT = "user/loginOut";
     public static final String CHANGE_LOGIN_PASSWORD = "auth/resetPwd";
     public static final String CHANGE_PAY_PASSWORD = "pay/updatePayPwd";
+    //common/product/getGuessYourLikeProductList
+
+    /**
+     * 猜你喜欢
+     */
+    public static final String GUESSLIKE = "common/product/getGuessYourLikeProductList";
 
     /**
      * 子账户详情
@@ -48,6 +54,13 @@ public class AppInterfaceAddress {
      * 首页基础信息
      */
     public static final String INDEXHOME = "common/basicHomeIndexInfo";
+
+    /**
+     * 必买清单
+     */
+
+    public static final String INDEXMUST = "common/product/getMustBuyProductList";
+
     /**
      * 首页新品，热销，降价，常用列表
      */
@@ -61,6 +74,11 @@ public class AppInterfaceAddress {
      * 首页其他信息
      */
     public static final String INDEXINFO = "common/getAreaHomeBasicInfo";
+    /**
+     * 首页其他信息
+     */
+    public static final String COUPONINFO = "common/getAreaHomeActiveInfo";
+
     public static final String HOMENEW = "common/prodHomeIndexInfo";
     public static final String GETPRODUCTLIST = "common/product/getProductList?";
     public static final String GETSELLPLACELISTBYIDANDDATE = "place/getSellPlaceListByIdAndDate?";
@@ -107,12 +125,15 @@ public class AppInterfaceAddress {
     /**
      * 获取地址列表
      */
-    public static final String GET_ADDRESS_LIST = "address/getAddressList";
+    public static final String GET_ADDRESS_LIST = "common/getHomeAddressList";
     public static final String GET_COLLECTION_LIST = "commonCollect/myCollectProd";
     public static final String GET_ORDER_LIST = "commonOrder/getCommonOrderListByPage";
     public static final String FEEDBACK = "feedback/addFeedBack";
     public static final String EDIT_ADDRESS = "address/updateAddress";
     public static final String DELETE_ADDRESS = "address/deleteAddressById";
+    /**
+     * 设置默认地址
+     */
     public static final String EDIT_DEFAULT_ADDRESS = "address/setDefaultAddressById";
     public static final String TEAMACTIVEQUERYBYID = "auth/teamActiveQueryById?";
     public static final String MESSAGE_CENTER = "notice/getNoticeInfoVOPage";
@@ -145,6 +166,10 @@ public class AppInterfaceAddress {
      * 去支付
      */
     public static final String ORDERPAY = "commonOrder/orderPay?";
+    /**
+     * 配送信息
+     */
+    public static final String DISTRIBUTE = "common/getAreaHomeOrderSendInfo";
     public static final String CHECKPAYPWD = "pay/checkPayPwd?";
     public static final String GETPAYRESULT = "commonOrder/getPaymentResult";
     /**
@@ -183,6 +208,10 @@ public class AppInterfaceAddress {
      * 商品评价
      */
     public static final String COMMENT_ORDER = "commonOrder/commentOrder";
+    /**
+     * 创蓝一键注册
+     */
+    public static final String CHAUNGLAN = "auth/getMobileCl";
     public static final String CONFIRM_GET_GOODS = "commonOrder/confirmGetGoods";
     public static final String APPLAY_RETURN_GOODS = "commonOrder/applayReturnGoods";
     public static final String CHANGE_ANOTHER_ADDRESS = "commonOrder/changeAnotherAddress";

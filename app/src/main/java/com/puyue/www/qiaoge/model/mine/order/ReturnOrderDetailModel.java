@@ -206,6 +206,15 @@ public class ReturnOrderDetailModel {
                 private int priceId;
                 private int itemNum;
                 private int itemUnitId;
+                String afterPrice;
+
+                public String getAfterPrice() {
+                    return afterPrice;
+                }
+
+                public void setAfterPrice(String afterPrice) {
+                    this.afterPrice = afterPrice;
+                }
 
                 public String getDeductPrice() {
                     return deductPrice;

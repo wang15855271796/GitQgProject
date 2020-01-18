@@ -438,7 +438,7 @@ public class ConfirmOrderActivity extends BaseSwipeActivity {
             } else if (view == mLlAddAddress) {
                 startActivityForResult(AddressListActivity.getIntent(mContext, AddressListActivity.class), 32);
             } else if (view == mTvGoPay) {
-                //去支付
+                // 去支付
                 if (mLlAddress.getVisibility() == View.VISIBLE) {
                     //判断收货地址是否可见
                     if (mRgPay.getCheckedRadioButtonId() == -1) {

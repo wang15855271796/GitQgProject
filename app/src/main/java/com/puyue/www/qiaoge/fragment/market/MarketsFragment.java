@@ -37,12 +37,20 @@ import com.example.xrecyclerview.XRecyclerView;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
+import com.puyue.www.qiaoge.activity.home.CouponDetailActivity;
 import com.puyue.www.qiaoge.activity.home.HomeGoodsListActivity;
 import com.puyue.www.qiaoge.activity.home.SearchStartActivity;
+import com.puyue.www.qiaoge.activity.home.TeamDetailActivity;
 import com.puyue.www.qiaoge.activity.mine.MessageCenterActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginEvent;
+import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
+import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletActivity;
+import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletPointActivity;
+import com.puyue.www.qiaoge.adapter.home.CommonProductActivity;
+import com.puyue.www.qiaoge.adapter.home.HotProductActivity;
+import com.puyue.www.qiaoge.adapter.home.ReductionProductActivity;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
 import com.puyue.www.qiaoge.adapter.market.MarketAlreadyGoodAdapter;
 import com.puyue.www.qiaoge.adapter.market.MarketGoodBrandAdapter;
@@ -50,7 +58,9 @@ import com.puyue.www.qiaoge.adapter.market.MarketGoodsAdapter;
 import com.puyue.www.qiaoge.adapter.market.MarketSecondAdapter;
 import com.puyue.www.qiaoge.api.cart.ProdRecommendModel;
 import com.puyue.www.qiaoge.api.cart.RecommendApI;
+import com.puyue.www.qiaoge.api.home.BannerModel;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
+import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
 import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.api.market.ClassIfyModel;
 import com.puyue.www.qiaoge.api.market.MarketAlreadyGoodAPI;
@@ -137,7 +147,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
     private LinearLayout ll_up;
     private TextView tv_blank;
     private SliderLayout mViewBanner;
-    private List<MarketBannerModel.DataBean> mListBanner = new ArrayList<>();
+    private List<BannerModel.DataBean> mListBanner = new ArrayList<>();
     private LinearLayout mllMarket;
     private RelativeLayout mRlSelectGood;
     private RecyclerView mRyGetGoodName;
@@ -1358,10 +1368,10 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
      */
     private void requestBanner() {
 
-        MarketGoodBannerAPI.requestMarketBanner(mActivity)
+        IndexHomeAPI.getBanner(mActivity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<MarketBannerModel>() {
+                .subscribe(new Subscriber<BannerModel>() {
                     @Override
                     public void onCompleted() {
 
@@ -1373,19 +1383,19 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
                     }
 
                     @Override
-                    public void onNext(MarketBannerModel marketBannerModel) {
+                    public void onNext(BannerModel marketBannerModel) {
 
                         if (marketBannerModel.isSuccess()) {
                             mListBanner.clear();
                             mListBanner.addAll(marketBannerModel.getData());
-                            initBanner();
+                            initBanner(marketBannerModel);
                         }
 
                     }
                 });
     }
 
-    private void initBanner() {
+    private void initBanner(BannerModel marketBannerModel) {
         mViewBanner.removeAllSliders();
 
         if (mListBanner.size() > 0) {
@@ -1393,12 +1403,12 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
             for (int i = 0; i < mListBanner.size(); i++) {
                 //图片轮播
                 DefaultSliderView defaultSliderView = new DefaultSliderView(getContext());
-                defaultSliderView.image(mListBanner.get(i).getPic());
+                defaultSliderView.image(mListBanner.get(i).getDefaultPic());
                 defaultSliderView.setScaleType(BaseSliderView.ScaleType.Fit);
                 defaultSliderView.setOnSliderClickListener(this);
                 defaultSliderView.bundle(new Bundle());
-                defaultSliderView.getBundle().putString("banner_url", mListBanner.get(i).getUrl());
-                defaultSliderView.getBundle().putString("toPage", mListBanner.get(i).getToPage());
+                defaultSliderView.getBundle().putInt("showType",marketBannerModel.getData().get(i).getShowType());
+                defaultSliderView.getBundle().putSerializable("bannerModel",marketBannerModel);
                 mViewBanner.addSlider(defaultSliderView);
 
             }
@@ -1418,52 +1428,13 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-        String banner_url = slider.getBundle().getString("banner_url");
-        String toPage = slider.getBundle().getString("toPage");
-        if (StringHelper.notEmptyAndNull(toPage)) {
-            //这个地方也是跳转到之前的H5位置。
-
-            if (toPage.equals("vip")) {
-                //猜测一：将这个跳转修改为跳到NewWebViewActivity即可 不对
-                Intent intent = new Intent(getActivity(), NewWebViewActivity.class);
-                intent.putExtra("URL", banner_url);
-                intent.putExtra("TYPE", toPage);
-                intent.putExtra("name", "");
-                startActivity(intent);
-            } else if (toPage.equals("kill")) {
-
-                Intent intent = new Intent(mActivity, HomeGoodsListActivity.class);
-                intent.putExtra(AppConstant.PAGETYPE, AppConstant.SECONDTYPE);
-                startActivity(intent);
-
-
-            } else if (toPage.equals("team")) {
-                Intent intent = new Intent(mActivity, HomeGoodsListActivity.class);
-                intent.putExtra(AppConstant.PAGETYPE, AppConstant.GROUPTYPE);
-                startActivity(intent);
-
-            } else if (toPage.equals("wallet")) {
-                Intent intent = new Intent(mActivity, MyWalletActivity.class);
-                startActivity(intent);
-            } else if (toPage.equals("notice")) {
-//跳转到信息中心
-                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(getActivity()))) {
-//                    startActivity(MessageCenterActivity.getIntent(getContext(), MessageCenterActivity.class));
-                    //写一个携带返回结果的跳转
-                    Intent intent = new Intent(getActivity(), MessageCenterActivity.class);
-                    startActivityForResult(intent, 101);
-//                    this.startActivityForResult()
-                } else {
-                    AppHelper.showMsg(getActivity(), "请先登录");
-                    startActivity(LoginActivity.getIntent(getActivity(), LoginActivity.class));
-                }
-            } else if (toPage.equals("disable")) {
-
-            }
-
-
-//
+        int showType = slider.getBundle().getInt("showType");
+        BannerModel bannerModel = (BannerModel) slider.getBundle().getSerializable("bannerModel");
+        for (int i = 0; i <bannerModel.getData().size() ; i++) {
+            BannerModel.DataBean dataBean = bannerModel.getData().get(i);
         }
+
+
     }
 
     @Override

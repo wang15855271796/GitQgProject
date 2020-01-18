@@ -9,6 +9,7 @@
 
 
     <TextView
+        android:id="@+id/tv_like"
         android:text="猜你喜欢"
         android:padding="@dimen/dp_10"
         android:textSize="@dimen/size_12dp"

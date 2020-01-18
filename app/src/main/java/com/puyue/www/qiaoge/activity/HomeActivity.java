@@ -24,6 +24,7 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.chuanglan.shanyan_sdk.OneKeyLoginManager;
+import com.chuanglan.shanyan_sdk.listener.GetPhoneInfoListener;
 import com.chuanglan.shanyan_sdk.listener.InitListener;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
@@ -126,6 +127,18 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                 Log.d("sswswswdffffff.....",code+"");
             }
         });
+
+        //闪验SDK预取号（可缩短拉起授权页时间）
+        OneKeyLoginManager.getInstance().getPhoneInfo(new GetPhoneInfoListener() {
+            @Override
+            public void getPhoneInfoStatus(int code, String result) {
+                //预取号回调
+                Log.e("VVV", "预取号： code==" + code + "   result==" + result);
+//                Intent intent = new Intent(HomeActivity.this, HomeActivity.class);
+//                startActivity(intent);
+//                finish();
+            }
+        });
         setContentView(R.layout.activity_home);
         //在首页中写运行时权限设置tv_home_car_number
 //        setNewPosition();
@@ -216,6 +229,9 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         //  SharedPreferences preferences = getSharedPreferences("isFirstUse", MODE_WORLD_READABLE);
         //  UserInfoHelper.saveGuide(mActivity, "guide");
         guide = UserInfoHelper.getGuide(mActivity);
+        UserInfoHelper.saveChangeFlag(mContext,0+"");
+
+
 /**
           *如果用户不是第一次使用则直接调转到显示界面,否则调转到引导界面
           */
@@ -442,23 +458,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                     mFragmentTransaction.show(mTabHome);
                 }
 
-//                if(mTabMarket!=null) {
-//                    mFragmentTransaction.hide(mTabMarket);
-//                }
-//
-//                if(mTabCart!=null) {
-//                    mFragmentTransaction.hide(mTabCart);
-//                }
-//
-//                if(mTabMine!=null) {
-//                    mFragmentTransaction.hide(mTabMine);
-//                }
-
-//                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-//
-//                    QueryHomePropup();
-//                }
-//                mFragmentTransaction.commitAllowingStateLoss();
                 mIvHome.setImageResource(R.mipmap.ic_tab_home_enable);
                 mTvHome.setTextColor(getResources().getColor(R.color.app_tab_selected));
                 getCartPoductNum();
@@ -545,8 +544,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     }
 
     private void getCartPoductNum() {
-
-
         if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
             getCartNum();
         }
@@ -555,15 +552,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     @Override
     protected void onResume() {
         super.onResume();
-     /*   if (mTabHome.isVisible()) {
-
-            QueryHomePropup();
-
-
-        }*/
-
-
-
         if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
             getCartNum();
 
@@ -782,20 +770,22 @@ public class MyLocationListener extends BDAbstractLocationListener {
         String country = location.getCountry();    //获取国家
         String province = location.getProvince();    //获取省份
         // String city = location.getCity();    //获取城市
-        String district = location.getDistrict();    //获取区县
         String street = location.getStreet();    //获取街道信息
         String streetNumber = location.getStreetNumber();
+        String district = location.getDistrict();    //获取区县
         city = location.getCity();
+        UserInfoHelper.saveAreaName(mContext,district);
+
         isGet = true;
 
         if (type.equals("goHome")) {
 //            Log.i("wweabv......",city);
             if (city != null) {
-
+                Log.d("dsgdsgggjhjh00000....",city);
                 UserInfoHelper.saveCity(mContext, city);
 //                switchTab(TAB_HOME);
 
-                Log.i("wweabv......",UserInfoHelper.getCity(mContext));
+
             } else {
                 UserInfoHelper.saveCity(mContext, "杭州市");
 //                switchTab(TAB_HOME);

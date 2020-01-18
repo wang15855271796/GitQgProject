@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/app_color_white"
     android:layout_height="match_parent">
@@ -146,22 +147,31 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:elevation="@dimen/size_15dp"
+            android:elevation="@dimen/size_5dp"
             android:layout_marginLeft="@dimen/size_15dp"
             android:layout_marginRight="@dimen/size_15dp"
             android:background="@drawable/shouye"
             android:layout_height="@dimen/size_60dp">
 
-            <TextView
-                android:text="杭州市"
-                android:textColor="#333333"
-                android:drawableLeft="@mipmap/icon_address"
-                android:drawablePadding="@dimen/size_5dp"
-                android:drawableRight="@mipmap/arrow_bottom"
-                android:layout_marginLeft="@dimen/size_20dp"
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:id="@+id/ll_area"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    tools:text="杭州市"
+                    android:id="@+id/tv_area"
+                    android:textColor="#333333"
+                    android:drawableLeft="@mipmap/icon_address"
+                    android:drawablePadding="@dimen/size_5dp"
+                    android:drawableRight="@mipmap/arrow_bottom"
+                    android:layout_marginLeft="@dimen/size_20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
 
             <View
                 android:layout_width="0.5dp"
@@ -171,6 +181,7 @@
                 android:layout_height="@dimen/size_20dp"/>
 
             <com.puyue.www.qiaoge.view.SearchView
+                android:visibility="gone"
                 android:id="@+id/searchView"
                 android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
@@ -204,13 +215,14 @@
                 <TextView
                     android:id="@+id/tv_tip"
                     android:textColor="#FF680A"
+                    android:textSize="13dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/size_10dp"
                     android:text="因各地区商品和配送服务不同，请选择准确的收货地址"
                     android:layout_width="wrap_content"
+                    android:drawablePadding="@dimen/dp_10"
                     android:paddingTop="@dimen/size_10dp"
                     android:paddingBottom="@dimen/size_10dp"
-                    android:drawablePadding="@dimen/size_15dp"
                     android:drawableRight="@mipmap/ic_mine_cancel"
                     android:layout_height="wrap_content" />
 
@@ -259,19 +271,34 @@
                                 android:layout_width="wrap_content"
                                 android:textColor="#333333"
                                 android:layout_height="wrap_content" />
+
+                            <ImageView
+                                android:layout_marginRight="@dimen/size_20dp"
+                                android:src="@mipmap/checkbax_yes"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
                         </RelativeLayout>
 
                     </LinearLayout>
 
+                    <View
+                        android:background="#f5f5f5"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size_15dp">
+
+                    </View>
+
                     <RelativeLayout
-                        android:paddingBottom="@dimen/size_20dp"
                         android:orientation="horizontal"
                         android:background="@color/white"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="@dimen/size_60dp">
 
                         <TextView
                             android:text="收货地址"
+                            android:layout_centerVertical="true"
                             android:textColor="#999999"
                             android:layout_marginLeft="@dimen/dp_10"
                             android:layout_width="wrap_content"
@@ -279,6 +306,7 @@
 
                         <TextView
                             android:id="@+id/tv_add_area"
+                            android:layout_centerVertical="true"
                             android:text="+  新建地址"
                             android:textColor="#FF680A"
                             android:layout_marginRight="@dimen/size_20dp"

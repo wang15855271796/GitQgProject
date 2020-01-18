@@ -49,6 +49,7 @@ public class ChooseSpecAdapters extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_spec, null);
             holder = new Holder();
             holder.tv_spec = convertView.findViewById(R.id.tv_spec);
+            holder.iv_reduce =  convertView.findViewById(R.id.iv_reduce);
             convertView.setTag(holder);
         } else {
             holder = (Holder) convertView.getTag();
@@ -63,14 +64,12 @@ public class ChooseSpecAdapters extends BaseAdapter {
             holder.tv_spec.setTextColor(Color.parseColor("#333333"));
             holder.tv_spec.setBackgroundColor(Color.parseColor("#eeeeee"));
         }
-//        Log.d("sedfewgdgrehdreghfr",prodSpecs.get(position).getProdDeduct()+"");
+
         if(prodSpecs.get(position).getProdDeduct()==0) {
             holder.iv_reduce.setVisibility(View.GONE);
-
         }else {
             holder.iv_reduce.setBackgroundResource(R.mipmap.icon_reduce);
             holder.iv_reduce.setVisibility(View.VISIBLE);
-
         }
 
         return convertView;

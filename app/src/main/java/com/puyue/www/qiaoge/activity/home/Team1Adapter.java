@@ -3,6 +3,8 @@ package com.puyue.www.qiaoge.activity.home;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -33,7 +35,7 @@ public class Team1Adapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean
     private TextView tv_add;
     private RelativeLayout rl_root;
     private int activeId;
-
+    RecyclerView recyclerView;
     public Team1Adapter(int layoutResId, @Nullable List<TeamActiveQueryModel.DataBean> data, Onclick onclick) {
         super(layoutResId, data);
         this.onclick = onclick;
@@ -41,50 +43,11 @@ public class Team1Adapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean
 
     @Override
     protected void convert(BaseViewHolder helper, TeamActiveQueryModel.DataBean item) {
-        tv_old_price = helper.getView(R.id.tv_old_price);
-        iv_pic = helper.getView(R.id.iv_pic);
-        rl_root = helper.getView(R.id.rl_root);
-        tv_add = helper.getView(R.id.tv_add);
-        tv_total = helper.getView(R.id.tv_total);
-        pb = helper.getView(R.id.pb);
-
+        recyclerView = helper.getView(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        TeamInnerAdapter teamInnerAdapter = new TeamInnerAdapter(R.layout.coupon_inner,item.getActives());
+        recyclerView.setAdapter(teamInnerAdapter);
         helper.setText(R.id.tv_time,item.getTitle());
-        for (int i = 0; i <item.getActives().size() ; i++) {
-            activesBean = item.getActives().get(i);
-
-        }
-
-        tv_total.setText(activesBean.getRemainNum());
-        Glide.with(mContext).load(activesBean.getDefaultPic()).into(iv_pic);
-        helper.setText(R.id.tv_name,activesBean.getActiveName());
-        helper.setText(R.id.tv_spec,activesBean.getSpec());
-        helper.setText(R.id.tv_price,activesBean.getPrice());
-        helper.setText(R.id.tv_old_price,activesBean.getOldPrice());
-        pb.setProgress(Integer.parseInt(activesBean.getProgress()));
-        tv_total.setText(activesBean.getRemainNum());
-
-
-        if(activesBean.getSaleDone()==1) {
-            tv_add.setText("立即加购");
-            tv_add.setBackgroundResource(R.drawable.shape_orange);
-        }else {
-            tv_add.setText("已售罄");
-            tv_add.setBackgroundResource(R.drawable.shape_detail_grey);
-        }
-        tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
-        tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-
-        rl_root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext,TeamGoodsDetailActivity.class);
-                for (int i = 0; i <item.getActives().size() ; i++) {
-                    activeId = item.getActives().get(i).getActiveId();
-                }
-                intent.putExtra(AppConstant.ACTIVEID,activeId);
-                mContext.startActivity(intent);
-            }
-        });
     }
 
     public interface Onclick {

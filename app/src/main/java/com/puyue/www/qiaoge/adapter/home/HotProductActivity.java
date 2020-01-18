@@ -75,6 +75,8 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
     TextView tv_num;
     @BindView(R.id.tv_title)
     TextView tv_title;
+    @BindView(R.id.iv_carts)
+    ImageView iv_carts;
     ProductNormalModel productNormalModel;
     private String cell; // 客服电话
     private AlertDialog mTypedialog;
@@ -105,7 +107,6 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
     public void findViewById() {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        setTranslucentStatus();
         adapterNewArrival = new CommonsAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
             @Override
             public void addDialog() {
@@ -138,7 +139,19 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
         iv_back.setOnClickListener(this);
         tv_title.setText("热销");
 
+        iv_carts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
+                    startActivity(new Intent(mContext, CartActivity.class));
+                } else {
+                    AppHelper.showMsg(mActivity, "请先登录");
+                    startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                }
 
+
+            }
+        });
         rl_num.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,6 +1,7 @@
 package com.puyue.www.qiaoge.adapter.mine;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +28,7 @@ public class ReturnSpecAdapter extends BaseQuickAdapter<ReturnOrderDetailModel.D
     private TextView mTvSpec;
     private TextView mTvPrice;
     private OnItemClick click;
-
+    TextView tv_old_price;
     public OnItemClick getClick() {
         return click;
     }
@@ -44,9 +45,13 @@ public class ReturnSpecAdapter extends BaseQuickAdapter<ReturnOrderDetailModel.D
     protected void convert(BaseViewHolder helper, ReturnOrderDetailModel.DataBean.ProductsBean.DetailsBean item) {
         helper.setIsRecyclable(false);
         //tv_coupon_price
+        tv_old_price = helper.getView(R.id.tv_old_price);
+        tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
+        tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         mTvPrice = helper.getView(R.id.tv_return_price);
         mTvSpec = helper.getView(R.id.tv_return_spec);
-        mTvPrice.setText("¥" + item.getTotalPrice());
+        mTvPrice.setText(item.getAfterPrice());
+        tv_old_price.setText(item.getTotalPrice());
         mTvSpec.setText(item.getDesc());
         helper.getView(R.id.tv_return).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.home.CustomPopWindow;
 import com.puyue.www.qiaoge.activity.mine.login.RegisterActivity;
 import com.puyue.www.qiaoge.adapter.market.MarketSecondAdapter;
 import com.puyue.www.qiaoge.dialog.CityDialog;
@@ -34,9 +35,11 @@ import java.util.List;
 public class CitysAdapter extends BaseAdapter {
     OnEventClickListener mOnEventClickListener;
     Context context;
+    Holder holder;
     List<CityChangeModel.DataBean.CityNamesBean> prodSpecs;
     int selectPosition = -1;
     CityDialog cityDialog;
+    CustomPopWindow mCustomPopWindow;
     public CitysAdapter(Context context, List<CityChangeModel.DataBean.CityNamesBean> prodSpecs) {
         this.context = context;
         this.prodSpecs = prodSpecs;
@@ -61,9 +64,6 @@ public class CitysAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-
-
-
     @Override
     public Object getItem(int position) {
         return null;
@@ -77,7 +77,7 @@ public class CitysAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Holder holder;
+
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_citys, null);
             holder = new Holder();
@@ -87,7 +87,7 @@ public class CitysAdapter extends BaseAdapter {
             holder = (Holder) convertView.getTag();
         }
         holder.tv_city.setText(prodSpecs.get(position).getCityName());
-
+        prodSpecs.get(position).getAreaNames().get(position);
         if(mOnEventClickListener != null) {
             holder.tv_city.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -95,6 +95,7 @@ public class CitysAdapter extends BaseAdapter {
                     mOnEventClickListener.onEventClick(position,holder.tv_city);
                 }
             });
+
 
             if(selectPosition==position) {
                 holder.tv_city.setTextColor(Color.parseColor("#FF680A"));
@@ -106,8 +107,22 @@ public class CitysAdapter extends BaseAdapter {
             }
         }
 
-
         return convertView;
+    }
+
+
+    private void showsDialog() {
+        View contentView = LayoutInflater.from(context).inflate(R.layout.popwindow_area,null);
+
+        //当前界面没关闭，不是售罄产品才显示
+        if (mCustomPopWindow == null){
+            mCustomPopWindow= new CustomPopWindow.PopupWindowBuilder(context)
+                    .setFocusable(false)
+                    .setOutsideTouchable(false)
+                    .setView(contentView)
+                    .create()
+                    .showAsDropDown(holder.tv_city);
+        }
     }
 
     class Holder {

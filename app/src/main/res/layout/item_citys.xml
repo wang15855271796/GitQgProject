@@ -2,13 +2,13 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:text="杭州"
         android:textColor="#666666"
         android:textSize="14sp"
-        android:layout_marginTop="@dimen/sp_12"
+        android:layout_marginTop="@dimen/dp_10"
         android:id="@+id/tv_city"
         android:layout_width="match_parent"
         android:gravity="center"
@@ -17,6 +17,7 @@
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_10"
         android:paddingTop="@dimen/size_10dp"
+        android:layout_marginBottom="@dimen/size_10dp"
         android:paddingBottom="@dimen/size_10dp"
         android:background="@drawable/shape_grey_button"
         android:layout_height="wrap_content" />

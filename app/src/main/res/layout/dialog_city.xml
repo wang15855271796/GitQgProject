@@ -2,7 +2,9 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:gravity="center"
+    android:gravity="center_vertical"
+    android:layout_marginLeft="@dimen/size_15dp"
+    android:layout_marginRight="@dimen/size_15dp"
     android:layout_height="match_parent">
 
 
@@ -19,6 +21,7 @@
 
 
     </android.support.v7.widget.RecyclerView>
+
 
     </LinearLayout>
 </LinearLayout>

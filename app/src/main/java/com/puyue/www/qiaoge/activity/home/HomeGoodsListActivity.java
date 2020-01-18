@@ -32,12 +32,14 @@ import com.puyue.www.qiaoge.adapter.home.ItemConditionAdapter;
 import com.puyue.www.qiaoge.adapter.home.NewArrivalAdapter;
 import com.puyue.www.qiaoge.adapter.home.PriceReductionAdapter;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
+import com.puyue.www.qiaoge.adapter.home.SeckillGoodActivity;
 import com.puyue.www.qiaoge.adapter.home.SpecialGoodAdapter;
 import com.puyue.www.qiaoge.adapter.home.SpikeActiveAdapter;
 import com.puyue.www.qiaoge.adapter.home.SpikeActiveNewAdapter;
 import com.puyue.www.qiaoge.adapter.home.SpikeActiveQueryAdapter;
 import com.puyue.www.qiaoge.adapter.home.TeamActiveQueryAdapter;
 import com.puyue.www.qiaoge.api.cart.AddCartAPI;
+import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetCommonProductAPI;
 import com.puyue.www.qiaoge.api.home.GetMoreSpecialAPI;
 import com.puyue.www.qiaoge.api.home.GetProductListAPI;
@@ -56,6 +58,7 @@ import com.puyue.www.qiaoge.calendar.utils.SelectBean;
 import com.puyue.www.qiaoge.calendar.weiget.CalendarView;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
+import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.DividerItemDecoration;
 import com.puyue.www.qiaoge.helper.FVHelper;
@@ -85,6 +88,9 @@ import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 import com.puyue.www.qiaoge.view.SuperTextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -108,18 +114,14 @@ import rx.schedulers.Schedulers;
 //列表
 public class HomeGoodsListActivity extends BaseSwipeActivity {
 
+    public TextView tv_num;
     private ImageView mIvBack;
     private TextView mTvTitle;
     private RecyclerView mRvData;
     private RecyclerView mRvSpikeData;
-    private PtrClassicFrameLayout mPtrRefresh;
     //秒杀预告，特惠
     private LinearLayout linearLayoutSpike;
-
-    ///热销商品/特别推荐,不改
-    private GetProductListAdapter mAdapterNew;
-    private List<GetProductListModel.DataBean.ListBean> mListNew = new ArrayList<>();
-
+    TextView tv_call;
     //秒杀活动
     private SpikeActiveNewAdapter mAdapterNewSpike;
     private List<SpikeNewQueryModel.DataBean> mListSpikeNew = new ArrayList<>();
@@ -131,9 +133,6 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
     private List<SpikeActiveQueryModel.DataBean.ListBean> mListSpike = new ArrayList<>();
     //秒杀列表
     private List<SeckillListModel.DataBean.KillsBean> mListSeckill = new ArrayList<>();
-
-    private String cell; // 客服电话
-
     private int currentPosition;
     private String pageType;
     private int pageNum = 1;
@@ -142,12 +141,9 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
     private boolean isFirst;
     private RelativeLayout rl_good_cart;
     private SuperTextView text_cart_num;
-    private List<GetRegisterShopModel.DataBean> list = new ArrayList<>();
     int isSelected;
     int shopTypeId;
     boolean isChecked = false;
-    RegisterShopAdapterTwo mRegisterAdapter;
-    private SeckillListModel.DataBean data;
     private long startTime;
     private long currentTime;
     private long endTime;
@@ -174,68 +170,91 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
         setContentView(R.layout.activity_home_goods_list);
     }
 
+
     @Override
     public void findViewById() {
         mIvBack = FVHelper.fv(this, R.id.iv_activity_back);
         mTvTitle = FVHelper.fv(this, R.id.tv_activity_goods_list_title);
-
+        tv_num = FVHelper.fv(this, R.id.tv_num);
+        tv_call =  FVHelper.fv(this, R.id.tv_call);
         mRvData = FVHelper.fv(this, R.id.rv_activity_goods_list);
-        mPtrRefresh = FVHelper.fv(this, R.id.ptr_activity_goods_list);
         linearLayoutSpike = FVHelper.fv(this, R.id.linearLayout_spike);
 
         mRvSpikeData = FVHelper.fv(this, R.id.recyclerview_spike_content);
         mTvSpikeTitle = FVHelper.fv(this, R.id.tv_spike_content);
         rl_good_cart = FVHelper.fv(this, R.id.rl_good_cart);
         text_cart_num = FVHelper.fv(this, R.id.text_cart_num);
+        EventBus.getDefault().register(this);
         mIvBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
+        tv_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int warnMe = SharedPreferencesUtil.getInt(mContext, "warnMe");
+                if(warnMe==0) {
+                    tv_call.setText("取消本场秒杀提醒");
+                    SharedPreferencesUtil.saveInt(mContext, "warnMe",1);
+                }else {
+                    tv_call.setText("添加本场秒杀提醒");
+                    SharedPreferencesUtil.saveInt(mContext, "warnMe",0);
+                }
+            }
+        });
     }
 
     @Override
     public void setViewData() {
-        setTranslucentStatus();
-
-        mRvData.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (recyclerView.canScrollVertically(-1)) {
-                    mPtrRefresh.setEnabled(false);
-                } else {
-                    mPtrRefresh.setEnabled(true);
-                }
-            }
-        });
-
-
-
+        getCartNum();
         judgePageType();//进行差异性的设置。
         judgeRefreshData();
 
     }
 
+    /**
+     * 购物车数量
+     */
+    private void getCartNum() {
+        GetCartNumAPI.requestData(mContext)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<GetCartNumModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(GetCartNumModel getCartNumModel) {
+                        if (getCartNumModel.isSuccess()) {
+                            if(getCartNumModel.getData().getNum().equals("0")) {
+                                tv_num.setVisibility(View.GONE);
+                            }else {
+                                tv_num.setVisibility(View.VISIBLE);
+
+                                tv_num.setText(getCartNumModel.getData().getNum());
+                            }
+                        } else {
+                            AppHelper.showMsg(mContext, getCartNumModel.getMessage());
+                        }
+                    }
+                });
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getCartNum(ReduceNumEvent event) {
+        getCartNum();
+    }
     @Override
     public void setClickEvent() {
-        mPtrRefresh.setPtrHandler(new PtrHandler() {
-            @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
-            }
-
-            @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
-                judgeRefreshData();
-            }
-        });
 
         rl_good_cart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -257,13 +276,10 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
      * 判断是哪种类型的页面
      **/
     private void judgePageType() {
-
-
-        mTvTitle.setText("秒杀专区");
+        mTvTitle.setText("限时秒杀");
         linearLayoutSpike.setVisibility(View.VISIBLE);
         mRvData.setLayoutManager(new LinearLayoutManager(mContext));
         mRvData.setBackgroundColor(Color.parseColor("#F5F5F5"));
-
 
     }
 
@@ -288,12 +304,10 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
                 .subscribe(new Subscriber<SpikeNewQueryModel>() {
                     @Override
                     public void onCompleted() {
-                        mPtrRefresh.refreshComplete();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mPtrRefresh.refreshComplete();
                     }
 
                     @Override
@@ -365,38 +379,36 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
 
                     @Override
                     public void onCompleted() {
-                        mPtrRefresh.refreshComplete();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mPtrRefresh.refreshComplete();
                     }
 
                     @Override
                     public void onNext(SeckillListModel seckillListModel) {
                         if (seckillListModel.success) {
 
-                            mAdapterSpikeQuery = new SpikeActiveQueryAdapter(R.layout.spike_new_active_product, seckillListModel.data.kills, activeId,
-                                    new SpikeActiveQueryAdapter.Onclick() {
-                                        @Override
-                                        public void addRemind(View view) {
-                                            getStat(activeId);
-                                        }
-                                    });
-
-
+                            mAdapterSpikeQuery = new SpikeActiveQueryAdapter(R.layout.spike_new_active_product, seckillListModel.data.kills, activeId);
                             mRvData.setAdapter(mAdapterSpikeQuery);
 
                             mAdapterSpikeQuery.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                                    Intent intent = new Intent(mContext, SpikeGoodsDetailsActivity.class);
+                                    Intent intent = new Intent(mContext, SeckillGoodActivity.class);
                                     intent.putExtra(AppConstant.ACTIVEID, mListSeckill.get(position).activeId);
                                     startActivity(intent);
                                 }
                             });
 
+                            if(seckillListModel.data.warnMe==0) {
+                                tv_call.setText("添加本场秒杀提醒");
+                                SharedPreferencesUtil.saveInt(mContext,"warnMe",0);
+                            }else {
+                                tv_call.setText("取消提醒");
+                                SharedPreferencesUtil.saveInt(mContext,"warnMe",1);
+                            }
                             int flag = seckillListModel.data.flag;
                             UserInfoHelper.saveSpikePosition(mContext, String.valueOf(flag));
 
@@ -413,8 +425,6 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
                             AppHelper.showMsg(mActivity, seckillListModel.message);
 
                         }
-//                        mAdapterSpikeQuery.notifyDataSetChanged();
-                        // judgeShowNodata(mAdapterSpikeQuery);
                     }
                 });
     }
@@ -429,12 +439,11 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
                 .subscribe(new Subscriber<BaseModel>() {
                     @Override
                     public void onCompleted() {
-                        mPtrRefresh.refreshComplete();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mPtrRefresh.refreshComplete();
                     }
 
                     @Override
@@ -449,30 +458,15 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
     protected void onDestroy() {
         super.onDestroy();
         SelectBean.cleanDate();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         isFirst = false;
-
-
     }
 
-
-    protected void setTranslucentStatus() {
-        // 5.0以上系统状态栏透明
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = HomeGoodsListActivity.this.getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            HomeGoodsListActivity.this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-    }
 
 
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
 import com.puyue.www.qiaoge.helper.RestHelper;
+import com.puyue.www.qiaoge.model.home.GuessModel;
 import com.puyue.www.qiaoge.model.home.RecommendModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 
@@ -66,5 +67,19 @@ public class RecommendApI {
     public static Observable<ProdRecommendModel> getSearchProd(Context context) {
         SearchProdService service = RestHelper.getBaseRetrofit(context).create(SearchProdService.class);
         return service.getData();
+    }
+
+    /**
+     * 猜你喜欢
+     */
+    private interface GuessService {
+        @FormUrlEncoded
+        @POST(AppInterfaceAddress.GUESSLIKE)
+        Observable<GuessModel> getData(@Field("productMainId") String productMainId);
+    }
+
+    public static Observable<GuessModel> getLikeList(Context context, String productMainId) {
+        GuessService service = RestHelper.getBaseRetrofit(context).create(GuessService.class);
+        return service.getData(productMainId);
     }
 }

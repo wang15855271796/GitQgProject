@@ -78,6 +78,7 @@ import com.puyue.www.qiaoge.model.home.ClickCollectionModel;
 import com.puyue.www.qiaoge.model.home.CommentOrderQueryModel;
 import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetProductListModel;
+import com.puyue.www.qiaoge.model.home.GuessModel;
 import com.puyue.www.qiaoge.model.home.HasCollectModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.model.home.SpecialGoodModel;
@@ -182,9 +183,9 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
     private CollapsingToolbarLayoutStateHelper state;
-    SearchResultsModel searchResultsModel;
+    GuessModel searchResultsModel;
     //搜索集合
-    private List<SearchResultsModel.DataBean.SearchProdBean.ListBean> searchList = new ArrayList<>();
+    private List<GuessModel.DataBean> searchList = new ArrayList<>();
 
     //推荐
     private RecyclerView recyclerViewRecommend;
@@ -932,10 +933,10 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
      * 推荐
      **/
     private void getProductList() {
-        RecommendApI.requestData(mContext,productName,pageNum,pageSize)
+        RecommendApI.getLikeList(mContext,activeId+"")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SearchResultsModel>() {
+                .subscribe(new Subscriber<GuessModel>() {
                     @Override
                     public void onCompleted() {
 
@@ -947,11 +948,11 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
                     }
 
                     @Override
-                    public void onNext(SearchResultsModel recommendModel) {
+                    public void onNext(GuessModel recommendModel) {
                         if (recommendModel.isSuccess()) {
                             searchResultsModel = recommendModel;
-                            if(recommendModel.getData().getSearchProd()!=null) {
-                                searchList.addAll(recommendModel.getData().getSearchProd().getList());
+                            if(recommendModel.getData()!=null) {
+                                searchList.addAll(recommendModel.getData());
                                 adapterRecommend.notifyDataSetChanged();
                                 Log.d("weorishssss....",searchList.size()+"");
                             }

@@ -49,6 +49,7 @@ import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.mine.login.LoginModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -416,6 +417,7 @@ public class LoginActivity extends BaseSwipeActivity {
         UserInfoHelper.saveUserHomeRefresh(mContext, "");
         UserInfoHelper.saveUserMarketRefresh(mContext, "");
         UserInfoHelper.saveDate(mContext, 0+"");
+//        SharedPreferencesUtil.saveInt(mContext,"days",0);
         Intent intent = new Intent(mContext,HomeActivity.class);
         startActivity(intent);
         EventBus.getDefault().post(new LoginEvent());

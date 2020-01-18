@@ -1,6 +1,7 @@
 package com.puyue.www.qiaoge.adapter.home;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,15 +19,19 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
+import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
+import com.puyue.www.qiaoge.activity.home.SpikeGoodsDetailsActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.adapter.cart.SearchInnerAdapter;
 import com.puyue.www.qiaoge.api.cart.AddCartAPI;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.fragment.home.CouponAdapter;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartModel;
+import com.puyue.www.qiaoge.model.home.CouponModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.view.ExpandLayout;
@@ -44,120 +49,82 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ${王涛} on 2019/11/5
  */
-public class CommonAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean.ListBean,BaseViewHolder> {
+public class CommonAdapter extends BaseQuickAdapter<CouponModel.DataBean.ActivesBean,BaseViewHolder> {
 
-    private ImageView iv_head;
-    private FlowLayout fl_container;
-    private TextView tv_stock;
-    private NewPriceAdapter searchInnerAdapter;
-    private LinearLayout ll_group;
-    private ImageView iv_type;
-    Onclick onclick;
-    private CommonDialog commonDialog;
-
-    public CommonAdapter(int layoutResId, @Nullable List<ProductNormalModel.DataBean.ListBean> data,Onclick onclick) {
+    private ImageView iv_pic;
+    private ImageView iv_add;
+    private RelativeLayout rl_group;
+    String flag;
+    ImageView iv_flag;
+    private TextView tv_old_price;
+    private TextView tv_coupon;
+    RelativeLayout rl_coupon;
+    String style;
+    public OnClick onClick;
+    public CommonAdapter(String style,int layoutResId, @Nullable List<CouponModel.DataBean.ActivesBean> data) {
         super(layoutResId, data);
-        this.onclick = onclick;
+//        this.onclick = onclick;
+        this.style = style;
+    }
+
+
+
+    public void setOnclick(OnClick onClick) {
+        this.onClick = onClick;
     }
 
     @Override
-    protected void convert(final BaseViewHolder helper, ProductNormalModel.DataBean.ListBean item) {
-        RecyclerView recyclerView = helper.getView(R.id.recyclerView);
-        ImageView iv_no_data = helper.getView(R.id.iv_no_data);
-        iv_type = helper.getView(R.id.iv_type);
-        RelativeLayout rl_spec = helper.getView(R.id.rl_spec);
-        if(item.getFlag()==0) {
-            Glide.with(mContext).load(item.getTypeUrl()).into(iv_no_data);
-            iv_no_data.setVisibility(View.VISIBLE);
-            iv_type.setVisibility(View.GONE);
+    protected void convert(final BaseViewHolder helper, CouponModel.DataBean.ActivesBean item) {
+        iv_pic = helper.getView(R.id.iv_pic);
+        iv_flag = helper.getView(R.id.iv_flag);
+        iv_add = helper.getView(R.id.iv_add);
+        tv_coupon = helper.getView(R.id.tv_coupon);
+        rl_coupon = helper.getView(R.id.rl_coupon);
+        rl_group = helper.getView(R.id.rl_group);
+        Glide.with(mContext).load(item.getDefaultPic()).into(iv_pic);
+        helper.setText(R.id.tv_name,item.getActiveName());
+        helper.setText(R.id.tv_price,item.getPrice());
+        tv_old_price = helper.getView(R.id.tv_old_price);
+        tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        helper.setText(R.id.tv_old_price,item.getOldPrice());
+
+        if(item.getDiscount()!=null) {
+            tv_coupon.setText(item.getDiscount());
+            rl_coupon.setVisibility(View.VISIBLE);
         }else {
-            Glide.with(mContext).load(item.getTypeUrl()).into(iv_type);
-            iv_type.setVisibility(View.VISIBLE);
-            iv_no_data.setVisibility(View.GONE);
+            rl_coupon.setVisibility(View.GONE);
         }
-
-        helper.setText(R.id.tv_spec,"规格："+item.getSpec());
-        ll_group = helper.getView(R.id.ll_group);
-        ll_group.setOnClickListener(new View.OnClickListener() {
+        rl_group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext,CommonGoodsDetailActivity.class);
-                intent.putExtra(AppConstant.ACTIVEID, item.getProductMainId());
-                mContext.startActivity(intent);
-            }
-        });
-
-        fl_container = helper.getView(R.id.fl_container);
-        NewSpecAdapter searchSpecAdapter = new NewSpecAdapter(mContext,item.getProdSpecs());
-        fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                searchSpecAdapter.selectPosition(position);
-                int productIds = item.getProdSpecs().get(position).getProductId();
-
-                GetProductDetailAPI.getExchangeList(mContext,productIds,1)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<ExchangeProductModel>() {
-
-                            @Override
-                            public void onCompleted() {
-
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-
-                            }
-
-                            @Override
-                            public void onNext(ExchangeProductModel exchangeProductModel) {
-                                helper.setText(R.id.tv_stock,exchangeProductModel.getData().getInventory());
-                                helper.setText(R.id.tv_desc,exchangeProductModel.getData().getSpecialOffer());
-                                SearchInnersAdapter itemChooseAdapter = new SearchInnersAdapter(1,exchangeProductModel.getData().getProdSpecs().get(position).getProductId(),
-                                        R.layout.item_choose_content,
-                                        exchangeProductModel.getData().getProdPrices());
-                                recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-                                recyclerView.setAdapter(itemChooseAdapter);
-                            }
-                        });
-            }
-        });
-
-        fl_container.setAdapter(searchSpecAdapter);
-        helper.setText(R.id.tv_name,item.getProductName());
-        helper.setText(R.id.tv_stock_total,item.getInventory());
-        helper.setText(R.id.tv_sale,item.getSalesVolume());
-        helper.setText(R.id.tv_price,item.getMinMaxPrice());
-        helper.setText(R.id.tv_desc,item.getSpecialOffer());
-        tv_stock = helper.getView(R.id.tv_stock);
-        tv_stock.setText(item.getInventory());
-        int productId = item.getProdSpecs().get(0).getProductId();
-        searchInnerAdapter = new NewPriceAdapter(productId,R.layout.item_choose_content,item.getProdPrices());
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.setAdapter(searchInnerAdapter);
-
-        rl_spec.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(onclick!=null) {
-                    onclick.addDialog();
+                if(style.equals("2")) {
+                    Intent intent = new Intent(mContext,SeckillGoodActivity.class);
+                    intent.putExtra(AppConstant.ACTIVEID,item.getActiveId());
+                    mContext.startActivity(intent);
+                }else {
+                    Intent intent = new Intent(mContext,SpecialGoodDetailActivity.class);
+                    intent.putExtra(AppConstant.ACTIVEID,item.getActiveId());
+                    mContext.startActivity(intent);
                 }
-                commonDialog = new CommonDialog(mContext,item);
-                commonDialog.show();
             }
         });
 
-        iv_head = helper.getView(R.id.iv_head);
-        Glide.with(mContext)
-                .load(item.getDefaultPic())
-                .apply(new RequestOptions().placeholder(R.mipmap.ic_launcher))
-                .apply(new RequestOptions().placeholder(iv_head.getDrawable()).skipMemoryCache(false).dontAnimate())
-                .into(iv_head);
+        iv_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onClick!=null) {
+                    onClick.shoppingCartOnClick(helper.getAdapterPosition());
+                }
 
+//                if(style.equals("2")) {
+//
+//                }
+            }
+        });
     }
-    public interface Onclick {
-        void addDialog();
+
+    public interface OnClick {
+        void shoppingCartOnClick(int position);
     }
+
 }

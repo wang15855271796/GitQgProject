@@ -75,7 +75,7 @@
     <string name="registerRead">我已阅读并同意《翘歌用户注册协议》</string>
     <string name="inputPsdWord">请输入密码</string>
     <string name="againInputPsd">确认密码</string>
-    <string name="inputCode">请输入授权码（选填）</string>
+    <string name="inputCode">请输入授权码</string>
     <string name="seachTitle">搜索</string>
     <string name="groupTitle">团购特惠</string>
     <string name="inputCommodityName">请输入商品名称</string>

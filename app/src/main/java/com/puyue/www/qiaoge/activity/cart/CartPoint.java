@@ -25,6 +25,7 @@ import com.puyue.www.qiaoge.helper.RestHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.cart.CartPointModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -96,6 +97,8 @@ public class CartPoint extends BaseSwipeActivity {
         mCalendar.setTimeInMillis(time);
         currentDay = mCalendar.get(Calendar.DAY_OF_MONTH);
         UserInfoHelper.saveDate(mActivity, currentDay + "");
+//        SharedPreferencesUtil.saveInt(mActivity,"days",currentDay);
+
     }
 
     @Override

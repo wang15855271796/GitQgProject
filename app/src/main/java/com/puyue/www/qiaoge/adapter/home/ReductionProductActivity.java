@@ -79,7 +79,6 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
     TextView tv_num;
     @BindView(R.id.rl_num)
     RelativeLayout rl_num;
-
     ProductNormalModel productNormalModel;
     private String cell; // 客服电话
     private AlertDialog mTypedialog;
@@ -122,7 +121,6 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
 
-        setTranslucentStatus();
         commonAdapter = new CommonsAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
             @Override
             public void addDialog() {
@@ -155,7 +153,17 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
         recyclerView.setAdapter(commonAdapter);
         iv_back.setOnClickListener(this);
         tv_title.setText("降价商品");
-
+        iv_carts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
+                    startActivity(new Intent(mContext, CartActivity.class));
+                } else {
+                    AppHelper.showMsg(mActivity, "请先登录");
+                    startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                }
+            }
+        });
         rl_num.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

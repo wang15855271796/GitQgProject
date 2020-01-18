@@ -14,11 +14,10 @@
         android:layout_marginLeft="@dimen/size_10dp"
         android:paddingTop="@dimen/size_12dp"
         tools:text="浙江"
-        android:textColor="#ff1c1c1c"
+        android:textColor="#333333"
         android:textSize="@dimen/size_15dp" />
 
     <com.puyue.www.qiaoge.view.FlowLayout
-        android:visibility="gone"
         android:id="@+id/fl_container"
         android:layout_marginBottom="@dimen/size_15dp"
         android:layout_width="match_parent"

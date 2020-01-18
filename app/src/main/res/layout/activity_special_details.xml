@@ -181,7 +181,7 @@
                                     style="?android:attr/progressBarStyleHorizontal"
                                     android:layout_marginTop="@dimen/size_12dp"
                                     android:layout_width="100dp"
-                                    android:layout_height="10dp"
+                                    android:layout_height="8dp"
                                     android:layout_marginLeft="5dp"
                                     android:progressDrawable="@drawable/layerlist_goods_progress" />
 

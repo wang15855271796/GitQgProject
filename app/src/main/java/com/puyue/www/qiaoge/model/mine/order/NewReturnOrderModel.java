@@ -92,7 +92,7 @@ public class NewReturnOrderModel {
         private String applyDate;
         private String checkDate;
         private List<ProductsBean> products;
-public String titleText;
+        public String titleText;
         public int getReturnProductMainId() {
             return returnProductMainId;
         }
@@ -211,7 +211,7 @@ public String titleText;
              * onShelves
 
              */
-
+            String afterPrice;
             private int businessId;
             private int businessType;
             private String typeImg;
@@ -223,6 +223,14 @@ public String titleText;
             private int additionFlag;
 
             public int onShelves;
+
+            public String getAfterPrice() {
+                return afterPrice;
+            }
+
+            public void setAfterPrice(String afterPrice) {
+                this.afterPrice = afterPrice;
+            }
 
             public int getBusinessId() {
                 return businessId;

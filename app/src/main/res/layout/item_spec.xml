@@ -26,6 +26,7 @@
 
         <ImageView
             android:id="@+id/iv_reduce"
+            android:visibility="gone"
             android:layout_marginLeft="@dimen/size_15dp"
             android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"

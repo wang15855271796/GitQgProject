@@ -84,7 +84,7 @@ public class GetProductDetailModel {
          * detailPic : []
          * topPic : []
          */
-
+        private int saleDone;
         private String type;
         private int productMainId;
         private int productId;
@@ -124,6 +124,14 @@ public class GetProductDetailModel {
                     ", detailPic=" + detailPic +
                     ", topPic=" + topPic +
                     '}';
+        }
+
+        public int getSaleDone() {
+            return saleDone;
+        }
+
+        public void setSaleDone(int saleDone) {
+            this.saleDone = saleDone;
         }
 
         public String getType() {

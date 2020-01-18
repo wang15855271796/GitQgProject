@@ -480,7 +480,6 @@ public class AddressListActivity extends BaseSwipeActivity {
                         Log.e(TAG, "onNext: " + baseModel.success + baseModel.message + baseModel.code);
                         if (mModelEditDefaultAddress.success) {
                             EventBus.getDefault().post(new AddressEvent());
-
                         } else {
                             AppHelper.showMsg(mContext, mModelEditDefaultAddress.message);
                         }

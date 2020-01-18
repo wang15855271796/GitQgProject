@@ -1,6 +1,9 @@
 package com.puyue.www.qiaoge.adapter.home;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -17,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.CartActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
@@ -36,6 +40,7 @@ import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
+import com.puyue.www.qiaoge.view.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -74,6 +79,8 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
     RelativeLayout rl_num;
     @BindView(R.id.tv_num)
     TextView tv_num;
+    @BindView(R.id.iv_carts)
+    ImageView iv_carts;
     ProductNormalModel productNormalModel;
     int PageNum;
     private String cell; // 客服电话
@@ -105,7 +112,7 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
     public void findViewById() {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        setTranslucentStatus();
+        initStatusBarWhiteColor();
         commonAdapter = new CommonsAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
             @Override
             public void addDialog() {
@@ -139,7 +146,17 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
         recyclerView.setAdapter(commonAdapter);
         iv_back.setOnClickListener(this);
         tv_title.setText("常用清单");
-
+        iv_carts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
+                    startActivity(new Intent(mContext, CartActivity.class));
+                } else {
+                    AppHelper.showMsg(mActivity, "请先登录");
+                    startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                }
+            }
+        });
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
@@ -401,6 +418,15 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
             case R.id.iv_back:
                 finish();
                 break;
+        }
+    }
+
+    protected void initStatusBarWhiteColor() {
+        //设置状态栏颜色为白色，状态栏图标为黑色
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(Color.WHITE);
+            StatusBarUtil.setStatusBarLightMode(mActivity);
         }
     }
 }

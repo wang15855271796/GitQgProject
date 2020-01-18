@@ -41,7 +41,7 @@ public class SeckillListModel {
         public int activeId;
         public int businessType;
         public List<KillsBean> kills;
-
+        public int warnMe;
         public static class KillsBean {
             /**
              * title : 小章鱼
@@ -54,7 +54,7 @@ public class SeckillListModel {
              * sales : 销量：2
              * progress : 5
              */
-            public int warnMe;
+
             public String title;
             public String price;
             public String oldPrice;

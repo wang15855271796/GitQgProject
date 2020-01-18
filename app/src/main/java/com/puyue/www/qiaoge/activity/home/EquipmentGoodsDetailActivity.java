@@ -236,7 +236,7 @@ public class EquipmentGoodsDetailActivity extends BaseSwipeActivity {
         }, mRvEvaluation);
 
         //设置推荐数据
-        mAdapterRecommend = new GoodsRecommendAdapter(R.layout.item_goods_recommend, searchList);
+//        mAdapterRecommend = new GoodsRecommendAdapter(R.layout.item_goods_recommend, searchList);
         mRvRecommend.setLayoutManager(new GridLayoutManager(mContext, 2, GridLayoutManager.VERTICAL, false));
         mRvRecommend.setAdapter(mAdapterRecommend);
         //获取数据

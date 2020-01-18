@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.adapter.home;
 
 import android.app.AlertDialog;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -14,10 +15,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.api.cart.AddMountChangeTwoAPI;
+import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartGoodModel;
+import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.utils.ToastUtil;
@@ -37,10 +40,10 @@ public class NewPriceAdapter extends BaseQuickAdapter<ProductNormalModel.DataBea
 
     private TextView tv_price;
     private ImageView iv_cut;
-    private ImageView iv_add;
+//    private ImageView iv_add;
     int productId;
 
-    public NewPriceAdapter(int productId,int layoutResId, @Nullable List<ProductNormalModel.DataBean.ListBean.ProdPricesBean> data) {
+    public NewPriceAdapter(int productId, int layoutResId, @Nullable List<ProductNormalModel.DataBean.ListBean.ProdPricesBean> data) {
         super(layoutResId, data);
         this.productId = productId;
 
@@ -53,18 +56,17 @@ public class NewPriceAdapter extends BaseQuickAdapter<ProductNormalModel.DataBea
         tv_price.setText(item.getPrice());
         helper.setText(R.id.tv_unit, item.getUnitDesc() + "");
         helper.setText(R.id.tv_old_price, item.getOldPrice());
-
         TextView tv_num = helper.getView(R.id.tv_num);
         tv_num.setText(item.getCartNum()+"");
+
         iv_cut = helper.getView(R.id.iv_cut);
-        iv_add = helper.getView(R.id.iv_add);
+        ImageView iv_add = helper.getView(R.id.iv_add);
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 int num = Integer.parseInt(tv_num.getText().toString());
                 num++;
-                addCart(num,item.getPriceId(),productId,1,tv_num);
+                addCart(num,item.getPriceId(),productId,1, tv_num);
 
             }
         });
@@ -75,7 +77,7 @@ public class NewPriceAdapter extends BaseQuickAdapter<ProductNormalModel.DataBea
                 int num = Integer.parseInt(tv_num.getText().toString());
                 if (num > 0) {
                     num--;
-                    addCarts(num,item.getPriceId(),productId,1,tv_num,item.getCartNum());
+                    addCarts(num,item.getPriceId(),productId,1, tv_num,item.getCartNum());
 
                 }
             }
@@ -216,4 +218,30 @@ public class NewPriceAdapter extends BaseQuickAdapter<ProductNormalModel.DataBea
                 });
     }
 
+
+//    private void getCartNum() {
+//        GetCartNumAPI.requestData(mContext)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<GetCartNumModel>() {
+//                    @Override
+//                    public void onCompleted() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(GetCartNumModel getCartNumModel) {
+//                        if (getCartNumModel.isSuccess()) {
+//                            tv_num.setText(getCartNumModel.getData().getNum()+"");
+//                        } else {
+//                            AppHelper.showMsg(mContext, getCartNumModel.getMessage());
+//                        }
+//                    }
+//                });
+//    }
 }

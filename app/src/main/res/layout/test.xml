@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:orientation="vertical">
 
     <android.support.design.widget.CoordinatorLayout
@@ -11,12 +12,13 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         >
-
+        <!--com.puyue.www.qiaoge.FixAppBarLayout-->
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBarLayout"
+            app:layout_behavior="com.puyue.www.qiaoge.FixAppBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:elevation="0dp">
+          >
 
             <com.daimajia.slider.library.SliderLayout
                 android:id="@+id/banner"

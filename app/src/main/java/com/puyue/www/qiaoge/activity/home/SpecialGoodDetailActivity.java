@@ -34,6 +34,7 @@ import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,6 +81,7 @@ import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
 import com.puyue.www.qiaoge.model.home.GetProductListModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
+import com.puyue.www.qiaoge.model.home.GuessModel;
 import com.puyue.www.qiaoge.model.home.HasCollectModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.model.home.SpecialGoodModel;
@@ -149,9 +151,9 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     private Date currents;
     private Date starts;
     private Date ends;
-    SearchResultsModel searchResultsModel;
-    //搜索集合
-    private List<SearchResultsModel.DataBean.SearchProdBean.ListBean> searchList = new ArrayList<>();
+    GuessModel searchResultsModel;
+    //猜你喜欢集合
+    private List<GuessModel.DataBean> searchList = new ArrayList<>();
     private List<ChoiceSpecModel> account = new ArrayList<>();
     private String totalMoney = "0";
     private String cell;
@@ -168,9 +170,10 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     private TextView goodsEvaluationTime;
     private TextView goodsEvaluationContent;
     private TextView goodsEvaluationReply;
-
+    ProgressBar pb;
     private StarBarView sbv_star_bar;
     private TextView tv_status;
+    private TextView tv_like;
     //推荐
     private RecyclerView recyclerViewRecommend;
     private GoodsRecommendAdapter adapterRecommend;
@@ -243,6 +246,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+        pb = FVHelper.fv(this, R.id.pb);
         tv_cut_down = FVHelper.fv(this, R.id.tv_cut_down);
         tv_time = (TextView) findViewById(R.id.tv_time);
         tv_total = (TextView) findViewById(R.id.tv_total);
@@ -288,7 +292,9 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         mTvAdd = FVHelper.fv(this, R.id.tv_activity_special_add);
         sbv_star_bar = findViewById(R.id.sbv_star_bar);
         tv_status = findViewById(R.id.tv_status);
-
+        tv_like = findViewById(R.id.tv_like);
+        tv_like.setVisibility(View.GONE);
+        recyclerViewRecommend.setVisibility(View.GONE);
     }
 
     @Override
@@ -517,6 +523,8 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                             tv_sale.setText(model.getData().getSaleVolume());
                             productName =model.getData().getActiveName();
                             tv_price.setText(model.getData().getShowPrice());
+                            int progress = Integer.parseInt(model.getData().getProgress());
+                            pb.setProgress(progress);
                             tv_old_price.setText("原价："+model.getData().getOldPrice());
                             tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                             tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
@@ -675,7 +683,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                                 }
                             });
 
-                            getProductList();
 
 
                         } else {
@@ -962,40 +969,7 @@ private float star;
         }
 
     }
-    /**
-     * 推荐
-     **/
-    private void getProductList() {
-        RecommendApI.requestData(mContext,productName,pageNum,pageSize)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SearchResultsModel>() {
-                    @Override
-                    public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(SearchResultsModel recommendModel) {
-                        if (recommendModel.isSuccess()) {
-                            searchResultsModel = recommendModel;
-                            if(recommendModel.getData().getSearchProd()!=null) {
-                                searchList.addAll(recommendModel.getData().getSearchProd().getList());
-                                adapterRecommend.notifyDataSetChanged();
-                                Log.d("weorishssss....",searchList.size()+"");
-                            }
-
-                        } else {
-                            AppHelper.showMsg(mContext, recommendModel.getMessage());
-                        }
-                    }
-                });
-    }
 
     /**
      * 获取收藏状态

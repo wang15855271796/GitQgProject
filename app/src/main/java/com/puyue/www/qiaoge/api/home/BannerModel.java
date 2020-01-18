@@ -1,11 +1,12 @@
 package com.puyue.www.qiaoge.api.home;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by ${王涛} on 2020/1/4
  */
-public class BannerModel {
+public class BannerModel implements Serializable {
 
     /**
      * code : 1
@@ -74,9 +75,9 @@ public class BannerModel {
 
         private int showType;
         private String defaultPic;
-        private Object linkSrc;
-        private Object detailPic;
-        private Object prodPage;
+        private String linkSrc;
+        private String detailPic;
+        private String prodPage;
         private int businessId;
         private int businessType;
 
@@ -100,15 +101,15 @@ public class BannerModel {
             return linkSrc;
         }
 
-        public void setLinkSrc(Object linkSrc) {
+        public void setLinkSrc(String linkSrc) {
             this.linkSrc = linkSrc;
         }
 
-        public Object getDetailPic() {
+        public String getDetailPic() {
             return detailPic;
         }
 
-        public void setDetailPic(Object detailPic) {
+        public void setDetailPic(String detailPic) {
             this.detailPic = detailPic;
         }
 
@@ -116,7 +117,7 @@ public class BannerModel {
             return prodPage;
         }
 
-        public void setProdPage(Object prodPage) {
+        public void setProdPage(String prodPage) {
             this.prodPage = prodPage;
         }
 

@@ -123,9 +123,12 @@ public class RestHelper {
                         .addQueryParameter(AppConstant.ANDROIDMODEL, AppHelper.getSystemVersion())
                         .addQueryParameter(AppConstant.PHONEIP, UserInfoHelper.getPhoneip(context))
                         .addQueryParameter(AppConstant.MACIP, UserInfoHelper.getMac(context))
+                        .addQueryParameter(AppConstant.changeFlag, UserInfoHelper.getChangeFlag(context))
+                        .addQueryParameter(AppConstant.AreaName, UserInfoHelper.getAreaName(context))
                         .addQueryParameter(AppConstant.LOCATIONADDRESS, UserInfoHelper.getLocationadress(context))
                         .build();
 
+                Log.d("dsgdsgggjhjh11111....",UserInfoHelper.getCity(context));
                 Request commonRequest = originalRequest.newBuilder().url(commonUrl).build();
                 Log.d("----->", commonRequest + AppConstant.TOKEN);
 

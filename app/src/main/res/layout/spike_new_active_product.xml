@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
 
-    <!--130dp 固定 之前:wrap_content-->
     <LinearLayout
+        android:id="@+id/ll_root"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/size_60dp"
                     android:layout_below="@+id/lin"
                     android:layout_centerVertical="true">
 
@@ -169,14 +169,13 @@
                         android:textSize="11dp" />
 
                     <TextView
-                        android:visibility="gone"
                         android:id="@+id/tv_sold_out"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/app_home_more"
+                        android:background="@drawable/shape_grey"
                         android:paddingLeft="8dp"
                         android:paddingTop="3dp"
                         android:paddingRight="8dp"
@@ -198,7 +197,7 @@
                         android:paddingTop="3dp"
                         android:paddingRight="8dp"
                         android:paddingBottom="3dp"
-                        android:text="添加提醒"
+                        tools:text="立即加购"
                         android:textColor="@color/white"
                         android:textSize="11dp" />
                 </RelativeLayout>

@@ -1,20 +1,36 @@
 package com.puyue.www.qiaoge.activity.home;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.api.home.CityChangeAPI;
 import com.puyue.www.qiaoge.base.BaseActivity;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
+import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.home.CityChangeModel;
+import com.puyue.www.qiaoge.view.FlowLayout;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,16 +41,14 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by ${王文博} on 2019/8/8
+ * 已开放城市列表界面
  */
 public class ChangeCityActivity extends BaseActivity {
 
-
     private ImageView ic_back;
-
     private RecyclerView rl_city_change;
     private CityChangeAdapter mAdapter;
-
-    private List<CityChangeModel> listCity =new ArrayList<>();
+    private List<CityChangeModel.DataBean> listCity =new ArrayList<>();
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
@@ -56,19 +70,20 @@ public class ChangeCityActivity extends BaseActivity {
     public void setViewData() {
 
         rl_city_change.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new CityChangeAdapter(R.layout.item_city,R.layout.city_item, listCity);
-        rl_city_change.setAdapter(mAdapter);
+        mAdapter = new CityChangeAdapter(mActivity,R.layout.city_item, listCity, new CityChangeAdapter.Onclick() {
+            @Override
+            public void addDialog(int position, List<CityChangeModel.DataBean.CityNamesBean.AreaNamesBean> areaNames, View view) {
+
+            }
+        });
 
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                UserInfoHelper.saveCity(mContext, listCity.get(position).getProvinceName());
-//                Intent intent = new Intent();//跳回首页
-//                setResult(104,intent);
-//                finish();
+
             }
         });
-
+        rl_city_change.setAdapter(mAdapter);
     }
 
     @Override
@@ -102,28 +117,20 @@ public class ChangeCityActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("sdddddddddddddddd",e.getMessage()+"");
                     }
 
                     @Override
                     public void onNext(CityChangeModel cityChangeModel) {
-                        Log.d("sdddddddddddddddd00",cityChangeModel.getData()+"");
                         if (cityChangeModel.isSuccess()) {
                             listCity.clear();
                             List<CityChangeModel.DataBean> data = cityChangeModel.getData();
-                            listCity.add(cityChangeModel);
+                            listCity.addAll(data);
 
                             mAdapter.notifyDataSetChanged();
                         } else {
                             AppHelper.showMsg(mContext, cityChangeModel.getMessage());
                         }
-
-
                     }
                 });
-
     }
-
-
-
 }

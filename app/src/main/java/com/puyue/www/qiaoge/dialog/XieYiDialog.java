@@ -16,6 +16,7 @@ public abstract class XieYiDialog extends Dialog {
     Context mContext;
 
     public TextView tv_sure,hint;
+    TextView tv_cancle;
     public TextView title;
     WebView webView;
     String url = "https://shaokao.qoger.com/apph5/html/czxy.html";
@@ -33,7 +34,7 @@ public abstract class XieYiDialog extends Dialog {
         tv_sure= (TextView) findViewById(R.id.tv_sure);
         webView = (WebView) findViewById(R.id.webView);
         title = findViewById(R.id.title);
-
+        tv_cancle = findViewById(R.id.tv_cancle);
         webView.loadUrl(url);
     }
 
@@ -45,8 +46,17 @@ public abstract class XieYiDialog extends Dialog {
                 Confirm();
             }
         });
+
+        tv_cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Cancle();
+            }
+        });
     }
 
-    public abstract void Confirm();
 
+
+    public abstract void Confirm();
+    public abstract void Cancle();
 }

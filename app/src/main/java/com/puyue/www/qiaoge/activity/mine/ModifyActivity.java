@@ -18,6 +18,7 @@ import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.AccountDetailModel;
 
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,39 +89,18 @@ public class ModifyActivity extends BaseSwipeActivity implements View.OnClickLis
         iv_back.setOnClickListener(this);
 
 
-        String inPoints = SharedPreferencesUtil.getString(mActivity, "inPoint");
-        String inBalances = SharedPreferencesUtil.getString(mActivity, "inBalance");
-        String inGifts = SharedPreferencesUtil.getString(mActivity, "inGift");
-        Log.d("swddddddddds....",inPoints);
-        Log.d("swdddddddddss....",inBalances);
-        Log.d("swdddddddddsss....",inGifts);
-//
-//
-        if(inPoints=="1") {
-            swipe.setChecked(false);
-        }else {
-            swipe.setChecked(true);
-        }
-
-        if(inBalances=="1") {
-            swipe1.setChecked(false);
-        }else {
-            swipe1.setChecked(true);
-        }
-
-        if(inGifts=="1") {
-            swipe2.setChecked(false);
-        }else {
-            swipe2.setChecked(true);
-        }
-
         swipe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d("woeeeeeeeee....","000");
                 if(isChecked) {
                     SharedPreferencesUtil.saveString(mActivity,"inPoint","0");
+                    String inPoint = SharedPreferencesUtil.getString(mActivity, "inPoint");
+                    editSubAccount(subId, inPoint,inBalance,inGift);
                 }else {
                     SharedPreferencesUtil.saveString(mActivity,"inPoint","1");
+                    String inPoint = SharedPreferencesUtil.getString(mActivity, "inPoint");
+                    editSubAccount(subId,inPoint,inBalance,inGift);
                 }
             }
         });
@@ -129,10 +109,15 @@ public class ModifyActivity extends BaseSwipeActivity implements View.OnClickLis
         swipe1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d("woeeeeeeeee....","111");
                 if(isChecked) {
                     SharedPreferencesUtil.saveString(mActivity,"inBalance","0");
+                    String inBalance = SharedPreferencesUtil.getString(mActivity, "inBalance");
+                    editSubAccount(subId,inPoint,inBalance,inGift);
                 }else {
                     SharedPreferencesUtil.saveString(mActivity,"inBalance","1");
+                    String inBalance = SharedPreferencesUtil.getString(mActivity, "inBalance");
+                    editSubAccount(subId,inPoint,inBalance,inGift);
 
                 }
             }
@@ -141,11 +126,16 @@ public class ModifyActivity extends BaseSwipeActivity implements View.OnClickLis
         swipe2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d("woeeeeeeeee....","222");
                 if(isChecked) {
                     SharedPreferencesUtil.saveString(mActivity,"inGift","0");
+                    String inGift = SharedPreferencesUtil.getString(mActivity, "inGift");
+                    editSubAccount(subId,inPoint,inBalance,inGift);
 
                 }else {
                     SharedPreferencesUtil.saveString(mActivity,"inGift","1");
+                    String inGift = SharedPreferencesUtil.getString(mActivity, "inGift");
+                    editSubAccount(subId,inPoint,inBalance,inGift);
                 }
             }
         });
@@ -154,10 +144,11 @@ public class ModifyActivity extends BaseSwipeActivity implements View.OnClickLis
             @Override
             public void onNoDoubleClick(View view) {
 
-                String inPoint = SharedPreferencesUtil.getString(mActivity, "inPoint");
-                String inBalance = SharedPreferencesUtil.getString(mActivity, "inBalance");
-                String inGift = SharedPreferencesUtil.getString(mActivity, "inGift");
-                editSubAccount(subId,inPoint,inBalance,inGift);
+                finish();
+//                String inPoint = SharedPreferencesUtil.getString(mActivity, "inPoint");
+//                String inBalance = SharedPreferencesUtil.getString(mActivity, "inBalance");
+//                String inGift = SharedPreferencesUtil.getString(mActivity, "inGift");
+//                editSubAccount(subId,inPoint,inBalance,inGift);
 
             }
         });
@@ -189,6 +180,26 @@ public class ModifyActivity extends BaseSwipeActivity implements View.OnClickLis
                         if (baseModel.isSuccess()) {
                             tv_name.setText(baseModel.getData().getName());
                             tv_phone.setText(baseModel.getData().getPhone());
+                            inPoint = String.valueOf(baseModel.getData().getInPoint());
+                            inGift = String.valueOf(baseModel.getData().getInGift());
+                            inBalance = String.valueOf(baseModel.getData().getInBalance());
+                            if(baseModel.getData().getInBalance()==1) {
+                                swipe1.setChecked(false);
+                            }else {
+                                swipe1.setChecked(true);
+                            }
+
+                            if(baseModel.getData().getInGift()==1) {
+                                swipe2.setChecked(false);
+                            }else {
+                                swipe2.setChecked(true);
+                            }
+
+                            if(baseModel.getData().getInPoint()==1) {
+                                swipe.setChecked(false);
+                            }else {
+                                swipe.setChecked(true);
+                            }
                         } else {
                             AppHelper.showMsg(mContext, baseModel.getMessage());
                         }
@@ -217,9 +228,7 @@ public class ModifyActivity extends BaseSwipeActivity implements View.OnClickLis
                     @Override
                     public void onNext(BaseModel baseModel) {
                         if (baseModel.success) {
-                            AppHelper.showMsg(mContext, "修改成功");
-
-                            finish();
+                            ToastUtil.showSuccessMsg(mActivity,"成功");
                         } else {
                             AppHelper.showMsg(mContext, baseModel.message);
                         }

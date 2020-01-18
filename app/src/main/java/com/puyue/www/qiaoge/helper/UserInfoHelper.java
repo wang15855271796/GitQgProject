@@ -31,7 +31,8 @@ public class UserInfoHelper {
 
     private static final String ORDERID = "orderId";
 
-
+    private static final String CHANGEFLAG = "changeFlag";
+    private static final String AreaName = "areaName";
     private static final String USERMINUTE = "user_minute";//记录弹窗
 
     private static final String FORGETPASSWORD = "forget_password";//退货规格
@@ -433,6 +434,52 @@ private static final String ISREGISTER ="is_register";
             e.printStackTrace();
         }
     }
+
+    public static void saveAreaName(Context context, String areaName) {
+        try {
+            PreferenceHelper.saveData(context, USER_INFO, AreaName, EncryptHelper.encrypt(AppConstant.APP_SHA_256, areaName));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static String getAreaName(Context context) {
+        if ((StringUtils.isBlank(PreferenceHelper.getData(context, USER_INFO, AreaName)))) {
+            return "";
+        } else {
+            try {
+                return EncryptHelper.decrypt(AppConstant.APP_SHA_256, PreferenceHelper.getData(context, USER_INFO, AreaName));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "";
+            }
+        }
+    }
+
+
+    public static void saveChangeFlag(Context context, String changeFlag) {
+        try {
+            PreferenceHelper.saveData(context, USER_INFO, CHANGEFLAG, EncryptHelper.encrypt(AppConstant.APP_SHA_256, changeFlag));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static String getChangeFlag(Context context) {
+        if ((StringUtils.isBlank(PreferenceHelper.getData(context, USER_INFO, CHANGEFLAG)))) {
+            return "";
+        } else {
+            try {
+                return EncryptHelper.decrypt(AppConstant.APP_SHA_256, PreferenceHelper.getData(context, USER_INFO, CHANGEFLAG));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "";
+            }
+        }
+    }
+
 
     public static String getDate(Context context) {
         if ((StringUtils.isBlank(PreferenceHelper.getData(context, USER_INFO, DATE)))) {

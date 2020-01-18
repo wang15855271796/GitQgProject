@@ -89,9 +89,36 @@ public class IndexInfoModel {
         private String otherInfo;
         private int addAddress;
         private int userIsBuy;
+        String questUrl;
+        String areaName;
+        String cityName;
         private List<BannersBean> banners;
         private List<IconsBean> icons;
         private List<ClassifyListBean> classifyList;
+
+        public String getAreaName() {
+            return areaName;
+        }
+
+        public void setAreaName(String areaName) {
+            this.areaName = areaName;
+        }
+
+        public String getCityName() {
+            return cityName;
+        }
+
+        public void setCityName(String cityName) {
+            this.cityName = cityName;
+        }
+
+        public String getQuestUrl() {
+            return questUrl;
+        }
+
+        public void setQuestUrl(String questUrl) {
+            this.questUrl = questUrl;
+        }
 
         public String getAddress() {
             return address;
@@ -211,10 +238,10 @@ public class IndexInfoModel {
             private int showType;
             private String defaultPic;
             private String linkSrc;
-            private Object detailPic;
-            private Object prodPage;
-            private Object businessId;
-            private Object businessType;
+            private String detailPic;
+            private String prodPage;
+            private String businessId;
+            private String businessType;
 
             public int getShowType() {
                 return showType;
@@ -240,35 +267,35 @@ public class IndexInfoModel {
                 this.linkSrc = linkSrc;
             }
 
-            public Object getDetailPic() {
+            public String getDetailPic() {
                 return detailPic;
             }
 
-            public void setDetailPic(Object detailPic) {
+            public void setDetailPic(String detailPic) {
                 this.detailPic = detailPic;
             }
 
-            public Object getProdPage() {
+            public String getProdPage() {
                 return prodPage;
             }
 
-            public void setProdPage(Object prodPage) {
+            public void setProdPage(String prodPage) {
                 this.prodPage = prodPage;
             }
 
-            public Object getBusinessId() {
+            public String getBusinessId() {
                 return businessId;
             }
 
-            public void setBusinessId(Object businessId) {
+            public void setBusinessId(String businessId) {
                 this.businessId = businessId;
             }
 
-            public Object getBusinessType() {
+            public String getBusinessType() {
                 return businessType;
             }
 
-            public void setBusinessType(Object businessType) {
+            public void setBusinessType(String businessType) {
                 this.businessType = businessType;
             }
         }

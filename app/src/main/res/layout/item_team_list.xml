@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="173dp"
+    android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginLeft="@dimen/dp_10"
     android:layout_height="wrap_content">
 
     <RelativeLayout
+        android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_10"
         android:id="@+id/rl_group"
         android:orientation="vertical"
-        android:background="@color/white"
+        android:background="@drawable/shouye"
         android:layout_width="match_parent"
         android:paddingBottom="@dimen/size_15dp"
         android:layout_height="wrap_content">
@@ -22,10 +22,10 @@
             <ImageView
                 android:id="@+id/iv_pic"
                 android:layout_marginTop="@dimen/dp_10"
-                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_centerHorizontal="true"
                 tools:src="@mipmap/icon_baidu"
-                android:layout_width="152dp"
-                android:layout_height="152dp" />
+                android:layout_width="162dp"
+                android:layout_height="162dp" />
 
             <ImageView
                 android:visibility="gone"
@@ -57,7 +57,7 @@
 
         <TextView
             android:textColor="#333333"
-            android:maxLines="2"
+            android:maxLines="1"
             android:id="@+id/tv_name"
             android:layout_marginTop="@dimen/size_15dp"
             android:layout_below="@+id/rl_pic"
@@ -66,12 +66,13 @@
             android:textSize="@dimen/sp_12"
             tools:text="华清源腿排腿排华排......................"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/size_45dp" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:text="15.0"
             android:textColor="#FF5000"
             android:id="@+id/tv_price"
+            android:layout_marginTop="@dimen/dp_10"
             android:layout_marginLeft="@dimen/dp_10"
             android:textSize="@dimen/size_15dp"
             android:layout_below="@+id/tv_name"
@@ -81,11 +82,13 @@
         <ImageView
             android:id="@+id/iv_add"
             android:src="@mipmap/app_add"
+
             android:layout_marginRight="@dimen/dp_10"
+            android:padding="@dimen/dp_10"
             android:layout_below="@+id/tv_name"
             android:layout_alignParentRight="true"
-            android:layout_width="@dimen/size_20dp"
-            android:layout_height="@dimen/size_20dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/iv_icon"

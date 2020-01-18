@@ -55,11 +55,11 @@ public class AppConstant {
     public static final String CONSULT ="messageNews";
     public static final String NEWTYPE = "new";
     public static final String SECONDTYPE = "second";
-    public static final String HOTTYPE = "hotProd";
+    public static final String HOTTYPE = "hot";
     public static final String GROUPTYPE = "group";
     public static final String VIPTYPE = "vip";
     public static final String SHARETYPE = "share";
-    public static final String REDUCTIONTYPE = "reductProd";
+    public static final String REDUCTIONTYPE = "reduct";
     public static final String COMMONTYPE = "commonBuy";
     public static final String RECOMMEND = "recommend";
     public static final String ACTIVEID = "activeId";
@@ -93,5 +93,40 @@ public class AppConstant {
 
     public static final  String PHONEIP= "loginIp";
     public static final  String MACIP= "loginMac";
+    public static final  String changeFlag= "changeFlag";
+    public static final  String AreaName= "areaName";
     public static final  String LOCATIONADDRESS= "loginAddress";
+
+
+//    NEW_PROD("", "新品上市", "newProd"),
+//    KILL_PROD("", "秒杀专区", "killProd"),
+//    HOT_PROD("", "热卖商品", "hotProd"),
+//    COMMON_PROD("", "常用清单", "commonProd"),
+//    DEDUCT_PROD("", "降价商品", "deductProd"),
+//    SPECIAL_PROD("", "折扣专区", "specialProd"),
+//    TEAM_PROD("", "超值组合", "teamProd"),
+//    CLASSIFY_PROD("", "分类", "classifyProd"),
+//    CART("", "购物车", "cart"),
+//    MUST_PROD("", "必买清单", "mustProd"),
+//    BALANCE("", "余额", "balance"),
+//    POINT("", "积分", "point"),
+//    GIFT("", "优惠券", "gift"),
+            ;
+
+
+    //banner跳转链接
+    public static final  String NEW_PROD= "newProd";
+    public static final  String KILL_PROD= "killProd";
+    public static final  String HOT_PROD= "hotProd";
+    public static final  String COMMON_PROD= "commonProd";
+    public static final  String DEDUCT_PROD= "deductProd";
+    public static final  String SPECIAL_PROD= "specialProd";
+    public static final  String TEAM_PROD= "teamProd";
+    public static final  String CLASSIFY_PROD= "classifyProd";
+    public static final  String CART= "cart";
+    public static final  String MUST_PROD= "mustProd";
+    public static final  String BALANCE= "balance";
+    public static final  String POINT= "point";
+    public static final  String GIFT= "gift";
+
 }

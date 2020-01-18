@@ -68,7 +68,6 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
     NewPriceAdapter searchInnerAdapter;
     private NewSpecAdapter searchSpecAdapter;
 
-
     public CommonDialog(Context mContext, ProductNormalModel.DataBean.ListBean item) {
         super(mContext, R.style.dialog);
         this.context = mContext;
@@ -89,6 +88,7 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
             attributes.width = Utils.getScreenWidth(context);
             getWindow().setAttributes(attributes);
         }
+
         iv_close.setOnClickListener(this);
         tv_name.setText(listBean.getProductName());
         tv_sale.setText(listBean.getSalesVolume());

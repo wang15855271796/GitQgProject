@@ -26,6 +26,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:layout_marginTop="@dimen/dp_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
             >
@@ -52,38 +53,33 @@
                     android:textColor="#333333"
                     android:textSize="18sp" />
 
-                <ImageView
-                    android:visibility="gone"
-                    android:layout_marginRight="@dimen/size_20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:src="@mipmap/ic_tab_cart_enable"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
                 <RelativeLayout
                     android:id="@+id/rl_good_cart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/size_10dp">
+                    android:layout_width="@dimen/size_60dp"
+                    android:layout_height="@dimen/size_48dp">
 
-                    <com.puyue.www.qiaoge.view.SuperTextView
-                        android:id="@+id/text_cart_num"
-                        android:layout_width="@dimen/size_13dp"
-                        android:layout_height="@dimen/size_13dp"
-                        android:layout_toRightOf="@id/iv_cart"
-                        android:gravity="center"
-                        android:text=""
-                        android:textColor="@color/white"
-                        android:textSize="9dp"
+                    <ImageView
+                        android:id="@+id/iv_cart"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/ic_tab_cart_unable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tv_num"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/iv_cart"
                         android:visibility="gone"
-                        app:corner="7.5dp"
-                        app:solid="#ff0000" />
+                        android:background="@drawable/shape_car_num"
+                        android:gravity="center"
+                        tools:text="9"
+                        android:textColor="@color/white"
+                        android:textSize="7dp" />
 
                 </RelativeLayout>
-
             </RelativeLayout>
 
         </LinearLayout>

@@ -476,13 +476,15 @@ public class DateUtils {
 			int hours = 0;
 			try {
 				long m = endDate.getTime() - beginDate.getTime();
-				int s = (int) (m / 1000);
+				long abs = Math.abs(m);
+				int s = (int) (abs / 1000);
 				hours = s / 3600;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if (hours > 2) {
+			Log.d("wffffdefdfdfdf.....",hours+"");
+			if (hours > 1) {
 				return true;
 			} else {
 				return false;

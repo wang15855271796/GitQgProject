@@ -34,6 +34,8 @@ import com.android.tu.loadingdialog.LoadingDailog;
 
 import com.chuanglan.shanyan_sdk.OneKeyLoginManager;
 import com.chuanglan.shanyan_sdk.listener.AuthenticationExecuteListener;
+import com.chuanglan.shanyan_sdk.listener.OneKeyLoginListener;
+import com.chuanglan.shanyan_sdk.listener.OpenLoginAuthListener;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lljjcoder.style.citylist.Toast.ToastUtils;
@@ -60,6 +62,7 @@ import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.mine.login.CheckPasswordCodeModel;
 import com.puyue.www.qiaoge.model.mine.login.RegisterAgreementModel;
 import com.puyue.www.qiaoge.model.mine.login.RegisterModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -166,7 +169,7 @@ public class RegisterActivity extends BaseSwipeActivity implements View.OnClickL
         iv_auth_success = findViewById(R.id.iv_auth_success);
         iv_auth_success.setVisibility(View.GONE);
         tv_register_secret = findViewById(R.id.tv_register_secret);
-
+        openLoginActivity();
         tv_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,6 +177,74 @@ public class RegisterActivity extends BaseSwipeActivity implements View.OnClickL
                 startActivity(intent);
             }
         });
+    }
+
+    private void openLoginActivity() {
+        //开始拉取授权页
+        OneKeyLoginManager.getInstance().openLoginAuth(false, new OpenLoginAuthListener() {
+            @Override
+            public void getOpenLoginAuthStatus(int code, String result) {
+                Log.d("sfdfffefefe",result+"...0000");
+                if (1000 == code) {
+                    Log.e("VVV", "拉起授权页成功： code==" + code + "   result==" + result);
+                } else {
+                    Log.e("VVV", "拉起授权页失败： code==" + code + "   result==" + result);
+                }
+            }
+        }, new OneKeyLoginListener() {
+            @Override
+            public void getOneKeyLoginStatus(int code, String result) {
+                Log.d("sfdfffefefe",result+"...1111");
+                if (1011 == code) {
+                    Log.e("VVV", "用户点击授权页返回： code==" + code + "   result==" + result);
+                    return;
+                } else if (1000 == code) {
+                    Log.e("VVV", "用户点击登录获取token成功： code==" + code + "   result==" + result);
+                    checks(result);
+                } else {
+                    Log.e("VVV", "用户点击登录获取token失败： code==" + code + "   result==" + result);
+                }
+
+
+                startResultActivity(code, result);
+            }
+        });
+    }
+
+    private void checks(String result) {
+        GetCustomerPhoneAPI.getData(mContext,result)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<BaseModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(BaseModel baseModel) {
+                        if (baseModel.success) {
+                            ToastUtil.showSuccessMsg(mActivity,"sdddddds");
+                            Log.d("sdgdsgdgfegtfg...",baseModel+"");
+                        } else {
+                            AppHelper.showMsg(mContext, baseModel.message);
+                        }
+                    }
+                });
+    }
+
+    private void startResultActivity(int code, String result) {
+//        Intent intent = new Intent(RegisterActivity.this, ResultActivity.class);
+
+//        intent.putExtra("loginResult", result);
+//        intent.putExtra("loginCode", code);
+//        startActivity(intent);
+//        OneKeyLoginManager.getInstance().finishAuthActivity();
     }
 
     @Override

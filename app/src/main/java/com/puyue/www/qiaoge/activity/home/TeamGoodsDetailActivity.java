@@ -80,6 +80,7 @@ import com.puyue.www.qiaoge.model.home.ClickCollectionModel;
 import com.puyue.www.qiaoge.model.home.CommentOrderQueryModel;
 import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetProductListModel;
+import com.puyue.www.qiaoge.model.home.GuessModel;
 import com.puyue.www.qiaoge.model.home.HasCollectModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.model.home.SecKillOrTeamProductModel;
@@ -126,6 +127,7 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
     TextView tv_num;
     TextView old_price;
     TextView tv_old_price;
+    private TextView tv_like;
     private TextView mTvDesc;
     TextView tv_title;
     private LinearLayout mLlSingle;
@@ -198,9 +200,9 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
     private RelativeLayout rl_share;
     private String productName;
     private GoodsRecommendAdapter adapterRecommend;
-    SearchResultsModel searchResultsModel;
+    GuessModel searchResultsModel;
     //搜索集合
-    private List<SearchResultsModel.DataBean.SearchProdBean.ListBean> searchList = new ArrayList<>();
+    private List<GuessModel.DataBean> searchList = new ArrayList<>();
 
     class MyHandler extends Handler {
         @Override
@@ -273,7 +275,8 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
         mTvCarAmount = FVHelper.fv(this, R.id.tv_include_common_amount);
         mTvFee = FVHelper.fv(this, R.id.tv_include_common_fee);
         mTvAddCar = FVHelper.fv(this, R.id.tv_add_car);
-
+        tv_like.setVisibility(View.GONE);
+        recyclerViewRecommend.setVisibility(View.GONE);
         //详情
         View viewDetail = LayoutInflater.from(this).inflate(R.layout.item_viewpager, null);
         mRvDetail = FVHelper.fv(viewDetail, R.id.rv_item_viewpager);
@@ -449,41 +452,7 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
         }
     };
 
-    /**
-     * 推荐
-     **/
-    private void getProductList() {
-        RecommendApI.requestData(mContext,productName,pageNum,pageSize)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SearchResultsModel>() {
-                    @Override
-                    public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(SearchResultsModel recommendModel) {
-                        searchList.clear();
-                        if (recommendModel.isSuccess()) {
-                            searchResultsModel = recommendModel;
-                            if(recommendModel.getData().getSearchProd()!=null) {
-                                searchList.addAll(recommendModel.getData().getSearchProd().getList());
-                                adapterRecommend.notifyDataSetChanged();
-                                Log.d("weorishssss....",searchList.size()+"");
-                            }
-
-                        } else {
-                            AppHelper.showMsg(mContext, recommendModel.getMessage());
-                        }
-                    }
-                });
-    }
 
     /**
      * 获取评价
@@ -584,7 +553,6 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
                                 }
                             });
 
-                            getProductList();
                             //填充详情
                             mListDetail.clear();
 

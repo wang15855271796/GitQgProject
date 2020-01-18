@@ -280,6 +280,11 @@ public class MyWalletActivity extends BaseSwipeActivity {
                                         public void Confirm() {
                                             dismiss();
                                         }
+
+                                        @Override
+                                        public void Cancle() {
+                                            dismiss();
+                                        }
                                     };
                                     promptDialog.show();
                                 }else {
@@ -297,6 +302,11 @@ public class MyWalletActivity extends BaseSwipeActivity {
                                     promptDialog = new XieYiDialog(mActivity) {
                                         @Override
                                         public void Confirm() {
+                                            dismiss();
+                                        }
+
+                                        @Override
+                                        public void Cancle() {
                                             dismiss();
                                         }
                                     };

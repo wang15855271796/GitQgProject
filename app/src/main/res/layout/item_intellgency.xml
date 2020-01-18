@@ -21,10 +21,20 @@
 
     <ImageView
         android:id="@+id/iv_pic"
-        android:src="@mipmap/icon_baidu"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/size_15dp"
         android:layout_marginLeft="@dimen/size_15dp"
         android:layout_marginRight="@dimen/size_15dp"
-        android:layout_width="match_parent"
-        android:layout_height="250dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/iv_pics"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/size_15dp"
+        android:layout_marginLeft="@dimen/size_15dp"
+        android:layout_marginRight="@dimen/size_15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

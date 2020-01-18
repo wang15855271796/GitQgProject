@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,11 +30,14 @@ import com.puyue.www.qiaoge.helper.UserInfoHelper;
  */
 public abstract class BaseFragment extends Fragment {
     public FragmentActivity mActivity;
-
+    public FragmentManager supportFragmentManager;
+    public FragmentTransaction fragmentTransaction;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mActivity = (FragmentActivity) context;
+        supportFragmentManager = getChildFragmentManager();
+
     }
 
     /**

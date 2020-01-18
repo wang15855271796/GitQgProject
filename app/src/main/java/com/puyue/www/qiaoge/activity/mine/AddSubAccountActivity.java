@@ -88,12 +88,14 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
         ButterKnife.bind(this);
         ll_yzm.setOnClickListener(this);
         iv_back.setOnClickListener(this);
-        SharedPreferencesUtil.saveString(mActivity,"inPoint","1");
-        SharedPreferencesUtil.saveString(mActivity,"inBalance","1");
-        SharedPreferencesUtil.saveString(mActivity,"inGift","1");
+        //关闭1 打开0
+//        SharedPreferencesUtil.saveString(mActivity,"inPoint","1");
+//        SharedPreferencesUtil.saveString(mActivity,"inBalance","1");
+//        SharedPreferencesUtil.saveString(mActivity,"inGift","1");
         swipe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d("wodemingzi.........","000");
                 if(isChecked) {
                     SharedPreferencesUtil.saveString(mActivity,"inPoint","0");
                 }else {
@@ -102,9 +104,11 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
             }
         });
 
+
         swipe1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d("wodemingzi.........","111");
                 if(isChecked) {
                     SharedPreferencesUtil.saveString(mActivity,"inBalance","0");
                 }else {
@@ -116,6 +120,7 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
         swipe2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d("wodemingzi.........","222");
                 if(isChecked) {
                     SharedPreferencesUtil.saveString(mActivity,"inGift","0");
                 }else {

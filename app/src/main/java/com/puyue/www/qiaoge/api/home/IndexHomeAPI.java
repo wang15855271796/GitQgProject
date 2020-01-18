@@ -4,8 +4,10 @@ import android.content.Context;
 
 import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
 import com.puyue.www.qiaoge.helper.RestHelper;
+import com.puyue.www.qiaoge.model.home.CouponModel;
 import com.puyue.www.qiaoge.model.home.HomeNewRecommendModel;
 import com.puyue.www.qiaoge.model.home.IndexHomeModel;
+import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.SpikeNewQueryModel;
 import com.puyue.www.qiaoge.model.mine.order.HomeBaseModel;
 
@@ -64,7 +66,7 @@ public class IndexHomeAPI {
         return service.getData(pageNum, pageSize);
     }
 
-    /**U
+    /**
      * 首页banner
      */
 
@@ -81,6 +83,21 @@ public class IndexHomeAPI {
 
 
     /**
+     * 必买清单
+     */
+
+    private interface MustService {
+        @POST(AppInterfaceAddress.INDEXMUST)
+        Observable<ProductNormalModel> getData();
+
+    }
+
+    public static Observable<ProductNormalModel> getMust(Context context) {
+        MustService spikeActiveQueryService = RestHelper.getBaseRetrofit(context).create(MustService.class);
+        return spikeActiveQueryService.getData();
+    }
+
+    /**
      * 首页其他信息
      */
     private interface RecommendService {
@@ -93,4 +110,34 @@ public class IndexHomeAPI {
         RecommendService spikeActiveQueryService = RestHelper.getBaseRetrofit(context).create(RecommendService.class);
         return spikeActiveQueryService.getData();
     }
+
+    /**
+     * 首页司机信息
+     */
+    private interface DriverService {
+        @POST(AppInterfaceAddress.DISTRIBUTE)
+        Observable<DriverInfo> getData();
+
+    }
+
+    public static Observable<DriverInfo> getDriverInfo(Context context) {
+        DriverService spikeActiveQueryService = RestHelper.getBaseRetrofit(context).create(DriverService.class);
+        return spikeActiveQueryService.getData();
+    }
+
+    /**
+     * 折扣、组合数据
+     */
+    private interface CouponService {
+        @FormUrlEncoded
+        @POST(AppInterfaceAddress.COUPONINFO)
+        Observable<CouponModel> getData(
+                @Field("activityType") String activityType);
+    }
+
+    public static Observable<CouponModel> getCouponList(Context context,  String activityType) {
+        CouponService service = RestHelper.getBaseRetrofit(context).create(CouponService.class);
+        return service.getData(activityType);
+    }
+
 }
