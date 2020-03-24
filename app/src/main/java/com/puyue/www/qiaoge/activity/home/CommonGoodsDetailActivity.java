@@ -5,16 +5,11 @@ import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +22,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,9 +35,7 @@ import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.adapter.cart.ChooseSpecAdapter;
 import com.puyue.www.qiaoge.adapter.cart.ImageViewAdapter;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
-import com.puyue.www.qiaoge.adapter.home.SearchResultAdapter;
 import com.puyue.www.qiaoge.adapter.market.GoodsRecommendAdapter;
-import com.puyue.www.qiaoge.api.cart.AddCartAPI;
 import com.puyue.www.qiaoge.api.cart.RecommendApI;
 import com.puyue.www.qiaoge.api.home.ClickCollectionAPI;
 import com.puyue.www.qiaoge.api.home.GetAllCommentListByPageAPI;
@@ -60,6 +52,7 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.ChooseDialog;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
+import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.CollapsingToolbarLayoutStateHelper;
@@ -69,7 +62,6 @@ import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.listener.OnItemClickListener;
-import com.puyue.www.qiaoge.model.cart.AddCartModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ChoiceSpecModel;
 import com.puyue.www.qiaoge.model.home.ClickCollectionModel;
@@ -80,7 +72,6 @@ import com.puyue.www.qiaoge.model.home.GetProductListModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.GuessModel;
 import com.puyue.www.qiaoge.model.home.HasCollectModel;
-import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
 import com.puyue.www.qiaoge.model.market.GoodsDetailModel;
 import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
@@ -97,13 +88,7 @@ import com.umeng.socialize.media.UMWeb;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -313,6 +298,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         @Override
         public void onNoDoubleClick(View view) {
             if (view == mIvBack) {
+                EventBus.getDefault().post(new NumEvent());
                 finish();
             } else if (view == linearLayoutCollection) {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
@@ -352,6 +338,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                 if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
                     if(chooseDialog==null) {
                         chooseDialog = new ChooseDialog(mContext,productId);
+
                     }
                 }else {
                     AppHelper.showMsg(mContext, "请先登录");
@@ -484,6 +471,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                                             if(chooseDialog==null){
                                                 productMainId = model.getData().getProductMainId();
                                                 chooseDialog = new ChooseDialog(mContext, productMainId);
+
                                             }
                                             chooseDialog.show();
                                         }
@@ -1066,7 +1054,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         window.setWindowAnimations(R.style.dialogStyle);
         window.getDecorView().setPadding(0, 0, 0, 0);
         //获得window窗口的属性
-        android.view.WindowManager.LayoutParams lp = window.getAttributes();
+        WindowManager.LayoutParams lp = window.getAttributes();
         //设置窗口宽度为充满全屏
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         //设置窗口高度为包裹内容

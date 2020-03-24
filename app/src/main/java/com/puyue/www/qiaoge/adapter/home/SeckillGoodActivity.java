@@ -41,13 +41,10 @@ import android.widget.Toast;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CartActivity;
-import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.adapter.cart.ImageViewAdapter;
-import com.puyue.www.qiaoge.adapter.market.GoodsDetailAdapter;
 import com.puyue.www.qiaoge.adapter.market.GoodsRecommendAdapter;
 import com.puyue.www.qiaoge.api.cart.AddCartAPI;
-import com.puyue.www.qiaoge.api.cart.RecommendApI;
 import com.puyue.www.qiaoge.api.home.ClickCollectionAPI;
 import com.puyue.www.qiaoge.api.home.GetAllCommentListByPageAPI;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
@@ -64,6 +61,7 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
+import com.puyue.www.qiaoge.fragment.cart.ChangeStatEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.CollapsingToolbarLayoutStateHelper;
 import com.puyue.www.qiaoge.helper.FVHelper;
@@ -78,11 +76,9 @@ import com.puyue.www.qiaoge.model.home.ChoiceSpecModel;
 import com.puyue.www.qiaoge.model.home.ClickCollectionModel;
 import com.puyue.www.qiaoge.model.home.GetAllCommentListByPageModel;
 import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
-import com.puyue.www.qiaoge.model.home.GetProductListModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.GuessModel;
 import com.puyue.www.qiaoge.model.home.HasCollectModel;
-import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.model.home.SpecialGoodModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
 import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
@@ -98,9 +94,10 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
@@ -149,7 +146,6 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
     private Date starts;
     private Date ends;
     //搜索集合
-    private List<GuessModel.DataBean> searchList = new ArrayList<>();
     private List<ChoiceSpecModel> account = new ArrayList<>();
     private String totalMoney = "0";
     private String cell;
@@ -159,7 +155,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
     private CollapsingToolbarLayoutStateHelper state;
     private Toolbar toolbar;
     private TextView textViewTitle;
-    TextView tv_total;
+    TextView tv_surplus;
     //用户评论
     private TextView userEvaluationNum;
     private TextView goodsEvaluationNumber;
@@ -169,9 +165,6 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
 
     private StarBarView sbv_star_bar;
     private TextView tv_status;
-    TextView tv_like;
-    //推荐
-    private RecyclerView recyclerViewRecommend;
     private GoodsRecommendAdapter adapterRecommend;
     // 商品详情
     private RecyclerView recyclerViewImage;
@@ -235,6 +228,8 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         handleExtra(savedInstanceState);
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
@@ -248,7 +243,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
         pb = FVHelper.fv(this, R.id.pb);
         tv_cut_down = FVHelper.fv(this, R.id.tv_cut_down);
         tv_time = (TextView) findViewById(R.id.tv_time);
-        tv_total = (TextView) findViewById(R.id.tv_total);
+        tv_surplus = (TextView) findViewById(R.id.tv_surplus);
         tv_limit_num = (TextView) findViewById(R.id.tv_limit_num);
         tv_price = (TextView) findViewById(R.id.tv_price);
         tv_name = (TextView) findViewById(R.id.tv_name);
@@ -281,7 +276,6 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
         goodsEvaluationReply = (TextView) findViewById(R.id.goodsEvaluationReply);
         tvOldPrice = (TextView) findViewById(R.id.old_price);
         tv_old_price = (TextView) findViewById(R.id.tv_old_price);
-        recyclerViewRecommend = (RecyclerView) findViewById(R.id.recyclerViewRecommend);
         recyclerViewImage = (RecyclerView) findViewById(R.id.recyclerViewImage);
         linearLayoutEvaluation = (LinearLayout) findViewById(R.id.linearLayoutEvaluation);
         linearLayoutEvaluationNoData = (LinearLayout) findViewById(R.id.linearLayoutEvaluationNoData);
@@ -291,10 +285,11 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
         mTvAdd = FVHelper.fv(this, R.id.tv_activity_special_add);
         sbv_star_bar = findViewById(R.id.sbv_star_bar);
         tv_status = findViewById(R.id.tv_status);
-        tv_like = findViewById(R.id.tv_like);
+    }
 
-        tv_like.setVisibility(View.GONE);
-        recyclerViewRecommend.setVisibility(View.GONE);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -307,10 +302,6 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
         getProductDetail(productId);
         getCustomerPhone();
         getAllCommentList(pageNum, pageSize, productId, businessType);
-        adapterRecommend = new GoodsRecommendAdapter(R.layout.item_goods_recommend, searchList);
-        LinearLayoutManager linearLayoutManagerCoupons = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewRecommend.setLayoutManager(linearLayoutManagerCoupons);
-        recyclerViewRecommend.setAdapter(adapterRecommend);
 
         imageViewAdapter = new ImageViewAdapter(mContext,R.layout.item_imageview,detailList);
         recyclerViewImage.setLayoutManager(new LinearLayoutManager(mContext));
@@ -536,13 +527,13 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
                             tv_sale.setText(model.getData().getSaleVolume());
                             productName =model.getData().getActiveName();
                             tv_price.setText(model.getData().getShowPrice());
-                            tv_old_price.setText("原价："+model.getData().getOldPrice());
+                            tv_old_price.setText(model.getData().getOldPrice());
                             tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                             tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
                             tv_name.setText(model.getData().getActTypeName());
                             tvOldPrice.setText(model.getData().getShowOldPrice());
                             tv_title.setText(model.getData().getActiveName());
-                            tv_total.setText(model.getData().getTotalNum());
+                            tv_surplus.setText(model.getData().getRemainNum());
                             int progress = Integer.parseInt(model.getData().getProgress());
                             pb.setProgress(progress);
                             mTvGroupPrice.setText(model.getData().getPrice());
@@ -554,21 +545,31 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
                             startTime = model.getData().getStartTime();
                             endTime = model.getData().getEndTime();
                             warnMe = model.getData().getWarnMe();
+
                             if(currentTime>startTime) {
                                 //秒杀开始
-                                mTvAddCar.setText("加入购物车");
-                                mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
+                                if (model.getData().getSaleDone() == 0) {
+                                    mTvAddCar.setEnabled(false);
+                                    mTvAddCar.setText("     已售罄     ");
+                                    mTvAddCar.setBackgroundResource(R.drawable.app_car);
+                                } else {
+                                    mTvAddCar.setEnabled(true);
+                                    mTvAddCar.setText("加入购物车");
+                                    mTvAddCar.setBackgroundColor(Color.parseColor("#F6551A"));
+                                }
                             }else {
                                 //未开始
-                                Log.d("sddwwdddddddd......",warnMe+"");
+
                                 if(warnMe==0) {
-                                    mTvAddCar.setText("添加提醒");
+                                    mTvAddCar.setText("     添加提醒     ");
                                     mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
                                     SharedPreferencesUtil.saveInt(mActivity,"warnMe",0);
+                                    Log.d("woshidajiadedef","111111111111");
                                 }else {
-                                    mTvAddCar.setText("取消提醒");
+                                    mTvAddCar.setText("     取消提醒     ");
                                     mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
                                     SharedPreferencesUtil.saveInt(mActivity,"warnMe",1);
+                                    Log.d("woshidajiadedef","222222222222");
                                 }
                             }
 
@@ -708,188 +709,23 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
                         if(seckillListModel.success) {
 
                             if(SharedPreferencesUtil.getInt(mActivity,"warnMe")==0) {
-                                mTvAddCar.setText("取消提醒");
+                                mTvAddCar.setText("     取消提醒     ");
                                 mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
-                                ToastUtil.showSuccessMsg(mContext,"成功222");
                                 SharedPreferencesUtil.saveInt(mActivity,"warnMe",1);
+                                EventBus.getDefault().post(new ChangeStatEvent());
                             }else {
-                                mTvAddCar.setText("添加提醒");
+                                mTvAddCar.setText("     添加提醒     ");
                                 mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
-                                ToastUtil.showSuccessMsg(mContext,"成功333");
+
+//                                ToastUtil.showSuccessMsg(mContext,"成功333");
                                 SharedPreferencesUtil.saveInt(mActivity,"warnMe",0);
+                                EventBus.getDefault().post(new ChangeStatEvent());
                             }
                         }else {
                             ToastUtil.showSuccessMsg(mContext,seckillListModel.message);
                         }
                     }
                 });
-    }
-
-    /**
-     * 通过list的大小设置控件的多少,
-     */
-    private void addViewForChoice(SpecialGoodModel model) {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);       //LayoutInflater inflater1=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-
-
-        View view = inflater.inflate(R.layout.item_choice_spec, null);
-        view.setLayoutParams(lp);
-//        mLlChoice.addView(view);
-
-
-        //setViewDataAndCount(view,model);
-
-
-    }
-
-
-    /**
-     * 对动态添加的view设置监听和数据,
-     */
-    private void setViewDataAndCount(View view, final SpecialGoodModel bean) {
-        TextView mTvPrice = FVHelper.fv(view, R.id.tv_item_group_price);
-        mTvPrice.setText(bean.getData().getPrice());
-
-        if (typeIntent == 1) {
-            TextView tvOriginalPrice = FVHelper.fv(view, R.id.tvOriginalPrice);
-            tvOriginalPrice.setText(bean.getData().getOldPrice());
-            tvOriginalPrice.setVisibility(View.VISIBLE);
-            tvOriginalPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); // 设置中划线并加清晰
-
-        } else {
-            TextView tvOriginalPrice = FVHelper.fv(view, R.id.tvOriginalPrice);
-            tvOriginalPrice.setVisibility(View.GONE);
-        }
-
-        final ChoiceSpecModel model = new ChoiceSpecModel();
-        // model.productCombinationPriceId = bean.productCombinationPriceId;
-        model.totalNum = 0;
-        // model.num = bean.num;
-        //model.productUnitName = bean.productUnitName;
-        if (model.num == 0) {
-            model.num = 1;
-        }
-        account.add(model);
-        final TextView mTvAmount = FVHelper.fv(view, R.id.tv_item_amount);
-        view.findViewById(R.id.tv_item_sub).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    //减少
-                    if (UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_RETAIL)) {
-                        //这个用户是零售用户
-                        if ("批发".equals(type)) {
-                            if (StringHelper.notEmptyAndNull(cell)) {
-                                AppHelper.showAuthorizationDialog(mContext, cell, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode())) {
-                                            AppHelper.hideAuthorizationDialog();
-                                            showDialog();
-                                        } else {
-                                            AppHelper.showMsg(SeckillGoodActivity.this, "请输入完整授权码");
-                                        }
-                                    }
-                                });
-                            }
-                        } else {
-                            amount = Integer.parseInt(mTvAmount.getText().toString());
-                            if (amount != 0) {
-                                amount--;
-
-
-                                account.get(0).totalNum = amount;
-
-
-                                mTvAmount.setText(amount + "");
-//                    totalMoney = totalMoney - Double.parseDouble(bean.price);
-                                BigDecimal totalMon = new BigDecimal(totalMoney);
-                                totalMon = totalMon.subtract(new BigDecimal(bean.getData().getPrice()));
-                                totalMoney = totalMon.toString();
-
-
-                            }
-                        }
-                    } else if (UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_WHOLESALE)) {
-                        //这个用户是批发用户
-                        amount = Integer.parseInt(mTvAmount.getText().toString());
-                        if (amount != 0) {
-                            amount--;
-
-                            account.get(0).totalNum = amount;
-                            mTvAmount.setText(amount + "");
-//                    totalMoney = totalMoney - Double.parseDouble(bean.price);
-                            BigDecimal totalMon = new BigDecimal(totalMoney);
-                            totalMon = totalMon.subtract(new BigDecimal(bean.getData().getPrice()));
-
-                        }
-                    }
-                } else {
-                    AppHelper.showMsg(mContext, "请先登录");
-                    startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
-                }
-            }
-        });
-        view.findViewById(R.id.tv_item_add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    //增加
-                    if (UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_RETAIL)) {
-                        //这个用户是零售用户
-                        if ("批发".equals(type)) {
-                            if (StringHelper.notEmptyAndNull(cell)) {
-                                AppHelper.showAuthorizationDialog(mContext, cell, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode())) {
-                                            AppHelper.hideAuthorizationDialog();
-                                            showDialog();
-                                        } else {
-                                            AppHelper.showMsg(SeckillGoodActivity.this, "请输入完整授权码");
-                                        }
-                                    }
-                                });
-                            }
-                        } else {
-                            if (inventory != 0) {
-                                amount = Integer.parseInt(mTvAmount.getText().toString());
-                                amount++;
-
-                                account.get(0).totalNum = amount;
-                                mTvAmount.setText(amount + "");
-//                totalMoney = totalMoney + Double.parseDouble(bean.price);
-                                BigDecimal totalMon = new BigDecimal(totalMoney);
-                                totalMon = totalMon.add(new BigDecimal(bean.getData().getPrice()));
-                                totalMoney = totalMon.toString();
-
-                            }
-                        }
-                    } else if (UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_WHOLESALE)) {
-                        //这个用户是批发用户
-                        if (inventory != 0) {
-                            amount = Integer.parseInt(mTvAmount.getText().toString());
-                            amount++;
-
-                            account.get(0).totalNum = amount;
-
-
-                            mTvAmount.setText(amount + "");
-//                totalMoney = totalMoney + Double.parseDouble(bean.price);
-                            BigDecimal totalMon = new BigDecimal(totalMoney);
-                            totalMon = totalMon.add(new BigDecimal(bean.getData().getPrice()));
-                            totalMoney = totalMon.toString();
-
-                        }
-                    }
-                } else {
-                    AppHelper.showMsg(mContext, "请先登录");
-                    startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
-                }
-
-            }
-        });
     }
 
 
@@ -1101,35 +937,6 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
 
     }
 
-    private void requestAddCart(String productCombinationPriceVOList, String tNum) {
-        AddCartAPI.requestData(mContext, productId, productCombinationPriceVOList, businessType, tNum)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<AddCartModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-//                        Toast.makeText(mContext, "错误", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onNext(AddCartModel addCartModel) {
-                        if (addCartModel.success) {
-
-
-                            setAnim(mTvAddCar);
-                            AppHelper.showMsg(mContext, "成功加入购物车");
-                            getCartNum();
-                        } else {
-                            AppHelper.showMsg(mContext, addCartModel.message);
-                        }
-                    }
-                });
-    }
 
     public void returnBitMap(String src) {
         MyHandler myHandler = new MyHandler();
@@ -1543,7 +1350,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
         window.setWindowAnimations(R.style.dialogStyle);
         window.getDecorView().setPadding(0, 0, 0, 0);
         //获得window窗口的属性
-        android.view.WindowManager.LayoutParams lp = window.getAttributes();
+        WindowManager.LayoutParams lp = window.getAttributes();
         //设置窗口宽度为充满全屏
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         //设置窗口高度为包裹内容
@@ -1691,5 +1498,16 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
 //            Toast.makeText(MyInviteActivity.this, platform + " 分享取消了", Toast.LENGTH_SHORT).show();
         }
     };
+
+
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            EventBus.getDefault().post(new ChangeStatEvent());
+//            finish();
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 
 }

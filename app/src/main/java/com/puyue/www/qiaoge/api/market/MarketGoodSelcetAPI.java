@@ -46,8 +46,8 @@ public class MarketGoodSelcetAPI {
                                                @Field("priceUp") String priceUp,
                                                @Field("newProduct") String newProduct,
                                                @Field("brandName") String brandName,
-                                               @Field("minPrice")  String minPrice,
-                                               @Field("maxPrice")  String maxPrice);
+                                               @Field("minPrice") String minPrice,
+                                               @Field("maxPrice") String maxPrice);
     }
 
     public static Observable<MarketRightModel> getClassifyRight(Context context, int pageNum, int pageSize, int firstId, int secondId, String saleVolume, String priceUp, String newProduct, String  brandName, String minPrice, String maxPrice) {

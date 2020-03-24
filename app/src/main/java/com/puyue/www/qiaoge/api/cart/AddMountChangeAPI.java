@@ -21,7 +21,7 @@ public class AddMountChangeAPI {
         @POST(AppInterfaceAddress.JUDGEPRODUCTINVENT)
         Observable<AddMountReduceModel> setParams(@Field("businessType") int businessType,
                                                   @Field("businessId") int businessId,
-                                                  @Field("num") int  num,
+                                                  @Field("num") int num,
                                                   @Field("productCombinationPriceId") int productCombinationPriceId);//int 1
     }
 

@@ -209,7 +209,7 @@ public class SearchInnerAdapter extends BaseQuickAdapter<SearchResultsModel.Data
     }
 
     public interface OnAddCarListener {
-        void addCar(int pos,int num,int id,int businessId);
+        void addCar(int pos, int num, int id, int businessId);
 
     }
 }

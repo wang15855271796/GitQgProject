@@ -2,11 +2,9 @@ package com.puyue.www.qiaoge.adapter.home;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,20 +13,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
-import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
-import com.puyue.www.qiaoge.adapter.market.ChoosesDialog;
-import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.constant.AppConstant;
-import com.puyue.www.qiaoge.helper.AppHelper;
-import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
+import com.puyue.www.qiaoge.dialog.ShouyeDialog;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
-import com.puyue.www.qiaoge.model.home.TeamActiveQueryModel;
 
 import java.util.List;
-
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by ${王涛} on 2019/12/27
@@ -40,7 +29,7 @@ public class CommonsAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean
     List<ProductNormalModel.DataBean.ListBean> activesBean;
     private ImageView iv_add;
     Onclick onclick;
-    private CommonDialog commonDialog;
+    private ShouyeDialog commonDialog;
     private RelativeLayout rl_group;
     String flag;
     private TextView tv_sale;
@@ -64,7 +53,6 @@ public class CommonsAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean
         Glide.with(mContext).load(item.getDefaultPic()).into(iv_pic);
         helper.setText(R.id.tv_name,item.getProductName());
         helper.setText(R.id.tv_price,item.getMinMaxPrice());
-
         if(flag.equals("hot")&&!item.getSalesVolume().equals("")) {
             tv_sale.setVisibility(View.VISIBLE);
             tv_sale.setText(item.getSalesVolume());
@@ -99,7 +87,6 @@ public class CommonsAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,CommonGoodsDetailActivity.class);
                 intent.putExtra(AppConstant.ACTIVEID,item.getProductMainId());
-                Log.d("SWDDDDDDDD......",item.getProductMainId()+"");
                 mContext.startActivity(intent);
             }
         });
@@ -110,7 +97,7 @@ public class CommonsAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean
                 if(onclick!=null) {
                     onclick.addDialog();
                 }
-                commonDialog = new CommonDialog(mContext,item);
+                commonDialog = new ShouyeDialog(mContext,item.getProductMainId());
                 commonDialog.show();
             }
         });

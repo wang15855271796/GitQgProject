@@ -67,6 +67,7 @@ public class PublicRequestHelper {
 
                     @Override
                     public void onNext(GetCartNumModel getCartNumModel) {
+
                         callBack.onSuccessful(getCartNumModel);
                     }
                 });

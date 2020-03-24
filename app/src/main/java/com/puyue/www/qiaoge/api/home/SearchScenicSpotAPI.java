@@ -22,9 +22,9 @@ public class SearchScenicSpotAPI {
     private interface SearchScenicSpotService{
         @FormUrlEncoded
         @POST(AppInterfaceAddress.SEARCHSCENICSPOT)
-        Observable<SearchScenicSpotModel> getData(@Field("pageNum") int pageNum, @Field("pageSize")int pageSize,
-                                                  @Field("name")String name, @Field("searchType")String searchType,
-                                                  @Field("startDate")String startDate, @Field("endDate")String endDate);
+        Observable<SearchScenicSpotModel> getData(@Field("pageNum") int pageNum, @Field("pageSize") int pageSize,
+                                                  @Field("name") String name, @Field("searchType") String searchType,
+                                                  @Field("startDate") String startDate, @Field("endDate") String endDate);
     }
   public static Observable<SearchScenicSpotModel> requestData(Context context,int pageNum,int pageSize,String name,String searchType,String startDate,String endDate){
         SearchScenicSpotService service = RestHelper.getBaseRetrofit(context).create(SearchScenicSpotService.class);

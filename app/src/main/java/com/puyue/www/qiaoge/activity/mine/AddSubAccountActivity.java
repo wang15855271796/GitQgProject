@@ -1,7 +1,5 @@
 package com.puyue.www.qiaoge.activity.mine;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -12,7 +10,6 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +23,6 @@ import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
-import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.utils.ToastUtil;
@@ -35,7 +31,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -89,9 +84,9 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
         ll_yzm.setOnClickListener(this);
         iv_back.setOnClickListener(this);
         //关闭1 打开0
-//        SharedPreferencesUtil.saveString(mActivity,"inPoint","1");
-//        SharedPreferencesUtil.saveString(mActivity,"inBalance","1");
-//        SharedPreferencesUtil.saveString(mActivity,"inGift","1");
+        SharedPreferencesUtil.saveString(mActivity,"inPoint","1");
+        SharedPreferencesUtil.saveString(mActivity,"inBalance","1");
+        SharedPreferencesUtil.saveString(mActivity,"inGift","1");
         swipe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -149,7 +144,7 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
                                 //添加一个子账号,添加子账号会默认注册一个账号
 
                                 requestAddSubAccount(et_phone.getText().toString(), et_name.getText().toString(),
-                                        et_set_psd.getText().toString(), et_yzm.getText().toString(),inPoint,inBalance,inGift);
+                                        et_set_psd.getText().toString(), et_yzm.getText().toString(), inPoint, inBalance, inGift);
                             } else {
                                 AppHelper.showMsg(mContext, "密码由6-16位数字与字母组成");
                             }
@@ -163,7 +158,6 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
                     AppHelper.showMsg(mContext, "数据不全!");
                 }
 
-                finish();
             }
         });
     }
@@ -183,7 +177,7 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.d("dangqiandeshujushi.....",e.getMessage());
                     }
 
                     @Override
@@ -193,7 +187,7 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
                             //添加子账号成功,刷新列表
                             ToastUtil.showSuccessMsg(mContext,"添加成功");
                             EventBus.getDefault().post(new BackEvent());
-
+                            finish();
                         } else {
                             AppHelper.showMsg(mContext, baseModel.message);
                         }

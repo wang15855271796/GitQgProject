@@ -22,6 +22,17 @@ public class BannerModel implements Serializable {
     private boolean success;
     private List<DataBean> data;
 
+    @Override
+    public String toString() {
+        return "BannerModel{" +
+                "code=" + code +
+                ", message='" + message + '\'' +
+                ", error=" + error +
+                ", success=" + success +
+                ", data=" + data +
+                '}';
+    }
+
     public int getCode() {
         return code;
     }
@@ -81,6 +92,19 @@ public class BannerModel implements Serializable {
         private int businessId;
         private int businessType;
 
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "showType=" + showType +
+                    ", defaultPic='" + defaultPic + '\'' +
+                    ", linkSrc='" + linkSrc + '\'' +
+                    ", detailPic='" + detailPic + '\'' +
+                    ", prodPage='" + prodPage + '\'' +
+                    ", businessId=" + businessId +
+                    ", businessType=" + businessType +
+                    '}';
+        }
+
         public int getShowType() {
             return showType;
         }
@@ -97,7 +121,7 @@ public class BannerModel implements Serializable {
             this.defaultPic = defaultPic;
         }
 
-        public Object getLinkSrc() {
+        public String getLinkSrc() {
             return linkSrc;
         }
 

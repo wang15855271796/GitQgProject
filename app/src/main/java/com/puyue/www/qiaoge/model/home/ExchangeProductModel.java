@@ -106,7 +106,7 @@ public class ExchangeProductModel {
         private String typeUrl;
         private String spec;
         private String salesVolume;
-        private Object minMaxPrice;
+        private String minMaxPrice;
         private String specialOffer;
         private List<ProdSpecsBean> prodSpecs;
         private String inventory;
@@ -184,11 +184,11 @@ public class ExchangeProductModel {
             this.salesVolume = salesVolume;
         }
 
-        public Object getMinMaxPrice() {
+        public String getMinMaxPrice() {
             return minMaxPrice;
         }
 
-        public void setMinMaxPrice(Object minMaxPrice) {
+        public void setMinMaxPrice(String minMaxPrice) {
             this.minMaxPrice = minMaxPrice;
         }
 

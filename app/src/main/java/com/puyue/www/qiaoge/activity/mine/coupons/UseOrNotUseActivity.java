@@ -3,12 +3,11 @@ package com.puyue.www.qiaoge.activity.mine.coupons;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.puyue.www.qiaoge.R;
-
 import com.puyue.www.qiaoge.adapter.mine.ViewPagerAdapter;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.fragment.mine.coupons.CouponsOverdueFragment;
@@ -16,7 +15,6 @@ import com.puyue.www.qiaoge.fragment.mine.coupons.CouponsUseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-import android.support.v4.view.ViewPager;
 /**
  * Created by ${daff} on 2018/9/20
  * 不可以使用优惠券

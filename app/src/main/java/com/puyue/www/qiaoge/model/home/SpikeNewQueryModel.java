@@ -88,6 +88,7 @@ public class SpikeNewQueryModel {
         private long endTime;
         private int activeId;
 
+
         public long getCurrentTime() {
             return currentTime;
         }
@@ -151,9 +152,6 @@ public class SpikeNewQueryModel {
         public void setFlag(int flag) {
             this.flag = flag;
         }
-
-
-
 
         }
     }

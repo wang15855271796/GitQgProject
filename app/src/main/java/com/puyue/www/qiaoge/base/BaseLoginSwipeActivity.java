@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -130,6 +131,7 @@ public abstract class BaseLoginSwipeActivity extends SwipeBackActivity {
 //        UserInfoHelper.saveUserCell(mContext, "");
         UserInfoHelper.saveUserType(context, "");
         startActivity(new Intent(context, HomeActivity.class));
+
         finish();
     }
 

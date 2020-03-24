@@ -7,12 +7,10 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.activity.mine.coupons.MyCouponsActivity;
 import com.puyue.www.qiaoge.api.mine.subaccount.MineAccountAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.mine.order.IntellGencyModel;
-import com.puyue.www.qiaoge.model.mine.order.MineCenterModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,8 +59,6 @@ public class IntelliGencyActivity extends BaseSwipeActivity {
                 finish();
             }
         });
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         getList();
     }
 

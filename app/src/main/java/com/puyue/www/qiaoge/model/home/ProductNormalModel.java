@@ -43,6 +43,17 @@ public class ProductNormalModel implements Serializable {
         return data;
     }
 
+    @Override
+    public String toString() {
+        return "ProductNormalModel{" +
+                "code=" + code +
+                ", message='" + message + '\'' +
+                ", data=" + data +
+                ", error=" + error +
+                ", success=" + success +
+                '}';
+    }
+
     public void setData(DataBean data) {
         this.data = data;
     }
@@ -83,6 +94,20 @@ public class ProductNormalModel implements Serializable {
         private boolean hasPrePage;
         private boolean hasNextPage;
         private List<ListBean> list;
+
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "pageNum=" + pageNum +
+                    ", pageSize=" + pageSize +
+                    ", startRow=" + startRow +
+                    ", pages=" + pages +
+                    ", total=" + total +
+                    ", hasPrePage=" + hasPrePage +
+                    ", hasNextPage=" + hasNextPage +
+                    ", list=" + list +
+                    '}';
+        }
 
         public int getPageNum() {
             return pageNum;
@@ -165,6 +190,8 @@ public class ProductNormalModel implements Serializable {
              * inventory : 0c
              * prodPrices : [{"price":"￥11/c","oldPrice":"","priceId":1406,"productUnit":649,"unitDesc":""}]
              */
+
+
             String deductAmount;
             private String type;
             private int productMainId;

@@ -3,9 +3,7 @@ package com.puyue.www.qiaoge.fragment.order;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.location.Location;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,16 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -37,7 +31,6 @@ import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.TextureMapView;
@@ -49,17 +42,13 @@ import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
-import com.baidu.mapapi.utils.DistanceUtil;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.activity.cart.CartPoint;
-import com.puyue.www.qiaoge.activity.mine.account.AddressListActivity;
 import com.puyue.www.qiaoge.activity.mine.order.MyConfireOrdersActivity;
 import com.puyue.www.qiaoge.adapter.mine.ChooseCouponsAdapter;
 import com.puyue.www.qiaoge.adapter.mine.ConfirmOrderNewAdapter;
 import com.puyue.www.qiaoge.api.cart.CartBalanceAPI;
-import com.puyue.www.qiaoge.api.home.GetDeliverTimeAPI;
 import com.puyue.www.qiaoge.api.mine.coupon.userChooseDeductAPI;
 import com.puyue.www.qiaoge.api.mine.order.GenerateOrderAPI;
 import com.puyue.www.qiaoge.api.mine.order.GetOrderDeliverTimeAPI;
@@ -72,7 +61,6 @@ import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.cart.CartBalanceModel;
-import com.puyue.www.qiaoge.model.home.GetDeliverTimeModel;
 import com.puyue.www.qiaoge.model.mine.coupons.UserChooseDeductModel;
 import com.puyue.www.qiaoge.model.mine.order.GenerateOrderModel;
 import com.puyue.www.qiaoge.model.mine.order.GetTimeOrderModel;
@@ -81,9 +69,6 @@ import com.puyue.www.qiaoge.view.PickCityUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -346,6 +331,9 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
         });
     }
 
+
+
+
     OnGetGeoCoderResultListener listener = new OnGetGeoCoderResultListener() {
         @Override
         public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
@@ -568,12 +556,8 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
                                     listTime.add(getTimeOrderModel.getData().get(i).getDetailTime().get(j).getName() + "(" + getTimeOrderModel.getData().get(i).getDetailTime().get(j).getStartTime() + "-" + getTimeOrderModel.getData().get(i).getDetailTime().get(j).getEndTime() + ")");
 
                                 }
-
                                 listTimer.add(listTime);
-
                             }
-
-
                         }
                         PickCityUtil.showDoublePickView(mActivity, listYear, listTimer, "请选择自提时间段", new PickCityUtil.ChooseDPositionListener() {
                             @Override
@@ -986,6 +970,7 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
 //                                if (UserInfoHelper.getDate(mActivity).equals("") || Integer.parseInt(UserInfoHelper.getDate(mActivity)) != currentDay) {
                             if (Integer.parseInt(UserInfoHelper.getDate(mActivity)) != currentDay) {
                                     if(toRecharge&&totalAmount>toRechargeAmount) {
+
                                         Intent intent = new Intent(mActivity,CartPoint.class);
                                         intent.putExtra(AppConstant.ORDERID, generateOrderModel.getData());
                                         intent.putExtra("orderAmount", totalAmount + "");
@@ -1000,8 +985,6 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
                                         intent.putExtra("remark", messageEditText.getText().toString());
                                         intent.putExtra("orderDeliveryType", 0);
                                         startActivity(intent);
-                                        Log.d("swhihihihiiih....","sssssss");
-                                        Log.d("温馨提示......","111111");
                                         mActivity.finish();
                                     }
                                 }else {
@@ -1030,7 +1013,7 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
 
         list.clear();
         requestCartBalance(NewgiftDetailNo, 1);////NewgiftDetailNo
-
+        userChooseDeduct();
     }
 
     /**

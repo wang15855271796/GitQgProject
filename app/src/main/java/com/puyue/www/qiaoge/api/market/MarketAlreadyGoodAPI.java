@@ -21,8 +21,8 @@ public class MarketAlreadyGoodAPI {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.GETALREADYPRODUCT)
         Observable<MarketAlreadyGoodModel> setParams(
-                                                     @Field("firstId") int firstId,
-                                                     @Field("secondId") int secondId
+                @Field("firstId") int firstId,
+                @Field("secondId") int secondId
         );
     }
 

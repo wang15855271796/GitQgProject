@@ -2,11 +2,9 @@ package com.puyue.www.qiaoge.adapter.home;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +26,7 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
-import com.puyue.www.qiaoge.fragment.cart.UpdateEvent;
+import com.puyue.www.qiaoge.fragment.home.MyGrideLayoutManager;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -149,7 +147,8 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
 
             }
         });
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
+        refreshLayout.setEnableLoadMore(false);
+        recyclerView.setLayoutManager(new MyGrideLayoutManager(mContext,2));
         recyclerView.setAdapter(commonAdapter);
         iv_back.setOnClickListener(this);
         tv_title.setText("降价商品");
@@ -386,7 +385,7 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
                             } else {
                                 commonAdapter.loadMoreComplete();
                             }
-
+                            refreshLayout.setEnableLoadMore(true);
                         } else {
                             AppHelper.showMsg(mActivity, getCommonProductModel.getMessage());
                         }

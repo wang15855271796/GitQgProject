@@ -33,7 +33,7 @@ public class GetProductDetailAPI {
     private interface GetExchageProductService {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.EXCHANGEPRODUCT)
-        Observable<ExchangeProductModel> getData(@Field("productId") int productId,@Field("businessType") int businessType);
+        Observable<ExchangeProductModel> getData(@Field("productId") int productId, @Field("businessType") int businessType);
     }
 
     public static Observable<ExchangeProductModel> getExchangeList(Context context, int productId,int businessType) {

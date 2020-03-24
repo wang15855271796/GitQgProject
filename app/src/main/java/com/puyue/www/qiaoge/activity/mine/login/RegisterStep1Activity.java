@@ -7,34 +7,48 @@ import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CommonH5Activity;
 import com.puyue.www.qiaoge.activity.HomeActivity;
+import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
 import com.puyue.www.qiaoge.api.home.GetCustomerPhoneAPI;
+import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
 import com.puyue.www.qiaoge.api.mine.login.RegisterAPI;
 import com.puyue.www.qiaoge.api.mine.login.RegisterAgreementAPI;
+import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
+import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.event.GoToMineEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
+import com.puyue.www.qiaoge.listener.OnItemClickListener;
 import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
+import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.mine.login.RegisterAgreementModel;
 import com.puyue.www.qiaoge.model.mine.login.RegisterModel;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,6 +83,8 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
     TextView tv_phone;
     @BindView(R.id.et_author)
     EditText et_author;
+    @BindView(R.id.tv_shop_style)
+    TextView tv_shop_style;
     private String phone;
     private String yzm;
     String token1;
@@ -76,15 +92,19 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
     private boolean isStarSecond = true;
     private String password;
     private String passwordSure;
+    private String etAuthor;
     private RegisterModel mModelRegister;
     private String mUrlAgreement;
     private RegisterAgreementModel mModelRegisterAgreement;
     private String mCustomerCell;
     private AlertDialog mDialog;
+    private boolean isFirst = true;
+    int isSelected;
+    boolean isChecked = false;
+    int shopTypeId;
+    private AlertDialog mTypedialog;
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
-
-
         return false;
     }
 
@@ -105,6 +125,148 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
         tv_register_secret.setOnClickListener(this);
         tv_phone.setOnClickListener(this);
         toolbar_register.setOnClickListener(this);
+
+        tv_shop_style.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                GetCustomerPhoneAPI.requestData(mContext)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<GetCustomerPhoneModel>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(GetCustomerPhoneModel getCustomerPhoneModel) {
+                                if (getCustomerPhoneModel.isSuccess()) {
+                                    mCustomerCell = getCustomerPhoneModel.getData();
+                                    tv_phone.setText(mCustomerCell);
+                                } else {
+                                    AppHelper.showMsg(mContext, getCustomerPhoneModel.getMessage());
+                                }
+                            }
+                        });
+
+
+
+                if(et_author.getText().toString().length()!=0) {
+                    String sqm = et_author.getText().toString();
+                    checkNum(sqm);
+
+                }else {
+                    AppHelper.showMsg(mContext, "授权码不能为空");
+                }
+
+
+            }
+        });
+    }
+
+    private void checkNum(String sqm) {
+        GetCustomerPhoneAPI.checkCode(mContext,sqm)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<BaseModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(BaseModel baseModel) {
+                        if (baseModel.success) {
+                            showSelectType(sqm);
+                        } else {
+                            AppHelper.showMsg(mContext, baseModel.message);
+                        }
+                    }
+                });
+    }
+
+    private void showSelectType(String authorizationCode) {
+        GetRegisterShopAPI.requestData(mActivity, authorizationCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<GetRegisterShopModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(GetRegisterShopModel getRegisterShopModel) {
+                        UserInfoHelper.saveIsRegister(mActivity, "is_register_type");
+                        if (getRegisterShopModel.isSuccess()) {
+                            isFirst = true;
+                            List<GetRegisterShopModel.DataBean> mList = new ArrayList<>();
+                            mList.addAll(getRegisterShopModel.getData());
+                            mTypedialog.show();
+                            Window window = mTypedialog.getWindow();
+                            window.setContentView(R.layout.select_type);
+                            WindowManager.LayoutParams attributes = window.getAttributes();
+                            attributes.width = LinearLayout.LayoutParams.MATCH_PARENT;
+                            attributes.height = LinearLayout.LayoutParams.MATCH_PARENT;
+                            window.setAttributes(attributes);
+                            RecyclerView rl_type = window.findViewById(R.id.rl_type);
+                            TextView tv_ok = window.findViewById(R.id.tv_ok);
+                            TextView tv_more_shop = window.findViewById(R.id.tv_more_shop);
+                            tv_more_shop.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(RegisterStep1Activity.this,ShopListActivity.class);
+                                }
+                            });
+
+                            rl_type.setLayoutManager(new GridLayoutManager(mActivity, 3));
+                            RegisterShopAdapterTwo mRegisterAdapterType = new RegisterShopAdapterTwo(mActivity, mList);
+                            rl_type.setAdapter(mRegisterAdapterType);
+                            mRegisterAdapterType.setOnItemClickListener(new OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    isSelected = position;
+                                    mRegisterAdapterType.selectPosition(position);
+                                    shopTypeId = mList.get(isSelected).getId();
+                                    isChecked = true;
+                                    tv_shop_style.setText(mList.get(isSelected).getName());
+                                }
+
+                                @Override
+                                public void onItemLongClick(View view, int position) {
+
+                                }
+                            });
+
+                            tv_ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (isChecked) {
+                                        mTypedialog.dismiss();
+                                    } else {
+                                        AppHelper.showMsg(mActivity, "请选择店铺类型");
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
     }
 
     @Override
@@ -136,7 +298,8 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
         tv_register_agreement.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         tv_register_agreement.getPaint().setAntiAlias(true);//抗锯齿
 
-
+        mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
+        mTypedialog.setCancelable(false);
     }
 
     /**
@@ -226,13 +389,21 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
             case R.id.tv_register:
                 password = et_password.getText().toString();
                 passwordSure = et_password_sure.getText().toString();
+                etAuthor = et_author.getText().toString();
                 if(cb_register.isChecked()) {
                     if(password !=null && passwordSure !=null) {
                         if(password.equals(passwordSure)) {
                         if(password.length()>6&& passwordSure.length()>6) {
                             if (StringHelper.isLetterDigit(et_password.getText().toString())) {
-                                updateCheckCode();
-
+                                if(!etAuthor.equals("")) {
+                                    if(!tv_shop_style.getText().toString().equals("")&&!tv_shop_style.getText().toString().equals("0")) {
+                                        updateCheckCode();
+                                    }else {
+                                        AppHelper.showMsg(mContext, "店铺类型不能为空");
+                                    }
+                                }else {
+                                    AppHelper.showMsg(mContext, "授权码不能为空");
+                                }
                             } else {
                                 AppHelper.showMsg(mContext, "密码由6-16位数字与字母组成");
                             }
@@ -352,7 +523,7 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
         } else {
             //这里请求注册成功之后直接登录成功,返回的token存储下来,就代表着用户已经登录了
             if(yzm==null) {
-                RegisterAPI.requestRegister(mContext, phone,token1,passwordSure, "000000", et_author.getText().toString(),"")
+                RegisterAPI.requestRegister(mContext, phone,token1,passwordSure, "000000", et_author.getText().toString(),"", String.valueOf(shopTypeId))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Subscriber<RegisterModel>() {
@@ -374,12 +545,11 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
                                 } else {
                                     //  dialog.dismiss();
                                     AppHelper.showMsg(mContext, mModelRegister.message);
-                                    finish();
                                 }
                             }
                         });
             }else {
-                RegisterAPI.requestRegister(mContext, phone,"",passwordSure, yzm, et_author.getText().toString(),"")
+                RegisterAPI.requestRegister(mContext, phone,"",passwordSure, yzm, et_author.getText().toString(),"", String.valueOf(shopTypeId))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Subscriber<RegisterModel>() {
@@ -403,7 +573,6 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
                                 } else {
                                     //  dialog.dismiss();
                                     AppHelper.showMsg(mContext, mModelRegister.message);
-                                    finish();
                                 }
                             }
                         });
@@ -425,7 +594,7 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
         UserInfoHelper.saveUserMarketRefresh(mContext, "");
         startActivity(HomeActivity.getIntent(mContext, HomeActivity.class));
         EventBus.getDefault().post(new GoToMineEvent());
-
+        EventBus.getDefault().post(new AddressEvent());
         finish();
     }
 }

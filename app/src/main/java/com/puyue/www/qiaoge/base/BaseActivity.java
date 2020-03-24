@@ -7,18 +7,13 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
-import android.webkit.PermissionRequest;
 
 import com.githang.statusbar.StatusBarCompat;
 import com.gyf.barlibrary.ImmersionBar;
-
-import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.helper.AppHelper;
-
-import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -26,7 +21,8 @@ import pub.devrel.easypermissions.EasyPermissions;
  * BaseActivity
  * Created by GuoGai on 2016/6/29.
  */
-public abstract class BaseActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+public abstract class BaseActivity extends AppCompatActivity  {
+    //implements EasyPermissions.PermissionCallbacks
     private long mExitTime = 0;
     private boolean mIsExit = false;
     protected Context mContext;
@@ -50,7 +46,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EasyPerm
 
 
         setContentView();
-
+        Log.d("wdddddddddddd....","wssss");
 
         mResources = this.getResources();
         mBundle = savedInstanceState;
@@ -61,8 +57,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EasyPerm
         setClickEvent();
         StatusBarCompat.setStatusBarColor(mActivity, Color.parseColor("#ffffff"), true);
 
-        //进行Android 6.0的动态权限申请
-        requestAndroidSixPermissions();
+//        //进行Android 6.0的动态权限申请
+//        requestAndroidSixPermissions();
 
     }
 
@@ -83,23 +79,23 @@ public abstract class BaseActivity extends AppCompatActivity implements EasyPerm
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
-
-    }
-
-
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
-
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        EasyPermissions. onRequestPermissionsResult(requestCode, permissions, grantResults);
+//    }
+//
+//
+//    @Override
+//    public void onPermissionsDenied(int requestCode, List<String> perms) {
+//
+//    }
+//
+//
+//    @Override
+//    public void onPermissionsGranted(int requestCode, List<String> perms) {
+//
+//    }
 
 
     public abstract boolean handleExtra(Bundle savedInstanceState);

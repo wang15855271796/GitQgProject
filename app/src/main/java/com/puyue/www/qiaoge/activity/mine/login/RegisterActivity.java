@@ -15,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.SparseArray;
@@ -30,18 +29,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.tu.loadingdialog.LoadingDailog;
-
-
 import com.chuanglan.shanyan_sdk.OneKeyLoginManager;
 import com.chuanglan.shanyan_sdk.listener.AuthenticationExecuteListener;
-import com.chuanglan.shanyan_sdk.listener.OneKeyLoginListener;
-import com.chuanglan.shanyan_sdk.listener.OpenLoginAuthListener;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.lljjcoder.style.citylist.Toast.ToastUtils;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.activity.CommonH5Activity;
 import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
 import com.puyue.www.qiaoge.api.home.GetCustomerPhoneAPI;
@@ -62,7 +53,6 @@ import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.mine.login.CheckPasswordCodeModel;
 import com.puyue.www.qiaoge.model.mine.login.RegisterAgreementModel;
 import com.puyue.www.qiaoge.model.mine.login.RegisterModel;
-import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -71,7 +61,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -169,7 +158,7 @@ public class RegisterActivity extends BaseSwipeActivity implements View.OnClickL
         iv_auth_success = findViewById(R.id.iv_auth_success);
         iv_auth_success.setVisibility(View.GONE);
         tv_register_secret = findViewById(R.id.tv_register_secret);
-        openLoginActivity();
+
         tv_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,64 +168,7 @@ public class RegisterActivity extends BaseSwipeActivity implements View.OnClickL
         });
     }
 
-    private void openLoginActivity() {
-        //开始拉取授权页
-        OneKeyLoginManager.getInstance().openLoginAuth(false, new OpenLoginAuthListener() {
-            @Override
-            public void getOpenLoginAuthStatus(int code, String result) {
-                Log.d("sfdfffefefe",result+"...0000");
-                if (1000 == code) {
-                    Log.e("VVV", "拉起授权页成功： code==" + code + "   result==" + result);
-                } else {
-                    Log.e("VVV", "拉起授权页失败： code==" + code + "   result==" + result);
-                }
-            }
-        }, new OneKeyLoginListener() {
-            @Override
-            public void getOneKeyLoginStatus(int code, String result) {
-                Log.d("sfdfffefefe",result+"...1111");
-                if (1011 == code) {
-                    Log.e("VVV", "用户点击授权页返回： code==" + code + "   result==" + result);
-                    return;
-                } else if (1000 == code) {
-                    Log.e("VVV", "用户点击登录获取token成功： code==" + code + "   result==" + result);
-                    checks(result);
-                } else {
-                    Log.e("VVV", "用户点击登录获取token失败： code==" + code + "   result==" + result);
-                }
 
-
-                startResultActivity(code, result);
-            }
-        });
-    }
-
-    private void checks(String result) {
-        GetCustomerPhoneAPI.getData(mContext,result)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<BaseModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(BaseModel baseModel) {
-                        if (baseModel.success) {
-                            ToastUtil.showSuccessMsg(mActivity,"sdddddds");
-                            Log.d("sdgdsgdgfegtfg...",baseModel+"");
-                        } else {
-                            AppHelper.showMsg(mContext, baseModel.message);
-                        }
-                    }
-                });
-    }
 
     private void startResultActivity(int code, String result) {
 //        Intent intent = new Intent(RegisterActivity.this, ResultActivity.class);
@@ -704,44 +636,44 @@ public class RegisterActivity extends BaseSwipeActivity implements View.OnClickL
 
 
     private void updateCheckCode() {
-        requestRegister();
+//        requestRegister();
 
     }
 
-    private void requestRegister() {
-        if (!NetWorkHelper.isNetworkAvailable(mContext)) {
-            AppHelper.showMsg(mContext, "网络不给力!");
-        } else {
-            //这里请求注册成功之后直接登录成功,返回的token存储下来,就代表着用户已经登录了
-            RegisterAPI.requestRegister(mContext, mEditPhone.getText().toString(), token, mEditPasswordOnce.getText().toString(), "000000", mEditAuthorization.getText().toString(),  "")
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<RegisterModel>() {
-                        @Override
-                        public void onCompleted() {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            //  dialog.dismiss();
-                        }
-
-                        @Override
-                        public void onNext(RegisterModel registerModel) {
-                            mModelRegister = registerModel;
-                            if (mModelRegister.success) {
-                                //这里注册完成也就直接登录成功,本地存储token
-                                updateRegister();
-                            } else {
-                                //  dialog.dismiss();
-                                AppHelper.showMsg(mContext, mModelRegister.message);
-                                finish();
-                            }
-                        }
-                    });
-        }
-    }
+//    private void requestRegister() {
+//        if (!NetWorkHelper.isNetworkAvailable(mContext)) {
+//            AppHelper.showMsg(mContext, "网络不给力!");
+//        } else {
+//            //这里请求注册成功之后直接登录成功,返回的token存储下来,就代表着用户已经登录了
+//            RegisterAPI.requestRegister(mContext, mEditPhone.getText().toString(), token, mEditPasswordOnce.getText().toString(), "000000", mEditAuthorization.getText().toString(),  "")
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(new Subscriber<RegisterModel>() {
+//                        @Override
+//                        public void onCompleted() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onError(Throwable e) {
+//                            //  dialog.dismiss();
+//                        }
+//
+//                        @Override
+//                        public void onNext(RegisterModel registerModel) {
+//                            mModelRegister = registerModel;
+//                            if (mModelRegister.success) {
+//                                //这里注册完成也就直接登录成功,本地存储token
+//                                updateRegister();
+//                            } else {
+//                                //  dialog.dismiss();
+//                                AppHelper.showMsg(mContext, mModelRegister.message);
+//                                finish();
+//                            }
+//                        }
+//                    });
+//        }
+//    }
 
     private void updateRegister() {
         //  dialog.dismiss();

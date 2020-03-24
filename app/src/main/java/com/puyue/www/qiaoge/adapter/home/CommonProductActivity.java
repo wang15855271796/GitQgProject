@@ -6,9 +6,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +28,8 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
+import com.puyue.www.qiaoge.fragment.cart.NumEvent;
+import com.puyue.www.qiaoge.fragment.home.MyGrideLayoutManager;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -103,12 +103,6 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        refreshLayout.autoRefresh();
-    }
-
-    @Override
     public void findViewById() {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
@@ -141,8 +135,8 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
 
             }
         });
-
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
+        refreshLayout.setEnableLoadMore(false);
+        recyclerView.setLayoutManager(new MyGrideLayoutManager(mContext,2));
         recyclerView.setAdapter(commonAdapter);
         iv_back.setOnClickListener(this);
         tv_title.setText("常用清单");
@@ -163,6 +157,7 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
                 pageNum = 1;
                 list.clear();
                 getProductsList(1,pageSize,"commonBuy");
+                getCartNum();
                 refreshLayout.finishRefresh();
             }
         });
@@ -226,7 +221,6 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
                                 public void onItemClick(View view, int position) {
                                     isSelected = position;
                                     mRegisterAdapterType.selectPosition(position);
-
                                     shopTypeId = mList.get(isSelected).getId();
                                     isChecked = true;
                                 }
@@ -324,7 +318,7 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
                                     commonAdapter.addData(list);
                                 }
                             }
-
+                            refreshLayout.setEnableLoadMore(true);
                         } else {
                             AppHelper.showMsg(mActivity, getCommonProductModel.getMessage());
                         }
@@ -334,7 +328,7 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
 
     @Override
     public void setViewData() {
-
+        refreshLayout.autoRefresh();
         getCustomerPhone();
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
         mTypedialog.setCancelable(false);
@@ -386,7 +380,10 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
         getCartNum();
     }
 
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getCartNum(NumEvent event) {
+        getCartNum();
+    }
     /**
      * 获取客服电话
      */

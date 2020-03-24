@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
-import com.puyue.www.qiaoge.adapter.home.CommonAdapter;
 import com.puyue.www.qiaoge.adapter.home.CommonsAdapter;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
@@ -24,6 +22,7 @@ import com.puyue.www.qiaoge.api.home.ProductListAPI;
 import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.fragment.home.MyGrideLayoutManager;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
@@ -123,7 +122,7 @@ public class NewProductActivity extends BaseSwipeActivity implements View.OnClic
 
             }
         });
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
+        recyclerView.setLayoutManager(new MyGrideLayoutManager(mContext,2));
         recyclerView.setAdapter(adapterNewArrival);
         iv_back.setOnClickListener(this);
         tv_title.setText("新品分类");

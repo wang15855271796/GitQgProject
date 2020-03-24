@@ -2,28 +2,26 @@ package com.puyue.www.qiaoge.fragment.order;
 
 
 import android.content.Intent;
-import android.graphics.Point;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.activity.cart.CartPoint;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListActivity;
-import com.puyue.www.qiaoge.activity.mine.order.ConfirmOrderNewActivity;
+import com.puyue.www.qiaoge.activity.mine.account.AddressListsActivity;
 import com.puyue.www.qiaoge.activity.mine.order.MyConfireOrdersActivity;
 import com.puyue.www.qiaoge.adapter.mine.ChooseCouponsAdapter;
 import com.puyue.www.qiaoge.adapter.mine.ConfirmOrderNewAdapter;
@@ -33,6 +31,7 @@ import com.puyue.www.qiaoge.api.mine.coupon.userChooseDeductAPI;
 import com.puyue.www.qiaoge.api.mine.order.GenerateOrderAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.LoadingDialog;
 import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
@@ -41,7 +40,7 @@ import com.puyue.www.qiaoge.model.cart.CartBalanceModel;
 import com.puyue.www.qiaoge.model.home.GetDeliverTimeModel;
 import com.puyue.www.qiaoge.model.mine.coupons.UserChooseDeductModel;
 import com.puyue.www.qiaoge.model.mine.order.GenerateOrderModel;
-import com.puyue.www.qiaoge.view.PickCityUtil;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -57,8 +56,6 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static com.umeng.commonsdk.stateless.UMSLEnvelopeBuild.mContext;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -69,6 +66,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
     private TextView userName;
     private TextView userPhone;
     private TextView address;
+    public LinearLayout ll_info;
     private TextView firmName; // 店名
     private LinearLayout LinearLayoutAddress;// 没地址的xml
     private TextView textViewNum; // 几件商品
@@ -83,7 +81,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
     private TextView commodity;
     private TextView payMoney; // 支付金额
     private LinearLayout LinearLayoutStoreName; // 店名xml
-
+    private AVLoadingIndicatorView lav_activity_loading;
     private LinearLayout linearLayoutCoupons;// 优惠券xml
     private String orderId;
 
@@ -158,6 +156,8 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
     @Override
     public void findViewById(View view) {
         //  toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        ll_info = (LinearLayout) view.findViewById(R.id.ll_info);
+        lav_activity_loading = (AVLoadingIndicatorView) view.findViewById(R.id.lav_activity_loading);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         userName = (TextView) view.findViewById(R.id.userName);
         userPhone = (TextView) view.findViewById(R.id.userPhone);
@@ -196,6 +196,10 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
         tv_vip_content_one = (TextView) view.findViewById(R.id.tv_vip_content_one);
         tv_vip_content_two = (TextView) view.findViewById(R.id.tv_tv_vip_content_two);
         tv_go = (TextView) view.findViewById(R.id.tv_go);
+
+//        progressBar.startAnimation(Animation );
+
+
     }
 
     @Override
@@ -239,22 +243,23 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
         public void onNoDoubleClick(View view) {
             switch (view.getId()) {
                 case R.id.linearLayoutAddressHead: // 地址切换
-                    Intent intent_ = new Intent(mActivity, AddressListActivity.class);
+                    Intent intent_ = new Intent(mActivity, AddressListsActivity.class);
                     intent_.putExtra("type", 1);
                     intent_.putExtra("mineAddress", "mineAddress");
                     startActivityForResult(intent_, 31);
                     break;
                 case R.id.LinearLayoutAddress: // 添加地址
-                    Intent intent1 = AddressListActivity.getIntent(mActivity, AddressListActivity.class);
+                    Intent intent1 = AddressListActivity.getIntent(mActivity, AddressListsActivity.class);
                     intent1.putExtra("mineAddress", "mineAddress");
                     startActivityForResult(intent1, 32);
 
                     break;
                 case R.id.buttonPay:// 去支付
+                    lav_activity_loading.show();
                     if (LinearLayoutAddress.getVisibility() == View.VISIBLE) { // 没有地址
                         AppHelper.showMsg(mActivity, "请填写地址");
+                        lav_activity_loading.hide();
                     } else {
-
                         GetDeliverTimeAPI.requestDeliverTime(mActivity, areaContent)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -266,12 +271,15 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
 
                                     @Override
                                     public void onError(Throwable e) {
-
+//                                        LoadingDialog.getInstance(getActivity()).dismiss();
+                                        lav_activity_loading.hide();
                                     }
 
                                     @Override
                                     public void onNext(GetDeliverTimeModel getDeliverTimeModel) {
+
                                         if (getDeliverTimeModel.success) {
+                                            lav_activity_loading.hide();
                                             if (getDeliverTimeModel.data != null) {
                                                 mlist.clear();
                                                 try {
@@ -282,20 +290,6 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
 
                                                     }
 
-                                                    PickCityUtil.showSinglePickView(mActivity, mlist, "请选择配送时间段", new PickCityUtil.ChoosePositionListener() {
-                                                        @Override
-                                                        public void choosePosition(int position, String s) {
-                                                            try {
-                                                                JSONObject jsonObjects = jsonArray.getJSONObject(position);
-                                                                deliverTimeStart = jsonObjects.getString("start");
-                                                                deliverTimeName = jsonObjects.getString("name");
-                                                                deliverTimeEnd = jsonObjects.getString("end");
-                                                            } catch (JSONException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            requestOrderNum();
-                                                        }
-                                                    });
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
@@ -304,6 +298,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
                                             }
                                         } else {
                                             AppHelper.showMsg(mActivity, getDeliverTimeModel.message);
+                                            lav_activity_loading.hide();
                                         }
 
 
@@ -346,7 +341,6 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
      * 结算接口
      */
     private void requestCartBalance(String giftDetailNo, int type) {
-
         CartBalanceAPI.requestCartBalance(mActivity, normalProductBalanceVOStr, activityBalanceVOStr, cartListStr, giftDetailNo, type, 0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -364,6 +358,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
                     @Override
                     public void onNext(CartBalanceModel cartBalanceModel) {
                         if (cartBalanceModel.success) {
+//                            Log.d("WWWWWWWWW......",cartBalanceModel.getData().getAddressOK()+"");
                             cModel = cartBalanceModel;
                             toRechargeAmount = cModel.getData().getToRechargeAmount();
                             toRecharge = cModel.getData().isToRecharge();
@@ -396,6 +391,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
      */
     private void setText(CartBalanceModel cartBalanceModel) {
         CartBalanceModel.DataBean info = cartBalanceModel.getData();
+
         proActAmount = info.getProActAmount();
         teamAmount = info.getTeamAmount();
         killAmount = info.getKillAmount();
@@ -427,9 +423,15 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
             linearLayoutAddressHead.setVisibility(View.VISIBLE);
             userName.setText(info.getAddressVO().getUserName());
             userPhone.setText(info.getAddressVO().getContactPhone());
+            if(info.isAddressOk()) {
+                address.setText(info.getAddressVO().getProvinceName() + info.getAddressVO().getCityName()
+                        + info.getAddressVO().getAreaName() + info.getAddressVO().getDetailAddress());
+                ll_info.setVisibility(View.VISIBLE);
+            }else {
+                address.setText("请选择收货地址");
+                ll_info.setVisibility(View.GONE);
+            }
 
-            address.setText(info.getAddressVO().getProvinceName() + info.getAddressVO().getCityName()
-                    + info.getAddressVO().getAreaName() + info.getAddressVO().getDetailAddress());
             if (!TextUtils.isEmpty(info.getAddressVO().getShopName())) {
                 firmName.setText(info.getAddressVO().getShopName());
                 // LinearLayoutStoreName.setVisibility(View.VISIBLE);
@@ -519,6 +521,8 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
     }
 
 
+//           address.setText(info.getAddressVO().getProvinceName() + info.getAddressVO().getCityName()
+//                    + info.getAddressVO().getAreaName() + info.getAddressVO().getDetailAddress());
     // 获取订单号
     private void requestOrderNum() {
 
@@ -534,16 +538,18 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
 
                     @Override
                     public void onError(Throwable e) {
+                        lav_activity_loading.hide();
                     }
 
                     @Override
                     public void onNext(GenerateOrderModel generateOrderModel) {
 
                         if (generateOrderModel.success) {
-
+//                            LoadingDialog.getInstance(getActivity()).dismiss();
+                            lav_activity_loading.hide();
                             if (Integer.parseInt(UserInfoHelper.getDate(mActivity)) != currentDay) {
-
                                 if(toRecharge&&totalAmount>toRechargeAmount) {
+
                                     Intent intent = new Intent(mActivity,CartPoint.class);
                                     intent.putExtra(AppConstant.ORDERID, generateOrderModel.getData());
                                     intent.putExtra("orderAmount", totalAmount + "");
@@ -575,6 +581,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
 
                         } else {
                             AppHelper.showMsg(mActivity, generateOrderModel.message);
+                            lav_activity_loading.hide();
                         }
                     }
                 });
@@ -584,7 +591,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
     public void onEventMainThread(AddressEvent event) {
         list.clear();
         requestCartBalance(NewgiftDetailNo, 1);////NewgiftDetailNo
-
+        userChooseDeduct();
     }
 
     /**
@@ -614,7 +621,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
                                 setRecyclerView();
                                 couponsList.clear();
                                 couponsList.addAll(model.getData().getAll());
-
+                                Log.d("wddwdwdwddddddddd.....","sdewdwwddddd");
                                 for (int i = 0; i < couponsList.size(); i++) {
                                     if (model.getData().getAll().get(i).getGiftDetailNo().equals(couponId)) {
                                         //此处为第二次设置优惠券的isFlag

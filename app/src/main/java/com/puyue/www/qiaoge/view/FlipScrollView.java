@@ -51,7 +51,7 @@ public class FlipScrollView extends ScrollView {
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         if (onSoftKeyboardListener != null) {
-            final int newSpec = View.MeasureSpec.getSize(heightMeasureSpec);
+            final int newSpec = MeasureSpec.getSize(heightMeasureSpec);
             final int oldSpec = getMeasuredHeight();
             // If layout became smaller, that means something forced it to resize. Probably soft keyboard :)
             if (oldSpec > newSpec){

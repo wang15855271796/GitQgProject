@@ -1,18 +1,8 @@
 package com.puyue.www.qiaoge.adapter.market;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.Image;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,38 +15,11 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
-import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
-import com.puyue.www.qiaoge.adapter.cart.SearchInnerAdapter;
-import com.puyue.www.qiaoge.adapter.home.SearchInnersAdapter;
-import com.puyue.www.qiaoge.adapter.home.SearchResultAdapter;
-import com.puyue.www.qiaoge.adapter.home.SearchSpecxAdapter;
-import com.puyue.www.qiaoge.api.cart.AddCartAPI;
-import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
-import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.constant.AppConstant;
-import com.puyue.www.qiaoge.dialog.ChooseDialog;
-import com.puyue.www.qiaoge.event.OnHttpCallBack;
-import com.puyue.www.qiaoge.helper.AppHelper;
-import com.puyue.www.qiaoge.helper.PublicRequestHelper;
-import com.puyue.www.qiaoge.helper.StringHelper;
-import com.puyue.www.qiaoge.helper.UserInfoHelper;
-import com.puyue.www.qiaoge.model.cart.AddCartModel;
-import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
-import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
-import com.puyue.www.qiaoge.model.home.SearchResultsModel;
-import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
-import com.puyue.www.qiaoge.view.ExpandLayout;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.List;
-
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/4/19.
@@ -110,49 +73,6 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
         });
 
         fl_container = helper.getView(R.id.fl_container);
-//        MarketSpecAdapter marketSpecAdapter = new MarketSpecAdapter(mContext,item.getProdSpecs());
-//        fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                marketSpecAdapter.selectPosition(position);
-//                int productIds = item.getProdSpecs().get(position).getProductId();
-//
-//                GetProductDetailAPI.getExchangeList(mContext,productIds,businessType)
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(new Subscriber<ExchangeProductModel>() {
-//
-//                            @Override
-//                            public void onCompleted() {
-//
-//                            }
-//
-//                            @Override
-//                            public void onError(Throwable e) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onNext(ExchangeProductModel exchangeProductModel) {
-//                                helper.setText(R.id.tv_stock,exchangeProductModel.getData().getInventory());
-//                                helper.setText(R.id.tv_desc,exchangeProductModel.getData().getSpecialOffer());
-//                                if(businessType==11) {
-//                                    itemChooseAdapter = new SearchInnersAdapter(item.getBusinessType(),exchangeProductModel.getData().getActiveId(),
-//                                            R.layout.item_choose_contents,exchangeProductModel.getData().getProdPrices());
-//                                }else {
-//                                    itemChooseAdapter = new SearchInnersAdapter(item.getBusinessType(),exchangeProductModel.getData().getProdSpecs().get(position).getProductId(),
-//                                            R.layout.item_choose_contents,exchangeProductModel.getData().getProdPrices());
-//                                }
-//
-//                                recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-//                                recyclerView.setAdapter(itemChooseAdapter);
-//
-//                            }
-//                        });
-//            }
-//        });
-//
-//        fl_container.setAdapter(marketSpecAdapter);
         helper.setText(R.id.tv_name,item.getProductName());
 
         helper.setText(R.id.tv_sale,item.getSalesVolume());
@@ -165,6 +85,7 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
         rl_spec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(onclick!=null) {
                     onclick.addDialog();
                 }

@@ -53,6 +53,7 @@ class SearchInnerResultAdapter extends BaseQuickAdapter<SearchResultsModel.DataB
         iv_cut = helper.getView(R.id.iv_cut);
         iv_add = helper.getView(R.id.iv_add);
         tv_num.setText(item.getCartNum()+"");
+        Log.d("werttttttt.....",item.getCartNum()+"");
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

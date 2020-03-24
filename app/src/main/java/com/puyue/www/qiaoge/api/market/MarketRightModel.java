@@ -777,6 +777,15 @@ public class MarketRightModel {
                     int activeId;
                     private int productId;
                     private String spec;
+                    int prodDeduct;
+
+                    public int getProdDeduct() {
+                        return prodDeduct;
+                    }
+
+                    public void setProdDeduct(int prodDeduct) {
+                        this.prodDeduct = prodDeduct;
+                    }
 
                     public int getActiveId() {
                         return activeId;

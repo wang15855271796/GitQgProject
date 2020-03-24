@@ -25,11 +25,11 @@ public class MyCouponsAPI {
     public interface  MyCoupons {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.QUERY_USER_DEDUCTBYSTATE)
-        Observable<queryUserDeductByStateModel> setParams(@Field("pageNum") int pageNum, @Query("pageSize") int pageSize ,@Query("state") String state );
+        Observable<queryUserDeductByStateModel> setParams(@Field("pageNum") int pageNum, @Query("pageSize") int pageSize, @Query("state") String state);
     }
 
     public static Observable<queryUserDeductByStateModel> requestCoupons (Context context, int pageNum, int pageSize,String state) {
-        Observable<queryUserDeductByStateModel> queryUserDeductByStateModelObservable = RestHelper.getBaseRetrofit(context).create(MyCouponsAPI.MyCoupons.class).setParams(pageNum, pageSize,state);
+        Observable<queryUserDeductByStateModel> queryUserDeductByStateModelObservable = RestHelper.getBaseRetrofit(context).create(MyCoupons.class).setParams(pageNum, pageSize,state);
         return queryUserDeductByStateModelObservable;
     }
 

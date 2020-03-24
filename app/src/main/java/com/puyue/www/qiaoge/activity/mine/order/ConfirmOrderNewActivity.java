@@ -1,6 +1,5 @@
 package com.puyue.www.qiaoge.activity.mine.order;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,39 +15,24 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.activity.CartActivity;
 import com.puyue.www.qiaoge.activity.HomeActivity;
-import com.puyue.www.qiaoge.activity.cart.ConfirmOrderActivity;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListActivity;
-import com.puyue.www.qiaoge.activity.mine.coupons.ChooseCouponsActivity;
 import com.puyue.www.qiaoge.adapter.mine.ChooseCouponsAdapter;
 import com.puyue.www.qiaoge.adapter.mine.ConfirmOrderNewAdapter;
 import com.puyue.www.qiaoge.api.cart.CartBalanceAPI;
 import com.puyue.www.qiaoge.api.home.GetDeliverTimeAPI;
-import com.puyue.www.qiaoge.api.home.GetOrderDetailAPI;
 import com.puyue.www.qiaoge.api.mine.coupon.userChooseDeductAPI;
-import com.puyue.www.qiaoge.api.mine.order.ChangeOrderAddressAPI;
 import com.puyue.www.qiaoge.api.mine.order.GenerateOrderAPI;
-import com.puyue.www.qiaoge.api.mine.order.GenerateOrderNewAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
-import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.AddressEvent;
-import com.puyue.www.qiaoge.event.WeChatUnPayEvent;
-import com.puyue.www.qiaoge.helper.ActivityResultHelper;
 import com.puyue.www.qiaoge.helper.AppHelper;
-import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.cart.CartBalanceModel;
-import com.puyue.www.qiaoge.model.cart.GetOrderDetailModel;
 import com.puyue.www.qiaoge.model.home.GetDeliverTimeModel;
 import com.puyue.www.qiaoge.model.mine.coupons.UserChooseDeductModel;
-import com.puyue.www.qiaoge.model.mine.order.ChangeOrderAddressModel;
-import com.puyue.www.qiaoge.model.mine.order.DeliverTimeModel;
 import com.puyue.www.qiaoge.model.mine.order.GenerateOrderModel;
-import com.puyue.www.qiaoge.view.PickCityUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -59,7 +43,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -299,20 +282,20 @@ public class ConfirmOrderNewActivity extends BaseSwipeActivity {
 
                                                     }
 
-                                                    PickCityUtil.showSinglePickView(mContext, mlist, "请选择配送时间段", new PickCityUtil.ChoosePositionListener() {
-                                                        @Override
-                                                        public void choosePosition(int position, String s) {
-                                                            try {
-                                                                JSONObject jsonObjects = jsonArray.getJSONObject(position);
-                                                                deliverTimeStart = jsonObjects.getString("start");
-                                                                deliverTimeName = jsonObjects.getString("name");
-                                                                deliverTimeEnd = jsonObjects.getString("end");
-                                                            } catch (JSONException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            requestOrderNum();
-                                                        }
-                                                    });
+//                                                    PickCityUtil.showSinglePickView(mContext, mlist, "请选择配送时间段", new PickCityUtil.ChoosePositionListener() {
+//                                                        @Override
+//                                                        public void choosePosition(int position, String s) {
+//                                                            try {
+//                                                                JSONObject jsonObjects = jsonArray.getJSONObject(position);
+//                                                                deliverTimeStart = jsonObjects.getString("start");
+//                                                                deliverTimeName = jsonObjects.getString("name");
+//                                                                deliverTimeEnd = jsonObjects.getString("end");
+//                                                            } catch (JSONException e) {
+//                                                                e.printStackTrace();
+//                                                            }
+//                                                            requestOrderNum();
+//                                                        }
+//                                                    });
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }

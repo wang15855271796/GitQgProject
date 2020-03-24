@@ -15,7 +15,6 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -60,7 +59,6 @@ import com.puyue.www.qiaoge.adapter.mine.NewOrderDetailAdapter;
 import com.puyue.www.qiaoge.api.cart.CancelOrderAPI;
 import com.puyue.www.qiaoge.api.cart.DeleteOrderAPI;
 import com.puyue.www.qiaoge.api.home.GetOrderDetailAPI;
-import com.puyue.www.qiaoge.api.mine.order.ConfirmGetGoodsAPI;
 import com.puyue.www.qiaoge.api.mine.order.ConfirmOrderSelfAPI;
 import com.puyue.www.qiaoge.api.mine.order.CopyToCartAPI;
 import com.puyue.www.qiaoge.api.mine.order.GetOrderDeliverTimeAPI;
@@ -69,11 +67,9 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.AddressEvent;
-import com.puyue.www.qiaoge.fragment.order.ConfirmOrderSufficiencyFragment;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.MapHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
-import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.cart.CancelOrderModel;
 import com.puyue.www.qiaoge.model.cart.GetOrderDetailModel;
@@ -715,6 +711,40 @@ public class SelfSufficiencyOrderDetailActivity extends BaseSwipeActivity {
 
     }
 
+//    private void initOptionPicker() {//条件选择器初始化
+//
+//        /**
+//         * 注意 ：如果是三级联动的数据(省市区等)，请参照 JsonDataActivity 类里面的写法。
+//         */
+//
+//        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+//            @Override
+//            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+//                //返回的分别是三个级别的选中位置
+////                String tx = options1Items.get(options1).getPickerViewText()
+////                        + options2Items.get(options1).get(options2)
+////                        /* + options3Items.get(options1).get(options2).get(options3).getPickerViewText()*/;
+////                btn_Options.setText(tx);
+//            }
+//        })
+//                .setTitleText("请选择自提时间段")
+//                .setTitleColor(Color.parseColor("#F56D23"))
+//
+//                .setCancelColor(Color.parseColor("#F56D23"))
+//                .setSubmitColor(Color.parseColor("#F56D23"))
+//                .setOptionsSelectChangeListener(new OnOptionsSelectChangeListener() {
+//                    @Override
+//                    public void onOptionsSelectChanged(int options1, int options2, int options3) {
+//                    }
+//                })
+//                .build();
+//
+////        pvOptions.setSelectOptions(1,1);
+//        /*pvOptions.setPicker(options1Items);//一级选择器*/
+////        pvOptions.setPicker(options1Items, options2Items);//二级选择器
+////        pvOptions.show();
+//        /*pvOptions.setPicker(options1Items, options2Items,options3Items);//三级选择器*/
+//    }
 
     private GetTimeOrderModel dataBean;
 

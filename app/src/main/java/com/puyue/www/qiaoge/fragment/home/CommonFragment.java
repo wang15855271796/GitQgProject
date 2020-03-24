@@ -22,10 +22,14 @@ import com.puyue.www.qiaoge.api.home.ProductListAPI;
 import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.event.BackEvent;
+import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.OnItemClickListener;
+import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
@@ -34,6 +38,10 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +60,9 @@ public class CommonFragment extends BaseFragment {
     private Unbinder bind;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-//    @BindView(R.id.smart)
-//    SmartRefreshLayout refreshLayout;
-    CommonsAdapter adapterNewArrival;
+    @BindView(R.id.smart)
+    SmartRefreshLayout refreshLayout;
+    CommonListAdapter adapterNewArrival;
     int pageNum = 1;
     int pageSize = 10;
     ProductNormalModel productNormalModel;
@@ -64,7 +72,7 @@ public class CommonFragment extends BaseFragment {
     int isSelected;
     boolean isChecked = false;
     int shopTypeId;
-    String flag = "common";
+    String flag = "commonBuy";
     //新品集合
     private List<ProductNormalModel.DataBean.ListBean> list = new ArrayList<>();
     @Override
@@ -73,24 +81,13 @@ public class CommonFragment extends BaseFragment {
     }
 
     @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getProductsList(pageNum,10,"common");
-    }
-
-
-    @Override
     public void initViews(View view) {
-        initStatusBarWhiteColor();
+        if(!EventBus.getDefault().isRegistered(this)) {//加上判断
+            EventBus.getDefault().register(this);
+        }
         bind = ButterKnife.bind(this, view);
-
-        adapterNewArrival = new CommonsAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
+        refreshLayout.setEnableLoadMore(false);
+        adapterNewArrival = new CommonListAdapter(flag,R.layout.item_team_list, list, new CommonListAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
@@ -123,42 +120,33 @@ public class CommonFragment extends BaseFragment {
         recyclerView.setAdapter(adapterNewArrival);
 
 
-//        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-//            @Override
-//            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-//                pageNum = 1;
-//                list.clear();
-//                getProductsList(1,pageSize,"common");
-//                refreshLayout.finishRefresh();
-//            }
-//        });
-//
-//        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-//            @Override
-//            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-//                if (productNormalModel.getData()!=null) {
-//                    if(productNormalModel.getData().isHasNextPage()) {
-//                        pageNum++;
-//                        getProductsList(pageNum, 10,"common");
-//                        refreshLayout.finishLoadMore();
-//                    }else {
-//                        refreshLayout.finishLoadMoreWithNoMoreData();
-//                    }
-//                }
-//            }
-//        });
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                pageNum = 1;
+                list.clear();
+                adapterNewArrival.notifyDataSetChanged();
+                getProductsList(1,pageSize,"commonBuy");
+                refreshLayout.finishRefresh();
+            }
+        });
+
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                if (productNormalModel.getData()!=null) {
+                    if(productNormalModel.getData().isHasNextPage()) {
+                        pageNum++;
+                        getProductsList(pageNum, 10,"commonBuy");
+                        refreshLayout.finishLoadMore();
+                    }else {
+                        refreshLayout.finishLoadMoreWithNoMoreData();
+                    }
+                }
+            }
+        });
 
 
-    }
-
-    protected void initStatusBarWhiteColor() {
-        //设置状态栏颜色为白色，状态栏图标为黑色
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getActivity().getWindow().setStatusBarColor(Color.WHITE);
-            Log.d("sssssssOOOOO..","ssss");
-            StatusBarUtil.setStatusBarLightMode(getActivity());
-        }
     }
     /**
      * 选择店铺类型
@@ -256,7 +244,7 @@ public class CommonFragment extends BaseFragment {
                             UserInfoHelper.saveUserType(mActivity, AppConstant.USER_TYPE_WHOLESALE);
                             UserInfoHelper.saveUserId(mActivity, updateUserInvitationModel.getData());
                             pageNum = 1;
-                            getProductsList(pageNum,10,"common");
+                            getProductsList(pageNum,10,"commonBuy");
                             UserInfoHelper.saveUserHomeRefresh(mActivity, "home_has_refresh");
                         } else {
                             AppHelper.showMsg(mActivity, updateUserInvitationModel.getMessage());
@@ -267,13 +255,13 @@ public class CommonFragment extends BaseFragment {
 
     /**
      * 常用清单列表(王涛)
-     * @param pageNum
+     * @param pageNums
      * @param pageSize
      * @param
      */
 
-    private void getProductsList(int pageNum, int pageSize, String type) {
-        ProductListAPI.requestData(mActivity, pageNum, pageSize,type,null)
+    private void getProductsList(int pageNums, int pageSize, String type) {
+        ProductListAPI.requestData(mActivity, pageNums, pageSize,type,null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ProductNormalModel>() {
@@ -289,30 +277,29 @@ public class CommonFragment extends BaseFragment {
 
                     @Override
                     public void onNext(ProductNormalModel getCommonProductModel) {
-                        Log.d("pagessssssssssww......",getCommonProductModel.getData().getList().size()+"");
+                        productNormalModel = getCommonProductModel;
                         if (getCommonProductModel.isSuccess()) {
-                            productNormalModel = getCommonProductModel;
-                            if (getCommonProductModel.getData().getList().size() > 0) {
+//                            if (getCommonProductModel.getData().getList()!=null&&getCommonProductModel.getData().getList().size()!=0) {
+//                                if (productNormalModel.getData().isHasNextPage()) {
+////                                    pageNum++;
+//                                    list.addAll(getCommonProductModel.getData().getList());
+//                                    adapterNewArrival.notifyDataSetChanged();
+//                                    refreshLayout.finishLoadMore();
+//                                } else {
+//                                    list.addAll(getCommonProductModel.getData().getList());
+//                                    adapterNewArrival.notifyDataSetChanged();
+//                                    refreshLayout.finishLoadMoreWithNoMoreData();
+//                                }
+//                            }
+                            if(getCommonProductModel.getData().getList().size()>0) {
                                 list.addAll(getCommonProductModel.getData().getList());
                                 adapterNewArrival.notifyDataSetChanged();
-                                List<ProductNormalModel.DataBean.ListBean> list = getCommonProductModel.getData().getList();
-                                if (pageNum == 1) {
-                                    adapterNewArrival.setNewData(list);
-                                } else {
-                                    adapterNewArrival.addData(list);
-                                }
                             }
-                            //判断是否有下一页
-                            if (!getCommonProductModel.getData().isHasNextPage()) {
-                                adapterNewArrival.loadMoreEnd(false);
-                            } else {
-                                adapterNewArrival.loadMoreComplete();
-                            }
-
-
-                        } else {
-                            AppHelper.showMsg(mActivity, getCommonProductModel.getMessage());
+                        }else {
+                            AppHelper.showMsg(mActivity,getCommonProductModel.getMessage());
                         }
+
+                        refreshLayout.setEnableLoadMore(true);
                     }
                 });
     }
@@ -322,11 +309,40 @@ public class CommonFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void setViewData() {
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getCommon(BackEvent event) {
+        //刷新UI
+//        pageNum = 1;
+//        list.clear();
+//        getProductsList(1,10,"new");
+
+        refreshLayout.autoRefresh();
 
     }
 
+    @Override
+    public void setViewData() {
+        getProductsList(pageNum,10,"commonBuy");
+        getCustomerPhone();
+    }
+
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
+
+            @Override
+            public void onFaild(String errorMsg) {
+            }
+        });
+    }
     @Override
     public void setClickEvent() {
 

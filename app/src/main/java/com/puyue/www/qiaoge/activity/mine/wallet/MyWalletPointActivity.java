@@ -63,7 +63,7 @@ public class MyWalletPointActivity extends BaseSwipeActivity {
     private RadioGroup radioGroup;
     private RadioButton radioButtonWeChat;
     private RadioButton radioButtonAliPay;
-    private ImageView commonButton;
+    private TextView commonButton;
     private RelativeLayout relativeLayoutInput;
     private RelativeLayout RelativeLayoutlRules;
     private MyWalletAdapter adapter;
@@ -103,7 +103,7 @@ public class MyWalletPointActivity extends BaseSwipeActivity {
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         radioButtonWeChat = (RadioButton) findViewById(R.id.radioButtonWeChat);
         radioButtonAliPay = (RadioButton) findViewById(R.id.radioButtonAliPay);
-        commonButton = (ImageView) findViewById(R.id.commonButton);
+        commonButton = (TextView) findViewById(R.id.commonButton);
         relativeLayoutInput = (RelativeLayout) findViewById(R.id.relativeLayoutInput);
         RelativeLayoutlRules = (RelativeLayout) findViewById(R.id.RelativeLayoutlRules);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);

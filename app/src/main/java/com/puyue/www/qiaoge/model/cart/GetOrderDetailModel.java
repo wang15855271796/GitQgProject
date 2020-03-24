@@ -192,7 +192,7 @@ public class GetOrderDetailModel {
              * checkStatus : null
              * productDescVOList : [{"detailDesc":"￥500.00/天","totalNum":"X3","productNum":3,"productCombinationPriceId":null,"productUnit":"天","price":"500.00"}]
              */
-
+            public int productMainId;
             public int productId;
             public String picUrl;
             public String name;
@@ -204,7 +204,6 @@ public class GetOrderDetailModel {
             public List<ProductDescVOListBean> productDescVOList;
             public String oldPrice;
             public String returnNum;
-
             public String prodTypeUrl;
 
 
@@ -226,6 +225,31 @@ public class GetOrderDetailModel {
                 public String productUnit;
                 public String price;
                 public String newDesc;
+                public String afterPrice;
+                public String totalPrice;
+
+                public String getTotalPrice() {
+                    return totalPrice;
+                }
+
+                public void setTotalPrice(String totalPrice) {
+                    this.totalPrice = totalPrice;
+                }
+                public String getAfterPrice() {
+                    return afterPrice;
+                }
+
+                public void setAfterPrice(String afterPrice) {
+                    this.afterPrice = afterPrice;
+                }
+
+                @Override
+                public String toString() {
+                    return "ProductVOListBean{" +
+                            "afterPrice='" + afterPrice + '\'' +
+                            '}';
+                }
+
             }
         }
     }

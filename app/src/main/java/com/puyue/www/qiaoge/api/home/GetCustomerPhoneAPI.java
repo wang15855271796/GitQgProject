@@ -6,7 +6,6 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
 import com.puyue.www.qiaoge.helper.RestHelper;
 import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
-import com.puyue.www.qiaoge.model.home.GetDeliverTimeModel;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -29,11 +28,22 @@ public class GetCustomerPhoneAPI {
 
     public interface ChuangLanService {
         @GET(AppInterfaceAddress.CHAUNGLAN)
-        Observable<BaseModel> setParams(@Query("accessCode") String accessCode);
+        Observable<OneRegisterModel> setParams(@Query("accessCode") String accessCode);
     }
 
-    public static Observable<BaseModel> getData(Context context , String accessCode) {
-        Observable<BaseModel> getDeliverTime = RestHelper.getBaseRetrofit(context).create(ChuangLanService.class).setParams(accessCode);
+    public static Observable<OneRegisterModel> getData(Context context , String accessCode) {
+        Observable<OneRegisterModel> getDeliverTime = RestHelper.getBaseRetrofit(context).create(ChuangLanService.class).setParams(accessCode);
+        return getDeliverTime;
+    }
+
+
+    public interface CodeService {
+        @GET(AppInterfaceAddress.CHECK_CODE)
+        Observable<BaseModel> setParams(@Query("invitationCode") String invitationCode);
+    }
+
+    public static Observable<BaseModel> checkCode(Context context , String invitationCode) {
+        Observable<BaseModel> getDeliverTime = RestHelper.getBaseRetrofit(context).create(CodeService.class).setParams(invitationCode);
         return getDeliverTime;
     }
 

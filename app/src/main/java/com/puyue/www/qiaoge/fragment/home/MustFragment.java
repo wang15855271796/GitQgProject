@@ -1,9 +1,6 @@
 package com.puyue.www.qiaoge.fragment.home;
 
 import android.app.AlertDialog;
-import android.graphics.Color;
-import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,29 +12,29 @@ import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
-import com.puyue.www.qiaoge.adapter.home.CommonAdapter;
 import com.puyue.www.qiaoge.adapter.home.CommonsAdapter;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
 import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
-import com.puyue.www.qiaoge.api.home.ProductListAPI;
 import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.event.BackEvent;
+import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.OnItemClickListener;
-import com.puyue.www.qiaoge.model.home.CouponModel;
+import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
+import com.puyue.www.qiaoge.model.home.MustModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
-import com.puyue.www.qiaoge.view.Snap;
-import com.puyue.www.qiaoge.view.StatusBarUtil;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +56,7 @@ public class MustFragment extends BaseFragment {
     RecyclerView recyclerView;
 //    @BindView(R.id.smart)
 //    SmartRefreshLayout refreshLayout;
-    CommonsAdapter adapterNewArrival;
+    MustAdapter adapterNewArrival;
     ProductNormalModel productNormalModel;
     private String cell; // 客服电话
     private AlertDialog mTypedialog;
@@ -69,34 +66,30 @@ public class MustFragment extends BaseFragment {
     int shopTypeId;
     String flag = "common";
     //新品集合
-    private List<ProductNormalModel.DataBean.ListBean> list = new ArrayList<>();
+    private List<MustModel.DataBean> list = new ArrayList<>();
 
     @Override
     public int setLayoutId() {
-        return R.layout.list;
+        return R.layout.list_must;
     }
 
     @Override
     public void initViews(View view) {
-//        refreshLayout.autoRefresh();
-        getProductsList();
-        initStatusBarWhiteColor();
-    }
-    protected void initStatusBarWhiteColor() {
-        //设置状态栏颜色为白色，状态栏图标为黑色
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getActivity().getWindow().setStatusBarColor(Color.WHITE);
-            Log.d("sssssssOOOOO..","ssss");
-            StatusBarUtil.setStatusBarLightMode(getActivity());
+        if(!EventBus.getDefault().isRegistered(this)) {//加上判断
+            EventBus.getDefault().register(this);
         }
+        getProductsList();
     }
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void findViewById(View view) {
-        setTranslucentStatus();
         bind = ButterKnife.bind(this, view);
 
-        adapterNewArrival = new CommonsAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
+        adapterNewArrival = new MustAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
@@ -127,32 +120,6 @@ public class MustFragment extends BaseFragment {
         });
         recyclerView.setLayoutManager(new GridLayoutManager(mActivity,2));
         recyclerView.setAdapter(adapterNewArrival);
-
-
-//        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-//            @Override
-//            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-//                list.clear();
-//                getProductsList();
-//                refreshLayout.finishRefresh();
-//            }
-//        });
-//
-//        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-//            @Override
-//            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-//                if (productNormalModel.getData()!=null) {
-//                    if(productNormalModel.getData().isHasNextPage()) {
-//                        getProductsList();
-//                        refreshLayout.finishLoadMore();
-//                    }else {
-//                        refreshLayout.finishLoadMoreWithNoMoreData();
-//                    }
-//                }
-//            }
-//        });
-
-
     }
 
 
@@ -269,7 +236,7 @@ public class MustFragment extends BaseFragment {
         IndexHomeAPI.getMust(mActivity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ProductNormalModel>() {
+                .subscribe(new Subscriber<MustModel>() {
                     @Override
                     public void onCompleted() {
 
@@ -277,15 +244,20 @@ public class MustFragment extends BaseFragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("pagewwwwwww......",e.getMessage()+"");
+
                     }
 
                     @Override
-                    public void onNext(ProductNormalModel getCommonProductModel) {
-
+                    public void onNext(MustModel getCommonProductModel) {
+                            Log.d("weeeeeweewew......","eee");
                         if (getCommonProductModel.isSuccess()) {
-                            list.addAll(getCommonProductModel.getData().getList());
+                            list.clear();
                             adapterNewArrival.notifyDataSetChanged();
+                            if(getCommonProductModel.getData().size()>0) {
+                                list.addAll(getCommonProductModel.getData());
+                                adapterNewArrival.notifyDataSetChanged();
+                            }
+
                         } else {
                             AppHelper.showMsg(mActivity, getCommonProductModel.getMessage());
                         }
@@ -296,7 +268,35 @@ public class MustFragment extends BaseFragment {
 
     @Override
     public void setViewData() {
+        getCustomerPhone();
+    }
 
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
+
+            @Override
+            public void onFaild(String errorMsg) {
+            }
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getMust(BackEvent event) {
+        //刷新UI
+//        pageNum = 1;
+//        list.clear();
+//        getProductsList(1,10,"new");
+
+        getProductsList();
+        Log.d("woshidewffssdf......","1234");
     }
 
     @Override

@@ -47,10 +47,8 @@ import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
 import com.puyue.www.qiaoge.adapter.market.GoodsDetailAdapter;
 import com.puyue.www.qiaoge.adapter.market.GoodsRecommendAdapter;
 import com.puyue.www.qiaoge.api.cart.AddCartAPI;
-import com.puyue.www.qiaoge.api.cart.RecommendApI;
 import com.puyue.www.qiaoge.api.home.ClickCollectionAPI;
 import com.puyue.www.qiaoge.api.home.GetAllCommentListByPageAPI;
-import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
 import com.puyue.www.qiaoge.api.home.GetSpecialDetailAPI;
 import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
@@ -64,7 +62,6 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.helper.AppHelper;
-import com.puyue.www.qiaoge.helper.BigDecimalUtils;
 import com.puyue.www.qiaoge.helper.CollapsingToolbarLayoutStateHelper;
 import com.puyue.www.qiaoge.helper.FVHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
@@ -78,33 +75,25 @@ import com.puyue.www.qiaoge.model.home.ChoiceSpecModel;
 import com.puyue.www.qiaoge.model.home.ClickCollectionModel;
 import com.puyue.www.qiaoge.model.home.GetAllCommentListByPageModel;
 import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
-import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
 import com.puyue.www.qiaoge.model.home.GetProductListModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.GuessModel;
 import com.puyue.www.qiaoge.model.home.HasCollectModel;
-import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.model.home.SpecialGoodModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
-import com.puyue.www.qiaoge.model.market.GoodsDetailModel;
 import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
 import com.puyue.www.qiaoge.utils.DateUtils;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 import com.puyue.www.qiaoge.view.StarBarView;
 import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
@@ -118,7 +107,7 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by ${王文博} on 2019/4/11
- * 折扣详情
+ * 折扣/团购详情
  */
 public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     private ImageView mIvBack;
@@ -153,7 +142,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     private Date ends;
     GuessModel searchResultsModel;
     //猜你喜欢集合
-    private List<GuessModel.DataBean> searchList = new ArrayList<>();
     private List<ChoiceSpecModel> account = new ArrayList<>();
     private String totalMoney = "0";
     private String cell;
@@ -163,7 +151,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     private CollapsingToolbarLayoutStateHelper state;
     private Toolbar toolbar;
     private TextView textViewTitle;
-    TextView tv_total;
+    TextView tv_surplus;
     //用户评论
     private TextView userEvaluationNum;
     private TextView goodsEvaluationNumber;
@@ -173,9 +161,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     ProgressBar pb;
     private StarBarView sbv_star_bar;
     private TextView tv_status;
-    private TextView tv_like;
-    //推荐
-    private RecyclerView recyclerViewRecommend;
     private GoodsRecommendAdapter adapterRecommend;
     private List<GetProductListModel.DataBean.ListBean> listRecommend = new ArrayList<>();
     // 商品详情
@@ -227,8 +212,10 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         if (getIntent() != null && getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             productId = bundle.getInt(AppConstant.ACTIVEID);
+            Log.d("wodeproductId....",productId+"");
 
         }
+
         return false;
     }
 
@@ -249,7 +236,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         pb = FVHelper.fv(this, R.id.pb);
         tv_cut_down = FVHelper.fv(this, R.id.tv_cut_down);
         tv_time = (TextView) findViewById(R.id.tv_time);
-        tv_total = (TextView) findViewById(R.id.tv_total);
+        tv_surplus = (TextView) findViewById(R.id.tv_surplus);
         tv_limit_num = (TextView) findViewById(R.id.tv_limit_num);
         tv_price = (TextView) findViewById(R.id.tv_price);
         tv_name = (TextView) findViewById(R.id.tv_name);
@@ -282,7 +269,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         goodsEvaluationReply = (TextView) findViewById(R.id.goodsEvaluationReply);
         tvOldPrice = (TextView) findViewById(R.id.old_price);
         tv_old_price = (TextView) findViewById(R.id.tv_old_price);
-        recyclerViewRecommend = (RecyclerView) findViewById(R.id.recyclerViewRecommend);
         recyclerViewImage = (RecyclerView) findViewById(R.id.recyclerViewImage);
         linearLayoutEvaluation = (LinearLayout) findViewById(R.id.linearLayoutEvaluation);
         linearLayoutEvaluationNoData = (LinearLayout) findViewById(R.id.linearLayoutEvaluationNoData);
@@ -292,9 +278,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         mTvAdd = FVHelper.fv(this, R.id.tv_activity_special_add);
         sbv_star_bar = findViewById(R.id.sbv_star_bar);
         tv_status = findViewById(R.id.tv_status);
-        tv_like = findViewById(R.id.tv_like);
-        tv_like.setVisibility(View.GONE);
-        recyclerViewRecommend.setVisibility(View.GONE);
     }
 
     @Override
@@ -307,11 +290,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         getProductDetail(productId);
         getCustomerPhone();
         getAllCommentList(pageNum, pageSize, productId, businessType);
-        adapterRecommend = new GoodsRecommendAdapter(R.layout.item_goods_recommend, searchList);
-        LinearLayoutManager linearLayoutManagerCoupons = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewRecommend.setLayoutManager(linearLayoutManagerCoupons);
-        recyclerViewRecommend.setAdapter(adapterRecommend);
-
         imageViewAdapter = new ImageViewAdapter(mContext,R.layout.item_imageview,detailList);
         recyclerViewImage.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerViewImage.setAdapter(imageViewAdapter);
@@ -514,6 +492,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                     @Override
                     public void onNext(SpecialGoodModel model) {
                         if (model.isSuccess()) {
+
                             //  addViewForChoice(model);
                             detailList.clear();
                             detailList.addAll(model.getData().getDetailPics());
@@ -525,17 +504,23 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                             tv_price.setText(model.getData().getShowPrice());
                             int progress = Integer.parseInt(model.getData().getProgress());
                             pb.setProgress(progress);
-                            tv_old_price.setText("原价："+model.getData().getOldPrice());
+
+                            tv_old_price.setText(model.getData().getOldPrice());
                             tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                             tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
+
                             tv_name.setText(model.getData().getActTypeName());
+
                             tvOldPrice.setText(model.getData().getShowOldPrice());
+
                             tv_title.setText(model.getData().getActiveName());
-                            tv_total.setText(model.getData().getTotalNum());
+                            Log.d("fsffffffff......",model.getData().getActiveName());
+                            tv_surplus.setText(model.getData().getRemainNum());
                             mTvGroupPrice.setText(model.getData().getPrice());
                             tv_time.setText(model.getData().getStartTime()+"");
                             tv_spec.setText("规格："+model.getData().getSpec());
                             mTvInven.setText(model.getData().getRemainNum());
+
                             tv_desc.setText(model.getData().getIntroduction());
 
                             long currentTime = System.currentTimeMillis();
@@ -557,9 +542,14 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                             if(startTime == 0) {
                                 tv_time.setVisibility(View.VISIBLE);
                                 if (model.getData().getSaleDone() == 0) {
-                                    tv_time.setText("折扣已售罄");
+                                    tv_time.setText("产品已售罄");
                                 }else {
-                                    tv_time.setText("折扣进行中");
+                                    if(model.getData().getActivityType()==3) {
+                                        tv_time.setText("抢购进行中");
+                                    }else if(model.getData().getActivityType()==11) {
+                                        tv_time.setText("折扣进行中");
+                                    }
+
                                 }
                             }else {
 //                                long abs = Math.abs(startTime - currentTime);
@@ -575,13 +565,18 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                                         if(startTime < currentTime) {
                                             tv_time.setVisibility(View.VISIBLE);
                                             if (model.getData().getSaleDone() == 0) {
-                                                tv_time.setText("折扣已售罄");
+                                                tv_time.setText("产品已售罄");
                                             }else {
-                                                tv_time.setText("折扣进行中");
+                                                if(model.getData().getActivityType()==3) {
+                                                    tv_time.setText("抢购进行中");
+                                                }else if(model.getData().getActivityType()==11) {
+                                                    tv_time.setText("折扣进行中");
+                                                }
+
                                             }
                                         }else {
                                             tv_cut_down.setTime(true,currentTime,startTime,endTime);
-                                            tv_cut_down.changeBackGrounds(ContextCompat.getColor(mContext, R.color.color_F6551A));
+                                            tv_cut_down.changeBackGrounds(ContextCompat.getColor(mContext, R.color.color333333));
                                             tv_cut_down.changeTypeColor(Color.WHITE);
                                             tv_time.setVisibility(View.INVISIBLE);
                                             tv_cut_down.start();
@@ -596,10 +591,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
 
                             }
 
-
-
-
-
                             tvOldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
                             mTvSub.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -610,7 +601,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                                                 amount--;
                                                 mAmount.setText(String.valueOf(amount));
                                                 //  mTvGroupAmount.setText(amount + unit);
-                                                //  mTvTotalMoney.setText("￥" + BigDecimalUtils.mul(price, amount, 2));
+//                                                  mTvTotalMoney.setText("￥" + BigDecimalUtils.mul(price, amount, 2));
                                             }
 
                                     } else {
@@ -638,13 +629,13 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                                 }
                             });
                             if(currentTime<startTime) {
-                                mTvAddCar.setText("未开始");
+                                mTvAddCar.setText("     未开始     ");
                                 mTvAddCar.setBackgroundResource(R.drawable.app_car);
 
                             }else {
                                 if (model.getData().getSaleDone() == 0) {
                                     mTvAddCar.setEnabled(false);
-                                    mTvAddCar.setText("已售罄");
+                                    mTvAddCar.setText("     已售罄     ");
                                     mTvAddCar.setBackgroundResource(R.drawable.app_car);
                                 } else {
                                     mTvAddCar.setEnabled(true);
@@ -691,173 +682,8 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
 
                     }
                 });
-    }
-
-    /**
-     * 通过list的大小设置控件的多少,
-     */
-    private void addViewForChoice(SpecialGoodModel model) {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);       //LayoutInflater inflater1=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LayoutInflater inflater = LayoutInflater.from(mContext);
 
 
-        View view = inflater.inflate(R.layout.item_choice_spec, null);
-        view.setLayoutParams(lp);
-//        mLlChoice.addView(view);
-
-
-        //setViewDataAndCount(view,model);
-
-
-    }
-
-
-    /**
-     * 对动态添加的view设置监听和数据,
-     */
-    private void setViewDataAndCount(View view, final SpecialGoodModel bean) {
-        TextView mTvPrice = FVHelper.fv(view, R.id.tv_item_group_price);
-        mTvPrice.setText(bean.getData().getPrice());
-
-        if (typeIntent == 1) {
-            TextView tvOriginalPrice = FVHelper.fv(view, R.id.tvOriginalPrice);
-            tvOriginalPrice.setText(bean.getData().getOldPrice());
-            tvOriginalPrice.setVisibility(View.VISIBLE);
-            tvOriginalPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); // 设置中划线并加清晰
-
-        } else {
-            TextView tvOriginalPrice = FVHelper.fv(view, R.id.tvOriginalPrice);
-            tvOriginalPrice.setVisibility(View.GONE);
-        }
-
-        final ChoiceSpecModel model = new ChoiceSpecModel();
-        // model.productCombinationPriceId = bean.productCombinationPriceId;
-        model.totalNum = 0;
-        // model.num = bean.num;
-        //model.productUnitName = bean.productUnitName;
-        if (model.num == 0) {
-            model.num = 1;
-        }
-        account.add(model);
-        final TextView mTvAmount = FVHelper.fv(view, R.id.tv_item_amount);
-        view.findViewById(R.id.tv_item_sub).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    //减少
-                    if (UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_RETAIL)) {
-                        //这个用户是零售用户
-                        if ("批发".equals(type)) {
-                            if (StringHelper.notEmptyAndNull(cell)) {
-                                AppHelper.showAuthorizationDialog(mContext, cell, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode())) {
-                                            AppHelper.hideAuthorizationDialog();
-                                           showDialog();
-                                        } else {
-                                            AppHelper.showMsg(SpecialGoodDetailActivity.this, "请输入完整授权码");
-                                        }
-                                    }
-                                });
-                            }
-                        } else {
-                            amount = Integer.parseInt(mTvAmount.getText().toString());
-                            if (amount != 0) {
-                                amount--;
-
-
-                                account.get(0).totalNum = amount;
-
-
-                                mTvAmount.setText(amount + "");
-//                    totalMoney = totalMoney - Double.parseDouble(bean.price);
-                                BigDecimal totalMon = new BigDecimal(totalMoney);
-                                totalMon = totalMon.subtract(new BigDecimal(bean.getData().getPrice()));
-                                totalMoney = totalMon.toString();
-
-
-                            }
-                        }
-                    } else if (UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_WHOLESALE)) {
-                        //这个用户是批发用户
-                        amount = Integer.parseInt(mTvAmount.getText().toString());
-                        if (amount != 0) {
-                            amount--;
-
-                            account.get(0).totalNum = amount;
-                            mTvAmount.setText(amount + "");
-//                    totalMoney = totalMoney - Double.parseDouble(bean.price);
-                            BigDecimal totalMon = new BigDecimal(totalMoney);
-                            totalMon = totalMon.subtract(new BigDecimal(bean.getData().getPrice()));
-
-                        }
-                    }
-                } else {
-                    AppHelper.showMsg(mContext, "请先登录");
-                    startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
-                }
-            }
-        });
-        view.findViewById(R.id.tv_item_add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    //增加
-                    if (UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_RETAIL)) {
-                        //这个用户是零售用户
-                        if ("批发".equals(type)) {
-                            if (StringHelper.notEmptyAndNull(cell)) {
-                                AppHelper.showAuthorizationDialog(mContext, cell, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode())) {
-                                            AppHelper.hideAuthorizationDialog();
-                                           showDialog();
-                                        } else {
-                                            AppHelper.showMsg(SpecialGoodDetailActivity.this, "请输入完整授权码");
-                                        }
-                                    }
-                                });
-                            }
-                        } else {
-                            if (inventory != 0) {
-                                amount = Integer.parseInt(mTvAmount.getText().toString());
-                                amount++;
-
-                                account.get(0).totalNum = amount;
-                                mTvAmount.setText(amount + "");
-//                totalMoney = totalMoney + Double.parseDouble(bean.price);
-                                BigDecimal totalMon = new BigDecimal(totalMoney);
-                                totalMon = totalMon.add(new BigDecimal(bean.getData().getPrice()));
-                                totalMoney = totalMon.toString();
-
-                            }
-                        }
-                    } else if (UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_WHOLESALE)) {
-                        //这个用户是批发用户
-                        if (inventory != 0) {
-                            amount = Integer.parseInt(mTvAmount.getText().toString());
-                            amount++;
-
-                            account.get(0).totalNum = amount;
-
-
-                            mTvAmount.setText(amount + "");
-//                totalMoney = totalMoney + Double.parseDouble(bean.price);
-                            BigDecimal totalMon = new BigDecimal(totalMoney);
-                            totalMon = totalMon.add(new BigDecimal(bean.getData().getPrice()));
-                            totalMoney = totalMon.toString();
-
-                        }
-                    }
-                } else {
-                    AppHelper.showMsg(mContext, "请先登录");
-                    startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
-                }
-
-            }
-        });
     }
 
 
@@ -1070,35 +896,6 @@ private float star;
 
     }
 
-    private void requestAddCart(String productCombinationPriceVOList, String tNum) {
-        AddCartAPI.requestData(mContext, productId, productCombinationPriceVOList, businessType, tNum)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<AddCartModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-//                        Toast.makeText(mContext, "错误", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onNext(AddCartModel addCartModel) {
-                        if (addCartModel.success) {
-
-
-                            setAnim(mTvAddCar);
-                            AppHelper.showMsg(mContext, "成功加入购物车");
-                            getCartNum();
-                        } else {
-                            AppHelper.showMsg(mContext, addCartModel.message);
-                        }
-                    }
-                });
-    }
 
     public void returnBitMap(String src) {
         MyHandler myHandler = new MyHandler();
@@ -1210,22 +1007,6 @@ private float star;
             buyImg.setY(currentPosition[1]);
         });
         valueAnimator.start();
-/*
-        TranslateAnimation translateAnimationX = new TranslateAnimation(0, endX, 0, 0);
-        translateAnimationX.setInterpolator(new LinearInterpolator());// 设置此动画的加速曲线。默认为一个线性插值。
-        translateAnimationX.setRepeatCount(0);// 动画重复的次数
-        translateAnimationX.setFillAfter(true);
-
-        TranslateAnimation translateAnimationY = new TranslateAnimation(0, 0, 0, endY);
-        translateAnimationY.setInterpolator(new AccelerateInterpolator());
-        translateAnimationY.setRepeatCount(0);// 动画重复次数
-        translateAnimationY.setFillAfter(true);
-        AnimationSet set = new AnimationSet(false);
-        set.setFillAfter(false);
-        set.addAnimation(translateAnimationX);
-        set.addAnimation(translateAnimationY);
-        set.setDuration(1000);
-        view.startAnimation(set);*/
 
 
         valueAnimator.addListener(new Animator.AnimatorListener() {
@@ -1512,7 +1293,7 @@ private float star;
         window.setWindowAnimations(R.style.dialogStyle);
         window.getDecorView().setPadding(0, 0, 0, 0);
         //获得window窗口的属性
-        android.view.WindowManager.LayoutParams lp = window.getAttributes();
+        WindowManager.LayoutParams lp = window.getAttributes();
         //设置窗口宽度为充满全屏
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         //设置窗口高度为包裹内容

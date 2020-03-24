@@ -13,7 +13,6 @@ import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.HomeGoodsListActivity;
 import com.puyue.www.qiaoge.activity.home.NewProductActivity;
-import com.puyue.www.qiaoge.activity.mine.MessageCenterActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.adapter.home.CommonProductActivity;
 import com.puyue.www.qiaoge.adapter.home.HotProductActivity;
@@ -23,7 +22,6 @@ import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
-import com.puyue.www.qiaoge.model.mine.order.HomeBaseModel;
 
 import java.util.List;
 
@@ -37,7 +35,6 @@ public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.Icon
     protected void convert(BaseViewHolder helper, IndexInfoModel.DataBean.IconsBean item) {
         helper.setText(R.id.tv_desc,item.getConfigDesc());
         ImageView iv_icon = helper.getView(R.id.iv_icon);
-        Log.d("ggffasfsfeerre.....",item.getConfigCode());
         Glide.with(mContext)
                 .load(item.getUrl())
                 .apply(new RequestOptions().placeholder(R.mipmap.ic_launcher))
@@ -89,13 +86,13 @@ public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.Icon
                 }else if (AppConstant.SHARETYPE.equals(item.getRemark())) {
                     //分享有礼
                     setIntent(item.getUrl());
-
                 }else if(AppConstant.VIPTYPE.equals(item.getConfigCode())) {
                     //VIP会员
                     setIntent(item.getUrl());
                 }else if(AppConstant.CONSULT.equals(item.getConfigCode())) {
                     //行业资讯
-                    setIntentConsult(item.getUrl());
+                    Log.d("sweeeeeeee....",item.getUrl());
+                    setIntentConsult(item.getRemark());
                 }
             }
         });

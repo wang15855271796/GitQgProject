@@ -31,7 +31,6 @@ public class CartUnableAdapter extends BaseQuickAdapter<CartsListModel.DataBean.
 
     @Override
     protected void convert(BaseViewHolder helper, CartsListModel.DataBean.InValidListBean item) {
-        Log.d("ssssddd.,,,,,",item+"");
         CheckBox cb_item_out = helper.getView(R.id.cb_item_out);
         cb_item_out.setVisibility(View.GONE);
         RecyclerView recyclerView = helper.getView(R.id.recyclerView);

@@ -8,9 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
-import android.graphics.Rect;
 import android.graphics.Shader;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,9 +16,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,41 +25,33 @@ import android.widget.TextView;
 
 import com.android.tu.loadingdialog.LoadingDailog;
 import com.puyue.www.qiaoge.R;
-
 import com.puyue.www.qiaoge.activity.CartActivity;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListActivity;
+import com.puyue.www.qiaoge.activity.mine.account.AddressListsActivity;
 import com.puyue.www.qiaoge.adapter.mine.NewOrderDetailAdapter;
 import com.puyue.www.qiaoge.api.cart.CancelOrderAPI;
-
 import com.puyue.www.qiaoge.api.cart.DeleteOrderAPI;
 import com.puyue.www.qiaoge.api.home.GetOrderDetailAPI;
 import com.puyue.www.qiaoge.api.mine.order.ConfirmGetGoodsAPI;
 import com.puyue.www.qiaoge.api.mine.order.CopyToCartAPI;
 import com.puyue.www.qiaoge.api.mine.order.GetDeliverTimeOrderAPI;
-import com.puyue.www.qiaoge.api.mine.order.NewOrderDetailAPI;
 import com.puyue.www.qiaoge.api.mine.order.NotifyDeliverTimeOrderAPI;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.AddressEvent;
-import com.puyue.www.qiaoge.fragment.cart.CartFragment;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
-import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.cart.CancelOrderModel;
-
 import com.puyue.www.qiaoge.model.cart.GetOrderDetailModel;
 import com.puyue.www.qiaoge.model.home.GetDeliverTimeModel;
 import com.puyue.www.qiaoge.model.mine.order.ConfirmGetGoodsModel;
 import com.puyue.www.qiaoge.model.mine.order.CopyToCartModel;
-
 import com.puyue.www.qiaoge.model.mine.order.OrderEvaluateListModel;
-
 import com.puyue.www.qiaoge.view.GradientColorTextView;
-import com.puyue.www.qiaoge.view.PickCityUtil;
 import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
-import com.umeng.commonsdk.debug.E;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -78,8 +66,6 @@ import java.util.List;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-
-import static com.umeng.commonsdk.stateless.UMSLEnvelopeBuild.mContext;
 
 /**
  * Created by ${daff}
@@ -192,7 +178,7 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
     private TextView tvCopyOrderOne;
     private TextView tvCopyOrderTwo;
     private TextView tvCopyOrderThree;
-
+    private AVLoadingIndicatorView lav_activity_loading;
     private TextView mTvConfirmOrder;
     //物流信息
     private RelativeLayout mRelativeDriver;
@@ -308,7 +294,7 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
         sendAmountStr = findViewById(R.id.tv_send_amount_str);
         tvDeductDsc = findViewById(R.id.tv_deduct_desc);
         tvNomalReductDesc = findViewById(R.id.tv_normal_reduct_desc);
-
+        lav_activity_loading = findViewById(R.id.lav_activity_loading);
         tvCopy = findViewById(R.id.tv_copy_order_num);
         mLinearLayoutShipped = findViewById(R.id.linearLayout_shipped);
         mLinearLayoutEvalute = findViewById(R.id.linearLayout_evalute);
@@ -351,8 +337,6 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
                 if (orderStatusRequest == 1) {
                     cancelOrder(orderId);
                 }
-
-
                 Log.i("abc", "getStop: aaaaaaaaaaaa");
             }
         });
@@ -849,6 +833,7 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
             @Override
             public void onClick(View v) {
                 mDialog.dismiss();
+                lav_activity_loading.show();
                 cancelOrder(orderId);
             }
         });
@@ -867,17 +852,19 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        lav_activity_loading.hide();
                     }
 
                     @Override
                     public void onNext(CancelOrderModel cancelOrderModel) {
                         if (cancelOrderModel.success) {
                             //取消成功
+                            lav_activity_loading.hide();
                             AppHelper.showMsg(NewOrderDetailActivity.this, "取消订单成功");
 
                             getOrderDetail(orderId, orderState, returnProductMainId);
                         } else {
+                            lav_activity_loading.hide();
                             AppHelper.showMsg(NewOrderDetailActivity.this, cancelOrderModel.message);
                         }
                     }
@@ -1101,14 +1088,13 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
                     break;
 
                 case R.id.tv_buttonAgainBuy:
-
                     requestCopyToCart();
                     break;
                 case R.id.tv_delete:
                     deleteOrder();
                     break;
                 case R.id.linearLayout_address_arrow:
-                    Intent intent_ = new Intent(mContext, AddressListActivity.class);
+                    Intent intent_ = new Intent(mContext, AddressListsActivity.class);
 
                     intent_.putExtra("orderId", orderId);
                     intent_.putExtra("type", 1);
@@ -1300,20 +1286,20 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
 
                                     }
 
-                                    PickCityUtil.showSinglePickViewTwo(mActivity, mlist, "请选择配送时间段", new PickCityUtil.ChoosePositionListener() {
-                                        @Override
-                                        public void choosePosition(int position, String s) {
-                                            try {
-                                                JSONObject jsonObjects = jsonArray.getJSONObject(position);
-                                                deliverTimeStart = jsonObjects.getString("start");
-                                                deliverTimeName = jsonObjects.getString("name");
-                                                deliverTimeEnd = jsonObjects.getString("end");
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                            notifyDeliverTime();
-                                        }
-                                    });
+//                                    PickCityUtil.showSinglePickViewTwo(mActivity, mlist, "请选择配送时间段", new PickCityUtil.ChoosePositionListener() {
+//                                        @Override
+//                                        public void choosePosition(int position, String s) {
+//                                            try {
+//                                                JSONObject jsonObjects = jsonArray.getJSONObject(position);
+//                                                deliverTimeStart = jsonObjects.getString("start");
+//                                                deliverTimeName = jsonObjects.getString("name");
+//                                                deliverTimeEnd = jsonObjects.getString("end");
+//                                            } catch (JSONException e) {
+//                                                e.printStackTrace();
+//                                            }
+//                                            notifyDeliverTime();
+//                                        }
+//                                    });
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

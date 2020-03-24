@@ -71,6 +71,7 @@ public class ClassifyDialog extends Dialog implements View.OnClickListener {
         super(mContext, R.style.dialog);
         this.context = mContext;
         this.listBean = item;
+        exchangeList(listBean.getProductId());
         init();
     }
 
@@ -88,18 +89,18 @@ public class ClassifyDialog extends Dialog implements View.OnClickListener {
             getWindow().setAttributes(attributes);
         }
         iv_close.setOnClickListener(this);
-        tv_name.setText(listBean.getProductName());
-        tv_sale.setText(listBean.getSalesVolume());
-        tv_price.setText(listBean.getMinMaxPrice());
-        tv_desc.setText(listBean.getSpecialOffer());
-        tv_stock.setText(listBean.getInventory());
+//        tv_name.setText(listBean.getProductName());
+//        tv_sale.setText(listBean.getSalesVolume());
+//        tv_price.setText(listBean.getMinMaxPrice());
+//        tv_desc.setText(listBean.getSpecialOffer());
+//        tv_stock.setText(listBean.getInventory());
 
         //初始展示
-        int productId = listBean.getProdSpecs().get(0).getProductId();
-        selectionInnerAdapter = new SelectionInnerAdapter(productId,R.layout.item_choose_content,listBean.getProdPrices());
-        Glide.with(context).load(listBean.getDefaultPic()).into(iv_head);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(selectionInnerAdapter);
+//        int productId = listBean.getProdSpecs().get(0).getProductId();
+//        selectionInnerAdapter = new SelectionInnerAdapter(productId,R.layout.item_choose_content,listBean.getProdPrices());
+//        Glide.with(context).load(listBean.getDefaultPic()).into(iv_head);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+//        recyclerView.setAdapter(selectionInnerAdapter);
 
         List<MarketRightModel.DataBean.ProdClassifyBean.ListBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
 

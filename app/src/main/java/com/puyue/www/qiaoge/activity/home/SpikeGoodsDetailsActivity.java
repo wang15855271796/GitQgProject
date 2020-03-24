@@ -381,9 +381,9 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
                     public void onNext(BaseModel seckillListModel) {
                         if(seckillListModel.success) {
                             if(warnMe==0) {
-                                mTvAddCar.setText("添加提醒");
+                                mTvAddCar.setText("     添加提醒     ");
                             }else {
-                                mTvAddCar.setText("取消提醒");
+                                mTvAddCar.setText("     取消提醒     ");
                             }
                         }else {
                             ToastUtil.showSuccessMsg(mContext,seckillListModel.message);
@@ -1117,7 +1117,7 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
         window.setWindowAnimations(R.style.dialogStyle);
         window.getDecorView().setPadding(0, 0, 0, 0);
         //获得window窗口的属性
-        android.view.WindowManager.LayoutParams lp = window.getAttributes();
+        WindowManager.LayoutParams lp = window.getAttributes();
         //设置窗口宽度为充满全屏
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         //设置窗口高度为包裹内容

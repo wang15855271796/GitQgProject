@@ -18,7 +18,7 @@ public class UpdateUserInvitationAPI {
     private interface UpdateUserInvitationService {
         @POST(AppInterfaceAddress.UPDATEUSERINVITATION)
         Observable<UpdateUserInvitationModel> setParams(@Query("invitationCode") String invitationCode,
-                                                        @Query("shopTypeId")  int shopTypeId);
+                                                        @Query("shopTypeId") int shopTypeId);
     }
 
     public static Observable<UpdateUserInvitationModel> requestData(Context context, String invitationCode, int shopTypeId) {

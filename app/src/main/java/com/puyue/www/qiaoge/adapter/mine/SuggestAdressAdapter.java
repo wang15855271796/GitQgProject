@@ -2,20 +2,14 @@ package com.puyue.www.qiaoge.adapter.mine;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 
 import java.util.List;
-import java.util.zip.Inflater;
 
 /**
  * Created by ${王文博} on 2019/6/25
@@ -44,8 +38,6 @@ public class SuggestAdressAdapter extends RecyclerView.Adapter<SuggestAdressAdap
     @Override
     public void onBindViewHolder(@NonNull MySuggestViewHolde holder, int position) {
         holder.tv_suggest_address.setText(list.get(position));
-
-
         holder.tv_suggest_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

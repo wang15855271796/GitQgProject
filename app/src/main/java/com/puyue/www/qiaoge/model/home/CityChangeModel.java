@@ -27,7 +27,7 @@ public class CityChangeModel extends SectionEntity<CityChangeModel.DataBean>{
     public CityChangeModel(boolean isHeader, String header) {
         super(isHeader, header);
     }
-    public CityChangeModel(CityChangeModel.DataBean dataBean) {
+    public CityChangeModel(DataBean dataBean) {
         super(dataBean);
     }
 

@@ -3,8 +3,8 @@ package com.puyue.www.qiaoge;
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.OverScroller;
 
@@ -14,94 +14,48 @@ import java.lang.reflect.Field;
  * Created by ${王涛} on 2020/1/12
  */
 public class AppBarLayoutBehavior extends AppBarLayout.Behavior{
-    private static final String TAG = "CustomAppbarLayoutBehavior";
 
-    private static final int TYPE_FLING = 1;
 
-    private boolean isFlinging;
-    private boolean shouldBlockNestedScroll;
+    private OverScroller mScroller1;
+
+    public AppBarLayoutBehavior() {
+        super();
+    }
 
     public AppBarLayoutBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(CoordinatorLayout parent, AppBarLayout child, MotionEvent ev) {
-        shouldBlockNestedScroll = false;
-        if (isFlinging) {
-            shouldBlockNestedScroll = true;
-        }
-
-        switch (ev.getActionMasked()) {
-            case MotionEvent.ACTION_DOWN:
-                stopAppbarLayoutFling(child);  //手指触摸屏幕的时候停止fling事件
-                break;
-        }
-
-        return super.onInterceptTouchEvent(parent, child, ev);
+        bindScrollerValue(context);
     }
 
     /**
-     * 停止appbarLayout的fling事件
-     * @param appBarLayout
+     * 反射注入Scroller以获取其引用
+     *
+     * @param context
      */
-    private void stopAppbarLayoutFling(AppBarLayout appBarLayout) {
-        //通过反射拿到HeaderBehavior中的flingRunnable变量
+    private void bindScrollerValue(Context context) {
+        if (mScroller1 != null) return;
+        mScroller1 = new OverScroller(context);
         try {
-            Class<?> headerBehaviorType = this.getClass().getSuperclass().getSuperclass();
-            Field flingRunnableField = headerBehaviorType.getDeclaredField("mFlingRunnable");
-            Field scrollerField = headerBehaviorType.getDeclaredField("mScroller");
-            flingRunnableField.setAccessible(true);
-            scrollerField.setAccessible(true);
-
-            Runnable flingRunnable = (Runnable) flingRunnableField.get(this);
-            OverScroller overScroller = (OverScroller) scrollerField.get(this);
-            if (flingRunnable != null) {
-                appBarLayout.removeCallbacks(flingRunnable);
-                flingRunnableField.set(this, null);
-            }
-            if (overScroller != null && !overScroller.isFinished()) {
-                overScroller.abortAnimation();
-            }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public boolean onStartNestedScroll(CoordinatorLayout parent, AppBarLayout child, View directTargetChild, View target, int nestedScrollAxes, int type) {
-        stopAppbarLayoutFling(child);
-        return super.onStartNestedScroll(parent, child, directTargetChild, target, nestedScrollAxes, type);
+            Class<?> clzHeaderBehavior = getClass().getSuperclass().getSuperclass();
+            Field fieldScroller = clzHeaderBehavior.getDeclaredField("mScroller");
+            fieldScroller.setAccessible(true);
+            fieldScroller.set(this, mScroller1);
+        } catch (Exception e) {}
     }
 
     @Override
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, AppBarLayout child, View target, int dx, int dy, int[] consumed, int type) {
-
-        //type返回1时，表示当前target处于非touch的滑动，
-        //该bug的引起是因为appbar在滑动时，CoordinatorLayout内的实现NestedScrollingChild2接口的滑动子类还未结束其自身的fling
-        //所以这里监听子类的非touch时的滑动，然后block掉滑动事件传递给AppBarLayout
-        if (type == TYPE_FLING) {
-            isFlinging = true;
+        if (type == ViewCompat.TYPE_NON_TOUCH) {
+            //fling上滑appbar然后迅速fling下滑list时, HeaderBehavior的mScroller并未停止, 会导致上下来回晃动
+            if (mScroller1.computeScrollOffset()) {
+                mScroller1.abortAnimation();
+            }
+            //当target滚动到边界时主动停止target fling,与下一次滑动产生冲突
+            if (getTopAndBottomOffset() == 0) {
+                ViewCompat.stopNestedScroll(target, type);
+            }
         }
-        if (!shouldBlockNestedScroll) {
-            super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type);
-        }
+        super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type);
     }
 
-    @Override
-    public void onNestedScroll(CoordinatorLayout coordinatorLayout, AppBarLayout child, View target, int dxConsumed, int dyConsumed, int
-            dxUnconsumed, int dyUnconsumed, int type) {
-        if (!shouldBlockNestedScroll) {
-            super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, type);
-        }
-    }
-
-    @Override
-    public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, AppBarLayout abl, View target, int type) {
-        super.onStopNestedScroll(coordinatorLayout, abl, target, type);
-        isFlinging = false;
-        shouldBlockNestedScroll = false;
-    }
 }

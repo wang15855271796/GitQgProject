@@ -15,9 +15,16 @@ import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
+import com.puyue.www.qiaoge.activity.home.CouponDetailActivity;
 import com.puyue.www.qiaoge.activity.home.HomeGoodsListActivity;
+import com.puyue.www.qiaoge.activity.home.TeamDetailActivity;
 import com.puyue.www.qiaoge.activity.mine.coupons.MyCouponsActivity;
+import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
+import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletPointActivity;
+import com.puyue.www.qiaoge.adapter.home.CommonProductActivity;
+import com.puyue.www.qiaoge.adapter.home.HotProductActivity;
+import com.puyue.www.qiaoge.adapter.home.ReductionProductActivity;
 import com.puyue.www.qiaoge.api.home.PopupViewHomeAPI;
 import com.puyue.www.qiaoge.api.home.QueryHomePropupAPI;
 import com.puyue.www.qiaoge.constant.AppConstant;
@@ -174,7 +181,7 @@ public class HomePopuWindow extends PopupWindow {
 
                     @Override
                     public void onNext(PopupViewHomeModel popupViewHomeModel) {
-
+                        Log.d("weeeeweeeeee.....",toPage);
                         //  toPage: 跳转页面 vip(会员),deduct(优惠券),seckill(秒杀),group（团购）,sharePage(分享),priceDown(降价),self(自定义界面),disable(无，不可跳转)
                         if (popupViewHomeModel.success) {
                             switch (toPage) {
@@ -185,17 +192,14 @@ public class HomePopuWindow extends PopupWindow {
 
                                 case "seckill": //秒杀页面
                                     Intent intent = new Intent(context, HomeGoodsListActivity.class);
-                                    intent.putExtra(AppConstant.PAGETYPE, AppConstant.SECONDTYPE);
                                     context.startActivity(intent);
                                     break;
                                 case "group": //团购页面
-                                    Intent intent2 = new Intent(context, HomeGoodsListActivity.class);
-                                    intent2.putExtra(AppConstant.PAGETYPE, AppConstant.GROUPTYPE);
+                                    Intent intent2 = new Intent(context, TeamDetailActivity.class);
                                     context.startActivity(intent2);
                                     break;
                                 case "priceDown": //降价页面
-                                    Intent intent3 = new Intent(context, HomeGoodsListActivity.class);
-                                    intent3.putExtra(AppConstant.PAGETYPE, "reduction");
+                                    Intent intent3 = new Intent(context, ReductionProductActivity.class);
                                     context.startActivity(intent3);
                                     break;
                                 case "disable":

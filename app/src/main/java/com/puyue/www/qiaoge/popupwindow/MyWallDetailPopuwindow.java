@@ -38,7 +38,7 @@ public class MyWallDetailPopuwindow extends PopupWindow {
         initview(itemsOnClick);
     }
 
-    private void initview(final MyWallDetailPopuwindow.ItemClick itemsOnClick) {
+    private void initview(final ItemClick itemsOnClick) {
 
         gridview = (GridView) view.findViewById(R.id.gridview);
         ArrayAdapter adapter = new ArrayAdapter(context, R.layout.item_my_detail_textview, R.id.text, list);

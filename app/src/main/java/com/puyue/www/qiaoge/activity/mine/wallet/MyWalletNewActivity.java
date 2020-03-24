@@ -2,7 +2,6 @@ package com.puyue.www.qiaoge.activity.mine.wallet;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -11,16 +10,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.api.market.MarketGoodsClassifyAPI;
 import com.puyue.www.qiaoge.api.mine.GetMyBalanceAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
-import com.puyue.www.qiaoge.constant.AppConstant;
-import com.puyue.www.qiaoge.helper.AppHelper;
-import com.puyue.www.qiaoge.helper.GlideRoundTransform;
-import com.puyue.www.qiaoge.helper.TwoDeviceHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
-import com.puyue.www.qiaoge.model.market.MarketClassifyModel;
 import com.puyue.www.qiaoge.model.mine.GetMyBalanceModle;
 
 import rx.Subscriber;
@@ -94,7 +87,7 @@ public class MyWalletNewActivity extends BaseSwipeActivity {
                 Intent intent = new Intent(mActivity, MyWalletActivity.class);
                 UserInfoHelper.saveUserWalletNum(getContext(), num);
                 startActivity(intent);
-                finish();
+//                finish();
                 //startActivity(MyWalletActivity.getIntent(mActivity, MyWalletActivity.class));
             }
         });

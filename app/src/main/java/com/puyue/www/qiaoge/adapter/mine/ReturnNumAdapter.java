@@ -192,7 +192,7 @@ public class ReturnNumAdapter extends BaseQuickAdapter<ReturnOrderDetailModel.Da
 
         dialog.show();
 
-        returnSpecNumAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        returnSpecNumAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 

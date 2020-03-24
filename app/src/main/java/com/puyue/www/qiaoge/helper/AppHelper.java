@@ -307,7 +307,7 @@ public class AppHelper {
        // window.setWindowAnimations(R.style.dialogStyle);
         window.getDecorView().setPadding(0, 0, 0, 0);
         //获得window窗口的属性
-        android.view.WindowManager.LayoutParams lp = window.getAttributes();
+        WindowManager.LayoutParams lp = window.getAttributes();
         //设置窗口宽度为充满全屏
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         //设置窗口高度为包裹内容
@@ -455,7 +455,7 @@ public class AppHelper {
      * @return  系统版本号
      */
     public static String getSystemVersion() {
-        return android.os.Build.VERSION.RELEASE;
+        return Build.VERSION.RELEASE;
     }
     /**
      * 获取手机型号
@@ -463,7 +463,7 @@ public class AppHelper {
      * @return  手机型号
      */
     public static String getSystemModel() {
-        return android.os.Build.MODEL;
+        return Build.MODEL;
     }
 
     /**
@@ -472,7 +472,7 @@ public class AppHelper {
      * @return  手机厂商
      */
     public static String getDeviceBrand() {
-        return android.os.Build.BRAND;
+        return Build.BRAND;
     }
 
     /**
@@ -495,7 +495,7 @@ public class AppHelper {
 
     public static String getLocalIpAddress(Context ctx) {
         WifiManager wifiManager = (WifiManager) ctx
-                .getSystemService(android.content.Context.WIFI_SERVICE);
+                .getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         int ipAddress = wifiInfo.getIpAddress();
         try {

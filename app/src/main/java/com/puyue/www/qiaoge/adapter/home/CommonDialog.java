@@ -14,15 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.adapter.cart.ItemChooseAdapter;
-import com.puyue.www.qiaoge.adapter.market.SpecAdapter;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
+import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
+import com.puyue.www.qiaoge.model.home.MustModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
-import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
@@ -61,14 +58,12 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
     ImageView iv_head;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    private SpecAdapter specAdapter;
-    ProductNormalModel.DataBean.ListBean listBean;
+    MustModel.DataBean listBean;
     int pos = 0;
-    private ItemChooseAdapter itemChooseAdapter;
     NewPriceAdapter searchInnerAdapter;
     private NewSpecAdapter searchSpecAdapter;
 
-    public CommonDialog(Context mContext, ProductNormalModel.DataBean.ListBean item) {
+    public CommonDialog(Context mContext, MustModel.DataBean item) {
         super(mContext, R.style.dialog);
         this.context = mContext;
         this.listBean = item;
@@ -103,8 +98,9 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(searchInnerAdapter);
 
-        List<ProductNormalModel.DataBean.ListBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
 
+//        List<MustModel.DataBean> prodSpecs = listBean.getProdSpecs();
+        List<MustModel.DataBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
         //切换规格
         fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -115,9 +111,34 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
                 exchangeList(productId);
             }
         });
-
         searchSpecAdapter = new NewSpecAdapter(context,listBean.getProdSpecs());
         fl_container.setAdapter(searchSpecAdapter);
+    }
+
+    private void getDetailSpec(int productId) {
+        GetProductDetailAPI.requestData(context, productId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<GetProductDetailModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(GetProductDetailModel model) {
+                        if (model.isSuccess()) {
+
+                        } else {
+
+                        }
+                    }
+                });
     }
 
     /**

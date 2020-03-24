@@ -20,7 +20,7 @@ public class SecKillMoreListAPI {
     private interface SecKillMoreListQueryService {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.SECKILLISTQUERY)
-        Observable<SeckillListModel> getData(@Field("activeId")int activeId);
+        Observable<SeckillListModel> getData(@Field("activeId") int activeId);
         //默认0不选，  1销售量 ，2价格升序,3价格降序
     }
 

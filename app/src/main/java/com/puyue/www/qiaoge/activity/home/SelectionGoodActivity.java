@@ -30,6 +30,7 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
+import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -45,6 +46,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -97,21 +99,22 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
         setContentView(R.layout.new_product);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        refreshLayout.autoRefresh();
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getCartNum(UpDateNumEvent event) {
         getCartNum();
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void findViewById() {
         ButterKnife.bind(this);
         initStatusBarWhiteColor();
+        EventBus.getDefault().register(this);
         productId = getIntent().getIntExtra("productId",0);
         title = getIntent().getStringExtra("title");
         selectionAdapter = new SelectionAdapter(R.layout.item_noresult_recommend, list, new SelectionAdapter.Onclick() {
@@ -141,7 +144,7 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
                 }
             }
         });
-
+        refreshLayout.setEnableLoadMore(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(selectionAdapter);
         recyclerView.setHasFixedSize(true);
@@ -175,7 +178,6 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
                 if (marketRightModel.getData()!=null) {
                     if(marketRightModel.getData().getProdClassify().isHasNextPage()) {
                         pageNum++;
-
                         getProductsList(pageNum, 10,productId);
                         refreshLayout.finishLoadMore();      //加载完成
                     }else {
@@ -333,17 +335,16 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
                     @Override
                     public void onNext(MarketRightModel marketGoodSelectModel) {
                         marketRightModel = marketGoodSelectModel;
-                        Log.d("sdwqdfsgdsf...",marketRightModel.getData().getProdClassify().getList().size()+"");
                         list.addAll(marketRightModel.getData().getProdClassify().getList());
                         selectionAdapter.notifyDataSetChanged();
-
+                        refreshLayout.setEnableLoadMore(true);
                     }
                 });
     }
 
     @Override
     public void setViewData() {
-
+        refreshLayout.autoRefresh();
         getCustomerPhone();
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
         mTypedialog.setCancelable(false);
@@ -352,6 +353,15 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getCartNums(UpDateNumEvent event) {
+        getCartNum();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getCartNums(NumEvent event) {
+        getCartNum();
+    }
     /**
      * 购物车数量
      */

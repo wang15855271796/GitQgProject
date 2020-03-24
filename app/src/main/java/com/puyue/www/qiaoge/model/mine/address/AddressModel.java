@@ -29,7 +29,8 @@ public class AddressModel extends BaseModel {
          */
 
         public int id;
-        String sendType;
+//        0 地址不可用， 1可用
+        public int sendType;
         public int userId;
         public String userName;
         public String contactPhone;

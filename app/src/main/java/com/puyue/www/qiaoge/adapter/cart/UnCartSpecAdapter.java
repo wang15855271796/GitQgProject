@@ -27,7 +27,7 @@ public class UnCartSpecAdapter extends BaseQuickAdapter<CartsListModel.DataBean.
     @Override
     protected void convert(BaseViewHolder helper, CartsListModel.DataBean.InValidListBean.SpecProductListBeanX item) {
         helper.setText(R.id.tv_spec,"规格："+item.getSpec());
-        helper.setText(R.id.tv_stock,"库存："+item.getInventory());
+        helper.setText(R.id.tv_stock,item.getInventory());
         CheckBox cb_item_in = helper.getView(R.id.cb_item_in);
         cb_item_in.setVisibility(View.GONE);
 

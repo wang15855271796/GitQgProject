@@ -1,7 +1,10 @@
 package com.puyue.www.qiaoge.adapter.mine;
 
+import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,14 +41,12 @@ public class AddressAdapter extends BaseQuickAdapter<AddressModel.DataBean, Base
     @Override
     protected void convert(final BaseViewHolder helper, AddressModel.DataBean item) {
         helper.setText(R.id.tv_item_address_name, item.userName);
+        TextView tv_set = helper.getView(R.id.tv_set);
         helper.setText(R.id.tv_item_address_phone, item.contactPhone);
+        CheckBox cb_item_address_default = helper.getView(R.id.cb_item_address_default);
+        LinearLayout ll_item_address_default = helper.getView(R.id.ll_item_address_default);
+
         helper.setText(R.id.tv_item_address_address, item.provinceName+item.cityName+item.areaName+item.detailAddress);
-        /*if (StringHelper.notEmptyAndNull(item.shopName)) {
-            ((LinearLayout) helper.getView(R.id.ll_item_address_store)).setVisibility(View.VISIBLE);
-            helper.setText(R.id.tv_item_address_store, item.shopName);
-        } else {
-            ((LinearLayout) helper.getView(R.id.ll_item_address_store)).setVisibility(View.GONE);
-        }*/
         if (item.isDefault == 0) {
             //不是默认地址
             helper.setChecked(R.id.cb_item_address_default, false);
@@ -53,6 +54,8 @@ public class AddressAdapter extends BaseQuickAdapter<AddressModel.DataBean, Base
             //是默认地址
             helper.setChecked(R.id.cb_item_address_default, true);
         }
+
+
         helper.getView(R.id.fl_address).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,11 +63,14 @@ public class AddressAdapter extends BaseQuickAdapter<AddressModel.DataBean, Base
             }
         });
 
+
+
         //切换默认地址
         ((LinearLayout) helper.getView(R.id.ll_item_address_default)).setOnClickListener(new NoDoubleClickListener() {
             @Override
             public void onNoDoubleClick(View view) {
                 mOnEventClickListener.onEventClick(view, helper.getAdapterPosition(), "default");
+
             }
         });
         //编辑地址
@@ -81,6 +87,7 @@ public class AddressAdapter extends BaseQuickAdapter<AddressModel.DataBean, Base
                 mOnEventClickListener.onEventClick(view, helper.getAdapterPosition(), "delete");
             }
         });
+
         //切换订单地址
         ((LinearLayout) helper.getView(R.id.ll_item_address)).setOnClickListener(new NoDoubleClickListener() {
             @Override
@@ -88,5 +95,15 @@ public class AddressAdapter extends BaseQuickAdapter<AddressModel.DataBean, Base
                 mOnEventClickListener.onEventClick(view, helper.getAdapterPosition(), "order_address");
             }
         });
+
+
+//        if(item.sendType==1) {
+//            ll_item_address_default.setEnabled(true);
+//            tv_set.setTextColor(Color.parseColor("#F56D23"));
+//        }else {
+//            ll_item_address_default.setEnabled(false);
+//            tv_set.setTextColor(Color.parseColor("#999999"));
+//        }
+
     }
 }

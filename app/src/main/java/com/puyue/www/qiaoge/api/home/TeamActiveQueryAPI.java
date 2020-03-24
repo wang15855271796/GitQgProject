@@ -24,7 +24,7 @@ public class TeamActiveQueryAPI {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.TEAMACTIVEQUERY)
         Observable<TeamActiveQueryModel> getData(@Field("activeType") String activeType,
-                                                 @Field("tabId")String tabId);
+                                                 @Field("tabId") String tabId);
     }
 
     public static Observable<TeamActiveQueryModel> requestData(Context context,String activeType,String tabId) {

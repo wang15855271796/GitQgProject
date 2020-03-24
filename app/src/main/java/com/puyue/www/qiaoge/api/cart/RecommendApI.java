@@ -47,8 +47,8 @@ public class RecommendApI {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.SEARCHRESULT)
         Observable<SearchResultsModel> getData(@Field("productName") String productName,
-                                           @Field("pageNum") int pageNum,
-                                           @Field("pageSize") int pageSize);
+                                               @Field("pageNum") int pageNum,
+                                               @Field("pageSize") int pageSize);
     }
 
     public static Observable<SearchResultsModel> requestData(Context context, String productName, int pageNum, int pageSize ) {

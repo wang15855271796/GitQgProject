@@ -21,11 +21,11 @@ public class GenerateOrderNewAPI {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.CART_GENERATEORDER)
         Observable<String> setParams(@Field("activityBalanceVOStr") String activityBalanceVOStr,
-                                                 @Field("normalProductBalanceVOStr") String normalProductBalanceVOStr,
-                                                 @Field("equipmentBalanceVOStr") String equipmentBalanceVOStr,
-                                                 @Field("cartListStr") String cartListStr,
-                                                 @Field("giftDetailNo") String giftDetailNo,
-                                                 @Field("memo") String memo);
+                                     @Field("normalProductBalanceVOStr") String normalProductBalanceVOStr,
+                                     @Field("equipmentBalanceVOStr") String equipmentBalanceVOStr,
+                                     @Field("cartListStr") String cartListStr,
+                                     @Field("giftDetailNo") String giftDetailNo,
+                                     @Field("memo") String memo);
 
     }
 

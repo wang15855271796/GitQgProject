@@ -1,4 +1,4 @@
-//package com.puyue.www.qiaoge.fragment.market;
+package com.puyue.www.qiaoge.fragment.market;//package com.puyue.www.qiaoge.fragment.market;
 //
 //import android.app.AlertDialog;
 //import android.content.Context;

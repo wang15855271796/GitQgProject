@@ -22,7 +22,9 @@ import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 //import com.puyue.www.qiaoge.dialog.ChooseSpecAdapters;
 import com.puyue.www.qiaoge.dialog.ChooseSpecAdapters;
+import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
+import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
@@ -65,66 +67,22 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
     MarketRightModel.DataBean.ProdClassifyBean.ListBean listBean;
     int pos = 0;
     private ItemChooseAdapter itemChooseAdapter;
-
+    ExchangeProductModel exchangeProductModels;
     public ChoosesDialog(Context context, MarketRightModel.DataBean.ProdClassifyBean.ListBean listBean) {
         super(context, R.style.dialog);
         this.context = context;
         this.listBean = listBean;
         init();
-    }
-
-
-
-    //初始化布局
-    private void init() {
-        if(view == null) {
-            view = View.inflate(context, R.layout.dialog_choice, null);
-            view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            binder = ButterKnife.bind(this, view);
-            setContentView(view);
-
-            getWindow().setGravity(Gravity.BOTTOM);
-            WindowManager.LayoutParams attributes = getWindow().getAttributes();
-            attributes.width = Utils.getScreenWidth(context);
-            getWindow().setAttributes(attributes);
+        if(listBean.getBusinessType()==11) {
+            exchangeLists(listBean.getActiveId(),listBean.getBusinessType());
+        }else {
+            exchangeLists(listBean.getProductId(),listBean.getBusinessType());
         }
-        iv_close.setOnClickListener(this);
-        tv_name.setText(listBean.getProductName());
-        tv_sale.setText(listBean.getSalesVolume());
-        tv_price.setText(listBean.getMinMaxPrice());
-        tv_desc.setText(listBean.getSpecialOffer());
-        tv_stock.setText(listBean.getInventory());
 
-        //初始展示
-        int productId = listBean.getProdSpecs().get(0).getProductId();
-        int activeId = listBean.getActiveId();
-        MarketInnerAdapter marketInnerAdapter = new MarketInnerAdapter(activeId,listBean.getBusinessType(),productId,R.layout.item_choose_contents,listBean.getProdPrices());
-        Glide.with(context).load(listBean.getDefaultPic()).into(iv_head);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(marketInnerAdapter);
-
-        List<MarketRightModel.DataBean.ProdClassifyBean.ListBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
-
-        //切换规格
-        fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                pos = position;
-                specAdapter.selectPosition(position);
-                int productId = prodSpecs.get(position).getProductId();
-                exchangeList(productId);
-            }
-        });
-        specAdapter = new SpecAdapter(context,prodSpecs);
-        fl_container.setAdapter(specAdapter);
     }
 
-    /**
-     * 切换规格
-     * @param productId
-     */
-    private void exchangeList(int productId) {
-        GetProductDetailAPI.getExchangeList(context,productId,1)
+    private void exchangeLists(int activeId,int businessType) {
+        GetProductDetailAPI.getExchangeList(context,activeId,businessType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ExchangeProductModel>() {
@@ -141,25 +99,64 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
 
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
-                        int productId1 = exchangeProductModel.getData().getProdSpecs().get(pos).getProductId();
-                        int activeId = exchangeProductModel.getData().getActiveId();
-
-                        if(listBean.getBusinessType()==11) {
-                            itemChooseAdapter = new ItemChooseAdapter(listBean.getBusinessType(), activeId, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
+                        if(exchangeProductModel.isSuccess()) {
+                            exchangeProductModels = exchangeProductModel;
+                            tv_name.setText(exchangeProductModel.getData().getProductName());
+                            tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
+                            tv_price.setText(exchangeProductModel.getData().getMinMaxPrice());
+                            tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
+                            tv_stock.setText(exchangeProductModel.getData().getInventory());
+                            Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
+                            Log.d("wssssssssssss....",exchangeProductModel.getData().getProductName());
+                            if(businessType==11) {
+                                itemChooseAdapter = new ItemChooseAdapter(businessType, exchangeProductModel.getData().getActiveId(), R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
+                            }else {
+                                itemChooseAdapter = new ItemChooseAdapter(businessType, exchangeProductModel.getData().getProdSpecs().get(pos).getProductId(), R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
+                            }
+                            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                            recyclerView.setAdapter(itemChooseAdapter);
+                            itemChooseAdapter.notifyDataSetChanged();
                         }else {
-                            itemChooseAdapter = new ItemChooseAdapter(listBean.getBusinessType(), productId1, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
+                            AppHelper.showMsg(context,exchangeProductModel.getMessage());
                         }
 
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(itemChooseAdapter);
 
-                        tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
-                        tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
-                        tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
-                        tv_stock.setText(exchangeProductModel.getData().getInventory());
-                        Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
                     }
                 });
+    }
+
+    //初始化布局
+    private void init() {
+        view = View.inflate(context, R.layout.dialog_choice, null);
+        view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        binder = ButterKnife.bind(this, view);
+        setContentView(view);
+
+        getWindow().setGravity(Gravity.BOTTOM);
+        WindowManager.LayoutParams attributes = getWindow().getAttributes();
+        attributes.width = Utils.getScreenWidth(context);
+        getWindow().setAttributes(attributes);
+        iv_close.setOnClickListener(this);
+
+        List<MarketRightModel.DataBean.ProdClassifyBean.ListBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
+
+        //切换规格
+        fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                pos = position;
+                specAdapter.selectPosition(position);
+                if(listBean.getBusinessType()==11) {
+                    exchangeLists(listBean.getActiveId(),11);
+                    Log.d("wdddddddd.....",listBean.getActiveId()+"");
+                }else {
+                    exchangeLists(exchangeProductModels.getData().getProdSpecs().get(position).getProductId(),1);
+
+                }
+            }
+        });
+        specAdapter = new SpecAdapter(context,prodSpecs);
+        fl_container.setAdapter(specAdapter);
     }
 
     @Override

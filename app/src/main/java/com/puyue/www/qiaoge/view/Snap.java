@@ -204,7 +204,7 @@ public class Snap extends LinearLayout {
         }
         if (hour >= 999 || min >= 60 || sec >= 60 || hour < 0 || min < 0
                 || sec < 0) {
-            AppHelper.showMsg(context, "时间格式错误");
+//            AppHelper.showMsg(context, "时间格式错误");
         }
 
         hour_decade = hour / 10;

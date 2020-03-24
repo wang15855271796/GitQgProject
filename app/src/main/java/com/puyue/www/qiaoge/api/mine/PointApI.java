@@ -22,7 +22,7 @@ public class PointApI {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.POINT_MYPOINT)
         Observable<MinerIntegralModel> setParams(@Field("pageNum") int pageNum,
-                                                 @Field("pageSize") int pageSize );
+                                                 @Field("pageSize") int pageSize);
     }
 
     public static Observable<MinerIntegralModel> requestPointService(Context context,int pageNum,int pageSize ) {

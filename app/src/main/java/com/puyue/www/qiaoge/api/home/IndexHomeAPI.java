@@ -7,6 +7,7 @@ import com.puyue.www.qiaoge.helper.RestHelper;
 import com.puyue.www.qiaoge.model.home.CouponModel;
 import com.puyue.www.qiaoge.model.home.HomeNewRecommendModel;
 import com.puyue.www.qiaoge.model.home.IndexHomeModel;
+import com.puyue.www.qiaoge.model.home.MustModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.SpikeNewQueryModel;
 import com.puyue.www.qiaoge.model.mine.order.HomeBaseModel;
@@ -88,11 +89,11 @@ public class IndexHomeAPI {
 
     private interface MustService {
         @POST(AppInterfaceAddress.INDEXMUST)
-        Observable<ProductNormalModel> getData();
+        Observable<MustModel> getData();
 
     }
 
-    public static Observable<ProductNormalModel> getMust(Context context) {
+    public static Observable<MustModel> getMust(Context context) {
         MustService spikeActiveQueryService = RestHelper.getBaseRetrofit(context).create(MustService.class);
         return spikeActiveQueryService.getData();
     }

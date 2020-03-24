@@ -9,19 +9,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -31,30 +25,21 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
-import com.daimajia.slider.library.Animations.DescriptionAnimation;
-import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.activity.home.ChangeCityActivity;
 import com.puyue.www.qiaoge.activity.home.ChooseAddressActivity;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.activity.home.CouponDetailActivity;
 import com.puyue.www.qiaoge.activity.home.HomeGoodsListActivity;
-import com.puyue.www.qiaoge.activity.home.NoticeListActivity;
-import com.puyue.www.qiaoge.activity.home.SearchReasultActivity;
 import com.puyue.www.qiaoge.activity.home.SearchStartActivity;
-import com.puyue.www.qiaoge.activity.home.SelectionGoodActivity;
 import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
 import com.puyue.www.qiaoge.activity.home.TeamDetailActivity;
 import com.puyue.www.qiaoge.activity.home.TeamGoodsDetailActivity;
-import com.puyue.www.qiaoge.activity.mine.MessageCenterActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
-import com.puyue.www.qiaoge.activity.mine.login.LoginEvent;
+import com.puyue.www.qiaoge.activity.mine.login.LogoutsEvent;
 import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletPointActivity;
@@ -62,16 +47,12 @@ import com.puyue.www.qiaoge.adapter.home.CommonAdapter;
 import com.puyue.www.qiaoge.adapter.home.CommonProductActivity;
 import com.puyue.www.qiaoge.adapter.home.HotProductActivity;
 import com.puyue.www.qiaoge.adapter.home.ReductionProductActivity;
-import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
 import com.puyue.www.qiaoge.adapter.home.SeckillGoodActivity;
 import com.puyue.www.qiaoge.api.cart.AddCartAPI;
-import com.puyue.www.qiaoge.api.home.BannerModel;
 import com.puyue.www.qiaoge.api.home.DriverInfo;
-import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
 import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
 import com.puyue.www.qiaoge.api.home.IndexInfoModel;
 import com.puyue.www.qiaoge.api.home.ProductListAPI;
-import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.api.mine.UpdateAPI;
 import com.puyue.www.qiaoge.api.mine.order.MyOrderNumAPI;
 import com.puyue.www.qiaoge.banner.Banner;
@@ -81,33 +62,29 @@ import com.puyue.www.qiaoge.banner.Transformer;
 import com.puyue.www.qiaoge.banner.listener.OnBannerListener;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
+import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
-import com.puyue.www.qiaoge.listener.OnItemClickListener;
 import com.puyue.www.qiaoge.model.cart.AddCartModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.CouponModel;
 import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
-import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.HomeNewRecommendModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
-import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
 import com.puyue.www.qiaoge.model.mine.UpdateModel;
 import com.puyue.www.qiaoge.model.mine.order.HomeBaseModel;
 import com.puyue.www.qiaoge.model.mine.order.MyOrderNumModel;
 import com.puyue.www.qiaoge.utils.DateUtils;
 import com.puyue.www.qiaoge.utils.Utils;
-import com.puyue.www.qiaoge.view.AutoScrollRecyclerView;
-import com.puyue.www.qiaoge.view.MarqueeView;
 import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 import com.puyue.www.qiaoge.view.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.taobao.library.VerticalBannerView;
 
@@ -119,20 +96,14 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-
-import static java.sql.DriverManager.getDrivers;
 
 /**
  * Created by ${王涛} on 2020/1/4
@@ -254,13 +225,7 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
     private boolean forceUpdate;
     private String content;
     private String url;//更新所用的url
-    private boolean isShowed = false;//店铺类型是否展示
     private AlertDialog mTypedialog;
-    private String invitationCode;
-    private boolean isFirst = true;
-    int isSelected;
-    boolean isChecked = false;
-    int shopTypeId;
     boolean flag;
     //banner集合
     List<String> list = new ArrayList<>();
@@ -269,10 +234,6 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
     private List<IndexInfoModel.DataBean.ClassifyListBean> classifyList = new ArrayList<>();
     private TypesAdapter typeAdapter;
     private DriverAdapter driverAdapter;
-    SpikeFragment spikeFragment;
-    CouponsFragment couponsFragment;
-    TeamsFragment teamsFragment;
-    boolean isFirsts = false;
     NewFragment newFragment;
     MustFragment mustFragment;
     InfoFragment infoFragment;
@@ -303,17 +264,6 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
         return R.layout.home_fragmentss;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        switchRb4();
-        if(!isFirsts) {
-            refreshLayout.autoRefresh();
-            isFirsts = true;
-        }
-    }
-
     private void getSpikeList(int type) {
         IndexHomeAPI.getCouponList(mActivity,type+"")
                 .subscribeOn(Schedulers.io())
@@ -335,10 +285,10 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                         if(couponModel.isSuccess()) {
                             actives.clear();
                             data4 = couponModel.getData();
+
                             if(type==2) {
                                 data1 = couponModel.getData();
                                 if(data1!=null) {
-                                    Log.d("dseeeeeeeeeeee.....","222222");
                                     rl_more.setVisibility(View.VISIBLE);
                                     rl_more2.setVisibility(View.GONE);
                                     rl_more3.setVisibility(View.GONE);
@@ -346,6 +296,7 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                                     rb_1.setVisibility(View.VISIBLE);
                                     currentTime = couponModel.getData().getCurrentTime();
                                     startTime = couponModel.getData().getStartTime();
+                                    commonAdapter = new CommonAdapter(2+"",R.layout.item_commons_list, actives);
                                     recyclerViewTest.setAdapter(commonAdapter);
                                     commonAdapter.setOnclick(new CommonAdapter.OnClick() {
                                         @Override
@@ -359,6 +310,7 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                                             }
                                         }
                                     });
+
                                     endTime = couponModel.getData().getEndTime();
                                     String current = DateUtils.formatDate(currentTime, "MM月dd日HH时mm分ss秒");
                                     String start = DateUtils.formatDate(startTime, "MM月dd日HH时mm分ss秒");
@@ -412,22 +364,23 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                                     rl_more.setVisibility(View.GONE);
                                 }
 
-                            }
-                            else if(type==11) {
+                            } else if(type==11) {
                                 data1 = couponModel.getData();
                                 if(data1!=null) {
-                                    Log.d("dseeeeeeeeeeee.....","000000");
+
                                     rb_2.setVisibility(View.VISIBLE);
                                     rl_more3.setVisibility(View.GONE);
                                     rl_more.setVisibility(View.GONE);
                                     actives.addAll(data1.getActives());
+                                    commonAdapter = new CommonAdapter(11+"",R.layout.item_commons_list, actives);
                                     recyclerViewTest.setAdapter(commonAdapter);
+
                                     commonAdapter.setOnclick(new CommonAdapter.OnClick() {
                                         @Override
                                         public void shoppingCartOnClick(int position) {
                                             if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
                                                 int activeId = actives.get(position).getActiveId();
-                                                addCar(activeId, "", 3, "1");
+                                                addCar(activeId, "", 11, "1");
                                             } else {
                                                 AppHelper.showMsg(mActivity, "请先登录");
                                                 startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
@@ -442,27 +395,29 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
 
                                     rl_more2.setVisibility(View.GONE);
                                 }
-                            }
-
-                            else if(type==3) {
+                            } else if(type==3) {
                                 data1 = couponModel.getData();
                                 if(data1!=null) {
-                                    Log.d("dseeeeeeeeeeee.....","111111");
+
                                     rb_3.setVisibility(View.VISIBLE);
                                     actives.addAll(data1.getActives());
+                                    commonAdapter = new CommonAdapter(3+"",R.layout.item_commons_list, actives);
                                     recyclerViewTest.setAdapter(commonAdapter);
+
                                     commonAdapter.setOnclick(new CommonAdapter.OnClick() {
                                         @Override
                                         public void shoppingCartOnClick(int position) {
                                             if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
                                                 int activeId = actives.get(position).getActiveId();
-                                                addCar(activeId, "", 11, "1");
+                                                Log.d("fsffffffff...",activeId+"");
+                                                addCar(activeId, "", 3, "1");
                                             } else {
                                                 AppHelper.showMsg(mActivity, "请先登录");
                                                 startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
                                             }
                                         }
                                     });
+
                                     rl_more.setVisibility(View.GONE);
                                     rl_more2.setVisibility(View.GONE);
                                     tv_desc3.setText(data1.getDesc());
@@ -470,12 +425,8 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                                 }else {
                                     rb_3.setVisibility(View.GONE);
                                 }
-
-
                             }
                             commonAdapter.notifyDataSetChanged();
-
-
                         }
                     }
                 });
@@ -509,11 +460,6 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                 });
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
 
     @Override
     public void onDestroy() {
@@ -529,15 +475,13 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
         context = getActivity();
         initStatusBarWhiteColor();
         token = UserInfoHelper.getUserId(mActivity);
-        rb_new.setChecked(true);
-
-
-        appbar.addOnOffsetChangedListener(new AppBarLayout.BaseOnOffsetChangedListener() {
+        getProductsList(1,10,"commonBuy");
+        appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-                int totalScrollRange = appBarLayout.getTotalScrollRange();
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-                if(totalScrollRange ==Math.abs(i)) {
+                int totalScrollRange = appBarLayout.getTotalScrollRange();
+                if(totalScrollRange ==Math.abs(verticalOffset)) {
                     flag = true;
                 }else {
                     flag = false;
@@ -546,11 +490,14 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                 if(flag) {
                     ll_small_title.setVisibility(View.GONE);
                     ll_line.setVisibility(View.VISIBLE);
+                    Log.d("qqqqqqqqqq....","ppppppppp");
                 }else {
+                    Log.d("qqqqqqqqqq....","wwwwwwwwww");
                     ll_small_title.setVisibility(View.VISIBLE);
                     ll_line.setVisibility(View.GONE);
 
                 }
+
             }
         });
 
@@ -596,7 +543,7 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerViewTest.setLayoutManager(linearLayoutManager);
 
-        commonAdapter = new CommonAdapter(2+"",R.layout.item_commons_list, actives);
+
 
         rg_group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -612,6 +559,7 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                         rb_3.setTextColor(Color.parseColor("#333333"));
                         rb_3.setBackgroundResource(R.drawable.shape_white);
                         getSpikeList(2);
+                        Log.d("swsssssssssssss.....","sswwss");
                         break;
 
                     case R.id.rb_2:
@@ -641,11 +589,17 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
             }
         });
 
+
+
+
         rg_new.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+//                hideFragment();
                 switch (checkedId) {
                     case R.id.rb_new:
+                        Log.d("wssssssssssss....",checkedId+"ss");
                         rb_info.setTextColor(Color.parseColor("#333333"));
                         rb_common.setTextColor(Color.parseColor("#333333"));
                         rb_must_common.setTextColor(Color.parseColor("#333333"));
@@ -661,7 +615,12 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
 
                         tv_title4.setTextColor(Color.parseColor("#999999"));
                         tv_title4.setBackgroundResource(R.drawable.shape_white);
-
+//                        if (newFragment == null){
+//                            newFragment=new NewFragment();
+//
+//                            fragmentTransaction.add(R.id.content,newFragment);
+//                        }
+//                        fragmentTransaction.show(newFragment);
                         switchRb4();
                         break;
 
@@ -756,6 +715,58 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
 
     }
 
+    private void getProductsList(int pageNums, int pageSize, String type) {
+        ProductListAPI.requestData(mActivity, pageNums, pageSize,type,null)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ProductNormalModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(ProductNormalModel getCommonProductModel) {
+                        if (getCommonProductModel.isSuccess()) {
+                            if(getCommonProductModel.getData().getList().size()>0) {
+                                switchRb7();
+                                rb_common.setChecked(true);
+                            }else {
+                                switchRb4();
+                                rb_new.setChecked(true);
+                            }
+                        }else {
+                            AppHelper.showMsg(mActivity,getCommonProductModel.getMessage());
+                        }
+                    }
+                });
+    }
+
+    private void hideFragment() {
+        if (newFragment!=null){
+            //隐藏
+            fragmentTransaction.hide(newFragment);
+        }
+        if (mustFragment!=null){
+            //隐藏
+            fragmentTransaction.hide(mustFragment);
+        }
+        if (infoFragment!=null){
+            //隐藏
+            fragmentTransaction.hide(infoFragment);
+        }
+        if (commonFragment!=null){
+            //隐藏
+            fragmentTransaction.hide(commonFragment);
+        }
+    }
+
+
     /**
      * 常用清单
      */
@@ -773,8 +784,8 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
             fragmentTransaction.hide(infoFragment);
         }
 
-        if (teamsFragment != null) {
-            fragmentTransaction.hide(teamsFragment);
+        if (mustFragment != null) {
+            fragmentTransaction.hide(mustFragment);
         }
 
         if (newFragment != null) {
@@ -850,6 +861,7 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
         fragmentTransaction = supportFragmentManager.beginTransaction();
         if (newFragment == null) {
             newFragment = new NewFragment();
+            Log.d("wssssssssssss....","000000000");
             fragmentTransaction.add(R.id.content, newFragment, NewFragment.class.getCanonicalName());
         }
         fragmentTransaction.show(newFragment);
@@ -907,12 +919,14 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
     public void setViewData() {
         requestUpdate();
 
-        newList.clear();
-        skillList.clear();
-        skillAdvList.clear();
-        driverList.clear();
-        getDriveInfo();
-        getBaseLists();
+//        newList.clear();
+//        skillList.clear();
+//        skillAdvList.clear();
+//        driverList.clear();
+//        getDriveInfo();
+//        getBaseLists();
+        refreshLayout.autoRefresh();
+        Log.d("opopoppoopoo.....","sdff");
         getCustomerPhone();
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
         mTypedialog.setCancelable(false);
@@ -976,18 +990,26 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                     @Override
                     public void onNext(DriverInfo driverInfo) {
                         if(driverInfo.isSuccess()) {
-                            if(driverInfo.getData()!=null) {
+
+                            if(driverInfo.getData().size()!=0) {
                                 driverList.clear();
                                 driverList.addAll(driverInfo.getData());
-                                if(cell!=""&&cell!=null) {
-                                    verticalBannerAdapter = new VerticalBannerAdapter(cell,driverList,context);
+
+                                if(!cell.equals("")) {
+                                    Log.d("sdwdwwdddddd....",driverInfo.getData().size()+"");
+                                    verticalBannerAdapter = new VerticalBannerAdapter(cell,driverList,getContext());
                                     verticalBanner.setAdapter(verticalBannerAdapter);
+
                                     verticalBanner.start();
+                                    ll_driver.setVisibility(View.VISIBLE);
+                                }else {
+                                    ll_driver.setVisibility(View.GONE);
+                                    Log.d("sdwdwwdddddd....","11111");
                                 }
 
-                                ll_driver.setVisibility(View.GONE);
                             }else {
                                 ll_driver.setVisibility(View.GONE);
+                                Log.d("sdwdwwdddddd....","22222");
                             }
                         }
 
@@ -1016,7 +1038,6 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                     @Override
                     public void onNext(IndexInfoModel indexInfoModel) {
                         data = indexInfoModel.getData();
-
                         classifyList.clear();
                         classifyList.addAll(data.getClassifyList());
                         if(classifyList.size()>0) {
@@ -1028,7 +1049,6 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                         typeAdapter.notifyDataSetChanged();
 
                         iconList.clear();
-
                         iconList.addAll(data.getIcons());
                         if(iconList.size()>0) {
                             rv_icon.setVisibility(View.VISIBLE);
@@ -1041,15 +1061,18 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                         specialNum = indexInfoModel.getData().getSpecialNum();
 
 
-                        Log.d("ewgrgegrdggrgege.....",spikeNum+"");
+                        Log.d("ewgrgegrdggrgege.....",spikeNum+"ss");
+                        Log.d("ewgrgegrdggrgege.....",teamNum+"ss");
+                        Log.d("ewgrgegrdggrgege.....",specialNum+"ss");
                         if(spikeNum!=0) {
                             rb_1.setVisibility(View.VISIBLE);
-                            Log.d("ewgrgegrdggrgege.....","2222222");
+                            Log.d("dseeeeeeeeeeee.....","000000");
                             rb_1.setChecked(true);
                             getSpikeList(2);
                         }else {
                             rb_1.setChecked(false);
                             rb_1.setVisibility(View.GONE);
+
                         }
 
                         if(spikeNum==0) {
@@ -1091,8 +1114,10 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
 
                         if(spikeNum==0) {
                             rb_1.setVisibility(View.GONE);
+
                         }else {
                             rb_1.setVisibility(View.VISIBLE);
+                            Log.d("dseeeeeeeeeeee.....","000000");
                         }
 
                         if(specialNum==0) {
@@ -1181,8 +1206,6 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                         Intent intent = new Intent(getActivity(), MyOrdersActivity.class);
                         startActivity(intent);
                     }
-
-
                 }else if(showType ==4 ) {
                     //商品
                     int businessId = Integer.parseInt(banners.get(position).getBusinessId());
@@ -1236,6 +1259,7 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
                     public void onNext(UpdateModel updateModel) {
                         mModelUpdate = updateModel;
                         if (mModelUpdate.success) {
+                            Log.d("weffffffff...",mModelUpdate.data.version);
                             updateUpdate();
                         } else {
                             AppHelper.showMsg(mActivity, mModelUpdate.message);
@@ -1386,9 +1410,9 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
             case R.id.rl_message:
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(getActivity()))) {
 
-                    Intent messageIntent = new Intent(getActivity(), MessageCenterActivity.class);
-//                    Intent messageIntents = new Intent(getActivity(), ChooseAddressActivity.class);
-                    startActivity(messageIntent);
+//                    Intent messageIntent = new Intent(getActivity(), HomeTest.class);
+                    Intent messageIntents = new Intent(getActivity(), ChooseAddressActivity.class);
+                    startActivity(messageIntents);
 //                    startActivityForResult(messageIntents, 101);
 
                 } else {
@@ -1447,9 +1471,6 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
             skillAdvList.clear();
             getBaseLists();
             EventBus.getDefault().post(new BackEvent());
-//            switchRb5();
-//            switchRb6();
-//            switchRb7();
         }
     }
 
@@ -1472,13 +1493,27 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void loginEvent(LoginEvent event) {
+    public void loginEvent(LogoutsEvent event) {
         //刷新UI
-        newList.clear();
-        skillList.clear();
-        skillAdvList.clear();
+//        newList.clear();
+//        skillList.clear();
+//        skillAdvList.clear();
+        Log.d("sdfhdshjdlsk.......","sdfsdfsd");
+        refreshLayout.autoRefresh();
+
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginsEvent(AddressEvent event) {
+        //刷新UI
+        refreshLayout.autoRefresh();
+        Log.d("sdfhdshjdlsk.......","sdfsdfsd");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cartNum(UpDateNumEvent event) {
+        getCartNum();
+    }
     protected void initStatusBarWhiteColor() {
         //设置状态栏颜色为白色，状态栏图标为黑色
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

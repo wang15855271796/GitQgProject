@@ -16,12 +16,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.api.cart.AddMountChangeTwoAPI;
-import com.puyue.www.qiaoge.constant.AppConstant;
-import com.puyue.www.qiaoge.dialog.ChooseDialog;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
-import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
-import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartGoodModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.utils.ToastUtil;
@@ -57,9 +53,10 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
 
     @Override
     protected void convert(BaseViewHolder helper, ExchangeProductModel.DataBean.ProdPricesBean item) {
-        Log.d("dangqiandialog........","sdddddddd");
+
         tv_price = helper.getView(R.id.tv_price);
         tv_price.setText(item.getPrice());
+        Log.d("wwwssssssssss.....",item.getPrice());
         tv_reduce = helper.getView(R.id.tv_reduce);
         helper.setText(R.id.tv_unit, item.getUnitDesc());
         TextView tv_old_price = helper.getView(R.id.tv_old_price);
@@ -126,8 +123,8 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                 tv_ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("swswswqqqq00........",productId+"");
                         if (et_num.getText().toString() != null && StringHelper.notEmptyAndNull(et_num.getText().toString())) {
+                            //判断库存
                             AddMountChangeTwoAPI.AddMountChangeService(mContext, businessType, productId, Integer.parseInt(et_num.getText().toString()), item.getPriceId())
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
@@ -148,7 +145,9 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
 
                                             if (addMountReduceModel.isSuccess()) {
                                                 tv_num.setText(et_num.getText().toString());
+                                                int num = Integer.parseInt(et_num.getText().toString());
                                                 alertDialog.dismiss();
+                                                addCart(num,item.getPriceId(),productId,businessType,tv_num,item.getCartNum());
                                                 EventBus.getDefault().post(new UpDateNumEvent());
                                             } else {
                                                 ToastUtil.showSuccessMsg(mContext, addMountReduceModel.getMessage());

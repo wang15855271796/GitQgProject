@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.model.home.MustModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 
@@ -22,9 +23,9 @@ import java.util.List;
  */
 public class NewSpecAdapter extends BaseAdapter {
     Context context;
-    List<ProductNormalModel.DataBean.ListBean.ProdSpecsBean> prodSpecs;
+    List<MustModel.DataBean.ProdSpecsBean> prodSpecs;
     int selectPosition;
-    public NewSpecAdapter(Context mContext, List<ProductNormalModel.DataBean.ListBean.ProdSpecsBean> spec) {
+    public NewSpecAdapter(Context mContext, List<MustModel.DataBean.ProdSpecsBean> spec) {
         this.context = mContext;
         this.prodSpecs = spec;
     }

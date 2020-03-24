@@ -1,21 +1,15 @@
 package com.puyue.www.qiaoge.view;
 
+
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.bigkoo.pickerview.OptionsPickerView;
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectChangeListener;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.puyue.www.qiaoge.R;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -125,66 +119,66 @@ public class PickCityUtil {
 
     }*/
 
-    /**
-     * 城市选择
-     *
-     * @param
-     * @param context
-     */
-    public static void showCityPickView(Context context, final ChooseCityListener listener) {
-
-        if (options1Items.isEmpty() || options2Items.isEmpty() || options3Items.isEmpty()) {
-            return;
-        }
-
-        OptionsPickerView pvOptions = new OptionsPickerView.Builder(context, new OptionsPickerView.OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                //返回的分别是三个级别的选中位置
-                String p = options1Items.get(options1);
-                String c = options2Items.get(options1).get(options2);
-                String a = options3Items.get(options1).get(options2).get(options3);
-                if (p.equals(c)) {
-                    listener.chooseCity(c + "_" + a);
-                } else {
-                    listener.chooseCity(p + "_" + c + "_" + a);
-                }
-            }
-        })
-                .setTitleText("选择城市")
-                .build();
-        pvOptions.setPicker(options1Items, options2Items, options3Items);
-        pvOptions.show();
-    }
+//    /**
+//     * 城市选择
+//     *
+//     * @param
+//     * @param context
+//     */
+//    public static void showCityPickView(Context context, final ChooseCityListener listener) {
+//
+//        if (options1Items.isEmpty() || options2Items.isEmpty() || options3Items.isEmpty()) {
+//            return;
+//        }
+//
+//        OptionsPickerView pvOptions = new OptionsPickerView.Builder(context, new OptionsPickerView.OnOptionsSelectListener() {
+//            @Override
+//            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+//                //返回的分别是三个级别的选中位置
+//                String p = options1Items.get(options1);
+//                String c = options2Items.get(options1).get(options2);
+//                String a = options3Items.get(options1).get(options2).get(options3);
+//                if (p.equals(c)) {
+//                    listener.chooseCity(c + "_" + a);
+//                } else {
+//                    listener.chooseCity(p + "_" + c + "_" + a);
+//                }
+//            }
+//        })
+//                .setTitleText("选择城市")
+//                .build();
+//        pvOptions.setPicker(options1Items, options2Items, options3Items);
+//        pvOptions.show();
+//    }
 
     /**
      * 分开传输地址
      */
-    public static void showCityPickViewDivide(Context context, final ChooseDivideCityListener listener) {
-
-        if (options1Items.isEmpty() || options2Items.isEmpty() || options3Items.isEmpty()) {
-            return;
-        }
-
-        OptionsPickerView pvOptions = new OptionsPickerView.Builder(context, new OptionsPickerView.OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                //返回的分别是三个级别的选中位置
-                String p = options1Items.get(options1);
-                String c = options2Items.get(options1).get(options2);
-                String a = options3Items.get(options1).get(options2).get(options3);
-                if (p.equals(c)) {
-                    listener.chooseCity(c, a);
-                } else {
-                    listener.chooseCity(p, c, a);
-                }
-            }
-        })
-                .setTitleText("选择城市")
-                .build();
-        pvOptions.setPicker(options1Items, options2Items, options3Items);
-        pvOptions.show();
-    }
+//    public static void showCityPickViewDivide(Context context, final ChooseDivideCityListener listener) {
+//
+//        if (options1Items.isEmpty() || options2Items.isEmpty() || options3Items.isEmpty()) {
+//            return;
+//        }
+//
+//        OptionsPickerView pvOptions = new OptionsPickerView.Builder(context, new OptionsPickerView.OnOptionsSelectListener() {
+//            @Override
+//            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+//                //返回的分别是三个级别的选中位置
+//                String p = options1Items.get(options1);
+//                String c = options2Items.get(options1).get(options2);
+//                String a = options3Items.get(options1).get(options2).get(options3);
+//                if (p.equals(c)) {
+//                    listener.chooseCity(c, a);
+//                } else {
+//                    listener.chooseCity(p, c, a);
+//                }
+//            }
+//        })
+//                .setTitleText("选择城市")
+//                .build();
+//        pvOptions.setPicker(options1Items, options2Items, options3Items);
+//        pvOptions.show();
+//    }
 
 
     /**
@@ -193,33 +187,33 @@ public class PickCityUtil {
      * @param
      * @param context
      */
-    public static void showSinglePickView(Context context, final List<String> list, String title, final ChoosePositionListener listener) {
-
-        if (list.isEmpty()) {
-            return;
-        }
-
-        OptionsPickerView pvOptions = new OptionsPickerView.Builder(context, new OptionsPickerView.OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                listener.choosePosition(options1, list.get(options1));
-            }
-        })
-                .setTitleText("请选择配送时间段")
-                .setTitleColor(Color.parseColor("#F56D23"))
-                .setOutSideCancelable(false)
-                .setCancelColor(Color.parseColor("#F56D23"))
-                .setSubmitColor(Color.parseColor("#F56D23"))
-                .build();
-
-
-        View tvTitle = pvOptions.findViewById(R.id.tvTitle);
-        tvTitle.setVisibility(View.VISIBLE);
-        pvOptions.setPicker(list);
-        pvOptions.show();
-
-
-    }
+//    public static void showSinglePickView(Context context, final List<String> list, String title, final ChoosePositionListener listener) {
+//
+//        if (list.isEmpty()) {
+//            return;
+//        }
+//
+//        OptionsPickerView pvOptions = new OptionsPickerView.Builder(context, new OptionsPickerView.OnOptionsSelectListener() {
+//            @Override
+//            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+//                listener.choosePosition(options1, list.get(options1));
+//            }
+//        })
+//                .setTitleText("请选择配送时间段")
+//                .setTitleColor(Color.parseColor("#F56D23"))
+//                .setOutSideCancelable(false)
+//                .setCancelColor(Color.parseColor("#F56D23"))
+//                .setSubmitColor(Color.parseColor("#F56D23"))
+//                .build();
+//
+//
+//        View tvTitle = pvOptions.findViewById(R.id.tvTitle);
+//        tvTitle.setVisibility(View.VISIBLE);
+//        pvOptions.setPicker(list);
+//        pvOptions.show();
+//
+//
+//    }
 
     /**
      * 单列表
@@ -227,52 +221,52 @@ public class PickCityUtil {
      * @param
      * @param context
      */
-    public static void showSinglePickViewTwo(Context context, final List<String> list, String title, final ChoosePositionListener listener) {
-
-        if (list.isEmpty()) {
-            return;
-        }
-
-        OptionsPickerView pvOptions = new OptionsPickerView.Builder(context, new OptionsPickerView.OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                listener.choosePosition(options1, list.get(options1));
-            }
-        })
-                .setTitleText("请选择配送时间段")
-                .setTitleColor(Color.parseColor("#F56D23"))
-                .setOutSideCancelable(false)
-                .setCancelColor(Color.parseColor("#F56D23"))
-                .setSubmitColor(Color.parseColor("#FFFFFF"))
-                .build();
-
-
-        View tvTitle = pvOptions.findViewById(R.id.tvTitle);
-        tvTitle.setVisibility(View.VISIBLE);
-        //居中
-        //
-   View btnSubmit = pvOptions.findViewById(R.id.btnCancel);
-btnSubmit.setVisibility(View.GONE);
-
-
-
-     /*   params.setMargins(10, 10, 6, 10);
-        btnSubmit.setBackgroundResource(R.drawable.bg_deliver_ok);
-        // btnSubmit.setPadding(20, 5, 20, 5);
-        View btnCancel = pvOptions.findViewById(R.id.btnCancel);
-        LinearLayout.LayoutParams paramCancel = (LinearLayout.LayoutParams) btnCancel.getLayoutParams();
-
-
-        // btnCancel.setPadding(20, 5, 20, 5);
-        paramCancel.setMargins(6, 10, 10, 10);
-        btnCancel.setBackgroundResource(R.drawable.bg_deliver_time);*/
-
-
-        pvOptions.setPicker(list);
-        pvOptions.show();
-
-
-    }
+//    public static void showSinglePickViewTwo(Context context, final List<String> list, String title, final ChoosePositionListener listener) {
+//
+//        if (list.isEmpty()) {
+//            return;
+//        }
+//
+//        OptionsPickerView pvOptions = new OptionsPickerView.Builder(context, new OptionsPickerView.OnOptionsSelectListener() {
+//            @Override
+//            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+//                listener.choosePosition(options1, list.get(options1));
+//            }
+//        })
+//                .setTitleText("请选择配送时间段")
+//                .setTitleColor(Color.parseColor("#F56D23"))
+//                .setOutSideCancelable(false)
+//                .setCancelColor(Color.parseColor("#F56D23"))
+//                .setSubmitColor(Color.parseColor("#FFFFFF"))
+//                .build();
+//
+//
+//        View tvTitle = pvOptions.findViewById(R.id.tvTitle);
+//        tvTitle.setVisibility(View.VISIBLE);
+//        //居中
+//        //
+//   View btnSubmit = pvOptions.findViewById(R.id.btnCancel);
+//btnSubmit.setVisibility(View.GONE);
+//
+//
+//
+//     /*   params.setMargins(10, 10, 6, 10);
+//        btnSubmit.setBackgroundResource(R.drawable.bg_deliver_ok);
+//        // btnSubmit.setPadding(20, 5, 20, 5);
+//        View btnCancel = pvOptions.findViewById(R.id.btnCancel);
+//        LinearLayout.LayoutParams paramCancel = (LinearLayout.LayoutParams) btnCancel.getLayoutParams();
+//
+//
+//        // btnCancel.setPadding(20, 5, 20, 5);
+//        paramCancel.setMargins(6, 10, 10, 10);
+//        btnCancel.setBackgroundResource(R.drawable.bg_deliver_time);*/
+//
+//
+//        pvOptions.setPicker(list);
+//        pvOptions.show();
+//
+//
+//    }
     /**
      * 双列表
      *
@@ -281,60 +275,108 @@ btnSubmit.setVisibility(View.GONE);
      */
     public static void showDoublePickView(Context context, final List<String> list1, final List<List<String>> list2, String title, final ChooseDPositionListener listener) {
 
-        if (list1.isEmpty() || list2.isEmpty()) {
-            return;
-        }
-
-        OptionsPickerView pvOptions = new OptionsPickerView.Builder(context, new OptionsPickerView.OnOptionsSelectListener() {
+//
+    OptionsPickerView pvOptions = new OptionsPickerBuilder(context, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 listener.choosePosition(options1, options2, list1.get(options1) + "_" + list2.get(options1).get(options2));
+
+                //返回的分别是三个级别的选中位置
+//                String tx = options1Items.get(options1).getPickerViewText()
+//                        + options2Items.get(options1).get(options2)
+//                        /* + options3Items.get(options1).get(options2).get(options3).getPickerViewText()*/;
+//                btn_Options.setText(tx);
             }
         })
-                .setTitleText(title)
+                .setTitleText("请选择自提时间段")
                 .setTitleColor(Color.parseColor("#F56D23"))
 
                 .setCancelColor(Color.parseColor("#F56D23"))
                 .setSubmitColor(Color.parseColor("#F56D23"))
+                .setOptionsSelectChangeListener(new OnOptionsSelectChangeListener() {
+                    @Override
+                    public void onOptionsSelectChanged(int options1, int options2, int options3) {
+
+                    }
+                })
                 .build();
+
         pvOptions.setPicker(list1, list2);
         pvOptions.show();
 
 
+//        if (list1.isEmpty() || list2.isEmpty()) {
+//            return;
+//        }
+//
+//        OptionsPickerView pvOptions = new OptionsPickerView.Builder(context, new OptionsPickerView.OnOptionsSelectListener() {
+//            @Override
+//            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+//                listener.choosePosition(options1, options2, list1.get(options1) + "_" + list2.get(options1).get(options2));
+//            }
+//        })
+//                .setTitleText(title)
+//                .setTitleColor(Color.parseColor("#F56D23"))
+//
+//                .setCancelColor(Color.parseColor("#F56D23"))
+//                .setSubmitColor(Color.parseColor("#F56D23"))
+//                .build();
+//        pvOptions.setPicker(list1, list2);
+//        pvOptions.show();
+
+
     }
+
+    private void initOptionPicker() {//条件选择器初始化
+
+        /**
+         * 注意 ：如果是三级联动的数据(省市区等)，请参照 JsonDataActivity 类里面的写法。
+         */
+
+
+
+//        pvOptions.setSelectOptions(1,1);
+        /*pvOptions.setPicker(options1Items);//一级选择器*/
+//        pvOptions.setPicker(options1Items, options2Items);//二级选择器
+//        pvOptions.show();
+        /*pvOptions.setPicker(options1Items, options2Items,options3Items);//三级选择器*/
+    }
+
+
 
     /**
      * @param
-     * @param context
+     * @param
      */
-    public static void showCityPickView(Context context, final ChooseCityListener listener, final ChooseCityAreaIdListener areaIdListener) {
-
-        if (options1Items.isEmpty() || options2Items.isEmpty() || options3Items.isEmpty()) {
-            return;
-        }
-        OptionsPickerView pvOptions = new OptionsPickerView.Builder(context, new OptionsPickerView.OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                //返回的分别是三个级别的选中位置
-                String p = options1Items.get(options1);
-                String c = options2Items.get(options1).get(options2);
-                String a = options3Items.get(options1).get(options2).get(options3);
-                if (p.equals(c)) {
-                    listener.chooseCity(c + "_" + a);
-                } else {
-                    listener.chooseCity(p + "_" + c + "_" + a);
-                }
-             /*   String ap= areaId1.get(options1);
-                String ac=areaId2.get(options1).get(options2);*/
-                String aa = areaId3.get(options1).get(options2).get(options3);
-                areaIdListener.chooseAreaId(/*ap+"_"+ac+"_"+*/aa);
-            }
-        })
-                .setTitleText("选择城市")
-                .build();
-        pvOptions.setPicker(options1Items, options2Items, options3Items);
-        pvOptions.show();
-    }
+//    public static void showCityPickView(Context context, final ChooseCityListener listener, final ChooseCityAreaIdListener areaIdListener) {
+//
+//        if (options1Items.isEmpty() || options2Items.isEmpty() || options3Items.isEmpty()) {
+//            return;
+//        }
+//
+//        OptionsPickerView pvOptions = new OptionsPickerView.Builder(context, new OptionsPickerView.OnOptionsSelectListener() {
+//            @Override
+//            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+//                //返回的分别是三个级别的选中位置
+//                String p = options1Items.get(options1);
+//                String c = options2Items.get(options1).get(options2);
+//                String a = options3Items.get(options1).get(options2).get(options3);
+//                if (p.equals(c)) {
+//                    listener.chooseCity(c + "_" + a);
+//                } else {
+//                    listener.chooseCity(p + "_" + c + "_" + a);
+//                }
+//             /*   String ap= areaId1.get(options1);
+//                String ac=areaId2.get(options1).get(options2);*/
+//                String aa = areaId3.get(options1).get(options2).get(options3);
+//                areaIdListener.chooseAreaId(/*ap+"_"+ac+"_"+*/aa);
+//            }
+//        })
+//                .setTitleText("选择城市")
+//                .build();
+//        pvOptions.setPicker(options1Items, options2Items, options3Items);
+//        pvOptions.show();
+//    }
 
     public interface ChooseCityListener {
         void chooseCity(String s);

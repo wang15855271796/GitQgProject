@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.adapter.mine.AddressAdapter;
 import com.puyue.www.qiaoge.api.mine.address.AddressListAPI;
@@ -23,6 +22,7 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.mine.address.AddressModel;
 
@@ -46,7 +46,6 @@ import rx.schedulers.Schedulers;
 public class AddressListActivity extends BaseSwipeActivity {
 
     private static final String TAG = AddressListActivity.class.getSimpleName();
-
     private ImageView mIvBack;
     private PtrClassicFrameLayout mPtr;
     private RecyclerView mRv;
@@ -69,6 +68,7 @@ public class AddressListActivity extends BaseSwipeActivity {
     private String userAddress;
 
     private String mineToAddress;
+
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
@@ -98,6 +98,7 @@ public class AddressListActivity extends BaseSwipeActivity {
         orderId = getIntent().getStringExtra("orderId");
         userAddress = getIntent().getStringExtra("UseAddress");
         mineToAddress = getIntent().getStringExtra("mineAddress");
+
         mPtr.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
@@ -123,8 +124,6 @@ public class AddressListActivity extends BaseSwipeActivity {
                         if (i == position) {
                             if (mListData.get(i).isDefault == 1) {
                                 //原来就是默认地址,这里点击没有效果,原来也设置了原来是默认地址这里就没有效果
-
-
                                 //点击原来的默认地址,不会有操作,跳出界面的时候也不会有调接口操作
 
                             } else if (mListData.get(i).isDefault == 0) {
@@ -134,7 +133,7 @@ public class AddressListActivity extends BaseSwipeActivity {
                                 mListData.get(i).isDefault = 1;
                                 //这里代表着切换了默认地址
                                 defaultId = mListData.get(i).id;
-
+                                Log.d("wdddddwdddd.....",defaultId+"");
                                 changeAddress = mListData.get(i).provinceName + mListData.get(i).cityName + mListData.get(i).areaName + mListData.get(i).detailAddress;
                             }
                         } else {
@@ -145,32 +144,33 @@ public class AddressListActivity extends BaseSwipeActivity {
                 } else if (flag.equals("delete")) {
                     showDeleteDialog(position);
                 } else if (flag.equals("edit")) {
-                    for (int i = 0; i < mListData.size(); i++) {
-                        if (i == position) {
-                            if (mListData.get(i).isDefault == 1) {
-                                //原来就是默认地址,这里点击没有效果,原来也设置了原来是默认地址这里就没有效果
-                                defaultId = mListData.get(i).id;
-                                requestEditDefaultAddress(mListData.get(i).id, orderId);
-                                //点击原来的默认地址,不会有操作,跳出界面的时候也不会有调接口操作
-
-                            } else if (mListData.get(i).isDefault == 0) {
-                                //原来不是默认地址,可以点击
-                                //一旦点击,这个即变成默认地址了
-                                //关键是,不能让用户点击一次就调一次接口重新刷新列表,需要在用户准备跳出这个界面的时候调接口
-                                mListData.get(i).isDefault = 1;
-                                //这里代表着切换了默认地址
-                                defaultId = mListData.get(i).id;
-                            }
-                        } else {
-                            mListData.get(i).isDefault = 0;
-                        }
-                    }
-                    mAdapterAddress.notifyDataSetChanged();
-                    if (defaultId != -1) {
-                        //说明修改过默认地址,在退出界面的时候请求接口来
-                        requestEditDefaultAddress(defaultId, orderId);
-                    }
-                    //跳转到编辑界面使用startActivityForResult,在完成操作之后回到地址列表的界面,重新请求一次地址列表的数据
+//                    startActivityForResult(EditAddressActivity.getIntent(mContext, EditAddressActivity.class, "edit", mListData.get(position).userName, mListData.get(position).contactPhone, mListData.get(position).shopName, (mListData.get(position).provinceName + " " + mListData.get(position).cityName + " " + mListData.get(position).areaName), mListData.get(position).detailAddress, "true", String.valueOf(mListData.get(position).id), mListData.get(position).provinceCode, mListData.get(position).cityCode, mListData.get(position).areaCode, orderId), 22);
+//                    for (int i = 0; i < mListData.size(); i++) {
+//                        if (i == position) {
+//                            if (mListData.get(i).isDefault == 1) {
+//                                //原来就是默认地址,这里点击没有效果,原来也设置了原来是默认地址这里就没有效果
+//                                defaultId = mListData.get(i).id;
+//                                requestEditDefaultAddress(mListData.get(i).id, orderId);
+//                                //点击原来的默认地址,不会有操作,跳出界面的时候也不会有调接口操作
+//
+//                            } else if (mListData.get(i).isDefault == 0) {
+//                                //原来不是默认地址,可以点击
+//                                //一旦点击,这个即变成默认地址了
+//                                //关键是,不能让用户点击一次就调一次接口重新刷新列表,需要在用户准备跳出这个界面的时候调接口
+//                                mListData.get(i).isDefault = 1;
+//                                //这里代表着切换了默认地址
+//                                defaultId = mListData.get(i).id;
+//                            }
+//                        } else {
+//                            mListData.get(i).isDefault = 0;
+//                        }
+//                    }
+//                    mAdapterAddress.notifyDataSetChanged();
+//                    if (defaultId != -1) {
+//                        //说明修改过默认地址,在退出界面的时候请求接口来
+//                        requestEditDefaultAddress(defaultId, orderId);
+//                    }
+//                    //跳转到编辑界面使用startActivityForResult,在完成操作之后回到地址列表的界面,重新请求一次地址列表的数据
                     if (mListData.get(position).isDefault == 1) {
                         //原本是默认地址
                         startActivityForResult(EditAddressActivity.getIntent(mContext, EditAddressActivity.class, "edit", mListData.get(position).userName, mListData.get(position).contactPhone, mListData.get(position).shopName, (mListData.get(position).provinceName + " " + mListData.get(position).cityName + " " + mListData.get(position).areaName), mListData.get(position).detailAddress, "true", String.valueOf(mListData.get(position).id), mListData.get(position).provinceCode, mListData.get(position).cityCode, mListData.get(position).areaCode, orderId), 22);
@@ -253,7 +253,7 @@ public class AddressListActivity extends BaseSwipeActivity {
                         mModelAddress = addressModel;
                         if (mModelAddress.success) {
                             updateAddressList();
-                            EventBus.getDefault().post(new AddressEvent());
+//                            EventBus.getDefault().post(new AddressEvent());
                         } else {
                             AppHelper.showMsg(mContext, mModelAddress.message);
                         }
@@ -323,13 +323,15 @@ public class AddressListActivity extends BaseSwipeActivity {
         mBtnAdd.setOnClickListener(new NoDoubleClickListener() {
             @Override
             public void onNoDoubleClick(View view) {
+
                 if (defaultId != -1) {
                     //说明修改过默认地址,在退出界面的时候请求接口来
                     requestEditDefaultAddress(defaultId, orderId);
 
                 }
                 //跳转到编辑界面使用startActivityForResult,在完成操作之后回到地址列表的界面,重新请求一次地址列表的数据
-                startActivityForResult(EditAddressActivity.getIntent(mContext, EditAddressActivity.class, "add", "", "", "", "", "", "false", "", "", "", "", orderId), 11);
+                    startActivityForResult(EditAddressActivity.getIntent(mContext, EditAddressActivity.class, "add", "", "", "", "", "", "false", "", "", "", "", orderId), 11);
+
             }
         });
     }
@@ -337,11 +339,9 @@ public class AddressListActivity extends BaseSwipeActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.i("isChanged", "onActivityResult: " + isChanged);
+
             if (mineToAddress.equals("mineAddress")) {
                 if (defaultId != -1) {
-
-
                     //说明修改过默认地址,在退出界面的时候请求接口来
                     requestEditDefaultAddress(defaultId, orderId);
 
@@ -452,6 +452,7 @@ public class AddressListActivity extends BaseSwipeActivity {
                             //删除地址之后重新请求一次地址列表
                             mPtr.autoRefresh();
                             EventBus.getDefault().post(new AddressEvent());
+                            Log.d("swxddddddddddd.....","wwddddddd");
                         } else {
                             AppHelper.showMsg(mContext, mModelDeleteAddress.message);
                         }
@@ -480,6 +481,7 @@ public class AddressListActivity extends BaseSwipeActivity {
                         Log.e(TAG, "onNext: " + baseModel.success + baseModel.message + baseModel.code);
                         if (mModelEditDefaultAddress.success) {
                             EventBus.getDefault().post(new AddressEvent());
+                            UserInfoHelper.saveChangeFlag(mActivity,"0");
                         } else {
                             AppHelper.showMsg(mContext, mModelEditDefaultAddress.message);
                         }

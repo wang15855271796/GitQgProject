@@ -17,13 +17,10 @@ import com.puyue.www.qiaoge.model.home.SpikeNewQueryModel;
 import com.puyue.www.qiaoge.utils.DateUtils;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.Snap;
-import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-
-import static cn.com.chinatelecom.account.api.CtAuth.mContext;
 
 /**
  * Created by ${王文博} on 2019/4/12
@@ -44,7 +41,7 @@ public class SpikeActiveNewAdapter extends RecyclerView.Adapter<SpikeActiveNewAd
     private Date ends;
     private boolean exceed2;
 
-    public SpikeActiveNewAdapter(Context context, List<SpikeNewQueryModel.DataBean> data, long currentTime, long endTime, long startTime) {
+    public SpikeActiveNewAdapter(Context context, List<SpikeNewQueryModel.DataBean> data) {
         this.context = context;
         this.data = data;
     }
@@ -56,7 +53,7 @@ public class SpikeActiveNewAdapter extends RecyclerView.Adapter<SpikeActiveNewAd
     }
 
     @Override
-    public void onBindViewHolder(SpikeActiveNewAdapter.MarketViewHolder holder, final int position) {
+    public void onBindViewHolder(MarketViewHolder holder, final int position) {
         flag = data.get(position).getFlag();
         startTime = data.get(position).getStartTime();
         endTime = data.get(position).getEndTime();

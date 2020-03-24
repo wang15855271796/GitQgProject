@@ -1,19 +1,16 @@
 package com.puyue.www.qiaoge.fragment.home;
 
 import android.app.AlertDialog;
-import android.graphics.Color;
-import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dcloud.android.annotation.NonNull;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.adapter.home.CommonsAdapter;
@@ -24,14 +21,16 @@ import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.BackEvent;
+import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.OnItemClickListener;
+import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
-import com.puyue.www.qiaoge.view.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -41,7 +40,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +61,7 @@ public class NewFragment extends BaseFragment {
     @BindView(R.id.smart)
     SmartRefreshLayout refreshLayout;
     CommonsAdapter adapterNewArrival;
-    int pageNum = 1;
+    public int pageNum = 1;
     ProductNormalModel productNormalModel;
     private String cell; // 客服电话
     private AlertDialog mTypedialog;
@@ -81,33 +79,29 @@ public class NewFragment extends BaseFragment {
 
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-
-    @Override
     public void initViews(View view) {
-        setTranslucentStatus();
-        EventBus.getDefault().register(this);
-        initStatusBarWhiteColor();
+
+        if(!EventBus.getDefault().isRegistered(this)) {//加上判断
+            EventBus.getDefault().register(this);
+        }
         bind = ButterKnife.bind(this, view);
-        getProductsList(pageNum,10,"new");
+        refreshLayout.setEnableLoadMore(false);
+        getProductsList(pageNum,11,"new");
         adapterNewArrival = new CommonsAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
+
                     if(UserInfoHelper.getUserType(mActivity).equals(AppConstant.USER_TYPE_RETAIL)) {
+
                         if (StringHelper.notEmptyAndNull(cell)) {
                             AppHelper.showAuthorizationDialog(mActivity, cell, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+
                                     if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode()) && AppHelper.getAuthorizationCode().length() == 6) {
                                         AppHelper.hideAuthorizationDialog();
-//                                        if (UserInfoHelper.getIsregister(mActivity) != null && StringHelper.notEmptyAndNull(UserInfoHelper.getIsregister(mActivity))) {
                                         showSelectType(AppHelper.getAuthorizationCode());
-//                                        }
 
                                     } else {
                                         AppHelper.showMsg(mActivity, "请输入完整授权码");
@@ -123,9 +117,9 @@ public class NewFragment extends BaseFragment {
 
             }
         });
-        recyclerView.setLayoutManager(new GridLayoutManager(mActivity,2));
-        recyclerView.setAdapter(adapterNewArrival);
 
+        recyclerView.setLayoutManager(new MyGrideLayoutManager(mActivity,2));
+        recyclerView.setAdapter(adapterNewArrival);
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -133,6 +127,7 @@ public class NewFragment extends BaseFragment {
                 pageNum = 1;
                 list.clear();
                 getProductsList(1,10,"new");
+                adapterNewArrival.notifyDataSetChanged();
                 refreshLayout.finishRefresh();
             }
         });
@@ -140,29 +135,22 @@ public class NewFragment extends BaseFragment {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                if (productNormalModel.getData()!=null) {
-                    if(productNormalModel.getData().isHasNextPage()) {
-                        Log.d("sddddwdddddddddddd",pageNum+"");
-                        pageNum++;
-                        getProductsList(pageNum, 10,"new");
-                        refreshLayout.finishLoadMore();
-                    }else {
-                        refreshLayout.finishLoadMoreWithNoMoreData();
+                    if (productNormalModel.getData()!=null) {
+                        if(productNormalModel.getData().isHasNextPage()) {
+                            pageNum++;
+                            getProductsList(pageNum, 10,"new");
+                            refreshLayout.finishLoadMore();
+                        }else {
+                            refreshLayout.finishLoadMoreWithNoMoreData();
+                        }
                     }
+//                getProductsList(pageNum, 10,"new");
+                refreshLayout.finishLoadMore();
+
                 }
-            }
         });
 
 
-    }
-    protected void initStatusBarWhiteColor() {
-        //设置状态栏颜色为白色，状态栏图标为黑色
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getActivity().getWindow().setStatusBarColor(Color.WHITE);
-            Log.d("sssssssOOOOO..","ssss");
-            StatusBarUtil.setStatusBarLightMode(getActivity());
-        }
     }
 
     /**
@@ -272,14 +260,14 @@ public class NewFragment extends BaseFragment {
 
     /**
      * 新品列表(王涛)
-     * @param pageNum
+     * @param
      * @param pageSize
      * @param
      */
 
-    private void getProductsList(final int pageNum, int pageSize, String type) {
+    private void getProductsList(int pageNums, int pageSize, String type) {
 
-        ProductListAPI.requestData(mActivity, pageNum, pageSize,type,null)
+        ProductListAPI.requestData(mActivity, pageNums, pageSize,type,null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ProductNormalModel>() {
@@ -296,17 +284,39 @@ public class NewFragment extends BaseFragment {
                     @Override
                     public void onNext(ProductNormalModel getCommonProductModel) {
 
+                        productNormalModel = getCommonProductModel;
                         if (getCommonProductModel.isSuccess()) {
-                            if (getCommonProductModel.getData()!=null) {
-                                productNormalModel = getCommonProductModel;
+                            adapterNewArrival.notifyDataSetChanged();
+                            if(getCommonProductModel.getData().getList().size()>0) {
                                 list.addAll(getCommonProductModel.getData().getList());
                                 adapterNewArrival.notifyDataSetChanged();
                             }
 
-                            boolean hasNextPage = productNormalModel.getData().isHasNextPage();
-                            Log.d("swseeeeeeee.....",hasNextPage+"");
-                            Log.d("swseeeeeeee.....",pageNum+"");
-                        } else {
+                            refreshLayout.setEnableLoadMore(true);
+//                        Log.d("sddsssssss......",getCommonProductModel.getData().getList().size()+"");
+//                        if (getCommonProductModel.isSuccess()) {
+//                            if (getCommonProductModel.getData()!=null) {
+//                                if(productNormalModel.getData().isHasNextPage()) {
+//                                    pageNum++;
+//                                    list.addAll(getCommonProductModel.getData().getList());
+//                                    adapterNewArrival.notifyDataSetChanged();
+//                                    refreshLayout.finishLoadMore();
+//                                }else {
+//                                    list.addAll(getCommonProductModel.getData().getList());
+//                                    adapterNewArrival.notifyDataSetChanged();
+//                                    refreshLayout.finishLoadMoreWithNoMoreData();
+//                                }
+//                        if(productNormalModel.getData().isHasNextPage()) {
+//                            pageNum++;
+//                            getProductsList(pageNum, 10,"new");
+//                            refreshLayout.finishLoadMore();
+//                        }else {
+//                            refreshLayout.finishLoadMoreWithNoMoreData();
+//                        }
+//                    }
+//                            }
+                        }
+                        else {
                             AppHelper.showMsg(mActivity, getCommonProductModel.getMessage());
                         }
                     }
@@ -320,18 +330,30 @@ public class NewFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void messageEventBusss(BackEvent event) {
-        //刷新UI
-//        pageNum = 1;
-//        list.clear();
-//        getProductsList(1,6,"new");
-
         refreshLayout.autoRefresh();
-
+        Log.d("woshidewffssdf......","0");
     }
 
     @Override
     public void setViewData() {
+        getCustomerPhone();
+    }
 
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
+
+            @Override
+            public void onFaild(String errorMsg) {
+            }
+        });
     }
 
     @Override

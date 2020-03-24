@@ -3,10 +3,8 @@ package com.puyue.www.qiaoge.activity.home;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,8 +39,6 @@ public class TeamInnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.Data
     private ImageView iv_pic;
     TextView tv_old_price;
     private TeamActiveQueryModel.DataBean.ActivesBean activesBean;
-    private TextView tv_total;
-    ProgressBar pb;
     private TextView tv_add;
     private RelativeLayout rl_root;
     private RelativeLayout rl_coupon;
@@ -64,8 +60,6 @@ public class TeamInnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.Data
         iv_pic = helper.getView(R.id.iv_pic);
         rl_root = helper.getView(R.id.rl_root);
         tv_add = helper.getView(R.id.tv_add);
-        tv_total = helper.getView(R.id.tv_total);
-        pb = helper.getView(R.id.pb);
         rl_coupon = helper.getView(R.id.rl_coupon);
 
         Glide.with(mContext).load(item.getDefaultPic()).into(iv_pic);
@@ -73,9 +67,6 @@ public class TeamInnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.Data
         helper.setText(R.id.tv_spec,item.getSpec());
         helper.setText(R.id.tv_price,item.getPrice());
         helper.setText(R.id.tv_old_price,item.getOldPrice());
-        pb.setProgress(Integer.parseInt(item.getProgress()));
-        tv_total.setText(item.getRemainNum());
-        Log.d("wodemingchenghsi.....",item.getPrice());
         rl_root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +76,7 @@ public class TeamInnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.Data
             }
         });
 
-        rl_coupon.setVisibility(View.GONE);
+        rl_coupon.setVisibility(View.INVISIBLE);
 
         if(item.getSaleDone()==0) {
             //已售完
@@ -95,8 +86,8 @@ public class TeamInnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.Data
             tv_add.setText("立即加购");
             tv_add.setBackgroundResource(R.drawable.shape_orange);
         }
-        tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
         tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
 
         tv_add.setOnClickListener(new View.OnClickListener() {
             @Override

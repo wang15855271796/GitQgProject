@@ -40,6 +40,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -153,12 +154,13 @@ public class NewWebViewActivity extends BaseSwipeActivity {
     @Override
     public void setViewData() {
         mUrl = getIntent().getStringExtra("URL");
+        Log.d("wwwwwwww......",mUrl);
         type = getIntent().getIntExtra("TYPE", 0);
         name = getIntent().getStringExtra("name");
         if (name.equals("consult") || name.equals("协议")) {
             toolbar_h5.setVisibility(View.GONE);
             //调整距离
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(0, 60, 0, 0);
             lp.width = LinearLayout.LayoutParams.MATCH_PARENT;
             lp.height = LinearLayout.LayoutParams.MATCH_PARENT;
@@ -589,7 +591,7 @@ public class NewWebViewActivity extends BaseSwipeActivity {
         window.setWindowAnimations(R.style.dialogStyle);
         window.getDecorView().setPadding(0, 0, 0, 0);
         //获得window窗口的属性
-        android.view.WindowManager.LayoutParams lp = window.getAttributes();
+        WindowManager.LayoutParams lp = window.getAttributes();
         //设置窗口宽度为充满全屏
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         //设置窗口高度为包裹内容

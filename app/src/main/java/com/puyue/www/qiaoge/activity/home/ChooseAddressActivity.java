@@ -1,20 +1,14 @@
 package com.puyue.www.qiaoge.activity.home;
 
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,8 +20,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListActivity;
 import com.puyue.www.qiaoge.activity.mine.account.EditAddressActivity;
-import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
-import com.puyue.www.qiaoge.adapter.mine.AddressAdapter;
 import com.puyue.www.qiaoge.adapter.mine.SuggestAdressAdapter;
 import com.puyue.www.qiaoge.api.mine.address.AddressListAPI;
 import com.puyue.www.qiaoge.api.mine.address.DefaultAddressAPI;
@@ -35,16 +27,12 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.event.BackEvent;
-import com.puyue.www.qiaoge.event.GoToMineEvent;
 import com.puyue.www.qiaoge.fragment.home.CityEvent;
-import com.puyue.www.qiaoge.fragment.market.MarketsFragment;
-import com.puyue.www.qiaoge.fragment.market.SearchProdAdapter;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.mine.address.AddressModel;
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
-import com.puyue.www.qiaoge.view.FlowLayout;
 import com.puyue.www.qiaoge.view.SearchView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -131,7 +119,6 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 requestEditDefaultAddress(list.get(position).id,null);
-
                 finish();
             }
         });
@@ -139,10 +126,13 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
 
         tv_address.setOnClickListener(this);
         rl_empty.setOnClickListener(this);
-        cityName = getIntent().getStringExtra("cityName");
-        areaName = getIntent().getStringExtra("areaName");
-        Log.d("wwdddddwwddd......",areaName);
-        tv_area.setText(areaName);
+        if(!TextUtils.isEmpty(getIntent().getStringExtra("cityName"))&&!TextUtils.isEmpty(getIntent().getStringExtra("areaName"))) {
+            cityName = getIntent().getStringExtra("cityName");
+            areaName = getIntent().getStringExtra("areaName");
+            tv_area.setText(cityName+areaName);
+        }
+
+
         tv_add_area.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,7 +166,7 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
                     @Override
                     public void onNext(BaseModel baseModel) {
                         if (baseModel.success) {
-//                            EventBus.getDefault().post(new AddressEvent());
+                            EventBus.getDefault().post(new AddressEvent());
                             UserInfoHelper.saveChangeFlag(mActivity,"0");
                             finish();
                             Log.d("woshidajiadeg.....","wwddddd");
@@ -235,6 +225,7 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
 
                         if (mModelAddress.success) {
                             if(mModelAddress.data!=null&&mModelAddress.data.size()>0) {
+                                list.clear();
                                 list.addAll(addressModel.data);
                                 Log.d("swrsdgdfgfg.....",list.size()+"");
                                 addressListAdapter.notifyDataSetChanged();
@@ -269,10 +260,9 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_empty:
-                if (!StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
-                    Intent intent = new Intent(mActivity, LoginActivity.class);
-                    startActivity(intent);
-                }
+                    Intent intents = new Intent(mActivity,EditAddressActivity.class);
+                    intents.putExtra("type","add");
+                    startActivity(intents);
                 break;
 
             case R.id.tv_tip:
@@ -290,8 +280,8 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
                 break;
 
             case R.id.ll_area:
-                Intent intents = new Intent(mActivity,ChangeCityActivity.class);
-                startActivityForResult(intents, 105);
+                Intent intentss = new Intent(mActivity,ChangeCityActivity.class);
+                startActivityForResult(intentss, 105);
                 finish();
                 break;
         }
@@ -350,41 +340,40 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
     @Override
     public void onGetSuggestionResult(SuggestionResult suggestionResult) {
 
-        if (suggestionResult == null || suggestionResult.getAllSuggestions() == null) {
-            //permission_unfinished
-            return;
-        }
-
-        List<String> suggest = new ArrayList<>();
-
-        for (SuggestionResult.SuggestionInfo info : suggestionResult.getAllSuggestions()) {
-            if (info.key != null) {
-                suggest.add(info.key);
-            }
-        }
-        search_recycleView.setVisibility(View.VISIBLE);
-
-        adressAdapter = new SuggestAdressAdapter(suggest, mContext, new SuggestAdressAdapter.onClick() {
-            @Override
-            public void setLocation(int pos) {
-                isClick = SharedPreferencesUtil.getInt(mActivity, "isClick");
-//                UserInfoHelper.saveCity(mContext, suggest.get(pos));
-                Intent intent = new Intent();//跳回首页
-                UserInfoHelper.saveChangeFlag(mActivity,"1");
-                Log.d("swdddddffffff.....","seffeeeee");
-                if(isClick==0) {
-                    UserInfoHelper.saveCity(mActivity,cityName);
-                    UserInfoHelper.saveAreaName(mActivity,areaName);
-                }else {
-                    UserInfoHelper.saveCity(mActivity,city);
-                    UserInfoHelper.saveAreaName(mActivity,areaName1);
-                }
-                setResult(104,intent);
-                finish();
-            }
-        });
-        search_recycleView.setLayoutManager(new LinearLayoutManager(mContext));
-        search_recycleView.setAdapter(adressAdapter);
-        adressAdapter.notifyDataSetChanged();
+//        if (suggestionResult == null || suggestionResult.getAllSuggestions() == null) {
+//            //permission_unfinished
+//            return;
+//        }
+//
+//        List<String> suggest = new ArrayList<>();
+//
+//        for (SuggestionResult.SuggestionInfo info : suggestionResult.getAllSuggestions()) {
+//            if (info.key != null) {
+//                suggest.add(info.key);
+//            }
+//        }
+//        search_recycleView.setVisibility(View.VISIBLE);
+//
+//        adressAdapter = new SuggestAdressAdapter(suggest, mContext, new SuggestAdressAdapter.onClick() {
+//            @Override
+//            public void setLocation(int pos) {
+//                isClick = SharedPreferencesUtil.getInt(mActivity, "isClick");
+//                Intent intent = new Intent();//跳回首页
+//                UserInfoHelper.saveChangeFlag(mActivity,"1");
+//                Log.d("swdddddffffff.....",areaName+"......."+areaName1);
+//                if(isClick==0) {
+//                    UserInfoHelper.saveCity(mActivity,cityName);
+//                    UserInfoHelper.saveAreaName(mActivity,areaName);
+//                }else {
+//                    UserInfoHelper.saveCity(mActivity,city);
+//                    UserInfoHelper.saveAreaName(mActivity,areaName1);
+//                }
+//                setResult(104,intent);
+//                finish();
+//            }
+//        });
+//        search_recycleView.setLayoutManager(new LinearLayoutManager(mContext));
+//        search_recycleView.setAdapter(adressAdapter);
+//        adressAdapter.notifyDataSetChanged();
     }
 }

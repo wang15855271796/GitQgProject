@@ -21,6 +21,7 @@ import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartGoodModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
+import com.puyue.www.qiaoge.model.home.MustModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.utils.ToastUtil;
@@ -36,14 +37,14 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ${王涛} on 2019/11/5
  */
-public class NewPriceAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean.ListBean.ProdPricesBean,BaseViewHolder> {
+public class NewPriceAdapter extends BaseQuickAdapter<MustModel.DataBean.ProdPricesBean,BaseViewHolder> {
 
     private TextView tv_price;
     private ImageView iv_cut;
 //    private ImageView iv_add;
     int productId;
 
-    public NewPriceAdapter(int productId, int layoutResId, @Nullable List<ProductNormalModel.DataBean.ListBean.ProdPricesBean> data) {
+    public NewPriceAdapter(int productId, int layoutResId, @Nullable List<MustModel.DataBean.ProdPricesBean> data) {
         super(layoutResId, data);
         this.productId = productId;
 
@@ -51,7 +52,7 @@ public class NewPriceAdapter extends BaseQuickAdapter<ProductNormalModel.DataBea
 
 
     @Override
-    protected void convert(BaseViewHolder helper, ProductNormalModel.DataBean.ListBean.ProdPricesBean item) {
+    protected void convert(BaseViewHolder helper, MustModel.DataBean.ProdPricesBean item) {
         tv_price = helper.getView(R.id.tv_price);
         tv_price.setText(item.getPrice());
         helper.setText(R.id.tv_unit, item.getUnitDesc() + "");

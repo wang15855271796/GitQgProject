@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.activity.mine.order.ConfirmNewOrderActivity;
@@ -30,10 +31,8 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
-import com.puyue.www.qiaoge.fragment.home.CityEvent;
 import com.puyue.www.qiaoge.fragment.market.TestAdapter;
 import com.puyue.www.qiaoge.helper.AlwaysMarqueeTextViewHelper;
-import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.BigDecimalUtils;
 import com.puyue.www.qiaoge.helper.CollapsingToolbarLayoutStateHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
@@ -107,6 +106,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     LinearLayout ll;
     @BindView(R.id.fl)
     FrameLayout fl;
+    @BindView(R.id.iv_back)
+    ImageView iv_back;
     //失效商品的cartId
     List<Integer> unCartsId = new ArrayList<>();
     //点击删除时的cartId存储集合
@@ -135,7 +136,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     @Override
     public int setLayoutId() {
         setTranslucentStatus();
-        Log.d("wojiaoanwwngghf....","00000");
         return R.layout.fragment_cart;
     }
 
@@ -152,6 +152,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
         ll_go_market.setOnClickListener(this);
         tv_clear.setOnClickListener(this);
         imageGoBay.setOnClickListener(this);
+        iv_back.setVisibility(View.GONE);
         Window window = getActivity().getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     }
@@ -459,6 +460,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
             @Override
             public void onNoDoubleClick(View view) {
                 for (int i = 0; i <unList.size() ; i++) {
+//                    unCartsId.clear();
                     List<CartsListModel.DataBean.InValidListBean.SpecProductListBeanX> specProductList = unList.get(i).getSpecProductList();
                     for (int j = 0; j <specProductList.size() ; j++) {
                         int cartId = specProductList.get(j).getCartId();
@@ -590,12 +592,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                     public void onNext(CartBalanceModel cartBalanceModel) {
                         if (cartBalanceModel.success) {
                             Intent intent = new Intent(getActivity(), ConfirmNewOrderActivity.class);
-//                            intent.putExtra("toRecharge",cartBalanceModel.getData().isToRecharge());
-//                            intent.putExtra("toRechargeAmount",cartBalanceModel.getData().getToRechargeAmount());
                             intent.putExtra("normalProductBalanceVOStr", normalProductBalanceVOStr);
                             intent.putExtra("activityBalanceVOStr", activityBalanceVOStr);
                             intent.putExtra("cartListStr", cartListStr);
-                            Log.d("wfdffbfkljnbkljnf..","dds");
                             startActivity(intent);
                             }else {
                             ToastUtil.showSuccessMsg(mActivity, cartBalanceModel.message);

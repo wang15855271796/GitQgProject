@@ -19,11 +19,11 @@ public class PostModifyMesAPI {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.MODIFYORDERINFO)
         Observable<BaseModel> setParams(@Field("orderId") String orderId,
-                                        @Field("pickUpName")String pickUpName,
+                                        @Field("pickUpName") String pickUpName,
                                         @Field("pickUpPhone") String pickUpPhone,
-                                        @Field("startTime")String startTime,
-                                        @Field("deliverTimeStart")String deliverTimeStart,
-                                        @Field("deliverTimeEnd")String deliverTimeEnd,
+                                        @Field("startTime") String startTime,
+                                        @Field("deliverTimeStart") String deliverTimeStart,
+                                        @Field("deliverTimeEnd") String deliverTimeEnd,
                                         @Field("deliverTimeName") String deliverTimeName);
     }
 

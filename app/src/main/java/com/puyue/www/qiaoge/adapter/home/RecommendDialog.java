@@ -74,6 +74,7 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
         this.context = context;
         this.listBean = listBean;
         init();
+        exchangeList(listBean.getProdSpecs().get(0).getProductId());
     }
 
     //初始化布局

@@ -76,11 +76,12 @@ public class ReturnDetailOrderAdapter extends BaseQuickAdapter<NewReturnOrderMod
             public void onClick(View v) {
                 if (item.getBusinessType() == 1) {
                     if (item.onShelves == 1) {
-                        Intent intent = new Intent(mContext, CommonGoodsDetailActivity.class);
-                        intent.putExtra(AppConstant.ACTIVEID, item.getBusinessId());
-                        mContext.startActivity(intent);
+//                        Intent intent = new Intent(mContext, CommonGoodsDetailActivity.class);
+//                        intent.putExtra(AppConstant.ACTIVEID, item.productMainId);
+//                        Log.d("wddddwdwddd.....",item.productMainId+"");
+//                        mContext.startActivity(intent);
                     } else if (item.onShelves == 0) {
-                        AppHelper.showMsg(mContext, "商品已下架");
+//                        AppHelper.showMsg(mContext, "商品已下架");
                     }
                 }
 

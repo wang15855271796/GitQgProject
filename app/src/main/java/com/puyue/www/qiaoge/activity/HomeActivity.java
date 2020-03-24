@@ -1,12 +1,12 @@
 package com.puyue.www.qiaoge.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -28,6 +28,7 @@ import com.chuanglan.shanyan_sdk.listener.GetPhoneInfoListener;
 import com.chuanglan.shanyan_sdk.listener.InitListener;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
+import com.puyue.www.qiaoge.activity.mine.login.LogoutsEvent;
 import com.puyue.www.qiaoge.api.PostLoadAmountAPI;
 import com.puyue.www.qiaoge.api.SendJsPushAPI;
 import com.puyue.www.qiaoge.api.home.QueryHomePropupAPI;
@@ -39,12 +40,11 @@ import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.GoToMineEvent;
 import com.puyue.www.qiaoge.event.LogoutEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
-import com.puyue.www.qiaoge.event.WeChatUnPayEvent;
 import com.puyue.www.qiaoge.fragment.cart.CartFragment;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
-import com.puyue.www.qiaoge.fragment.home.HomeFragment;
 import com.puyue.www.qiaoge.fragment.home.HomeFragments;
 import com.puyue.www.qiaoge.fragment.home.HomeFragmentss;
+import com.puyue.www.qiaoge.fragment.home.HomeFragmentsss;
 import com.puyue.www.qiaoge.fragment.market.MarketsFragment;
 import com.puyue.www.qiaoge.fragment.mine.MineFragment;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -97,7 +97,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     private int popuWindowId;
     private LinearLayout rootview;
     public LocationClient mLocationClient = null;
-    private MyLocationListener myListener;
+    private MyLocationListener myListener = new MyLocationListener();
     private String token;
     private String locationMessage = "";
     private String guide;
@@ -105,16 +105,62 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     private String city;
     private boolean isGet = false;
     private String type;
+    private String district;
+    public static final String KEY_MSG_FRAGMENT = "msg_fragment";
+    public static final String KEY_CONTACTS_FRAGMENT = "contacts_fragment";
+    public static final String KEY_NEWS_FRAGMENT = "news_fragment";
+    public static final String KEY_Mine = "mine_fragment";
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+//            mTabHome = (HomeFragmentsss) fm.findFragmentByTag(HomeFragmentsss.class.getCanonicalName());
+//            mTabMarket = (MarketsFragment) fm.findFragmentByTag(MarketsFragment.class.getCanonicalName());
+//            mTabCart = (CartFragment) fm.findFragmentByTag(CartFragment.class.getCanonicalName());
+//            mTabMine = (MineFragment) fm.findFragmentByTag(MineFragment.class.getCanonicalName());
+
+            try {
+                mTabHome = (HomeFragmentsss)getSupportFragmentManager().getFragment(savedInstanceState,KEY_MSG_FRAGMENT);
+                mTabMarket = (MarketsFragment)getSupportFragmentManager().getFragment(savedInstanceState,KEY_CONTACTS_FRAGMENT);
+                mTabCart = (CartFragment)getSupportFragmentManager().getFragment(savedInstanceState,KEY_NEWS_FRAGMENT);
+                mTabMine = (MineFragment)getSupportFragmentManager().getFragment(savedInstanceState,KEY_Mine);
+            }catch (Exception e) {
+
+            }
+
+        }else {
+
+        }
+
         return false;
     }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if(mTabHome != null){
+            getSupportFragmentManager().putFragment(outState,KEY_MSG_FRAGMENT,mTabHome);
+        }
+        if(mTabMarket != null){
+            getSupportFragmentManager().putFragment(outState,KEY_CONTACTS_FRAGMENT,mTabMarket);
+        }
+        if(mTabCart != null){
+            getSupportFragmentManager().putFragment(outState,KEY_NEWS_FRAGMENT,mTabCart);
+        }
+        if(mTabMine != null){
+            getSupportFragmentManager().putFragment(outState,KEY_Mine,mTabMine);
+        }
+
+
+        super.onSaveInstanceState(outState);
+    }
+
 
     @Override
     public void setContentView() {
         //showSystemParameter();
         //在使用SDK各组件之前初始化context信息，传入ApplicationContext
+
         SDKInitializer.initialize(getApplicationContext());
         //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
@@ -124,7 +170,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                                 @Override
             public void getInitStatus(int code, String result) {
                 //初始化回调
-                Log.d("sswswswdffffff.....",code+"");
+
             }
         });
 
@@ -143,23 +189,12 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         //在首页中写运行时权限设置tv_home_car_number
 //        setNewPosition();
 
-    }
 
-    /**
-     * 将角标数据重新给HomeFragment
-     */
-    private void setNewPosition(int newPosition) {
-        //HA 传给HF
-
-        Bundle newPositionbundle = new Bundle();
-        newPositionbundle.putInt("newPosition", newPosition);
-
-        mTabHome.setArguments(newPositionbundle);
-
-        Log.e("MessageCenterActivity", "setNewPosition: " + newPosition);
 
 
     }
+
+
 
 
     @Override
@@ -194,7 +229,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         }
 
         token = AppConstant.TOKEN;
-        myListener = new MyLocationListener();
         mLocationClient = new LocationClient(getApplicationContext());
         //声明LocationClient类
         mLocationClient.registerLocationListener(myListener);
@@ -208,7 +242,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
 //可选，是否需要地址信息，默认为不需要，即参数为false
 //如果开发者需要获得当前点的地址信息，此处必须为true
         option.setOpenGps(true);
-
 //可选，设置是否使用gps，默认false
 //使用高精度和仅用设备两种定位模式的，参数必须设置为true
 
@@ -269,8 +302,8 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
               }
           }, 5000);
       }*/
-    switchTab(TAB_HOME);
 
+//        switchTab(TAB_HOME);
 }
 
 
@@ -284,25 +317,14 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
         Window window = alertDialog.getWindow();
-
         window.setContentView(R.layout.home_guide);
         window.setGravity(Gravity.TOP | Gravity.RIGHT);
         ImageView ivGuideOne = window.findViewById(R.id.iv_guide_one);
-
-
+        ivGuideOne.setVisibility(View.VISIBLE);
         ivGuideOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 ivGuideOne.setVisibility(View.GONE);
-                /*alertDialog.dismiss();
-
-                final AlertDialog alertDialog1 = new AlertDialog.Builder(mContext, R.style.DialogStyle).create();
-                alertDialog1.setCanceledOnTouchOutside(false);
-                alertDialog1.show();
-                Window window = alertDialog1.getWindow();
-                window.setContentView(R.layout.home_guide);*/
-
                 ImageView ivGuideTwo = window.findViewById(R.id.iv_guide_two);
                 ivGuideTwo.setVisibility(View.VISIBLE);
                 ivGuideTwo.setOnClickListener(new View.OnClickListener() {
@@ -310,24 +332,25 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                     public void onClick(View v) {
                         ivGuideOne.setVisibility(View.GONE);
                         ivGuideTwo.setVisibility(View.GONE);
+                        alertDialog.dismiss();
                      /*   //alertDialog1.dismiss();
                         final AlertDialog alertDialog2 = new AlertDialog.Builder(mContext, R.style.DialogStyle).create();
                         alertDialog2.setCanceledOnTouchOutside(false);
                         alertDialog2.show();
                         Window window = alertDialog2.getWindow();
                         window.setContentView(R.layout.home_guide);*/
-                        ImageView ivGuideThree = window.findViewById(R.id.iv_guide_three);
-                        ivGuideThree.setVisibility(View.VISIBLE);
-                        ivGuideThree.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                alertDialog.dismiss();
-
-
-                                UserInfoHelper.saveLoadAmount(mContext, "已下载");
-
-                            }
-                        });
+//                        ImageView ivGuideThree = window.findViewById(R.id.iv_guide_three);
+//                        ivGuideThree.setVisibility(View.GONE);
+//                        ivGuideThree.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                alertDialog.dismiss();
+//
+//
+//                                UserInfoHelper.saveLoadAmount(mContext, "已下载");
+//
+//                            }
+//                        });
                     }
                 });
 
@@ -337,7 +360,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
 
 
     }
-
 
     private void sendLocation() {
         SendLocationAPI.requestData(mContext, locationMessage)
@@ -385,7 +407,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         public void onNoDoubleClick(View view) {
             if (view == mLlHome) {
                 switchTab(TAB_HOME);
-                setTranslucentStatus();
+//                setTranslucentStatus();
                 Window window = getWindow();
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
@@ -400,7 +422,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
                     switchTab(TAB_CART);
 //                     StatusBarCompat.setStatusBarColor(mActivity, R.mipmap.ic_car_title,true);
-                    setTranslucentStatus();
+//                    setTranslucentStatus();
                     Window window = getWindow();
                     window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 } else {
@@ -410,7 +432,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
             } else if (view == mLlMine) {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
                     switchTab(TAB_MINE);
-                    setTranslucentStatus();
+//                    setTranslucentStatus();
                     Window window = getWindow();
                     window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 } else {
@@ -451,7 +473,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         switch (tab) {
             case TAB_HOME:
                 if (mTabHome == null || isGet) {
-                    mTabHome = new HomeFragmentss();
+                    mTabHome = new HomeFragmentsss();
                     mFragmentTransaction.add(R.id.layout_home_container, mTabHome);
                     isGet = false;
                 } else {
@@ -469,8 +491,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                 } else {
                     mFragmentTransaction.show(mTabMarket);
                 }
-                //   mTabMarket = new MarketFragment();
-                ///   mFragmentTransaction.add(R.id.layout_home_container, mTabMarket);
 
                 mIvMarket.setImageResource(R.mipmap.ic_tab_goods_enable);
                 mTvMarket.setTextColor(getResources().getColor(R.color.app_tab_selected));
@@ -579,6 +599,22 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(LogoutsEvent mainEvent) {
+        switchTab(TAB_HOME);
+        Log.d("weweeeewwwww....","1111");
+        if (city != null) {
+            UserInfoHelper.saveCity(mContext, city);
+            UserInfoHelper.saveAreaName(mContext,district);
+        } else {
+            UserInfoHelper.saveCity(mContext, "杭州市");
+
+//                switchTab(TAB_HOME);
+        }
+
+    }
+
+
     private void sendLoadNum() {
         PostLoadAmountAPI.requestData(mContext)
                 .subscribeOn(Schedulers.io())
@@ -645,7 +681,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                     if (Integer.valueOf(getCartNumModel.getData().getNum()) > 0) {
                         mTvCarNum.setVisibility(View.VISIBLE);
                         mTvCarNum.setText(getCartNumModel.getData().getNum());
-
                     } else {
                         mTvCarNum.setVisibility(View.GONE);
                     }
@@ -661,19 +696,19 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         });
     }
 
-    protected void setTranslucentStatus() {
-        // 5.0以上系统状态栏透明
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-    }
+//    protected void setTranslucentStatus() {
+//        // 5.0以上系统状态栏透明
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Window window = getWindow();
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.setStatusBarColor(Color.TRANSPARENT);
+//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        }
+//    }
 
     private String toPage;
 
@@ -697,7 +732,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                     @Override
                     public void onNext(QueryHomePropupModel queryHomePropupModel) {
                         if (queryHomePropupModel.isSuccess()) {
-                            Log.d("hahhaaahahhaha....",queryHomePropupModel.getData().isPropup()+"");
+
                             if (queryHomePropupModel.getData().isPropup()) {
                                 popuWindowImage = queryHomePropupModel.getData().getHomePropup().getShowUrl();
                                 popuWindowUrlIntent = queryHomePropupModel.getData().getHomePropup().getPageUrl();
@@ -769,32 +804,31 @@ public class MyLocationListener extends BDAbstractLocationListener {
 
         String country = location.getCountry();    //获取国家
         String province = location.getProvince();    //获取省份
-        // String city = location.getCity();    //获取城市
+//         String city = location.getCity();    //获取城市
         String street = location.getStreet();    //获取街道信息
         String streetNumber = location.getStreetNumber();
-        String district = location.getDistrict();    //获取区县
+        //获取区县
+        district = location.getDistrict();
         city = location.getCity();
-        UserInfoHelper.saveAreaName(mContext,district);
-
+        UserInfoHelper.saveAreaName(mContext, district);
+        UserInfoHelper.saveLocation(mContext,location.getAddrStr());
+        Log.d("hahhaaahahhaha....",city+"");
         isGet = true;
+//
 
         if (type.equals("goHome")) {
-//            Log.i("wweabv......",city);
             if (city != null) {
-                Log.d("dsgdsgggjhjh00000....",city);
                 UserInfoHelper.saveCity(mContext, city);
-//                switchTab(TAB_HOME);
-
-
+//                Log.d("hahhaaahahhaha....",city+"");
+//
             } else {
                 UserInfoHelper.saveCity(mContext, "杭州市");
 //                switchTab(TAB_HOME);
             }
         }
-
         type = "";
         locationMessage = location.getAddrStr();    //获取详细地址信息
-
+        switchTab(TAB_HOME);
     }
 }
 }

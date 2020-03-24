@@ -125,7 +125,6 @@ public class ConfirmNewOrderActivity extends BaseSwipeActivity {
             @Override
             public void onClick(View v) {
                 tv_deliver_order_two.setVisibility(View.VISIBLE);
-
                 tv_deliver_order.setVisibility(View.GONE);
                 tv_sufficiency_order.setVisibility(View.GONE);
                 switchTab(TAB_SUFFICIENCY);

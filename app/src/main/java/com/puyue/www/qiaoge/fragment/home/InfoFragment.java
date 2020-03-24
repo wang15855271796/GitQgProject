@@ -24,6 +24,7 @@ import android.os.Parcelable;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,12 +47,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.activity.mine.IntegralPayActivity;
 import com.puyue.www.qiaoge.activity.mine.coupons.MyCouponsActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
+import com.puyue.www.qiaoge.adapter.home.CommonsAdapter;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
@@ -60,6 +61,7 @@ import com.puyue.www.qiaoge.helper.AppSafeHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
+import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.mine.NewWebModel;
 import com.puyue.www.qiaoge.model.mine.wallet.NewWebPhoneModel;
 import com.puyue.www.qiaoge.view.CompatToolbar;
@@ -96,7 +98,7 @@ public class InfoFragment extends BaseFragment {
     private TextView mTvTitle;
     private ProgressBar mProgress;
     private ImageView mIvBack;
-
+    RecyclerView recyclerView;
     private MyWebView mWv;
     // private WebView mWv;
     private String mUrl;
@@ -115,7 +117,7 @@ public class InfoFragment extends BaseFragment {
     private ValueCallback<Uri> mUploadMessage;// 表单的数据信息
     private Uri imageUri;
     private final static int PHOTO_REQUEST = 100;
-
+    CommonsAdapter adapterNewArrival;
 
     private final static int FILECHOOSER_RESULTCODE = 1;// 表单的结果回调</span>
 
@@ -123,7 +125,7 @@ public class InfoFragment extends BaseFragment {
 
 
     private int index;
-
+    private List<ProductNormalModel.DataBean.ListBean> lists = new ArrayList<>();
     private List<String> list;
     private int iphone;
     private String url;
@@ -384,7 +386,7 @@ public class InfoFragment extends BaseFragment {
         window.setWindowAnimations(R.style.dialogStyle);
         window.getDecorView().setPadding(0, 0, 0, 0);
         //获得window窗口的属性
-        android.view.WindowManager.LayoutParams lp = window.getAttributes();
+        WindowManager.LayoutParams lp = window.getAttributes();
         //设置窗口宽度为充满全屏
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         //设置窗口高度为包裹内容
@@ -811,6 +813,7 @@ public class InfoFragment extends BaseFragment {
     public void findViewById(View view) {
         mIvBack = (ImageView) view.findViewById(R.id.iv_h5_back);
         mWv = view.findViewById(R.id.frm_h5);
+        recyclerView = view.findViewById(R.id.recyclerView);
         mProgress = (ProgressBar) view.findViewById(R.id.progress_h5);
         mTvTitle = (TextView) view.findViewById(R.id.tv_h5_title);
         toolbar_h5 = (CompatToolbar) view.findViewById(R.id.toolbar_h5);
@@ -818,7 +821,33 @@ public class InfoFragment extends BaseFragment {
 
     @Override
     public void setViewData() {
+        adapterNewArrival = new CommonsAdapter("common",R.layout.item_team_list, lists, new CommonsAdapter.Onclick() {
+            @Override
+            public void addDialog() {
+                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
+                    if(UserInfoHelper.getUserType(mActivity).equals(AppConstant.USER_TYPE_RETAIL)) {
+                        if (StringHelper.notEmptyAndNull("16667655")) {
+                            AppHelper.showAuthorizationDialog(mActivity, "16667655", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode()) && AppHelper.getAuthorizationCode().length() == 6) {
+                                        AppHelper.hideAuthorizationDialog();
+//                                        if (UserInfoHelper.getIsregister(mActivity) != null && StringHelper.notEmptyAndNull(UserInfoHelper.getIsregister(mActivity))) {
+//                                        }
 
+                                    } else {
+                                        AppHelper.showMsg(mActivity, "请输入完整授权码");
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+
+            }
+        });
+        recyclerView.setLayoutManager(new MyGrideLayoutManager(mActivity,2));
+        recyclerView.setAdapter(adapterNewArrival);
     }
 
     @Override

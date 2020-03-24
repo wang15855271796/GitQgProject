@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +26,8 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
+import com.puyue.www.qiaoge.fragment.cart.NumEvent;
+import com.puyue.www.qiaoge.fragment.home.MyGrideLayoutManager;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -97,11 +98,6 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
         setContentView(R.layout.hot_product);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        refreshLayout.autoRefresh();
-    }
 
     @Override
     public void findViewById() {
@@ -134,7 +130,9 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
                 }
             }
         });
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
+        refreshLayout.setEnableLoadMore(false);
+
+        recyclerView.setLayoutManager(new MyGrideLayoutManager(mContext,2));
         recyclerView.setAdapter(adapterNewArrival);
         iv_back.setOnClickListener(this);
         tv_title.setText("热销");
@@ -166,7 +164,7 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
                 pageNum = 1;
                 list.clear();
                 getProductsList(1,pageSize,"hot");
-
+                getCartNum();
                 refreshLayout.finishRefresh();
             }
         });
@@ -356,7 +354,7 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
                             } else {
                                 adapterNewArrival.loadMoreComplete();
                             }
-
+                            refreshLayout.setEnableLoadMore(true);
 
                         } else {
                             AppHelper.showMsg(mActivity, getCommonProductModel.getMessage());
@@ -376,10 +374,16 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
         getCartNum();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getCartNum(NumEvent event) {
+        getCartNum();
+    }
+
     @Override
     public void setViewData() {
 
         getCustomerPhone();
+        refreshLayout.autoRefresh();
         getCartNum();
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
         mTypedialog.setCancelable(false);

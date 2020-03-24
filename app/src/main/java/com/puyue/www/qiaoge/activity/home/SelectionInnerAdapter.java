@@ -1,8 +1,13 @@
 package com.puyue.www.qiaoge.activity.home;
 
+import android.app.AlertDialog;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,7 +17,7 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.api.cart.AddMountChangeTwoAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
-import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartGoodModel;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 
@@ -68,6 +73,80 @@ public class SelectionInnerAdapter extends BaseQuickAdapter<MarketRightModel.Dat
                     addCarts(num,item.getPriceId(),productId,1,tv_num);
                 }
             }
+        });
+
+        tv_num.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final AlertDialog alertDialog = new AlertDialog.Builder(mContext, R.style.DialogStyle).create();
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
+                Window window = alertDialog.getWindow();
+                window.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
+                        | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+                window.setContentView(R.layout.dialog_cart_num_set);
+
+                EditText et_num = window.findViewById(R.id.et_num);
+                TextView tv_ok = window.findViewById(R.id.tv_ok);
+                TextView tv_cancel = window.findViewById(R.id.tv_cancel);
+
+                window.setGravity(Gravity.CENTER);
+
+                tv_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                tv_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (et_num.getText().toString() != null && StringHelper.notEmptyAndNull(et_num.getText().toString())) {
+
+                            AddMountChangeTwoAPI.AddMountChangeService(mContext, 1, productId, Integer.parseInt(et_num.getText().toString()), item.getPriceId())
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Subscriber<AddCartGoodModel>() {
+                                        @Override
+                                        public void onCompleted() {
+
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+
+                                        }
+
+
+                                        @Override
+                                        public void onNext(AddCartGoodModel addMountReduceModel) {
+
+                                            if (addMountReduceModel.isSuccess()) {
+                                                tv_num.setText(et_num.getText().toString());
+                                                alertDialog.dismiss();
+                                                EventBus.getDefault().post(new UpDateNumEvent());
+                                            } else {
+                                                ToastUtil.showSuccessMsg(mContext, addMountReduceModel.getMessage());
+                                                tv_num.setText(addMountReduceModel.data.toString());
+                                                alertDialog.dismiss();
+                                            }
+                                        }
+                                    });
+
+
+                        } else {
+                            ToastUtil.showSuccessMsg(mContext, "请输入数量");
+                        }
+                    }
+                });
+
+            }
+
         });
     }
 

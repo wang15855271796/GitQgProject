@@ -80,7 +80,6 @@ public class CouponsInnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.D
         helper.setText(R.id.tv_old_price,item.getOldPrice());
         pb.setProgress(Integer.parseInt(item.getProgress()));
         tv_total.setText(item.getRemainNum());
-        Log.d("wodemingchenghsi.....",item.getPrice());
         rl_root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,14 +98,14 @@ public class CouponsInnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.D
 
         if(item.getSaleDone()==0) {
             //已售完
-            tv_add.setText("已售罄");
+            tv_add.setText("  已售罄  ");
             tv_add.setBackgroundResource(R.drawable.shape_detail_grey);
         }else {
             tv_add.setText("立即加购");
             tv_add.setBackgroundResource(R.drawable.shape_orange);
         }
-        tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
         tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
 
         tv_add.setOnClickListener(new View.OnClickListener() {
             @Override

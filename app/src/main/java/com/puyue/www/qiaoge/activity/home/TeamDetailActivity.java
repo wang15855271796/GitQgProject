@@ -1,12 +1,8 @@
 package com.puyue.www.qiaoge.activity.home;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,9 +11,6 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CartActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
-import com.puyue.www.qiaoge.adapter.home.TeamActiveQueryAdapter;
-import com.puyue.www.qiaoge.adapter.mine.ViewPagerAdapter;
-import com.puyue.www.qiaoge.api.cart.AddCartAPI;
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.TeamActiveQueryAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
@@ -25,21 +18,15 @@ import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
-import com.puyue.www.qiaoge.model.cart.AddCartModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.TabModel;
-import com.puyue.www.qiaoge.model.home.TeamActiveQueryModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -158,66 +145,11 @@ public class TeamDetailActivity extends BaseSwipeActivity {
     public void setViewData() {
 
 
-        //团购
-//        teamActiveQueryAdapter = new TeamActiveQueryAdapter(R.layout.item_teame_adapter, teamList, new TeamActiveQueryAdapter.OnClick() {
-//            @Override
-//            public void addCarOnclick(int position) {
-//                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
-//                    TeamActiveQueryModel.DataBean.ListBean listBean = teamList.get(position);
-//                    addCar(listBean.activeId, "", 11, "1");
-//                } else {
-//                    AppHelper.showMsg(mActivity, "请先登录");
-//                    startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
-//                }
-//
-//                teamActiveQueryAdapter.notifyDataSetChanged();
-//            }
-//        });
-
-//        rv_detail.setLayoutManager(new LinearLayoutManager(mContext));
-//        rv_detail.setAdapter(teamActiveQueryAdapter);
-
     }
 
     @Override
     public void setClickEvent() {
 
-    }
-
-    /**
-     * 添加购物车
-     * @param businessId
-     * @param productCombinationPriceVOList
-     * @param businessType
-     * @param totalNum
-     */
-    private void addCar(int businessId, String productCombinationPriceVOList, int businessType, String totalNum) {
-        AddCartAPI.requestData(mActivity, businessId, productCombinationPriceVOList, businessType, String.valueOf(totalNum))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<AddCartModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(AddCartModel addCartModel) {
-                        if (addCartModel.success) {
-                            AppHelper.showMsg(mActivity, "成功加入购物车");
-//                            getCartNum();
-                        } else {
-                            AppHelper.showMsg(mActivity, addCartModel.message);
-                            Log.e("Crash", "onNext: " + addCartModel.message);
-                        }
-
-                    }
-                });
     }
 
     /**

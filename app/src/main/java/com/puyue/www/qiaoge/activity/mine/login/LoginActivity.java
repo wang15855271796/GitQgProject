@@ -33,14 +33,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
-import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.chuanglan.shanyan_sdk.OneKeyLoginManager;
+import com.chuanglan.shanyan_sdk.listener.OneKeyLoginListener;
+import com.chuanglan.shanyan_sdk.listener.OpenLoginAuthListener;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.ConfigUtils;
 import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.activity.WebDriverActivity;
 import com.puyue.www.qiaoge.activity.mine.account.EditAccountInputPhoneActivity;
+import com.puyue.www.qiaoge.api.home.GetCustomerPhoneAPI;
+import com.puyue.www.qiaoge.api.home.OneRegisterModel;
 import com.puyue.www.qiaoge.api.mine.login.LoginAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -49,9 +52,10 @@ import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.mine.login.LoginModel;
-import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -93,8 +97,8 @@ public class LoginActivity extends BaseSwipeActivity {
 
     private ImageView iv_change_type;
     private LinearLayout ll_change_type;
-    public LocationClient mLocationClient = null;
-    private MyLocationListener myListener = new MyLocationListener();
+//    public LocationClient mLocationClient = null;
+//    private MyLocationListener myListener = new MyLocationListener();
 
     private String city;
 
@@ -132,9 +136,9 @@ public class LoginActivity extends BaseSwipeActivity {
     public void setViewData() {
         UserInfoHelper.saveMac(mContext, getMacAddress(mContext));
         UserInfoHelper.savePhoneIp(mContext, getLocalIpAddress(mContext));
-        mLocationClient = new LocationClient(getApplicationContext());
-        //声明LocationClient类
-        mLocationClient.registerLocationListener(myListener);
+//        mLocationClient = new LocationClient(getApplicationContext());
+//        //声明LocationClient类
+//        mLocationClient.registerLocationListener(myListener);
         //注册监听函数
         LocationClientOption option = new LocationClientOption();
 
@@ -143,8 +147,8 @@ public class LoginActivity extends BaseSwipeActivity {
 //可选，是否需要地址信息，默认为不需要，即参数为false
 //如果开发者需要获得当前点的地址信息，此处必须为true
 
-        mLocationClient.setLocOption(option);
-        mLocationClient.start();
+//        mLocationClient.setLocOption(option);
+//        mLocationClient.start();
         option.setLocationMode(LocationClientOption.LocationMode.Battery_Saving);
 
 
@@ -227,10 +231,14 @@ public class LoginActivity extends BaseSwipeActivity {
             } else if (view == mTvForgetPassword) {
                 //走忘记密码的流程,忘记密码需要先输入一次手机号码
                 startActivity(EditAccountInputPhoneActivity.getIntent(mContext, EditAccountInputPhoneActivity.class, "1", "forget"));
-            } else if (view == mTvRegister) {
+            }
+            else if (view == mTvRegister) {
                 //走注册流程
-                startActivity(RegisterActivity.getIntent(mContext, RegisterActivity.class));
-            } else if (view == mIvBack) {
+//                startActivity(RegisterActivity.getIntent(mContext, RegisterActivity.class));
+                OneKeyLoginManager.getInstance().setAuthThemeConfig(ConfigUtils.getCJSConfig(getApplicationContext()));
+                openLoginActivity();
+            }
+            else if (view == mIvBack) {
                 Intent intent = new Intent(mContext, HomeActivity.class);
                 intent.putExtra("go_home", "");
                 startActivity(intent);
@@ -320,6 +328,76 @@ public class LoginActivity extends BaseSwipeActivity {
             }
         }
     };
+    private String token1;
+
+    private void openLoginActivity() {
+        //开始拉取授权页
+        OneKeyLoginManager.getInstance().openLoginAuth(false, new OpenLoginAuthListener() {
+            @Override
+            public void getOpenLoginAuthStatus(int code, String result) {
+                Log.d("sfdfffefefe",code+"...0000");
+                if (1000 == code) {
+                    Log.e("VVV", "拉起授权页成功： code==" + code + "   result==" + result);
+                } else {
+                    Log.e("VVV", "拉起授权页失败： code==" + code + "   result==" + result);
+                    Intent intent = new Intent(LoginActivity.this,RegisterMessageActivity.class);
+                    startActivity(intent);
+                }
+            }
+        }, new OneKeyLoginListener() {
+            @Override
+            public void getOneKeyLoginStatus(int code, String result) {
+
+                if (1011 == code) {
+                    Log.e("VVV", "用户点击授权页返回： code==" + code + "   result==" + result);
+                    return;
+                } else if (1000 == code) {
+                    Log.e("VVV", "用户点击登录获取token成功： code==" + code + "   result==" + result);
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(result);
+                        token1 = jsonObject.getString("token");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    checks(token1);
+                } else {
+                    Log.e("VVV", "用户点击登录获取token失败： code==" + code + "   result==" + result);
+                }
+            }
+        });
+    }
+
+    private void checks(String result) {
+        GetCustomerPhoneAPI.getData(mContext,result)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<OneRegisterModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(OneRegisterModel baseModel) {
+                        if (baseModel.success) {
+                            Intent intent = new Intent(LoginActivity.this,RegisterStep1Activity.class);
+                            intent.putExtra("phone",baseModel.data);
+                            intent.putExtra("token1",result);
+                            startActivity(intent);
+                            OneKeyLoginManager.getInstance().finishAuthActivity();
+                        } else {
+                            AppHelper.showMsg(mContext, baseModel.message);
+                            OneKeyLoginManager.getInstance().finishAuthActivity();
+                        }
+                    }
+                });
+    }
+
 
     private void applyBlur() {
 
@@ -406,7 +484,7 @@ public class LoginActivity extends BaseSwipeActivity {
 
     private void updateLogin() {
         AppHelper.showMsg(mContext, "登录成功");
-        Log.i("login", "updateLogin: wufanhui");
+        Log.i("loginxscscfdfd", "updateLogin: wufanhui");
         UserInfoHelper.saveUserId(mContext, mModelLogin.data.token);
         UserInfoHelper.saveUserCell(mContext, mModelLogin.data.userBaseInfoVO.phone);
         UserInfoHelper.saveUserType(mContext, String.valueOf(mModelLogin.data.userBaseInfoVO.type));
@@ -416,37 +494,41 @@ public class LoginActivity extends BaseSwipeActivity {
         //登录成功,登录状态有变化,需要让
         UserInfoHelper.saveUserHomeRefresh(mContext, "");
         UserInfoHelper.saveUserMarketRefresh(mContext, "");
-        UserInfoHelper.saveDate(mContext, 0+"");
-//        SharedPreferencesUtil.saveInt(mContext,"days",0);
         Intent intent = new Intent(mContext,HomeActivity.class);
         startActivity(intent);
-        EventBus.getDefault().post(new LoginEvent());
+        EventBus.getDefault().post(new LogoutsEvent());
         finish();
+//        UserInfoHelper.saveUserHomeRefresh(mContext, "");
+//        UserInfoHelper.saveUserMarketRefresh(mContext, "");
+//        startActivity(new Intent(mContext, HomeActivity.class));
+//        EventBus.getDefault().post(new LogoutsEvent());
+//
+//        finish();
     }
 
-    public class MyLocationListener extends BDAbstractLocationListener {
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-            //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
-            //以下只列举部分获取地址相关的结果信息
-            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
-
-            UserInfoHelper.saveLocation(mContext,location.getAddrStr());
-
-            String country = location.getCountry();    //获取国家
-            String province = location.getProvince();    //获取省份
-            city = location.getCity();    //获取城市
-            String district = location.getDistrict();    //获取区县
-            String street = location.getStreet();    //获取街道信息
-            String streetNumber = location.getStreetNumber();
-
-
-
-            Log.i("city", "updateLogin: " + city);
-
-
-        }
-    }
+//    public class MyLocationListener extends BDAbstractLocationListener {
+//        @Override
+//        public void onReceiveLocation(BDLocation location) {
+//            //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
+//            //以下只列举部分获取地址相关的结果信息
+//            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
+//
+//            UserInfoHelper.saveLocation(mContext,location.getAddrStr());
+//
+//            String country = location.getCountry();    //获取国家
+//            String province = location.getProvince();    //获取省份
+//            city = location.getCity();    //获取城市
+//            String district = location.getDistrict();    //获取区县
+//            String street = location.getStreet();    //获取街道信息
+//            String streetNumber = location.getStreetNumber();
+//
+//
+//
+//            Log.i("city..............",location.getLocType()+"");
+//
+//
+//        }
+//    }
 
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -523,7 +605,7 @@ public class LoginActivity extends BaseSwipeActivity {
 
     public static String getLocalIpAddress(Context ctx) {
         WifiManager wifiManager = (WifiManager) ctx
-                .getSystemService(android.content.Context.WIFI_SERVICE);
+                .getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         int ipAddress = wifiInfo.getIpAddress();
         try {

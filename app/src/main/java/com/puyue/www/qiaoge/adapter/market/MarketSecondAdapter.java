@@ -142,7 +142,7 @@ public class MarketSecondAdapter extends BaseQuickAdapter<ClassIfyModel.DataBean
 
 
     public interface OnEventClickListener {
-        void onEventClick(int position,int secondId);
+        void onEventClick(int position, int secondId);
 
     }
 

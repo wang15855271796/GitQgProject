@@ -80,10 +80,10 @@ public class Coupon1InnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.D
         }
 
 
-        tv_add.setText("未开始");
+        tv_add.setText("  未开始  ");
         tv_add.setBackgroundResource(R.drawable.shape_detail_grey);
-        tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
         tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
 
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.v4.app.FragmentActivity;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,21 +14,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.order.NewOrderDetailActivity;
-import com.puyue.www.qiaoge.activity.mine.order.SelfSufficiencyOrderDetailActivity;
 import com.puyue.www.qiaoge.api.home.DriverInfo;
-import com.puyue.www.qiaoge.api.home.GetCustomerPhoneAPI;
 import com.puyue.www.qiaoge.constant.AppConstant;
-import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringSpecialHelper;
-import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.taobao.library.BaseBannerAdapter;
 import com.taobao.library.VerticalBannerView;
 
 import java.util.List;
-
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by ${王涛} on 2020/1/14
@@ -64,13 +55,14 @@ class VerticalBannerAdapter extends BaseBannerAdapter<DriverInfo.DataBean> {
         tv_no.setText("订单"+data.getOrderId());
         Glide.with(context).load(data.getIcon()).into(iv_icon);
         String s = data.getDriverName()+data.getDriverPhone()+"已出货，正在配送";
+        String phone = String.valueOf(data.getDriverPhone());
         SpannableStringBuilder spannableStringBuilder = StringSpecialHelper.buildSpanColorStyle(s, data.getDriverName().length(),
-                11, Color.parseColor("#ff5000"));
+                phone.length(), Color.parseColor("#ff5000"));
         tv_phone.setText(spannableStringBuilder);
         tv_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + cell));
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + data.getDriverPhone()));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

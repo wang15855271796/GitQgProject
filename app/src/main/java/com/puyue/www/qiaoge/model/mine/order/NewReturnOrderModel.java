@@ -211,6 +211,7 @@ public class NewReturnOrderModel {
              * onShelves
 
              */
+            public int productMainId;
             String afterPrice;
             private int businessId;
             private int businessType;
@@ -223,6 +224,14 @@ public class NewReturnOrderModel {
             private int additionFlag;
 
             public int onShelves;
+
+            public int getProductMainId() {
+                return productMainId;
+            }
+
+            public void setProductMainId(int productMainId) {
+                this.productMainId = productMainId;
+            }
 
             public String getAfterPrice() {
                 return afterPrice;

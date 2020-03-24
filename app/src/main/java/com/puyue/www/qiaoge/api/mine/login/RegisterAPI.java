@@ -28,12 +28,11 @@ public class RegisterAPI {
                 @Field("password") String password,
                 @Field("verifyCode") String verifyCode,
                 @Field("invitationCode") String invitationCode,
-
-        @Field("inviteCode") String inviteCode);
+                @Field("inviteCode") String inviteCode, @Field("shopTypeId") String shopTypeId);
     }
 
-    public static Observable<RegisterModel> requestRegister(Context context, String phone, String accessCode, String password,String verifyCode, String invitationCode,String inviteCode) {
-        Observable<RegisterModel> registerModelObservable = RestHelper.getBaseRetrofit(context).create(RegisterService.class).setParams(phone, accessCode, password,verifyCode, invitationCode,inviteCode);
+    public static Observable<RegisterModel> requestRegister(Context context, String phone, String accessCode, String password,String verifyCode, String invitationCode,String inviteCode,String shopTypeId) {
+        Observable<RegisterModel> registerModelObservable = RestHelper.getBaseRetrofit(context).create(RegisterService.class).setParams(phone, accessCode, password,verifyCode, invitationCode,inviteCode,shopTypeId);
         return registerModelObservable;
     }
 }

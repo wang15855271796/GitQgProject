@@ -85,6 +85,7 @@ public class DriverHelper {
                             .build();
                 }
                 Response response = chain.proceed(request);
+
                 if (NetWorkHelper.isNetworkAvailable(context)) {
                     int maxAge = 0 * 60;
                     // 有网络时 设置缓存超时时间0个小时

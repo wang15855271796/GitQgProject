@@ -115,6 +115,9 @@ public class AppConstant {
 
 
     //banner跳转链接
+    public static final  String CLASSIFY_PROD= "classifyProd";
+    public static final  String CART= "cart";
+    public static final  String MUST_PROD= "mustProd";
     public static final  String NEW_PROD= "newProd";
     public static final  String KILL_PROD= "killProd";
     public static final  String HOT_PROD= "hotProd";
@@ -122,9 +125,6 @@ public class AppConstant {
     public static final  String DEDUCT_PROD= "deductProd";
     public static final  String SPECIAL_PROD= "specialProd";
     public static final  String TEAM_PROD= "teamProd";
-    public static final  String CLASSIFY_PROD= "classifyProd";
-    public static final  String CART= "cart";
-    public static final  String MUST_PROD= "mustProd";
     public static final  String BALANCE= "balance";
     public static final  String POINT= "point";
     public static final  String GIFT= "gift";

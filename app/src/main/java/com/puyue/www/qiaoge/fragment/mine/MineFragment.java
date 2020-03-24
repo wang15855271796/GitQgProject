@@ -4,9 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,7 +35,6 @@ import com.puyue.www.qiaoge.activity.mine.coupons.MyCouponsActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
-import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletDetailActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletNewActivity;
 import com.puyue.www.qiaoge.api.mine.AccountCenterAPI;
@@ -565,7 +562,7 @@ public class MineFragment extends BaseFragment {
 
             {
                 String num = "0";
-                Intent intent = new Intent(mActivity, MyWalletActivity.class);
+                Intent intent = new Intent(mActivity, MyWalletNewActivity.class);
 
                 UserInfoHelper.saveUserWalletNum(getContext(), num);
                 startActivity(intent);
@@ -780,14 +777,13 @@ public class MineFragment extends BaseFragment {
                     @Override
                     public void onNext(MyOrderNumModel myOrderNumModel) {
                         mListData.clear();
-                        // mModelMyOrderNum = myOrderNumModel;
                         if (myOrderNumModel.success) {
 
                             mListData.add(myOrderNumModel.getData());
                             day = myOrderNumModel.getData().getDay();
                             giftNo = myOrderNumModel.getData().getGiftNo();
                             commissionUrl = myOrderNumModel.getData().getCommissionUrl();
-                            // updateOrderNum(myOrderNumModel);
+//                             updateOrderNum();
 
 
                                     if(myOrderNumModel.getData().getInviteOpen()==1) {
@@ -848,25 +844,6 @@ public class MineFragment extends BaseFragment {
                             } else {
                                 relativeLayoutVip.setEnabled(false);
                             }
-                          /*  // 会员活动中心 url
-                            if (!TextUtils.isEmpty(myOrderNumModel.getData().getActiveBanner().getBannerDetailUrl())) {
-                                vipDayUrlVIP = myOrderNumModel.getData().getActiveBanner().getBannerDetailUrl();
-                                relativeLayoutVip.setEnabled(true);
-                                relativeLayoutVip.setVisibility(View.VISIBLE);
-                                Glide.with(mActivity).load(myOrderNumModel.getData().getActiveBanner().getBannerUrl()).into(vipDay);
-
-                            } else {
-                                relativeLayoutVip.setEnabled(false);
-                                relativeLayoutVip.setVisibility(View.GONE);
-                            }*/
-
-
-      /*  if (mModelMyOrderNum.getData().isIsVip()) {
-            vipImage.setVisibility(View.VISIBLE);
-        } else {
-            vipImage.setVisibility(View.GONE);
-        }*/
-                            //  会员中心角标
                             if (!TextUtils.isEmpty((myOrderNumModel.getData().getVipDesc()))) {
                                 vipDesc.setText(myOrderNumModel.getData().getVipDesc());
                                 vipDesc.setVisibility(View.VISIBLE);
@@ -1030,19 +1007,7 @@ public class MineFragment extends BaseFragment {
         return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
-    protected void setTranslucentStatus() {
-        // 5.0以上系统状态栏透明
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getActivity().getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-    }
+//
 
 
    /* @Override
@@ -1173,5 +1138,6 @@ public class MineFragment extends BaseFragment {
                     }
                 });
     }
+
 
 }

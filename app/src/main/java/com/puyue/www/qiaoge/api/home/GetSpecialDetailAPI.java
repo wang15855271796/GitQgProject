@@ -23,7 +23,7 @@ public class GetSpecialDetailAPI {
     }
 
     public static Observable<SpecialGoodModel> requestData(Context context, int activeId) {
-        GetSpecialDetailAPI.getSpecialDetail service = RestHelper.getBaseRetrofit(context).create(getSpecialDetail.class);
+        getSpecialDetail service = RestHelper.getBaseRetrofit(context).create(getSpecialDetail.class);
         return service.getData(activeId);
     }
 }

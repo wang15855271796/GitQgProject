@@ -246,6 +246,7 @@ intent.putExtra("orderType" ,0);
                         Intent intent = new Intent(mContext, NewOrderDetailActivity.class);
                         intent.putExtra(AppConstant.ORDERID, item.orderId);
                         intent.putExtra(AppConstant.ORDERSTATE, "");
+
                         intent.putExtra(AppConstant.RETURNPRODUCTMAINID, "");
                         mContext.startActivity(intent);
                     }
@@ -367,7 +368,7 @@ intent.putExtra("orderType" ,0);
 
 
         void confirmSelfOrder(String orderId);
-        void confirmSelfReturnOrder(String orderId,int pos);
+        void confirmSelfReturnOrder(String orderId, int pos);
 
     }
 }

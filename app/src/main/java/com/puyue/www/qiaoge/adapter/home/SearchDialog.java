@@ -72,6 +72,7 @@ public class SearchDialog extends Dialog implements View.OnClickListener {
         this.context = context;
         this.listBean = listBean;
         init();
+        exchangeList(listBean.getProductId());
     }
 
     //初始化布局

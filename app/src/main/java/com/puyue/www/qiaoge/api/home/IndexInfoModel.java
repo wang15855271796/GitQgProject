@@ -311,7 +311,7 @@ public class IndexInfoModel {
 
             private String configCode;
             private String configDesc;
-            private Object remark;
+            private String remark;
             private String url;
             private Object type;
 
@@ -331,11 +331,11 @@ public class IndexInfoModel {
                 this.configDesc = configDesc;
             }
 
-            public Object getRemark() {
+            public String getRemark() {
                 return remark;
             }
 
-            public void setRemark(Object remark) {
+            public void setRemark(String remark) {
                 this.remark = remark;
             }
 

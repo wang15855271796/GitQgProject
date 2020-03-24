@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,8 +29,6 @@ import android.widget.TextView;
 import com.android.tu.loadingdialog.LoadingDailog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.example.xrecyclerview.XRecyclerView;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
@@ -40,18 +36,20 @@ import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.activity.home.CouponDetailActivity;
 import com.puyue.www.qiaoge.activity.home.HomeGoodsListActivity;
 import com.puyue.www.qiaoge.activity.home.SearchStartActivity;
+import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
 import com.puyue.www.qiaoge.activity.home.TeamDetailActivity;
-import com.puyue.www.qiaoge.activity.mine.MessageCenterActivity;
+import com.puyue.www.qiaoge.activity.home.TeamGoodsDetailActivity;
+import com.puyue.www.qiaoge.activity.mine.coupons.MyCouponsActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginEvent;
 import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
-import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletPointActivity;
 import com.puyue.www.qiaoge.adapter.home.CommonProductActivity;
 import com.puyue.www.qiaoge.adapter.home.HotProductActivity;
 import com.puyue.www.qiaoge.adapter.home.ReductionProductActivity;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
+import com.puyue.www.qiaoge.adapter.home.SeckillGoodActivity;
 import com.puyue.www.qiaoge.adapter.market.MarketAlreadyGoodAdapter;
 import com.puyue.www.qiaoge.adapter.market.MarketGoodBrandAdapter;
 import com.puyue.www.qiaoge.adapter.market.MarketGoodsAdapter;
@@ -64,16 +62,22 @@ import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
 import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.api.market.ClassIfyModel;
 import com.puyue.www.qiaoge.api.market.MarketAlreadyGoodAPI;
-import com.puyue.www.qiaoge.api.market.MarketGoodBannerAPI;
 import com.puyue.www.qiaoge.api.market.MarketGoodNameAPI;
 import com.puyue.www.qiaoge.api.market.MarketGoodSelcetAPI;
 import com.puyue.www.qiaoge.api.market.MarketGoodsClassifyAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
+import com.puyue.www.qiaoge.banner.Banner;
+import com.puyue.www.qiaoge.banner.BannerConfig;
+import com.puyue.www.qiaoge.banner.GlideImageLoader;
+import com.puyue.www.qiaoge.banner.Transformer;
+import com.puyue.www.qiaoge.banner.listener.OnBannerListener;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.LoadingDialog;
+import com.puyue.www.qiaoge.event.AddressEvent;
+import com.puyue.www.qiaoge.event.LogoutEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
-import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.fragment.home.CityEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
@@ -87,12 +91,11 @@ import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
 import com.puyue.www.qiaoge.model.market.MarketAlreadyGoodModel;
-import com.puyue.www.qiaoge.model.market.MarketBannerModel;
 import com.puyue.www.qiaoge.model.market.MarketSelectGoodModel;
 import com.puyue.www.qiaoge.view.FlowLayout;
-import com.puyue.www.qiaoge.view.StatusBarUtil;
 import com.puyue.www.qiaoge.view.selectmenu.MenuBar;
 import com.puyue.www.qiaoge.view.selectmenu.MyListView;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -108,7 +111,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ${王涛} on 2019/10/30
  */
-public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSliderClickListener {
+public class MarketsFragment extends BaseFragment {
     private RelativeLayout mLlSearch;
 
     //左侧列表
@@ -146,7 +149,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
     private RecyclerView tvRvSelect;
     private LinearLayout ll_up;
     private TextView tv_blank;
-    private SliderLayout mViewBanner;
+//    private SliderLayout mViewBanner;
     private List<BannerModel.DataBean> mListBanner = new ArrayList<>();
     private LinearLayout mllMarket;
     private RelativeLayout mRlSelectGood;
@@ -156,6 +159,8 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
     private EditText mEtHighPrice;
     private EditText mEtSearchGood;
     private TextView mTvReresh;
+    AVLoadingIndicatorView lav_activity_loading;
+    Banner banner;
     private TextView mTvOk;
     private ImageView ivSearch;
     private LoadingDailog dialog;
@@ -194,7 +199,6 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
     private AlertDialog mTypedialog;
     int shopTypeId;
     boolean flag = false;
-    int pos;
     @Override
     public int setLayoutId() {
         return R.layout.fragment_market;
@@ -202,23 +206,24 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
 
     @Override
     public void initViews(View view) {
-        initStatusBarWhiteColor();
+//        initStatusBarWhiteColor();
     }
 
-    protected void initStatusBarWhiteColor() {
-        //设置状态栏颜色为白色，状态栏图标为黑色
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getActivity().getWindow().setStatusBarColor(Color.WHITE);
-            StatusBarUtil.setStatusBarLightMode(getActivity());
-        }
-    }
+//    protected void initStatusBarWhiteColor() {
+//        //设置状态栏颜色为白色，状态栏图标为黑色
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            getActivity().getWindow().setStatusBarColor(Color.WHITE);
+//            StatusBarUtil.setStatusBarLightMode(getActivity());
+//        }
+//    }
     @Override
     public void findViewById(View view) {
         context = getActivity();
 
         EventBus.getDefault().register(this);
 //        ptr = view.findViewById(R.id.ptr);
+        banner = view.findViewById(R.id.banner);
         tv_search = view.findViewById(R.id.tv_search);
         et_goods = view.findViewById(R.id.et_goods);
         v_shadow = view.findViewById(R.id.v_shadow);
@@ -229,14 +234,14 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
         mRvSecond = ((RecyclerView) view.findViewById(R.id.rv_market_second));
         mRvDetail = ((XRecyclerView) view.findViewById(R.id.rv_market_detail));
         mIvNoData = ((ImageView) view.findViewById(R.id.iv_market_no_data));
-        mViewBanner = view.findViewById(R.id.view_market_banner);
+//        mViewBanner = view.findViewById(R.id.view_market_banner);
+        lav_activity_loading = view.findViewById(R.id.lav_activity_loading);
         llDialog = ((LinearLayout) view.findViewById(R.id.dialog));
         tvRvSelect = view.findViewById(R.id.recyclerView_select);
         ll_up = view.findViewById(R.id.ll_up);
         tv_blank = view.findViewById(R.id.tv_blank);
         mRlSelectGood = view.findViewById(R.id.rl_select_good);
         mllMarket = view.findViewById(R.id.ll_market);
-
         mb_bar = view.findViewById(R.id.mb_bar);
         tv_search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -390,8 +395,6 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
                 });
             }
         });
-
-
     }
 
     /**
@@ -461,21 +464,21 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
 
     //筛选确定
     private void sendSelectGoodTwo(String saleVolume, String priceUp, String newProduct, String brandName, String minPrices, String maxPrices) {
-        Log.i("lyy", "sendSelectGood: " + mFirstCode + "//" + mSecondCode);
-
         MarketGoodSelcetAPI.getClassifyRight(mActivity, pageNum, 12, mFirstCode, mSecondCode, saleVolume, priceUp, newProduct, brandName, minPrices, maxPrices)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<MarketRightModel>() {
                     @Override
                     public void onCompleted() {
-//                        ptr.refreshComplete();
                         mRvDetail.refreshComplete();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
 //                        ptr.refreshComplete();
+                        lav_activity_loading.hide();
+
                     }
 
                     @Override
@@ -486,7 +489,11 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
                             mModelMarketGoods = marketGoodSelectModel;
                             dialog.dismiss();
                             updateMarketGoods();
+                            lav_activity_loading.hide();
+//                            Log.d("swsssssssssss.......","1");
+
                         } else {
+                            lav_activity_loading.hide();
                             AppHelper.showMsg(mActivity, marketGoodSelectModel.getMessage());
                         }
 
@@ -496,7 +503,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
 
     //筛选确定
     private void sendSelectGood(String saleVolume, String priceUp, String newProduct, String brandName, String minPrices, String maxPrices) {
-        Log.d("wwwwwwwwwwwqqqqqqq...",mFirstCode+"////"+mSecondCode);
+
 
         MarketGoodSelcetAPI.getClassifyRight(mActivity, pageNum, 12, mFirstCode, mSecondCode, saleVolume, priceUp, newProduct, brandName, minPrices, maxPrices)
                 .subscribeOn(Schedulers.io())
@@ -506,28 +513,31 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
                     public void onCompleted() {
 //                        ptr.refreshComplete();
                         mRvDetail.refreshComplete();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
 //                        ptr.refreshComplete();
+                        lav_activity_loading.hide();
                     }
 
                     @Override
                     public void onNext(MarketRightModel marketGoodSelectModel) {
-
                         if (marketGoodSelectModel.isSuccess()) {
+                            Log.d("swsssssssssss.......","2");
                             selectBrandName = "";
                             minPrice = "";
                             maxPrice = "";
                             mModelMarketGoods = marketGoodSelectModel;
-
                             dialog.dismiss();
                             updateMarketGoods();
+                            lav_activity_loading.hide();
                             flag = true;
-                            Log.d("qiansqiansinaas..",flag+"");
                         } else {
                             AppHelper.showMsg(mActivity, marketGoodSelectModel.getMessage());
+                            lav_activity_loading.hide();
+
                         }
                     }
                 });
@@ -648,22 +658,33 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void cityEvent(CityEvent event) {
         //刷新UI
+        lav_activity_loading.show();
+//        lav_activity_loading.smoothToShow();
         requestGoodsList();
-            requestBanner();
-            getSearchProd();
+        requestBanner();
+        getSearchProd();
         getDataThree();
         getDataTwo();
-        getData();
+//        getData();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky=true)
+    public void update(AddressEvent event) {
+        //刷新数据
+        lav_activity_loading.show();
+//        lav_activity_loading.smoothToShow();
+        requestGoodsList();
+        requestBanner();
+        getSearchProd();
+        getDataThree();
+        getDataTwo();
+
+    }
 
     @Override
     public void setViewData() {
+        lav_activity_loading.show();
         ArrayList<String> titles = new ArrayList<>();
-
-        int height = mb_bar.getLayoutParams().height;
-
-
         titles.add("综合排序");
         ArrayList<String> contentThree = new ArrayList<>();
         contentThree.add("综合排序");
@@ -725,11 +746,11 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
             }
         });
 
-
-//获取banner
+        //获取banner
         requestBanner();
         getSearchProd();
 
+        //切换左边导航时的加载数据弹窗
         LoadingDailog.Builder loadBuilder = new LoadingDailog.Builder(getContext())
                 .setMessage("获取数据中")
                 .setCancelable(false)
@@ -915,6 +936,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
                 if (isCheck) {
                     pageNum = 1;
                     getDataThree();
+
                     hasPage  = true;
                 } else {
                     pageNum = 1;
@@ -929,6 +951,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
                 if (isCheck) {
 
                     if (hasPage) {
+
                         pageNum++;
                         getDataThree();
                     } else {
@@ -939,6 +962,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
                 } else {
 
                     if (hasPage) {
+                        Log.d("wwwwwwwwwwwww...",hasPage+"11");
                         pageNum++;
 
                         getDataThree();
@@ -1087,6 +1111,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
                             mListRecommendProd.clear();
                             mListRecommendProd.addAll(recommendModel.getData());
                             searchProdAdapter.notifyDataSetChanged();
+
                         } else {
                             AppHelper.showMsg(context, recommendModel.getMessage());
                         }
@@ -1095,7 +1120,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
     }
 
     private void getDataThree() {
-        Log.d("wqqwqwqqw...",Imposition+"");
+        Log.d("wodeswhuedhddhjjd.....","222");
         if (Imposition == 0) {
             sendSelectGoodThree("", "", "", selectBrandName, minPrice, maxPrice);
         } else if (Imposition == 1) {
@@ -1120,7 +1145,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
      */
     private void sendSelectGoodThree(String saleVolume, String priceUp, String newProduct, String brandName, String minPrices, String maxPrices) {
         Log.d("dsdsdwdwdd....",pageNum+"");
-        MarketGoodSelcetAPI.getClassifyRight(mActivity, pageNum, 3, mFirstCode, mSecondCode,
+        MarketGoodSelcetAPI.getClassifyRight(mActivity, pageNum, 4, mFirstCode, mSecondCode,
                 saleVolume, priceUp, newProduct, brandName, minPrices, maxPrices)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -1133,20 +1158,21 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
 
                     @Override
                     public void onError(Throwable e) {
-//                        ptr.refreshComplete();
+                        lav_activity_loading.hide();
                     }
 
                     @Override
                     public void onNext(MarketRightModel marketGoodSelectModel) {
                         mModelMarketGoods = marketGoodSelectModel;
-                        Log.d("wangtoasss.....","sdfswangtao");
                         if (marketGoodSelectModel.isSuccess()) {
+//                            Log.d("swsssssssssss.......","0");
                             flag = true;
-//                            hintKbTwo();
                             dialog.dismiss();
                             upProdDate(marketGoodSelectModel);
+                            lav_activity_loading.hide();
                         } else {
                             AppHelper.showMsg(mActivity, marketGoodSelectModel.getMessage());
+                            lav_activity_loading.hide();
                         }
                     }
                 });
@@ -1204,6 +1230,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
     }
 
     private void getData() {
+        Log.d("wodeswhuedhddhjjd.....","111");
         isCheck = false;
         if (Imposition == 0) {
             sendSelectGood("", "", "", selectBrandName, minPrice, maxPrice);
@@ -1240,6 +1267,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
                     @Override
                     public void onNext(ClassIfyModel marketGoodsModel) {
                         AppHelper.UserLogout(getContext(), marketGoodsModel.getCode(), 0);
+                        Log.d("zuoceshujujihe...",marketGoodsModel.getData()+"");
                         mModelMarketGoodsClassify = marketGoodsModel;
                         if (mModelMarketGoodsClassify.isSuccess()) {
                             updateGoodsList();
@@ -1264,6 +1292,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
         mListSecondNow.addAll(mModelMarketGoodsClassify.getData());
         mAdapterMarketSecond.notifyDataSetChanged();
         mAdapterMarketSecond.selectPosition(0);
+
         mFirstCode = -1;
         mSecondCode  = 0;
         getData();
@@ -1338,7 +1367,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
      /*   pageNum = 1;
         requestGoodsList();*/
 
-        mViewBanner.startAutoCycle(3000, 8000, true);
+//        mViewBanner.startAutoCycle(3000, 8000, true);
 
     }
 
@@ -1364,7 +1393,7 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
 
 
     /**
-     * 请求banner接口
+     * 请求banner接口 common/product/getTopBanner
      */
     private void requestBanner() {
 
@@ -1384,62 +1413,126 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
 
                     @Override
                     public void onNext(BannerModel marketBannerModel) {
-
+                        Log.d("feeeeeeeeeee....",marketBannerModel.getData()+"");
                         if (marketBannerModel.isSuccess()) {
                             mListBanner.clear();
                             mListBanner.addAll(marketBannerModel.getData());
-                            initBanner(marketBannerModel);
+                            list.clear();
+                            for (int i = 0; i < marketBannerModel.getData().size(); i++) {
+                                list.add(marketBannerModel.getData().get(i).getDefaultPic());
+                            }
+
+                            if (marketBannerModel.getData().size() > 0) {
+                                banner.setVisibility(View.VISIBLE);
+                                banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
+                                banner.setImageLoader(new GlideImageLoader());
+                                bannerList.clear();
+                                bannerList.addAll(list);
+                                banner.setImages(bannerList);
+                                banner.setBannerAnimation(Transformer.DepthPage);
+                                banner.isAutoPlay(true);
+                                banner.setDelayTime(3000);
+                                banner.setIndicatorGravity(BannerConfig.RIGHT);
+
+                                ClickBanner(marketBannerModel.getData());
+
+
+                                banner.start();
+                            } else {
+                                banner.setVisibility(View.GONE);
+
+                            }
                         }
 
                     }
                 });
     }
+    private int showType;
+    private void ClickBanner(List<BannerModel.DataBean> banners) {
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                showType = banners.get(position).getShowType();
+                Log.d("wswswsswsss",banners.get(position).getProdPage()+"");
+                if(showType==1|| banners.get(position).getLinkSrc()!=null) {
+                    //链接 banners.get(position).getLinkSrc()
+                    Intent intent = new Intent(getActivity(), NewWebViewActivity.class);
+                    intent.putExtra("URL", banners.get(position).getLinkSrc());
+                    intent.putExtra("TYPE", 2);
+                    intent.putExtra("name", "");
+                    startActivity(intent);
+                }
 
-    private void initBanner(BannerModel marketBannerModel) {
-        mViewBanner.removeAllSliders();
+                else if(showType == 2|| banners.get(position).getDetailPic()!=null) {
+                    //图片
+                    AppHelper.showPhotoDetailDialog(mActivity, bannerList, position);
+                }else if(showType == 3|| banners.get(position).getProdPage()!=null) {
+                    //H5页面
 
-        if (mListBanner.size() > 0) {
-            mViewBanner.setVisibility(View.VISIBLE);
-            for (int i = 0; i < mListBanner.size(); i++) {
-                //图片轮播
-                DefaultSliderView defaultSliderView = new DefaultSliderView(getContext());
-                defaultSliderView.image(mListBanner.get(i).getDefaultPic());
-                defaultSliderView.setScaleType(BaseSliderView.ScaleType.Fit);
-                defaultSliderView.setOnSliderClickListener(this);
-                defaultSliderView.bundle(new Bundle());
-                defaultSliderView.getBundle().putInt("showType",marketBannerModel.getData().get(i).getShowType());
-                defaultSliderView.getBundle().putSerializable("bannerModel",marketBannerModel);
-                mViewBanner.addSlider(defaultSliderView);
+                    if(AppConstant.KILL_PROD.equals(banners.get(position).getProdPage())) {
+                        Intent intent = new Intent(getActivity(), HomeGoodsListActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.HOT_PROD.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), HotProductActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.COMMON_PROD.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), CommonProductActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.DEDUCT_PROD.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), ReductionProductActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.SPECIAL_PROD.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), CouponDetailActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.TEAM_PROD.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.BALANCE.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), MyWalletPointActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.POINT.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), MinerIntegralActivity.class);
+                        startActivity(intent);
+                    }else if(AppConstant.GIFT.equals(banners.get(position).getProdPage())){
+                        Intent intent = new Intent(getActivity(), MyCouponsActivity.class);
+                        startActivity(intent);
+                    }
+                }else if(showType ==4 ) {
+                    //商品
+                    int businessId = banners.get(position).getBusinessId();
+                    Intent intent = new Intent(getActivity(), CommonGoodsDetailActivity.class);
+                    intent.putExtra(AppConstant.ACTIVEID, businessId);
+                    startActivity(intent);
+                }else if(showType ==5 ) {
+                    //活动
+                    String businessType = String.valueOf(banners.get(position).getBusinessType());
+                    int businessId = banners.get(position).getBusinessId();
+                    if(businessType.equals("2")) {
+                        Intent intent = new Intent(getActivity(), SeckillGoodActivity.class);
+                        intent.putExtra(AppConstant.ACTIVEID,businessId );
+                        startActivity(intent);
+                    }else if(businessType.equals("3")) {
+                        Intent intent = new Intent(getActivity(), TeamGoodsDetailActivity.class);
+                        intent.putExtra(AppConstant.ACTIVEID, businessId);
+                        startActivity(intent);
+                    }else if(businessType.equals("11")) {
+                        Intent intent = new Intent(getActivity(), SpecialGoodDetailActivity.class);
+                        intent.putExtra(AppConstant.ACTIVEID,businessId);
+                        startActivity(intent);
+                    }
+
+                }
 
             }
-        } else {
-            mViewBanner.setVisibility(View.GONE);
-        }
-
-        mViewBanner.setPresetTransformer(SliderLayout.Transformer.Default);
-        mViewBanner.setIndicatorVisibility(null);
-        //轮播的指示器点点
-     /*     mViewBanner.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-     mViewBanner.setCustomAnimation(new DescriptionAnimation());*/
-        mViewBanner.startAutoCycle(3000, 3000, true);
-
-
+        });
     }
 
-    @Override
-    public void onSliderClick(BaseSliderView slider) {
-        int showType = slider.getBundle().getInt("showType");
-        BannerModel bannerModel = (BannerModel) slider.getBundle().getSerializable("bannerModel");
-        for (int i = 0; i <bannerModel.getData().size() ; i++) {
-            BannerModel.DataBean dataBean = bannerModel.getData().get(i);
-        }
-
-
-    }
+    List<String> list = new ArrayList<>();
+    private List<String> bannerList = new ArrayList<>();
 
     @Override
     public void onStop() {
-        mViewBanner.stopAutoCycle();
+//        mViewBanner.stopAutoCycle();
         super.onStop();
     }
 
@@ -1490,5 +1583,12 @@ public class MarketsFragment extends BaseFragment implements BaseSliderView.OnSl
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginEvent(LogoutEvent event) {
+        //刷新UI
+        requestGoodsList();
+        getData();
     }
 }

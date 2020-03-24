@@ -23,4 +23,26 @@ public class AddressListAPI {
         Observable<AddressModel> addressModelObservable = RestHelper.getBaseRetrofit(context).create(AddressListService.class).setParams();
         return addressModelObservable;
     }
+
+    //从订单里进去选择省市区
+    public interface AddressListServices {
+        @GET(AppInterfaceAddress.GET_AREA_LIST)
+        Observable<AreaModel> setParams();
+    }
+
+    public static Observable<AreaModel> getArea(Context context) {
+        Observable<AreaModel> addressModelObservable = RestHelper.getBaseRetrofit(context).create(AddressListServices.class).setParams();
+        return addressModelObservable;
+    }
+
+    public interface AddressListServicess {
+        @GET(AppInterfaceAddress.GET_ENABLEAREA_LIST)
+        Observable<AreaModel> setParams();
+    }
+
+    public static Observable<AreaModel> getEnableArea(Context context) {
+        Observable<AreaModel> addressModelObservable = RestHelper.getBaseRetrofit(context).create(AddressListServicess.class).setParams();
+        return addressModelObservable;
+    }
+
 }

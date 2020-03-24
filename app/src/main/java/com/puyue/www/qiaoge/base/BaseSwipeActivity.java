@@ -14,14 +14,9 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.githang.statusbar.StatusBarCompat;
-import com.puyue.www.qiaoge.activity.HomeActivity;
-import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
-import com.puyue.www.qiaoge.event.GoToMarketEvent;
-import com.puyue.www.qiaoge.event.LogoutEvent;
+import com.puyue.www.qiaoge.activity.mine.login.LogoutsEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
-import com.puyue.www.qiaoge.view.StatusBarUtil;
-import com.yanzhenjie.sofia.Sofia;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -143,8 +138,9 @@ public abstract class BaseSwipeActivity extends FragmentActivity {
             UserInfoHelper.saveUserType(context, "");
             UserInfoHelper.saveUserHomeRefresh(context, "");
             UserInfoHelper.saveUserMarketRefresh(context, "");
-            startActivity(new Intent(context, HomeActivity.class));
-            EventBus.getDefault().post(new LogoutEvent());
+            UserInfoHelper.saveChangeFlag(mActivity,"0");
+//            startActivity(new Intent(context, HomeActivity.class));
+            EventBus.getDefault().post(new LogoutsEvent());
             finish();
         }
     }

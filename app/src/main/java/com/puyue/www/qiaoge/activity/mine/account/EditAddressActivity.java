@@ -35,6 +35,9 @@ import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
 import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
 import com.baidu.mapapi.search.sug.SuggestionSearchOption;
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.lljjcoder.Interface.OnCityItemClickListener;
 import com.lljjcoder.bean.CityBean;
 import com.lljjcoder.bean.DistrictBean;
@@ -45,8 +48,11 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginEvent;
 import com.puyue.www.qiaoge.adapter.mine.SuggestAdressAdapter;
 import com.puyue.www.qiaoge.api.mine.address.AddAddressAPI;
+import com.puyue.www.qiaoge.api.mine.address.AddressListAPI;
+import com.puyue.www.qiaoge.api.mine.address.AreaModel;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
+import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -113,15 +119,20 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
 
     //private PoiSearch poiSearch= PoiSearch.newInstance();
     private SuggestionSearch mSuggestionSearch;
-
+    //  省
+    private List<AreaModel.DataBean> options1Items = new ArrayList<>();
+    //  市
+    private ArrayList<ArrayList<AreaModel.DataBean.ChildrenBeanX>> options2Items = new ArrayList<>();
+    //  区
+    private ArrayList<ArrayList<ArrayList<AreaModel.DataBean.ChildrenBeanX.ChildrenBean>>> options3Items = new ArrayList<>();
     private ArrayAdapter<String> sugAdapter = null;
     private int loadIndex = 0;
 
-
+    private boolean isLoaded = false;
     private SuggestAdressAdapter adressAdapter;
     private RecyclerView ry_suggest;
     private TextView tv_target;
-
+    TextView tv_edit_address_area;
 
     private String cityName;
     private String orderId;
@@ -189,6 +200,7 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
 
     @Override
     public void findViewById() {
+        tv_edit_address_area = (TextView) findViewById(R.id.tv_edit_address_area);
         mIvBack = (ImageView) findViewById(R.id.iv_edit_address_back);
         mEditName = (EditText) findViewById(R.id.edit_edit_address_name);
         mEditPhone = (EditText) findViewById(R.id.edit_edit_address_phone);
@@ -206,11 +218,9 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
 
     @Override
     public void setViewData() {
-        //   setTranslucentStatus();
         mSuggestionSearch = SuggestionSearch.newInstance();
         cityName=mArea;
 
-        //  mSuggestionSearch = SuggestionSearch.newInstance();
         mPicker.init(mContext);
         if (StringHelper.notEmptyAndNull(mType)) {
             if (mType.equals("add")) {
@@ -243,6 +253,8 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
                 }
             }
         }
+
+        selectCity();
 
 /*
 
@@ -309,6 +321,74 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
         mSuggestionSearch.setOnGetSuggestionResultListener(this);
 
 
+    }
+
+    private void selectCity() {
+        AddressListAPI.getArea(mContext)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AreaModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AreaModel areaModel) {
+                        if (areaModel.isSuccess()) {
+                            parseData(areaModel.getData());
+                        } else {
+                            AppHelper.showMsg(mContext, areaModel.getMessage());
+                        }
+                    }
+                });
+    }
+
+    private void parseData(List<AreaModel.DataBean> data) {
+        options1Items = data;
+////     遍历省
+        for(int i = 0; i <data.size() ; i++) {
+
+//         存放城市
+            ArrayList<AreaModel.DataBean.ChildrenBeanX> cityList = new ArrayList<>();
+//         存放区
+            ArrayList<ArrayList<AreaModel.DataBean.ChildrenBeanX.ChildrenBean>> province_AreaList = new ArrayList<>();
+            List<AreaModel.DataBean.ChildrenBeanX> children1 = data.get(i).getChildren();
+            cityList.addAll(children1);
+//         遍历市
+            for(int c = 0; c <data.get(i).getChildren().size() ; c++) {
+                //该城市的所有地区列表
+                ArrayList<AreaModel.DataBean.ChildrenBeanX.ChildrenBean> city_AreaList = new ArrayList<>();
+
+                if (data.get(i).getChildren().get(c).getChildren() == null || data.get(i).getChildren().get(c).getChildren().size() == 0) {
+                    AreaModel.DataBean.ChildrenBeanX.ChildrenBean childrenBean = new AreaModel.DataBean.ChildrenBeanX.ChildrenBean();
+                    childrenBean.setName("");
+                    city_AreaList.add(childrenBean);
+                } else {
+
+                    List<AreaModel.DataBean.ChildrenBeanX.ChildrenBean> children = data.get(i).getChildren().get(c).getChildren();
+                    city_AreaList.addAll(children);
+                    province_AreaList.add(city_AreaList);
+                    Log.d("cccccccccccc.......",province_AreaList.size()+"");
+                }
+            }
+            /**
+             * 添加城市数据
+             */
+            options2Items.add(cityList);
+            /**
+             * 添加地区数据
+             */
+            options3Items.add(province_AreaList);
+
+        }
+
+        isLoaded = true;
     }
 
     private void showSugDialog(CharSequence cs) {
@@ -392,7 +472,11 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
                 }
             } else if (view == mTvArea) {
                 hintKbTwo();
-                selectCity();
+//                selectCity();
+                if(isLoaded) {
+                    showPickerView();
+                }
+
             } else if (view == mBtnConfirm) {
                 //在这里点击确定了,判断数据是否完整,完整才能请求接口
                 //请求接口反成功之后,调用onResult,finish这个activity
@@ -414,12 +498,39 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
                 } else {
                     mCbDefault.setChecked(true);
                     isDefaultNow = true;
+
                 }
             }
         }
 
 
     };
+
+    private void showPickerView() {
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                //返回的分别是三个级别的选中位置
+
+                proviceCode = options1Items.get(options1).getCode();
+                cityCode = options2Items.get(options1).get(options2).getCode();
+                areaCode = options3Items.get(options1).get(options2).get(options3).getCode();
+                String tx = options1Items.get(options1).getName() +
+                        options2Items.get(options1).get(options2) +
+                        options3Items.get(options1).get(options2).get(options3);
+                tv_edit_address_area.setText(tx);
+                tv_edit_address_area.setTextColor(Color.parseColor("#333333"));
+            }
+        })
+
+                .setTitleText("城市选择")
+                .setDividerColor(Color.BLACK)
+                .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
+                .setContentTextSize(20)
+                .build();
+        pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
+        pvOptions.show();
+    }
 
     private void requestEditAddress() {
         if (mCbDefault.isChecked()) {
@@ -458,6 +569,7 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
                             intent.putExtra("type", "edit");
                             intent.putExtra("defaultNum",isDefault);
                             EditAddressActivity.this.setResult(22, intent);
+                            EventBus.getDefault().post(new AddressEvent());
                             finish();
                         } else {
                             AppHelper.showMsg(mContext, mModelEditAddress.message);
@@ -498,6 +610,7 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
                             EventBus.getDefault().post(new BackEvent());
                             intent.putExtra("type", "add");
                             EditAddressActivity.this.setResult(11, intent);
+                            EventBus.getDefault().post(new AddressEvent());
                             finish();
                         } else {
                             AppHelper.showMsg(mContext, mModelAddAddress.message);
@@ -506,73 +619,6 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
                 });
     }
 
-    private void selectCity() {
-        CityConfig cityConfig = new CityConfig.Builder().title("")//标题
-                .titleTextSize(0)//标题文字大小
-                .titleTextColor("#585858")//标题文字颜色
-                .titleBackgroundColor("#ffffff")//标题栏背景色
-                .confirTextColor("#F56D23")//确认按钮文字颜色
-                .confirmText("确认")//确认按钮文字
-                .confirmTextSize(16)//确认按钮文字大小
-                .cancelTextColor("#F56D23")//取消按钮文字颜色
-                .cancelText("取消")//取消按钮文字
-                .cancelTextSize(16)//取消按钮文字大小
-                .setCityWheelType(CityConfig.WheelType.PRO_CITY_DIS)//显示类，只显示省份一级，显示省市两级还是显示省市区三级
-                .showBackground(false)//是否显示半透明背景
-                .visibleItemsCount(5)//显示item的数量
-                .province("浙江省")//默认显示的省份
-                .city("杭州市")//默认显示省份下面的城市
-                .district("滨江区")//默认显示省市下面的区县数据
-                .provinceCyclic(false)//省份滚轮是否可以循环滚动
-                .cityCyclic(false)//城市滚轮是否可以循环滚动
-                .districtCyclic(false)//区县滚轮是否循环滚动
-                .build();//自定义item布局里面的textViewid
-
-        mPicker.setConfig(cityConfig);
-        mPicker.setOnCityItemClickListener(new OnCityItemClickListener() {
-            @Override
-            public void onSelected(ProvinceBean province, CityBean city, DistrictBean district) {
-                proviceCode = province.getId();
-                cityCode = city.getId();
-
-                areaCode = district.getId();
-
-
-                cityName = city.getName();
-                Log.d("swwwsssssssss",cityName);
-            /*    if (city.getName().contains("杭州市")) {
-                    mTvArea.setText(province.getName() + " " + city.getName() + " " + district.getName());
-                    mTvArea.setTextColor(Color.parseColor("#232131"));
-                } else {
-                    AppHelper.showMsg(mContext, "目前只支持杭州市区域");
-                    mPicker.hide();
-                }*/
-                mTvArea.setText(province.getName() + " " + city.getName() + " " + district.getName());
-                mTvArea.setTextColor(Color.parseColor("#232131"));
-                mPicker.hide();
-                if (StringHelper.notEmptyAndNull(proviceCode)
-                        && StringHelper.notEmptyAndNull(cityCode)
-                        && StringHelper.notEmptyAndNull(areaCode)
-                        && StringHelper.notEmptyAndNull(mEditName.getText().toString())
-                        && StringHelper.notEmptyAndNull(mEditPhone.getText().toString())
-                        && StringHelper.notEmptyAndNull(keyWorldsView.getText().toString())) {
-                    mBtnConfirm.setEnabled(true);
-                    mBtnConfirm.setTextColor(getResources().getColor(R.color.app_color_white));
-                } else {
-                    mBtnConfirm.setEnabled(false);
-                    mBtnConfirm.setTextColor(getResources().getColor(R.color.app_btn_unable));
-                }
-
-
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
-        mPicker.showCityPicker();
-    }
 
     //此方法只是关闭软键盘
     private void hintKbTwo() {

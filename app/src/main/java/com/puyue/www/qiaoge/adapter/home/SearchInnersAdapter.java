@@ -3,7 +3,6 @@ package com.puyue.www.qiaoge.adapter.home;
 import android.app.AlertDialog;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -16,13 +15,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.api.cart.AddMountChangeTwoAPI;
-import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
-import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartGoodModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
-import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -181,7 +177,6 @@ public class SearchInnersAdapter extends BaseQuickAdapter<ExchangeProductModel.D
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num+"");
                             ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
-
                             EventBus.getDefault().post(new UpDateNumEvent());
                         } else {
                             ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());

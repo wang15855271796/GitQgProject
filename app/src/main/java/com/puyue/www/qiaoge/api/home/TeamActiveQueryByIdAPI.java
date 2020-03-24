@@ -23,7 +23,7 @@ public class TeamActiveQueryByIdAPI {
     private interface TeamActiveQueryByIdService{
         @FormUrlEncoded
         @POST(AppInterfaceAddress.SPECIALOFFERDETAIL)
-        Observable<SpecialGoodModel> getData(@Field("activeId") int activeId );
+        Observable<SpecialGoodModel> getData(@Field("activeId") int activeId);
     }
     public static Observable<SpecialGoodModel> requestData(Context context,int activeId){
         TeamActiveQueryByIdService service = RestHelper.getBaseRetrofit(context).create(TeamActiveQueryByIdService.class);

@@ -26,7 +26,7 @@ public class GetOrderDetailAPI {
         Observable<GetOrderDetailModel> getData(@Field("orderId") String orderId,
                                                 @Field("orderStatus") String orderState,
                                                 @Field("returnProductMainId") String returnProductMainId
-                                             );
+        );
     }
 
     public static Observable<GetOrderDetailModel> requestData(Context context, String orderId, String orderState, String returnProductMainId) {

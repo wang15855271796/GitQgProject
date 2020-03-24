@@ -20,10 +20,10 @@ public class MarketAddAPI {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.CARTADDPRODUCT)
         Observable<MarketAddCartModel> setParams(
-                                                 @Field("businessId") int businessId,
-                                                 @Field("direction") String direction,
-                                                 @Field("productCombinationPriceId") int productCombinationPriceId,
-                                                 @Field("businessType") int businessType);//int 1
+                @Field("businessId") int businessId,
+                @Field("direction") String direction,
+                @Field("productCombinationPriceId") int productCombinationPriceId,
+                @Field("businessType") int businessType);//int 1
     }
 
     public static Observable<MarketAddCartModel> requestCartPostChangeOrderDetail(Context context, int businessId, String direction, int productCombinationPriceId,int businessType) {

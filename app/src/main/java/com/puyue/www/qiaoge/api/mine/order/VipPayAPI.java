@@ -23,7 +23,7 @@ public class VipPayAPI  {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.VIPPAY)
         Observable<VipPayModel> getVipPayData(@Field("vipPackageId") String vipPackageId,
-                                                @Field("payChannel") int payChannel);
+                                              @Field("payChannel") int payChannel);
     }
 
     public static Observable<VipPayModel> requestVipPayData(Context context, String vipPackageId, int payChannel) {

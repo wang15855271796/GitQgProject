@@ -457,7 +457,7 @@ public class ReboundScrollView extends FrameLayout implements OnTouchListener {
 
             {
 
-                final FrameLayout.LayoutParams lp = (LayoutParams) child.getLayoutParams();
+                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
 
                 int childWidthMeasureSpec = getChildMeasureSpec(widthMeasureSpec, getPaddingLeft() + getPaddingRight(), lp.width);
@@ -1246,9 +1246,9 @@ public class ReboundScrollView extends FrameLayout implements OnTouchListener {
      * <p>
      * </p>
      *
-     * @param direction the scroll direction: {@link android.view.View#FOCUS_UP} to go
+     * @param direction the scroll direction: {@link View#FOCUS_UP} to go
      *                  <p>
-     *                  one page up or {@link android.view.View#FOCUS_DOWN} to go one
+     *                  one page up or {@link View#FOCUS_DOWN} to go one
      *                  <p>
      *                  page down
      * @return true if the key event is consumed by this method, false otherwise
@@ -1324,9 +1324,9 @@ public class ReboundScrollView extends FrameLayout implements OnTouchListener {
      * <p>
      * </p>
      *
-     * @param direction the scroll direction: {@link android.view.View#FOCUS_UP} to go
+     * @param direction the scroll direction: {@link View#FOCUS_UP} to go
      *                  <p>
-     *                  the top of the view or {@link android.view.View#FOCUS_DOWN} to
+     *                  the top of the view or {@link View#FOCUS_DOWN} to
      *                  <p>
      *                  go the bottom
      * @return true if the key event is consumed by this method, false otherwise
@@ -1385,9 +1385,9 @@ public class ReboundScrollView extends FrameLayout implements OnTouchListener {
      * <p>
      * </p>
      *
-     * @param direction the scroll direction: {@link android.view.View#FOCUS_UP} to go
+     * @param direction the scroll direction: {@link View#FOCUS_UP} to go
      *                  <p>
-     *                  upward {@link android.view.View#FOCUS_DOWN} to downward
+     *                  upward {@link View#FOCUS_DOWN} to downward
      * @param top       the top offset of the new area to be made visible
      * @param bottom    the bottom offset of the new area to be made visible
      * @return true if the key event is consumed by this method, false otherwise
@@ -2208,7 +2208,7 @@ public class ReboundScrollView extends FrameLayout implements OnTouchListener {
      * <p>
      * <p>
      * <p>
-     * This is more expensive than the default {@link android.view.ViewGroup}
+     * This is more expensive than the default {@link ViewGroup}
      * <p>
      * implementation, otherwise this behavior might have been made the default.
      */

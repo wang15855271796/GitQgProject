@@ -1,29 +1,22 @@
 package com.puyue.www.qiaoge.activity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.order.ConfirmNewOrderActivity;
 import com.puyue.www.qiaoge.adapter.cart.CartUnableAdapter;
@@ -36,31 +29,21 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.fragment.cart.CartFragment;
+import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.fragment.cart.UpdateEvent;
 import com.puyue.www.qiaoge.fragment.market.TestAdapter;
 import com.puyue.www.qiaoge.helper.AlwaysMarqueeTextViewHelper;
-import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.BigDecimalUtils;
 import com.puyue.www.qiaoge.helper.CollapsingToolbarLayoutStateHelper;
-import com.puyue.www.qiaoge.helper.PublicRequestHelper;
-import com.puyue.www.qiaoge.helper.StringHelper;
-import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
-import com.puyue.www.qiaoge.model.cart.AddCartGoodModel;
 import com.puyue.www.qiaoge.model.cart.CartActivityGoodsModel;
-import com.puyue.www.qiaoge.model.cart.CartAddReduceModel;
 import com.puyue.www.qiaoge.model.cart.CartBalanceModel;
 import com.puyue.www.qiaoge.model.cart.CartCommonGoodsModel;
-import com.puyue.www.qiaoge.model.cart.CartEquipmentModel;
-import com.puyue.www.qiaoge.model.cart.CartListModel;
 import com.puyue.www.qiaoge.model.cart.CartsListModel;
-import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
-import com.puyue.www.qiaoge.model.mine.GetMyBalanceModle;
 import com.puyue.www.qiaoge.model.mine.order.CartGetReductModel;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.Arith;
-import com.puyue.www.qiaoge.view.SlideRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,10 +51,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -126,6 +106,9 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
     LinearLayout ll;
     @BindView(R.id.fl)
     FrameLayout fl;
+    @BindView(R.id.iv_back)
+    ImageView iv_back;
+
     //失效商品的cartId
     List<Integer> unCartsId = new ArrayList<>();
     //点击删除时的cartId存储集合
@@ -447,6 +430,7 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
         mTvConfirm.setOnClickListener(new NoDoubleClickListener() {
             @Override
             public void onNoDoubleClick(View view) {
+                unCartsId.clear();
                 for (int i = 0; i <unList.size() ; i++) {
                     List<CartsListModel.DataBean.InValidListBean.SpecProductListBeanX> specProductList = unList.get(i).getSpecProductList();
                     for (int j = 0; j <specProductList.size() ; j++) {
@@ -591,7 +575,16 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+            EventBus.getDefault().post(new NumEvent());
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
 
+    }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -648,6 +641,12 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
         ll_go_market.setOnClickListener(this);
         tv_clear.setOnClickListener(this);
         imageGoBay.setOnClickListener(this);
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override

@@ -18,7 +18,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,24 +37,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.flyco.tablayout.SlidingTabLayout;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CartActivity;
-import com.puyue.www.qiaoge.activity.cart.ConfirmOrderActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
-import com.puyue.www.qiaoge.adapter.market.DataAdapter;
 import com.puyue.www.qiaoge.adapter.market.GoodsDetailAdapter;
 import com.puyue.www.qiaoge.adapter.market.GoodsEvaluationAdapter;
 import com.puyue.www.qiaoge.adapter.market.GoodsRecommendAdapter;
 import com.puyue.www.qiaoge.api.cart.AddCartAPI;
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
-import com.puyue.www.qiaoge.api.cart.RecommendApI;
 import com.puyue.www.qiaoge.api.home.ClickCollectionAPI;
 import com.puyue.www.qiaoge.api.home.CommentOrderQueryAPI;
 import com.puyue.www.qiaoge.api.home.GetCustomerPhoneAPI;
-import com.puyue.www.qiaoge.api.home.SecKillOrTeamProductAPI;
 import com.puyue.www.qiaoge.api.home.TeamActiveQueryByIdAPI;
 import com.puyue.www.qiaoge.api.mine.GetShareInfoAPI;
 import com.puyue.www.qiaoge.banner.Banner;
@@ -82,15 +75,11 @@ import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetProductListModel;
 import com.puyue.www.qiaoge.model.home.GuessModel;
 import com.puyue.www.qiaoge.model.home.HasCollectModel;
-import com.puyue.www.qiaoge.model.home.SearchResultsModel;
-import com.puyue.www.qiaoge.model.home.SecKillOrTeamProductModel;
 import com.puyue.www.qiaoge.model.home.SpecialGoodModel;
-import com.puyue.www.qiaoge.model.home.TeamActiveQueryByIdModel;
 import com.puyue.www.qiaoge.model.market.GoodsDetailModel;
 import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
 import com.puyue.www.qiaoge.utils.DateUtils;
 import com.puyue.www.qiaoge.utils.Utils;
-import com.puyue.www.qiaoge.view.GlideModel;
 import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
@@ -127,7 +116,6 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
     TextView tv_num;
     TextView old_price;
     TextView tv_old_price;
-    private TextView tv_like;
     private TextView mTvDesc;
     TextView tv_title;
     private LinearLayout mLlSingle;
@@ -275,7 +263,6 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
         mTvCarAmount = FVHelper.fv(this, R.id.tv_include_common_amount);
         mTvFee = FVHelper.fv(this, R.id.tv_include_common_fee);
         mTvAddCar = FVHelper.fv(this, R.id.tv_add_car);
-        tv_like.setVisibility(View.GONE);
         recyclerViewRecommend.setVisibility(View.GONE);
         //详情
         View viewDetail = LayoutInflater.from(this).inflate(R.layout.item_viewpager, null);
@@ -602,8 +589,6 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
 
         long currentTime = System.currentTimeMillis();
         long startTime = model.getData().getStartTime();
-        Log.d("swddddddddddd",startTime+"");
-        Log.d("swddddddddddd.....",currentTime+"");
         long endTime = model.getData().getEndTime();
         String current = DateUtils.formatDate(currentTime, "MM月dd日HH时mm分ss秒");
         String start = DateUtils.formatDate(startTime, "MM月dd日HH时mm分ss秒");
@@ -617,13 +602,13 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
         }
 
         if(currentTime<startTime) {
-            mTvAddCar.setText("未开始");
+            mTvAddCar.setText("     未开始     ");
             mTvAddCar.setBackgroundResource(R.drawable.app_car);
 
         }else {
             if (model.getData().getSaleDone() == 0) {
                 mTvAddCar.setEnabled(false);
-                mTvAddCar.setText("已售罄");
+                mTvAddCar.setText("       已售罄     ");
                 mTvAddCar.setBackgroundResource(R.drawable.app_car);
             } else {
                 mTvAddCar.setEnabled(true);
@@ -631,7 +616,7 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
                 mTvAddCar.setBackgroundColor(Color.parseColor("#F6551A"));
             }
         }
-
+        Log.d("swddddddddddd",model.getData().getSaleDone()+"");
         if(startTime == 0) {
             tv_time.setVisibility(View.VISIBLE);
             if (model.getData().getSaleDone() == 0) {
@@ -673,45 +658,6 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
             }
 
         }
-
-
-//        long currentTime = model.getData().getCurrentTime();
-//        long startTime = model.getData().getStartTime();
-//        long endTime = model.getData().getEndTime();
-//        String current = DateUtils.formatDate(currentTime, "MM月dd日HH时mm分ss秒");
-//        String start = DateUtils.formatDate(startTime, "MM月dd日HH时mm分ss秒");
-//        String end = DateUtils.formatDate(endTime, "MM月dd日HH时mm分ss秒");
-//        try {
-//            currents = Utils.stringToDate(current, "MM月dd日HH时mm分ss秒");
-//            starts = Utils.stringToDate(start, "MM月dd日HH时mm分ss秒");
-//            ends = Utils.stringToDate(end, "MM月dd日HH时mm分ss秒");
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        boolean exceed24 = DateUtils.isExceed24(currents, starts);
-//        Log.d("wsddddddddd...",start+"");
-//        Log.d("wsddddddddd........",current+"");
-//        if(exceed24) {
-//            //大于24
-//            tv_time.setText(start+"开抢");
-//        }else {
-//            //小于24
-//            if(startTime!=0) {
-//                tv_cut_down.setTime(true,currentTime,startTime,endTime);
-//                tv_cut_down.changeBackGrounds(ContextCompat.getColor(mContext, R.color.color_F6551A));
-//                tv_cut_down.changeTypeColor(Color.WHITE);
-//                tv_time.setVisibility(View.INVISIBLE);
-//                tv_cut_down.start();
-//                tv_cut_down.setVisibility(View.VISIBLE);
-//
-//
-//            }else {
-//                tv_time.setVisibility(View.INVISIBLE);
-//                tv_cut_down.setVisibility(View.INVISIBLE);
-//            }
-////
-//        }
 
     }
 
@@ -1086,7 +1032,7 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
         window.setWindowAnimations(R.style.dialogStyle);
         window.getDecorView().setPadding(0, 0, 0, 0);
         //获得window窗口的属性
-        android.view.WindowManager.LayoutParams lp = window.getAttributes();
+        WindowManager.LayoutParams lp = window.getAttributes();
         //设置窗口宽度为充满全屏
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         //设置窗口高度为包裹内容

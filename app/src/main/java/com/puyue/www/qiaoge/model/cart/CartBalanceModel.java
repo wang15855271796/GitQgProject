@@ -118,12 +118,22 @@ public class CartBalanceModel extends BaseModel {
         private String killAmount;
         private String normalAmount;
         private boolean isVip;
+        public boolean addressOk;
 
+        public boolean isAddressOk() {
+            return addressOk;
+        }
+
+        public void setAddressOk(boolean addressOk) {
+            this.addressOk = addressOk;
+        }
 
         @Override
         public String toString() {
             return "DataBean{" +
-                    "pickUserName='" + pickUserName + '\'' +
+                    "toRechargeAmount=" + toRechargeAmount +
+                    ", toRecharge=" + toRecharge +
+                    ", pickUserName='" + pickUserName + '\'' +
                     ", pickPhone='" + pickPhone + '\'' +
                     ", wareAddress='" + wareAddress + '\'' +
                     ", sendStartTime='" + sendStartTime + '\'' +
@@ -167,6 +177,7 @@ public class CartBalanceModel extends BaseModel {
                     ", killAmount='" + killAmount + '\'' +
                     ", normalAmount='" + normalAmount + '\'' +
                     ", isVip=" + isVip +
+                    ", addressOk=" + addressOk +
                     ", notVipDesc='" + notVipDesc + '\'' +
                     ", offerIsOpen=" + offerIsOpen +
                     ", vipReduct='" + vipReduct + '\'' +
@@ -827,7 +838,7 @@ public class CartBalanceModel extends BaseModel {
             private Object oldPrice;
             private String prodTypeUrl;
             private List<ProductDescVOListBean> productDescVOList;
-            public List<CartBalanceModel.DataBean.ProductVOListBean.AdditionProductVOListBean> cartAdditionProductVOList;
+            public List<AdditionProductVOListBean> cartAdditionProductVOList;
 
 
             public static class AdditionProductVOListBean {

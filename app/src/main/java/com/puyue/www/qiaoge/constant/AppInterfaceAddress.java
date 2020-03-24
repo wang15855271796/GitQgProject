@@ -6,7 +6,7 @@ package com.puyue.www.qiaoge.constant;
 public class AppInterfaceAddress {
     //https://shaokao.qoger.com/qiaoge/正式
     //http://116.62.67.230:8082/qiaoge/   测试http://120.55.55.99:8082/qiaoge/
-    public static final String BASE_URL = "https://shaokao.qoger.com/qiaoge/";
+    public static final String BASE_URL = "http://120.55.55.99:8082/qiaoge/";
     //http://shaokao.qiaogeshipin.cn/qiaoge/
     // 正式https://shaokao.qoger.com/qiaoge/
     //http://192.168.1.45/   本地192.168.101.69:8088
@@ -126,6 +126,14 @@ public class AppInterfaceAddress {
      * 获取地址列表
      */
     public static final String GET_ADDRESS_LIST = "common/getHomeAddressList";
+    /**
+     * 选择省市区
+     */
+    public static final String GET_AREA_LIST = "common/area/getAllAreaList";
+    /**
+     * 选择可用省市区
+     */
+    public static final String GET_ENABLEAREA_LIST = "common/area/getEnableAreaList";
     public static final String GET_COLLECTION_LIST = "commonCollect/myCollectProd";
     public static final String GET_ORDER_LIST = "commonOrder/getCommonOrderListByPage";
     public static final String FEEDBACK = "feedback/addFeedBack";
@@ -212,6 +220,11 @@ public class AppInterfaceAddress {
      * 创蓝一键注册
      */
     public static final String CHAUNGLAN = "auth/getMobileCl";
+
+    /**
+     * 授权码
+     */
+    public static final String CHECK_CODE = "auth/validateUserInvitation";
     public static final String CONFIRM_GET_GOODS = "commonOrder/confirmGetGoods";
     public static final String APPLAY_RETURN_GOODS = "commonOrder/applayReturnGoods";
     public static final String CHANGE_ANOTHER_ADDRESS = "commonOrder/changeAnotherAddress";

@@ -22,7 +22,7 @@ public class MasterWorkerReserveAPI {
     private interface MasterWorkerReserveService{
         @FormUrlEncoded
         @POST(AppInterfaceAddress.MASTERWORKERRESERVE)
-        Observable<MasterWorkerReserveModel> getData(@Field("masterWorkerId") int masterWorkerId, @Field("startDate")String startDate, @Field("endDate")String endDate);
+        Observable<MasterWorkerReserveModel> getData(@Field("masterWorkerId") int masterWorkerId, @Field("startDate") String startDate, @Field("endDate") String endDate);
     }
     public static Observable<MasterWorkerReserveModel> requestData(Context context,int masterWorkerId,String startDate,String endDate){
         MasterWorkerReserveService service = RestHelper.getBaseRetrofit(context).create(MasterWorkerReserveService.class);

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -18,9 +17,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -28,24 +25,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alipay.sdk.app.PayTask;
-import com.puyue.www.qiaoge.QiaoGeApplication;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CommonH5Activity;
 import com.puyue.www.qiaoge.adapter.mine.MyWalletAdapter;
 import com.puyue.www.qiaoge.api.mine.GetWalletInfoAPI;
 import com.puyue.www.qiaoge.api.mine.RechargeAPI;
-import com.puyue.www.qiaoge.api.mine.coupon.MyCouponsAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
-import com.puyue.www.qiaoge.dialog.PromptDialog;
 import com.puyue.www.qiaoge.dialog.XieYiDialog;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.WeChatPayEvent;
+import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.MapHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.mine.RechargeModel;
-import com.puyue.www.qiaoge.model.mine.coupons.queryUserDeductByStateModel;
 import com.puyue.www.qiaoge.model.mine.wallet.GetWalletInfoModel;
 import com.puyue.www.qiaoge.popupwindow.MyWalletPopuWindow;
 import com.tencent.mm.opensdk.modelpay.PayReq;
@@ -54,6 +49,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -104,8 +100,6 @@ public class MyWalletActivity extends BaseSwipeActivity {
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
-
-
         return false;
     }
 
@@ -147,6 +141,12 @@ public class MyWalletActivity extends BaseSwipeActivity {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void messageEventBuss(NumEvent event) {
+        //刷新UI
+        checkBox.setChecked(true);
+
+    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -269,94 +269,60 @@ public class MyWalletActivity extends BaseSwipeActivity {
                     popuWindow.showAtLocation(view, Gravity.NO_GRAVITY, 0, 0);
                     break;
                 case R.id.commonButton:
-                    if(!TextUtils.isEmpty(mEtAmount)) {
-                        if(radioButtonAliPay.isChecked()) {
-                            if (Double.parseDouble(mEtAmount)>0){
+                    if(MapHelper.isAvilible(mActivity, "com.tencent.mm")) {
+                        if(!TextUtils.isEmpty(mEtAmount)) {
+                            if(radioButtonAliPay.isChecked()) {
+                                if (Double.parseDouble(mEtAmount)>0){
 
-                                if(!checkBox.isChecked()) {
-                                    Log.d("isCheck....",checkBox.isChecked()+"");
-                                    promptDialog = new XieYiDialog(mActivity) {
-                                        @Override
-                                        public void Confirm() {
-                                            dismiss();
-                                        }
+                                    if(!checkBox.isChecked()) {
+                                        promptDialog = new XieYiDialog(mActivity) {
+                                            @Override
+                                            public void Confirm() {
+                                                dismiss();
+                                            }
 
-                                        @Override
-                                        public void Cancle() {
-                                            dismiss();
-                                        }
-                                    };
-                                    promptDialog.show();
+                                            @Override
+                                            public void Cancle() {
+                                                dismiss();
+                                            }
+                                        };
+                                        promptDialog.show();
+                                    }else {
+                                        recharge(Double.parseDouble(mEtAmount), (byte) 2);
+                                    }
+
                                 }else {
-                                    Log.d("isCheck...........",checkBox.isChecked()+"");
-                                    recharge(Double.parseDouble(mEtAmount), (byte) 2);
+                                    AppHelper.showMsg(mContext,"充值金额不能为0");
                                 }
+                            } else if (radioButtonWeChat.isChecked()) {
+                                if (Double.parseDouble(mEtAmount)>0){
+                                    if(!checkBox.isChecked()) {
+                                        promptDialog = new XieYiDialog(mActivity) {
+                                            @Override
+                                            public void Confirm() {
+                                                dismiss();
+                                            }
 
-                            }else {
-                                AppHelper.showMsg(mContext,"充值金额不能为0");
-                            }
-                        }
-                        else if (radioButtonWeChat.isChecked()) {
-                            if (Double.parseDouble(mEtAmount)>0){
-                                if(!checkBox.isChecked()) {
-                                    promptDialog = new XieYiDialog(mActivity) {
-                                        @Override
-                                        public void Confirm() {
-                                            dismiss();
-                                        }
+                                            @Override
+                                            public void Cancle() {
+                                                dismiss();
+                                            }
+                                        };
+                                        promptDialog.show();
+                                    }else {
+                                        recharge(Double.parseDouble(mEtAmount), (byte) 3);
+                                    }
 
-                                        @Override
-                                        public void Cancle() {
-                                            dismiss();
-                                        }
-                                    };
-                                    promptDialog.show();
                                 }else {
-                                    recharge(Double.parseDouble(mEtAmount), (byte) 3);
+                                    AppHelper.showMsg(mContext,"充值金额不能为0");
                                 }
-
-                            }else {
-                                AppHelper.showMsg(mContext,"充值金额不能为0");
                             }
+                        }else {
+                            AppHelper.showMsg(mContext, "请选择价格");
                         }
                     }else {
-                        AppHelper.showMsg(mContext, "请选择价格");
+                        AppHelper.showMsg(mContext, "请下载微信");
                     }
-
-
-
-                    //--------------
-//                    if (TextUtils.isEmpty(mEtAmount)) {
-//
-//                        return;
-//                    }
-//
-//                    if (radioButtonAliPay.isChecked()) {
-//                        if (Double.parseDouble(mEtAmount)>0){
-//                            recharge(Double.parseDouble(mEtAmount), (byte) 2);
-//                        }else {
-//                            AppHelper.showMsg(mContext,"充值金额不能为0");
-//                        }
-//
-//                    } else if (radioButtonWeChat.isChecked()) {
-//                        if (Double.parseDouble(mEtAmount)>0){
-//                            recharge(Double.parseDouble(mEtAmount), (byte) 3);
-//                        }else {
-//                            AppHelper.showMsg(mContext,"充值金额不能为0");
-//                        }
-//                    } else if(!checkBox.isChecked()){
-//                            promptDialog = new XieYiDialog(mActivity) {
-//                                @Override
-//                                public void Confirm() {
-//                                    dismiss();
-//                                }
-//                            };
-//
-//                            promptDialog.show();
-//
-//                    }else {
-//                        AppHelper.showMsg(mContext, "请选择渠道");
-//                    }
 
 
                     break;

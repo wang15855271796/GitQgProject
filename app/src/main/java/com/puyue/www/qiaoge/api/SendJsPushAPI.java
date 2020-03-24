@@ -22,7 +22,7 @@ public class SendJsPushAPI {
     private interface SendJsService {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.SENDJGUESRID)
-        Observable<BaseModel> setParams(@Field("registrationId")String registrationId);
+        Observable<BaseModel> setParams(@Field("registrationId") String registrationId);
     }
 
     public static Observable<BaseModel> requestData(Context context,String registrationId) {

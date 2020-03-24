@@ -11,15 +11,13 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.api.cart.AddMountChangeTwoAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
-import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
-import com.puyue.www.qiaoge.fragment.cart.UpdateEvent;
-import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartGoodModel;
 import com.puyue.www.qiaoge.utils.ToastUtil;
@@ -57,12 +55,22 @@ public class MarketInnerAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
         tv_price.setText(item.getPrice());
         helper.setText(R.id.tv_unit,item.getUnitDesc());
         TextView tv_num = helper.getView(R.id.tv_num);
+        TextView tv_reduce = helper.getView(R.id.tv_reduce);
         tv_num.setText(item.getCartNum()+"");
+
         iv_cut = helper.getView(R.id.iv_cut);
         iv_add = helper.getView(R.id.iv_add);
         TextView tv_old_price = helper.getView(R.id.tv_old_price);
         tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         helper.setText(R.id.tv_old_price,item.getOldPrice());
+
+        if(item.getOldPrice().equals("")) {
+            tv_reduce.setVisibility(View.GONE);
+        }else {
+            tv_reduce.setBackgroundResource(R.drawable.shape_orange);
+            tv_reduce.setVisibility(View.VISIBLE);
+        }
+
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

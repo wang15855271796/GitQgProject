@@ -29,7 +29,7 @@ public class AddAddressAPI {
                                         @Field("isDefault") int isDefault,
                                         @Field("detailAddress") String detailAddress,
                                         @Field("shopName") String shopName,
-                                        @Field("id") String id,@Field("orderId") String orderId);
+                                        @Field("id") String id, @Field("orderId") String orderId);
     }
 
     public static Observable<BaseModel> requestAddAddress(Context context, String userName, String contactPhone, String proviceCode, String cityCode, String areaCode, int isDefault, String detailAddress, String shopName, String id,String orderId) {
