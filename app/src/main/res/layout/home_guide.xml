@@ -5,36 +5,25 @@
 
 
     <ImageView
-
+        android:visibility="gone"
         android:layout_marginRight="34dp"
-        android:layout_marginTop="62dp"
-     android:layout_alignParentTop="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:id="@+id/iv_guide_one"
         android:scaleType="fitXY"
-        android:src="@mipmap/ic_guide_two"
+        android:src="@mipmap/ic_guilde_one"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <ImageView
         android:visibility="gone"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:id="@+id/iv_guide_two"
         android:scaleType="fitXY"
-        android:layout_marginTop="146dp"
-        android:layout_marginLeft="15dp"
-        android:src="@mipmap/ic_guilde_one"
+        android:layout_marginTop="380dp"
+        android:src="@mipmap/ic_guide_two"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <ImageView
-        android:visibility="gone"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="3dp"
-        android:layout_alignParentRight="true"
-        android:id="@+id/iv_guide_three"
-        android:scaleType="fitXY"
-        android:src="@mipmap/ic_guide_three"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
 </RelativeLayout>

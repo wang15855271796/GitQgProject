@@ -43,6 +43,15 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <TextView
+        android:id="@+id/tv_more_shop"
+        android:gravity="center"
+        android:textColor="#FA712B"
+        android:text="查看更多店铺类型>>"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp_40"
+        android:layout_marginBottom="@dimen/size_40dp"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:background="@drawable/select_type_bg"

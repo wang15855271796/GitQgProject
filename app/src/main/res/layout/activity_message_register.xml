@@ -113,7 +113,7 @@
                         android:background="@null"
                         android:drawablePadding="@dimen/size_15dp"
                         android:hint="短信验证码"
-                        android:maxLength="16"
+                        android:maxLength="6"
                         android:inputType="number"
                         android:textColor="#232131"
                         android:textColorHint="@color/color_CACACB"

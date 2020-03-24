@@ -36,7 +36,7 @@
             android:id="@+id/tv_old_price"
             tools:text="(1箱10盒)"
             android:layout_centerVertical="true"
-            tools:textSize="10sp"
+            android:textSize="10sp"
             android:textColor="#666666"
             android:layout_marginLeft="@dimen/size_10dp"
             android:layout_toRightOf="@+id/tv_unit"

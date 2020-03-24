@@ -44,7 +44,7 @@
             <TextView
                 android:layout_below="@+id/tv_spec"
                 android:id="@+id/tv_stock"
-                android:text="库存：300箱"
+                tools:text="库存：300箱"
                 android:textSize="11sp"
                 android:textColor="#666666"
                 android:layout_marginLeft="@dimen/size_11dp"

@@ -33,7 +33,7 @@
                 android:id="@+id/imageIcon"
                 android:layout_width="@dimen/size_29dp"
                 android:layout_height="@dimen/size_15dp"
-android:scaleType="fitXY"
+                android:scaleType="fitXY"
 
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="3dp"
@@ -56,7 +56,6 @@ android:scaleType="fitXY"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textTitle"
-
                 android:layout_marginTop="@dimen/size_15dp"
                 android:layout_marginRight="@dimen/size_50dp"
                 android:ellipsize="end"
@@ -65,18 +64,28 @@ android:scaleType="fitXY"
                 android:text="1xiang/5包"
                 android:textColor="@color/app_black"
                 android:textSize="@dimen/size_11dp" />
+
+            <TextView
+                android:id="@+id/coupon"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/size_5dp"
+                android:text="惠"
+                android:textColor="@color/color_F6551A"
+                android:textSize="@dimen/size_13dp" />
+
             <TextView
                 android:id="@+id/Price"
-
+                android:visibility="gone"
                 android:layout_below="@+id/textSpe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-
                 android:padding="@dimen/size_5dp"
                 android:paddingBottom="@dimen/dp_10"
                 android:text="￥12.0"
-
                 android:textColor="@color/color_F6551A"
                 android:textSize="@dimen/size_13dp" />
 
@@ -85,10 +94,10 @@ android:scaleType="fitXY"
                 android:id="@+id/oldPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-    android:layout_below="@+id/textSpe"
+                android:layout_below="@+id/textSpe"
                 android:layout_marginRight="@dimen/size_10dp"
                 android:layout_toLeftOf="@+id/Price"
-
+                android:visibility="gone"
                 android:padding="@dimen/size_5dp"
                 android:paddingBottom="@dimen/size_5dp"
                 android:textColor="@color/color_939393"
@@ -99,6 +108,7 @@ android:scaleType="fitXY"
 
 
             <com.puyue.www.qiaoge.view.LineBreakLayout
+                android:visibility="gone"
                 android:id="@+id/lineBreakLayout"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
@@ -109,6 +119,14 @@ android:scaleType="fitXY"
                 app:isFull="false"
                 app:vertical_Space="10dp" />
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_below="@+id/textSpe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+            </android.support.v7.widget.RecyclerView>
 
             <RelativeLayout
                 android:layout_width="match_parent"

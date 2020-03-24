@@ -2,47 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <android.support.design.widget.CoordinatorLayout
+    <TextView
+        android:text="新品上市"
+        android:id="@+id/tv_title"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_67dp">
+
+    </TextView>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_small_title"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:text="上新立荐"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        >
-        <!--com.puyue.www.qiaoge.FixAppBarLayout-->
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appBarLayout"
-            app:layout_behavior="com.puyue.www.qiaoge.FixAppBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-          >
-
-            <com.daimajia.slider.library.SliderLayout
-                android:id="@+id/banner"
-                android:layout_width="match_parent"
-                android:layout_height="160dp">
-
-            </com.daimajia.slider.library.SliderLayout>
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/size_54dp">
-
-            </android.support.design.widget.TabLayout>
-
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-        </android.support.v7.widget.RecyclerView>
-    </android.support.design.widget.CoordinatorLayout>
+        android:textColor="#ffffff"
+        android:background="@drawable/shape_orange"
+        android:textSize="13dp"
+        android:gravity="center_horizontal"
+        android:layout_height="@dimen/size_20dp" />
 
 </LinearLayout>

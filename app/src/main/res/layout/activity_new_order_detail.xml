@@ -39,149 +39,169 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <include layout="@layout/activity_new_order_head" />
-            <RelativeLayout
-                android:id="@+id/relativeLayout_driver"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/new_order_bg"
-                android:paddingBottom="5dp">
-                <TextView
-                    android:id="@+id/tv_driver_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:drawableLeft="@mipmap/driver_iv"
-                    android:drawablePadding="10dp"
-                    android:text="2019-3-10"
-                    android:textColor="#333333"
-                    android:textSize="15dp" />
-                <ImageView
-                    android:id="@+id/iv_fresh_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_toRightOf="@id/tv_driver_content"
-                    android:src="@mipmap/iv_driver_status" />
-                <TextView
-                    android:id="@+id/tv_order_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="等待接受订单"
-                    android:textColor="#333333"
-                    android:textSize="15dp" />
-                <TextView
-                    android:id="@+id/tv_driver_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_driver_content"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginTop="5dp"
-                    android:text="程师傅"
-                    android:textSize="15dp" />
-                <TextView
-                    android:id="@+id/tv_driver_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_driver_content"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_toRightOf="@id/tv_driver_name"
-                    android:text="程师傅"
-                    android:textSize="15dp" />
-                <TextView
-                    android:id="@+id/tv_order_driver_message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_order_status"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="10dp"
-                    android:text="查看物流信息"
-                    android:textColor="#FE560A"
-                    android:textSize="15dp"
-                    android:visibility="gone" />
-            </RelativeLayout>
+            android:layout_height="match_parent">
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/new_order_bg"
-                android:orientation="horizontal"
-                android:padding="@dimen/size_10dp">
-                <ImageView
-                    android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <include layout="@layout/activity_new_order_head" />
+                <RelativeLayout
+                    android:id="@+id/relativeLayout_driver"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/size_15dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/address_location" />
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="3dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:background="@drawable/new_order_bg"
+                    android:paddingBottom="5dp">
                     <TextView
-                        android:id="@+id/tvNewOrderAddresseeName"
-                        android:layout_width="match_parent"
+                        android:id="@+id/tv_driver_content"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/size_15dp"
-                        android:textColor="@color/app_black"
-                        android:textSize="@dimen/size_11dp" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:drawableLeft="@mipmap/driver_iv"
+                        android:drawablePadding="10dp"
+                        android:text="2019-3-10"
+                        android:textColor="#333333"
+                        android:textSize="15dp" />
+                    <ImageView
+                        android:id="@+id/iv_fresh_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_toRightOf="@id/tv_driver_content"
+                        android:src="@mipmap/iv_driver_status" />
                     <TextView
-                        android:id="@+id/tvNewOrderAddress"
-                        android:layout_width="match_parent"
+                        android:id="@+id/tv_order_status"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/size_15dp"
-                        android:textColor="@color/app_black"
-                        android:textSize="@dimen/size_11dp" />
-                </LinearLayout>
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="等待接受订单"
+                        android:textColor="#333333"
+                        android:textSize="15dp" />
+                    <TextView
+                        android:id="@+id/tv_driver_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_driver_content"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginTop="5dp"
+                        android:text="程师傅"
+                        android:textSize="15dp" />
+                    <TextView
+                        android:id="@+id/tv_driver_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_driver_content"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@id/tv_driver_name"
+                        android:text="程师傅"
+                        android:textSize="15dp" />
+                    <TextView
+                        android:id="@+id/tv_order_driver_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_order_status"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="10dp"
+                        android:text="查看物流信息"
+                        android:textColor="#FE560A"
+                        android:textSize="15dp"
+                        android:visibility="gone" />
+                </RelativeLayout>
                 <LinearLayout
-                    android:id="@+id/linearLayout_address_arrow"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/new_order_bg"
                     android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:padding="@dimen/size_10dp">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/size_15dp"
                         android:scaleType="fitXY"
-                        android:src="@mipmap/address_arrow" />
+                        android:src="@mipmap/address_location" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/size_15dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvNewOrderAddresseeName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/size_15dp"
+                            android:textColor="@color/app_black"
+                            android:textSize="@dimen/size_11dp" />
+                        <TextView
+                            android:id="@+id/tvNewOrderAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/size_15dp"
+                            android:textColor="@color/app_black"
+                            android:textSize="@dimen/size_11dp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/linearLayout_address_arrow"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleType="fitXY"
+                            android:src="@mipmap/address_arrow" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/new_order_bg">
-                <com.puyue.www.qiaoge.view.MaxHeightRecyclerView
-                    android:id="@+id/recyclerView"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:maxHeight="360dp">
-                </com.puyue.www.qiaoge.view.MaxHeightRecyclerView>
-            </RelativeLayout>
-            <include layout="@layout/activity_new_order_foot" />
-        </LinearLayout>
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/new_order_bg">
+                    <com.puyue.www.qiaoge.view.MaxHeightRecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:maxHeight="360dp">
+                    </com.puyue.www.qiaoge.view.MaxHeightRecyclerView>
+                </RelativeLayout>
+                <include layout="@layout/activity_new_order_foot" />
+            </LinearLayout>
+
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/lav_activity_loading"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="150dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicatorName="BallPulseIndicator"
+                android:visibility="gone"
+                style="@style/AVLoadingIndicatorView.Large"
+                app:indicatorColor="#f40"
+                />
+        </RelativeLayout>
+
     </android.support.v4.widget.NestedScrollView>
+
+
 
 
 </LinearLayout>

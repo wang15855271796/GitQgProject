@@ -37,7 +37,7 @@
             android:id="@+id/rl_coupon"
             android:background="@drawable/shape_ring"
             android:layout_width="40dp"
-            android:visibility="gone"
+            android:visibility="invisible"
             android:layout_marginTop="@dimen/size_70dp"
             android:layout_marginLeft="@dimen/size_70dp"
             android:gravity="center_vertical"
@@ -70,70 +70,50 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <RelativeLayout
+            android:layout_toRightOf="@+id/rl_coupon"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/size_65dp"
+            android:layout_height="@dimen/size_45dp">
 
-        <TextView
-            tools:text="100"
-            android:id="@+id/tv_price"
-            android:textSize="@dimen/size_18dp"
-            android:textColor="#FF703C"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_below="@+id/tv_spec"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@+id/iv_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                tools:text="100"
+                android:layout_centerVertical="true"
+                android:id="@+id/tv_price"
+                android:textSize="@dimen/size_18dp"
+                android:textColor="#FF703C"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            tools:text="100"
-
-            android:layout_toRightOf="@+id/tv_price"
-            android:id="@+id/tv_old_price"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_below="@+id/tv_spec"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <ProgressBar
-            android:id="@+id/pb"
-            android:layout_toRightOf="@+id/iv_pic"
-            android:layout_below="@+id/tv_old_price"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_marginTop="@dimen/size_13dp"
-            android:layout_width="100dp"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_height="10dp"
-            android:progressDrawable="@drawable/shape_red" />
+            <TextView
+                tools:text="100"
+                android:layout_toRightOf="@+id/tv_price"
+                android:layout_centerVertical="true"
+                android:id="@+id/tv_old_price"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
 
-        <TextView
-            android:id="@+id/tv_total"
-            tools:text="剩余"
-            android:layout_below="@+id/tv_old_price"
-            android:textColor="#999999"
-            android:layout_toRightOf="@+id/pb"
-            android:textSize="8dp"
-            android:layout_alignBaseline="@+id/pb"
-            android:layout_marginTop="12dp"
-            android:layout_marginLeft="@dimen/size_15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/tv_add"
-            android:text="  未开始  "
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp"
-            android:paddingBottom="@dimen/size_3dp"
-            android:paddingTop="@dimen/size_3dp"
-            android:textColor="@color/white"
-            android:layout_marginTop="@dimen/size_5dp"
-            android:background="@drawable/shape_detail_grey"
-            android:layout_below="@+id/tv_old_price"
-            android:layout_marginRight="@dimen/size_15dp"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_add"
+                android:text="  未开始  "
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:layout_centerVertical="true"
+                android:paddingBottom="@dimen/size_3dp"
+                android:paddingTop="@dimen/size_3dp"
+                android:textColor="@color/white"
+                android:background="@drawable/shape_detail_grey"
+                android:layout_marginRight="@dimen/size_15dp"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+
 
     </RelativeLayout>
 

@@ -45,7 +45,7 @@
                 android:drawableLeft="@mipmap/ic_one_psd"
                 android:drawablePadding="@dimen/size_15dp"
                 android:hint="@string/inputPsdWord"
-                android:inputType="textEmailAddress"
+                android:inputType="textPassword"
                 android:maxLength="16"
                 android:textColor="#232131"
                 android:textColorHint="@color/color_CACACB"
@@ -82,7 +82,7 @@
                 android:drawableLeft="@mipmap/ic_two_psd"
                 android:drawablePadding="@dimen/size_15dp"
                 android:hint="@string/againInputPsd"
-                android:inputType="textEmailAddress"
+                android:inputType="textPassword"
                 android:maxLength="16"
                 android:textColor="#232131"
                 android:textColorHint="@color/color_CACACB"
@@ -118,9 +118,9 @@
                 android:background="@null"
                 android:drawableLeft="@mipmap/ic_landing_psd"
                 android:drawablePadding="@dimen/size_15dp"
-                android:hint="@string/inputCode"
+                android:hint="请输入授权码(必填)"
                 android:inputType="number"
-                android:maxLength="16"
+                android:maxLength="6"
                 android:textColor="#232131"
                 android:textColorHint="@color/color_CACACB"
 
@@ -136,6 +136,40 @@
                 android:orientation="vertical" />
 
         </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_25dp">
+
+            <TextView
+                android:id="@+id/tv_shop_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:drawableLeft="@mipmap/ic_landing_psd"
+                android:drawablePadding="@dimen/size_15dp"
+                android:hint="店铺类型(必填)"
+                android:inputType="number"
+                android:maxLength="16"
+                android:textColor="#232131"
+                android:textColorHint="@color/color_CACACB"
+                android:textSize="@dimen/size_13dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/tv_shop_style"
+                android:layout_marginLeft="@dimen/size_25dp"
+                android:layout_marginTop="@dimen/size_5dp"
+                android:background="#EFEFEF"
+                android:orientation="vertical" />
+
+        </RelativeLayout>
+
+
+
+
 
         <LinearLayout
             android:layout_width="match_parent"

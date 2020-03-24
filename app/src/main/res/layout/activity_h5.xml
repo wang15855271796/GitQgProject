@@ -3,11 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_color_white"
     android:orientation="vertical">
 
     <com.puyue.www.qiaoge.view.CompatToolbar
-        android:visibility="gone"
         android:layout_marginTop="@dimen/size_30dp"
         android:id="@+id/toolbar_h5"
         android:layout_width="match_parent"
@@ -35,6 +33,7 @@
     </com.puyue.www.qiaoge.view.CompatToolbar>
 
     <ProgressBar
+        android:visibility="gone"
         android:id="@+id/progress_h5"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
@@ -44,13 +43,26 @@
         android:max="100"
         android:progressDrawable="@drawable/app_h5_progressbar" />
 
-    <com.puyue.www.qiaoge.wxapi.MyWebView
 
-        android:id="@+id/frm_h5"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.puyue.www.qiaoge.wxapi.MyWebView>
+        <com.puyue.www.qiaoge.wxapi.MyWebView
+            android:id="@+id/frm_h5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.puyue.www.qiaoge.wxapi.MyWebView>
+
+    </android.support.v4.widget.NestedScrollView>
 
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginRight="@dimen/dp_10"
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>

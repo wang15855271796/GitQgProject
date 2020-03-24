@@ -95,7 +95,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/tv_include_common_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -113,7 +112,7 @@
             android:maxLines="1"
             android:textColor="#ffa7a7a7"
             android:textSize="12dp"
-            android:visibility="gone" />
+         />
 
     </LinearLayout>
 

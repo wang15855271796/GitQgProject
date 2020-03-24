@@ -33,15 +33,29 @@
             android:layout_height="wrap_content" />
 
         <TextView
-
             android:id="@+id/tv_old_price"
             tools:text="(1箱10盒)"
             android:textSize="10sp"
-            android:layout_below="@+id/tv_unit"
+            android:layout_centerVertical="true"
             android:textColor="#666666"
+            android:layout_toRightOf="@+id/tv_unit"
             android:layout_marginLeft="@dimen/size_15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="降价"
+            android:id="@+id/tv_reduce"
+            android:layout_centerVertical="true"
+            android:textSize="8dp"
+            android:textColor="#ffffff"
+            android:paddingRight="@dimen/size_5dp"
+            android:paddingLeft="@dimen/size_5dp"
+            android:layout_marginLeft="@dimen/size_10dp"
+            android:layout_toRightOf="@+id/tv_old_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
 
         <LinearLayout
             android:layout_alignParentRight="true"

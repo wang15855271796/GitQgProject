@@ -307,10 +307,13 @@
 
                 <CheckBox
                     android:id="@+id/checkbox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:button="@null"
+                    android:background="@drawable/check"
+                    android:layout_width="@dimen/size_18dp"
+                    android:layout_height="@dimen/size_18dp" />
 
                 <TextView
+                    android:layout_marginLeft="@dimen/size_5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="我已阅读并同意"

@@ -30,7 +30,7 @@
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-               >
+                >
 
                 <ImageView
                     android:id="@+id/iv_activity_back"
@@ -127,34 +127,46 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-       >
+        >
 
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_activity_goods_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginBottom="@dimen/size_60dp"
+            android:id="@+id/rv_activity_goods_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <RelativeLayout
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
+            android:id="@+id/rl"
             android:background="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/size_3dp"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/size_60dp">
 
-            <TextView
-                android:id="@+id/tv_call"
-                android:paddingBottom="@dimen/dp_10"
-                android:paddingTop="@dimen/dp_10"
-                android:paddingLeft="@dimen/size_65dp"
-                android:paddingRight="@dimen/size_65dp"
-                android:background="@drawable/shape_orange"
-                android:layout_centerInParent="true"
-                android:text="添加本场秒杀提醒"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:orientation="vertical"
+                android:id="@+id/rl_bg"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/size_23dp"
+                android:layout_marginRight="@dimen/size_23dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_40dp">
+
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/tv_call"
+                    tools:text="添加本场秒杀提醒"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="@dimen/size_15dp"
+                    android:textSize="@dimen/size_16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+
         </RelativeLayout>
+
     </RelativeLayout>
 
 

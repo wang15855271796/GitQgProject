@@ -11,7 +11,7 @@
         android:id="@+id/fl_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,7 +26,6 @@
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
                     android:layout_marginLeft="@dimen/size_20dp"
                     android:text="收货人："
                     android:textColor="@color/app_black"
@@ -35,7 +34,7 @@
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                     android:layout_marginLeft="@dimen/size_5dp"
+                    android:layout_marginLeft="@dimen/size_5dp"
                     android:layout_marginRight="30dp"
                     android:layout_weight="1">
 
@@ -66,7 +65,6 @@
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
                     android:text="收货地址："
                     android:layout_marginLeft="@dimen/size_20dp"
                     android:textColor="@color/app_black"
@@ -112,6 +110,7 @@
         </LinearLayout>
 
         <ImageView
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -121,6 +120,8 @@
 
     <View
         android:layout_marginTop="@dimen/size_5dp"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#e5e5e5" />
@@ -142,16 +143,19 @@
                 android:layout_height="15dp"
                 android:clickable="false"
                 android:enabled="false"
+                android:layout_marginLeft="@dimen/size_10dp"
                 android:background="@drawable/app_checkbox_style"
                 android:button="@null" />
 
             <TextView
+                android:id="@+id/tv_set"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:text="设置为默认地址"
                 android:textColor="#fff56d23"
-                android:textSize="15dp" />
+                android:textSize="14dp" />
+
         </LinearLayout>
 
         <TextView
@@ -162,10 +166,14 @@
             android:layout_centerVertical="true"
             android:padding="@dimen/dp_10"
             android:text="编辑"
+            android:drawableLeft="@mipmap/icon_edit"
             android:textColor="#ffa7a7a7"
+            android:drawablePadding="5dp"
             android:textSize="15dp" />
 
         <TextView
+            android:drawablePadding="5dp"
+            android:drawableLeft="@mipmap/icon_record"
             android:id="@+id/tv_item_address_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
