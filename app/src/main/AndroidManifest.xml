@@ -44,7 +44,7 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <!-- 8.0系统，允许安装未知来源的apk的权限 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
+    <uses-permission android:name="android.permission.READ_LOGS" />
     <!-- 系统级别权限 -->
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
@@ -70,9 +70,9 @@
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"></uses-permission>
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"></uses-permission>
     <uses-permission android:name="android.permission.GET_TASKS" />
-<!--io.dcloud.application.DCloudApplication-->
+    <!--io.dcloud.application.DCloudApplication-->
     <application
-        android:name="io.dcloud.application.DCloudApplication"
+        android:name=".SophixStubApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -84,6 +84,39 @@
         android:supportsRtl="true"
 
         android:theme="@style/AppTheme">
+
+
+        <!--bugly开始-->
+        <!-- 配置APP ID -->
+        <!--        <meta-data-->
+        <!--            android:name="BUGLY_APPID"-->
+        <!--            android:value="385e5aaa75" />-->
+        <!--        &lt;!&ndash; 配置APP版本号 &ndash;&gt;-->
+        <!--        <meta-data-->
+        <!--            android:name="BUGLY_APP_VERSION"-->
+        <!--            android:value="<APP_Version>" />-->
+        <!--        &lt;!&ndash; 配置APP渠道号 &ndash;&gt;-->
+        <!--        <meta-data-->
+        <!--            android:name="BUGLY_APP_CHANNEL"-->
+        <!--            android:value="<APP_Channel>" />-->
+        <!-- 配置Bugly调试模式（true或者false）-->
+        <!--        <meta-data-->
+        <!--            android:name="BUGLY_ENABLE_DEBUG"-->
+        <!--            android:value="<isDebug>" />-->
+
+        <!--bugly结束-->
+
+        <meta-data
+            android:name="com.taobao.android.hotfix.IDSECRET"
+            android:value="28409197" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.APPSECRET"
+            android:value="c18c910d23aadf7e2b554585ecb2f6f3" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.RSASECRET"
+            android:value="MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCHGlmm+USKaEdBxiE2riYDT0I/g9pb2vq3oKP/xG28uQfMcSNHq8UDB/ligfic/rSxmfiWvRvZBVO11iZHcDWak3CvkJ/hDLlBRVc+1wowEs6RxXJGWGTs28BajppPJsCZcuXGa6m5i+FMTcFmu4xVB3/Z3txnA51dS3LUh6e9+tOQ/Z7WTDcrhKt9b3lnT65nvehYkI5Lc1F+J3YWcD2phB3115wmUbGjtVrtcptOWg0vybNMM9gdAK9hGYNsQbxUQ4MmkJwnsOkAHhR1NdM8/kL4dYJKkec1CCzsiSpX1/pVrgec++vIXsizbU+qY73wUKsnWaNKt2n1dxoXEDFxAgMBAAECggEAIaZDfB4Lnzl3vf8eGKNpXluoUW+CvGwfFAtTrYl8F4wyUA5BzkEPEcEzsQBULq4VzUJfMxQo0nXMMrcC07oz76sXXvLzjzb/ES23HDStGeolPxNhcfnkMUZOc3+fGWW6hL2kUzZPkKIxXDLln7PIsQjsJBSo6pNw52K6WArtkZiB40be8zd+fhQpk62EA6OhBxhfPb3b1MI95fCBign8awVtX50J0mtxjIRima2ze2iPFUf3H2tSDUGH7RjXb4oLesfsl+w0n5SoJQtIdEnLcxhTFy+gPLDnmIgPY7KWPpXhFTHim10GJdYoN+fA1M1m+9y+DSp81a5fv/gPcBlA7QKBgQC5+yfY03sWRY2CDH4KGT9oBa4uemuum/SBuCSvj+EXXcIYF76hAMm40dGZngiaqXBslhylZJhXshEp5A9Vl11CBat4fl7aKddrciHiN59JWEiqa5oJXGzuptahKVcD+aohjL2AHj4Wa9oJxdKSq4BCeT1K/RrA8EW5oApzPdstZwKBgQC594/ifZxjy29BSE5VFHLJnD2UOc/YWgkQ62DGNBJtl68CKmgQyFIRkaLG6H6zuyqsociWiErhsVhMoFS+xYPmLht2a4S64++ry0DhtozVsWWXjd2RPAqmUhGdpTWp8ucar3Rd8iVN8AAYRoOX/WUf4rsUWlqUv812FIeO3baLZwKBgFFLZpyRvKD8oCFzonh5lsy6huvMGVvG0fcN7gNLyiFzm076uhoYhRSjqpISkUJBxGHCsBzfvvO+Y2BDTyyjsGEWp2BRJNcKKR7PUd5XX+oojALqa/ehjgA3r2Pc9StIq8Rkh8UD8zHLzRAuh6ATFUp5QoCP6Gzj2iaMvWSoajELAoGALMV/LIYVOqlllY/02+LaZ9Nnt+HbOjki6aHhYJZ0wVG9XoYbG78+kuA/EigzKM4szfb9NdCGRqPNoFURUgR3Ztk+31mvUNdDglaivjSW33OgA8axyx9raPNlLlDyBIJoRTJsj5mWhZb8TtvbHqJw0CZj59iA6kLrEjyLDkguhI0CgYAeUb/x6rUYSBVt53xnUjqKZP5HNtv9sAoN1wmaw1hX5bCoNOyQC8W29zMuTUCaMh2PTdoEDF46jiqbymJoLGAV6ecSpb8fFt/pyEpwjWw2QHpM0AuLqDUK6nXoZEdSJnBTGRICH/Jnsy9DCSP0TnSqkZLiPKaDDbOMhF/X4kLJbw==" />
+
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="KqnEcjvFD0DdacMhQxUtxtSYm2Fj9Lia">
@@ -94,7 +127,6 @@
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote">
-
         </service>
         <!--  -->
         <activity
@@ -137,6 +169,8 @@
 
             />
 
+        <activity android:name=".activity.mine.login.ShopTypeActivity"></activity>
+        <activity android:name=".fragment.home.HomeTest"></activity>
         <activity android:name=".activity.mine.SubAccountActivity"/>
         <activity android:name=".adapter.home.SeckillGoodActivity"/>
         <activity android:name=".activity.mine.login.RegisterStep1Activity"/>
@@ -152,7 +186,6 @@
 
         <activity android:name=".adapter.home.ReductionProductActivity"/>
         <activity android:name=".fragment.mine.IntelliGencyActivity"/>
-
         <activity android:name=".activity.mine.login.DcloudActvity" />
         <!-- android:screenOrientation="portrait" -->
         <activity
@@ -188,9 +221,11 @@
             android:name=".activity.home.SearchStartActivity"
             android:windowSoftInputMode="stateAlwaysVisible|adjustPan" />
         <activity android:name=".activity.mine.account.AddressListActivity" />
+        <activity android:name=".activity.mine.account.AddressListsActivity" />
         <activity
             android:name=".activity.mine.account.EditAddressActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".activity.mine.account.EditAndAddActivity"></activity>
         <activity android:name=".activity.mine.order.OrderDetailActivity" />
         <activity android:name=".activity.mine.order.ReturnGoodsListActivity" />
         <activity android:name=".activity.mine.order.ReturnReasonActivity" />

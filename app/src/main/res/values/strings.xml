@@ -64,7 +64,7 @@
     <string name="editTextHint">选填：填写内容已和卖家协商确认</string>
     <string name="input_commodity">请输入搜索的商品名</string>
     <string name="tellMine">跟我们反馈</string>
-    <string name="inputTellMine">感谢你使用翘歌烧烤APP，使用过程中有任何意见或建议请反馈给我们。</string>
+    <string name="inputTellMine">感谢你使用翘歌APP，使用过程中有任何意见或建议请反馈给我们。</string>
     <string name="tvBalance">余额</string>
     <string name="myCommission">我的佣金</string>
     <string name="tvLanding">登录</string>
