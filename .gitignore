@@ -10,6 +10,6 @@
 
 *.class
 *.properties
-build
+/build
 Directory:.buildCacheDir/
 .idea/
