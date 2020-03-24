@@ -9,5 +9,5 @@
 .externalNativeBuild
 
 *.class
+Directory:.build
 Directory:.buildCacheDir/
-xrecyclerview/
