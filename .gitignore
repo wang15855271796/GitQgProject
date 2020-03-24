@@ -12,3 +12,4 @@
 *.properties
 build
 Directory:.buildCacheDir/
+.idea/
