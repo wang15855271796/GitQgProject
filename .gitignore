@@ -10,4 +10,4 @@
 
 *.class
 Directory:.buildCacheDir/
-*.gradle
+*build/
