@@ -9,6 +9,6 @@
 .externalNativeBuild
 
 *.class
+*.properties
 build
-
 Directory:.buildCacheDir/
