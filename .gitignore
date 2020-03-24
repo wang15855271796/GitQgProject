@@ -10,4 +10,5 @@
 
 *.class
 Directory:.build
+*.properties
 Directory:.buildCacheDir/
