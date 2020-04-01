@@ -90,6 +90,7 @@ public class SearchReasultActivity extends BaseSwipeActivity {
     @Override
     public void findViewById() {
         ButterKnife.bind(this);
+
         ll_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,7 +105,7 @@ public class SearchReasultActivity extends BaseSwipeActivity {
             }
         });
 
-
+        refreshLayout.setEnableLoadMore(false);
         tv_activity_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -351,6 +352,7 @@ public class SearchReasultActivity extends BaseSwipeActivity {
                                 recyclerView.setAdapter(searchResultAdapter);
                             }
 
+                            refreshLayout.setEnableLoadMore(true);
 
                         } else {
                             AppHelper.showMsg(mContext, recommendModel.getMessage());

@@ -10,8 +10,8 @@ public class AppInterfaceAddress {
     //http://shaokao.qiaogeshipin.cn/qiaoge/
     // 正式https://shaokao.qoger.com/qiaoge/
     //http://192.168.1.45/   本地192.168.101.69:8088
-//http://qg.zhiyun88u.com/shen
-//http://192.168.101.17/
+    //http://qg.zhiyun88u.com/shen
+    //http://192.168.101.17/
 
     //http://192.168.101.41:8088/
 
@@ -272,9 +272,15 @@ public class AppInterfaceAddress {
     public static final String POINT = "cart/checkIsToRecharge";
 
     /**
-     * 注册选择店铺类型
+     * 获取热门店铺类型
      */
-    public static final String REGISTERSHOPTYPE = "auth/queryShopType";
+    public static final String REGISTERSHOPTYPE = "auth/getHotShopType";
+
+    /**
+     *  店铺类型列表数据
+     */
+    public static final String SHOP_TYPE_LIST = "auth/getShopTypeList";
+
     /**
      * 商品详情添加数量判断
      */

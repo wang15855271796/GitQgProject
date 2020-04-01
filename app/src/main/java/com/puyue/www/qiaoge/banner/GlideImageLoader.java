@@ -9,6 +9,10 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.banner.loader.ImageLoaderUse;
 import com.puyue.www.qiaoge.helper.GlideRoundTransform;
 
+import static android.widget.ImageView.ScaleType.CENTER_CROP;
+import static android.widget.ImageView.ScaleType.CENTER_INSIDE;
+import static android.widget.ImageView.ScaleType.FIT_XY;
+
 
 /**
  * If I become novel would you like ?

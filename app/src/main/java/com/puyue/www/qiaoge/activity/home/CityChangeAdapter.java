@@ -57,11 +57,17 @@ public class CityChangeAdapter extends BaseQuickAdapter<CityChangeModel.DataBean
                     @Override
                     public void Confirm() {
                         mActivity.finish();
-//                        cityDialog.dismiss();
+                    }
+
+                    @Override
+                    public void close() {
+                        cityDialog.dismiss();
                     }
                 };
-                cityDialog.show();
+                cityDialog.setCancelable(true);
                 cityDialog.setCanceledOnTouchOutside(true);
+                cityDialog.show();
+
             }
         });
 

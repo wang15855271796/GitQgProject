@@ -3,15 +3,14 @@ package com.puyue.www.qiaoge.adapter.mine;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.ModifyActivity;
+import com.puyue.www.qiaoge.activity.mine.SubAccountOrderActivity;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.mine.SubAccountModel;
 
@@ -69,6 +68,14 @@ public class SubAccountAdapter extends RecyclerView.Adapter<SubAccountAdapter.Su
                 context.startActivity(intent);
             }
         });
+
+        holder.tv_look.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,SubAccountOrderActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
 
@@ -84,10 +91,11 @@ public class SubAccountAdapter extends RecyclerView.Adapter<SubAccountAdapter.Su
         private TextView mTvPhone;
         private TextView mTvDelete;
         private TextView mTvModify;
-
+        TextView tv_look;
 
         public SubAccountViewHolder(View itemView) {
             super(itemView);
+            tv_look = ((TextView) itemView.findViewById(R.id.tv_look));
             mTvName = ((TextView) itemView.findViewById(R.id.tv_item_sub_account_name));
             mTvPhone = ((TextView) itemView.findViewById(R.id.tv_item_sub_account_phone));
             mTvDelete = ((TextView) itemView.findViewById(R.id.tv_item_sub_account_delete));//删除

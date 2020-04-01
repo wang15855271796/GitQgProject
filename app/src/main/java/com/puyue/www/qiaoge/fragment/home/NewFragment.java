@@ -70,6 +70,7 @@ public class NewFragment extends BaseFragment {
     boolean isChecked = false;
     int shopTypeId;
     String flag = "new";
+    View emptyView;
     //新品集合
     private List<ProductNormalModel.DataBean.ListBean> list = new ArrayList<>();
     @Override
@@ -86,6 +87,7 @@ public class NewFragment extends BaseFragment {
         }
         bind = ButterKnife.bind(this, view);
         refreshLayout.setEnableLoadMore(false);
+        emptyView = View.inflate(mActivity, R.layout.layout_empty, null);
         getProductsList(pageNum,11,"new");
         adapterNewArrival = new CommonsAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
             @Override
@@ -120,7 +122,7 @@ public class NewFragment extends BaseFragment {
 
         recyclerView.setLayoutManager(new MyGrideLayoutManager(mActivity,2));
         recyclerView.setAdapter(adapterNewArrival);
-
+        adapterNewArrival.setEmptyView(emptyView);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {

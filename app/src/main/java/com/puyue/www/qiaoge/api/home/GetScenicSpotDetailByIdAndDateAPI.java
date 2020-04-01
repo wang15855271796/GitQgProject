@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
 import com.puyue.www.qiaoge.helper.RestHelper;
+import com.puyue.www.qiaoge.model.home.AddressBean;
+import com.puyue.www.qiaoge.model.home.CityChangeModel;
 import com.puyue.www.qiaoge.model.home.GetScenicSpotDetailByIdAndDateModel;
 
 import retrofit2.http.Field;
@@ -28,5 +30,17 @@ public class GetScenicSpotDetailByIdAndDateAPI {
     public static Observable<GetScenicSpotDetailByIdAndDateModel> requestData(Context context, int spotId, String startDate, String endDate) {
         GetScenicSpotDetailByIdAndDateService service = RestHelper.getBaseRetrofit(context).create(GetScenicSpotDetailByIdAndDateService.class);
         return service.getData(spotId, startDate, endDate);
+    }
+
+    public interface ShopListService{
+
+        @POST(AppInterfaceAddress.SHOP_TYPE_LIST)
+        Observable<AddressBean> setParam();
+    }
+
+    public static Observable<AddressBean>getShopList(Context context){
+        Observable<AddressBean> cityChangeModelObservable = RestHelper.getBaseRetrofit(context).create(ShopListService.class).setParam();
+        return cityChangeModelObservable;
+
     }
 }

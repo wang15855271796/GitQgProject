@@ -65,6 +65,7 @@ public class MustFragment extends BaseFragment {
     boolean isChecked = false;
     int shopTypeId;
     String flag = "common";
+    View emptyView;
     //新品集合
     private List<MustModel.DataBean> list = new ArrayList<>();
 
@@ -88,7 +89,7 @@ public class MustFragment extends BaseFragment {
     @Override
     public void findViewById(View view) {
         bind = ButterKnife.bind(this, view);
-
+        emptyView = View.inflate(mActivity, R.layout.layout_empty, null);
         adapterNewArrival = new MustAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
             @Override
             public void addDialog() {
@@ -120,6 +121,8 @@ public class MustFragment extends BaseFragment {
         });
         recyclerView.setLayoutManager(new GridLayoutManager(mActivity,2));
         recyclerView.setAdapter(adapterNewArrival);
+
+        adapterNewArrival.setEmptyView(emptyView);
     }
 
 

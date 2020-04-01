@@ -35,6 +35,7 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.event.GoToMineEvent;
+import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -46,6 +47,8 @@ import com.puyue.www.qiaoge.model.mine.login.RegisterAgreementModel;
 import com.puyue.www.qiaoge.model.mine.login.RegisterModel;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,8 +118,17 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        EventBus.getDefault().unregister(this);
+
+    }
+
+    @Override
     public void findViewById() {
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         tv_register.setOnClickListener(this);
         cb_register.setOnClickListener(this);
         iv_one.setOnClickListener(this);
@@ -169,6 +181,7 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
             }
         });
     }
+
 
     private void checkNum(String sqm) {
         GetCustomerPhoneAPI.checkCode(mContext,sqm)
@@ -232,6 +245,8 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
                                 @Override
                                 public void onClick(View v) {
                                     Intent intent = new Intent(RegisterStep1Activity.this,ShopListActivity.class);
+                                    mTypedialog.dismiss();
+                                    startActivity(intent);
                                 }
                             });
 
@@ -580,6 +595,12 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
             }
 
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getCartNum(ShopEvent event) {
+        tv_shop_style.setText(event.name);
+    }
+
 
     /**
      * 注册成功

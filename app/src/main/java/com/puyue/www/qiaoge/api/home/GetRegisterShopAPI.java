@@ -18,7 +18,7 @@ import rx.Observable;
  */
 public class GetRegisterShopAPI {
     private interface GetRegisterShop {
-@FormUrlEncoded
+        @FormUrlEncoded
         @POST(AppInterfaceAddress.REGISTERSHOPTYPE)
         Observable<GetRegisterShopModel> getData(@Field("invitationCode") String invitationCode);
     }

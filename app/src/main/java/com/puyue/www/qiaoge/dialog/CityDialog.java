@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -30,7 +31,9 @@ public abstract class CityDialog extends Dialog implements View.OnClickListener 
     Activity mContext;
     RecyclerView recyclerView;
     LinearLayout ll_root;
+    ImageView iv_close;
     List<CityChangeModel.DataBean.CityNamesBean.AreaNamesBean> areaNames;
+
     public CityDialog(@NonNull Activity context, List<CityChangeModel.DataBean.CityNamesBean.AreaNamesBean> areaNames) {
         super(context, R.style.promptDialog);
         setContentView(R.layout.dialog_city);
@@ -43,9 +46,9 @@ public abstract class CityDialog extends Dialog implements View.OnClickListener 
     private void initView() {
         recyclerView = findViewById(R.id.recyclerView);
         ll_root = findViewById(R.id.ll_root);
+        iv_close = findViewById(R.id.iv_close);
         recyclerView.setLayoutManager(new GridLayoutManager(mContext,3));
         AreaAdapter areaAdapter = new AreaAdapter(R.layout.item_citys,areaNames);
-
         recyclerView.setAdapter(areaAdapter);
 
         areaAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -54,7 +57,6 @@ public abstract class CityDialog extends Dialog implements View.OnClickListener 
                 Confirm();
                 dismiss();
                 UserInfoHelper.saveAreaName(mContext, areaNames.get(position).getAreaName());
-                Log.d("yuyuyuyuyuyuyu.....",areaNames.get(position).getAreaName());
                 SharedPreferencesUtil.saveInt(mContext,"isClick",1);
                 UserInfoHelper.saveChangeFlag(mContext,1+"");
                 Intent intent = new Intent();//跳回首页
@@ -67,6 +69,7 @@ public abstract class CityDialog extends Dialog implements View.OnClickListener 
         });
 
         ll_root.setOnClickListener(this);
+        iv_close.setOnClickListener(this);
     }
 
 
@@ -74,12 +77,16 @@ public abstract class CityDialog extends Dialog implements View.OnClickListener 
 
     }
     public abstract void Confirm();
-
+    public abstract void close();
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_root:
 //                Confirm();
+                break;
+
+            case R.id.iv_close:
+                close();
                 break;
         }
     }

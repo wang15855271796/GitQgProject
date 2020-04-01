@@ -172,6 +172,7 @@
         <activity android:name=".activity.mine.login.ShopTypeActivity"></activity>
         <activity android:name=".fragment.home.HomeTest"></activity>
         <activity android:name=".activity.mine.SubAccountActivity"/>
+        <activity android:name=".activity.mine.SubAccountOrderActivity"></activity>
         <activity android:name=".adapter.home.SeckillGoodActivity"/>
         <activity android:name=".activity.mine.login.RegisterStep1Activity"/>
         <activity android:name=".activity.mine.login.RegisterMessageActivity"/>
@@ -362,7 +363,8 @@
         <activity android:name=".activity.WebDriverActivity"></activity>
 
         <activity android:name=".view.scrollview.NestingScrollActivity"></activity>
-
+        <!--ShopListActivity-->
+        <activity android:name=".activity.mine.login.ShopListActivity"/>
 
         <activity
             android:name=".activity.android.CaptureActivity"

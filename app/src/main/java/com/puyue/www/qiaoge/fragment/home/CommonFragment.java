@@ -73,6 +73,7 @@ public class CommonFragment extends BaseFragment {
     boolean isChecked = false;
     int shopTypeId;
     String flag = "commonBuy";
+    View emptyView;
     //新品集合
     private List<ProductNormalModel.DataBean.ListBean> list = new ArrayList<>();
     @Override
@@ -116,10 +117,10 @@ public class CommonFragment extends BaseFragment {
 
             }
         });
+        emptyView = View.inflate(mActivity, R.layout.layout_empty, null);
+        adapterNewArrival.setEmptyView(emptyView);
         recyclerView.setLayoutManager(new GridLayoutManager(mActivity,2));
         recyclerView.setAdapter(adapterNewArrival);
-
-
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {

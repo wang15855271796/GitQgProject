@@ -132,8 +132,7 @@ public class IndexHomeAPI {
     private interface CouponService {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.COUPONINFO)
-        Observable<CouponModel> getData(
-                @Field("activityType") String activityType);
+        Observable<CouponModel> getData(@Field("activityType") String activityType);
     }
 
     public static Observable<CouponModel> getCouponList(Context context,  String activityType) {

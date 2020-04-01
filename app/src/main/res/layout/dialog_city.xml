@@ -4,25 +4,39 @@
     android:layout_width="match_parent"
     android:gravity="center_vertical"
     android:id="@+id/ll_root"
+    android:orientation="vertical"
     android:layout_marginLeft="@dimen/size_15dp"
     android:layout_marginRight="@dimen/size_15dp"
     android:layout_height="match_parent">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/app_my_wallet_bg"
         android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
 
-    </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
 
+    </RelativeLayout>
 
-    </LinearLayout>
+    <View
+        android:layout_width="0.1dp"
+        android:background="#fff"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="@dimen/size_40dp"/>
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/ic_login_delete_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
