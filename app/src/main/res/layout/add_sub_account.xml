@@ -32,299 +32,577 @@
             android:textSize="18dp" />
     </com.puyue.www.qiaoge.view.CompatToolbar>
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-
             <LinearLayout
                 android:orientation="vertical"
-                android:background="@color/ffffff"
                 android:layout_width="match_parent"
-                android:layout_height="225dp">
+                android:layout_height="match_parent">
 
 
-                <RelativeLayout
+
+                <LinearLayout
                     android:orientation="vertical"
+                    android:background="@color/ffffff"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp">
+                    android:layout_height="225dp">
 
-                    <TextView
-                        android:text="联系人"
-                        android:id="@+id/tv"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/size_15dp"
-                        android:textColor="#333333"
-                        android:layout_marginLeft="@dimen/size_20dp"
-                        android:layout_centerVertical="true"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content" />
-
-                    <EditText
-                        android:id="@+id/et_name"
-                        android:layout_width="match_parent"
-                        android:layout_toRightOf="@+id/tv"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:hint="请输入姓名"
-                        android:singleLine="true"
-                        android:textColor="#232131"
-                        android:textColorHint="#D5D5D5"
-                        android:textSize="15dp" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp">
-
-
-                    <TextView
-                        android:text="登录账号"
-                        android:id="@+id/tv1"
-                        android:textSize="@dimen/size_15dp"
-                        android:textColor="#333333"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="@dimen/size_20dp"
-                        android:layout_centerVertical="true"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content" />
-
-                    <EditText
-                        android:id="@+id/et_phone"
-                        android:layout_width="match_parent"
-                        android:layout_toRightOf="@+id/tv1"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:hint="请输入手机号码"
-                        android:singleLine="true"
-                        android:textColor="#232131"
-                        android:textColorHint="#D5D5D5"
-                        android:textSize="15dp" />
 
                     <RelativeLayout
-                        android:id="@+id/ll_yzm"
-                        android:layout_marginRight="@dimen/size_20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true">
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp">
 
                         <TextView
-                            android:id="@+id/tv_yzm"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@drawable/shape_green"
-                            android:gravity="center"
-                            android:padding="@dimen/size_7dp"
-                            android:text="获取验证码"
+                            android:text="联系人"
+                            android:id="@+id/tv"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/size_15dp"
                             android:textColor="#333333"
-                            android:textSize="12dp" />
+                            android:layout_marginLeft="@dimen/size_20dp"
+                            android:layout_centerVertical="true"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content" />
+
+                        <EditText
+                            android:id="@+id/et_name"
+                            android:layout_width="match_parent"
+                            android:layout_toRightOf="@+id/tv"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:hint="请输入姓名"
+                            android:singleLine="true"
+                            android:textColor="#232131"
+                            android:textColorHint="#D5D5D5"
+                            android:textSize="15dp" />
+
                     </RelativeLayout>
 
-                </RelativeLayout>
+                    <RelativeLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp">
 
-                <RelativeLayout
+
+                        <TextView
+                            android:text="登录账号"
+                            android:id="@+id/tv1"
+                            android:textSize="@dimen/size_15dp"
+                            android:textColor="#333333"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="@dimen/size_20dp"
+                            android:layout_centerVertical="true"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content" />
+
+                        <EditText
+                            android:id="@+id/et_phone"
+                            android:layout_width="match_parent"
+                            android:layout_toRightOf="@+id/tv1"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:hint="请输入手机号码"
+                            android:singleLine="true"
+                            android:textColor="#232131"
+                            android:textColorHint="#D5D5D5"
+                            android:textSize="15dp" />
+
+                        <RelativeLayout
+                            android:id="@+id/ll_yzm"
+                            android:layout_marginRight="@dimen/size_20dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true">
+
+                            <TextView
+                                android:id="@+id/tv_yzm"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:background="@drawable/shape_orange_border"
+                                android:gravity="center"
+                                android:padding="@dimen/size_7dp"
+                                android:text="获取验证码"
+                                android:textColor="#F56D23"
+                                android:textSize="12dp" />
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp">
+
+
+                        <TextView
+                            android:text="验证码"
+                            android:id="@+id/tv2"
+                            android:textSize="@dimen/size_15dp"
+                            android:textColor="#333333"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="@dimen/size_20dp"
+                            android:layout_centerVertical="true"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content" />
+
+                        <EditText
+                            android:id="@+id/et_yzm"
+                            android:layout_width="match_parent"
+                            android:layout_toRightOf="@+id/tv2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:hint="请输入验证码"
+                            android:singleLine="true"
+                            android:textColor="#232131"
+                            android:textColorHint="#D5D5D5"
+                            android:textSize="15dp" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp">
+
+
+                        <TextView
+                            android:text="请设置登录密码"
+                            android:id="@+id/tv3"
+                            android:textSize="@dimen/size_15dp"
+                            android:textColor="#333333"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="@dimen/size_20dp"
+                            android:layout_centerVertical="true"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content" />
+
+                        <EditText
+                            android:id="@+id/et_set_psd"
+                            android:layout_width="match_parent"
+                            android:layout_toRightOf="@+id/tv3"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:hint="请输入登录密码"
+                            android:singleLine="true"
+                            android:textColor="#232131"
+                            android:textColorHint="#D5D5D5"
+                            android:textSize="15dp" />
+
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp">
+
+
+                        <TextView
+                            android:text="确认登录密码"
+                            android:id="@+id/tv4"
+                            android:textSize="@dimen/size_15dp"
+                            android:textColor="#333333"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="@dimen/size_20dp"
+                            android:layout_centerVertical="true"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content" />
+
+                        <EditText
+                            android:id="@+id/et_sure_psd"
+                            android:layout_width="match_parent"
+                            android:layout_toRightOf="@+id/tv4"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:hint="请确认登录密码"
+                            android:singleLine="true"
+                            android:textColor="#232131"
+                            android:textColorHint="#D5D5D5"
+                            android:textSize="15dp" />
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+
+                <!--<RelativeLayout-->
+                <!--android:background="#ffffff"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_marginTop="@dimen/size_10dp"-->
+                <!--android:layout_height="@dimen/size_45dp">-->
+
+                <!--<TextView-->
+                <!--android:text="是否共享积分"-->
+                <!--android:textColor="#333333"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textSize="@dimen/size_15dp"-->
+                <!--android:layout_marginLeft="@dimen/size_20dp"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+                <!--<android.support.v7.widget.SwitchCompat-->
+                <!--android:id="@+id/swipe"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_marginRight="@dimen/size_20dp"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+                <!--</RelativeLayout>-->
+
+                <!--<RelativeLayout-->
+                <!--android:background="#ffffff"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_marginTop="@dimen/size_1dp"-->
+                <!--android:layout_height="@dimen/size_45dp">-->
+
+                <!--<TextView-->
+                <!--android:text="是否共享余额"-->
+                <!--android:textColor="#333333"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textSize="@dimen/size_15dp"-->
+                <!--android:layout_marginLeft="@dimen/size_20dp"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+                <!--<android.support.v7.widget.SwitchCompat-->
+                <!--android:id="@+id/swipe1"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_marginRight="@dimen/size_20dp"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+                <!--</RelativeLayout>-->
+
+                <!--<RelativeLayout-->
+                <!--android:background="#ffffff"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_marginTop="@dimen/size_1dp"-->
+                <!--android:layout_height="@dimen/size_45dp">-->
+
+                <!--<TextView-->
+                <!--android:text="是否共享优惠券"-->
+                <!--android:textColor="#333333"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textSize="@dimen/size_15dp"-->
+                <!--android:layout_marginLeft="@dimen/size_20dp"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+                <!--<android.support.v7.widget.SwitchCompat-->
+                <!--android:id="@+id/swipe2"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_marginRight="@dimen/size_20dp"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+                <!--</RelativeLayout>-->
+
+
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/size_20dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp">
+                    android:layout_height="wrap_content">
 
+                    <RelativeLayout
 
-                    <TextView
-                        android:text="验证码"
-                        android:id="@+id/tv2"
-                        android:textSize="@dimen/size_15dp"
-                        android:textColor="#333333"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="@dimen/size_20dp"
-                        android:layout_centerVertical="true"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content" />
+                        android:layout_marginLeft="@dimen/size_15dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
-                    <EditText
-                        android:id="@+id/et_yzm"
+                        <View
+                            android:background="#FF3500"
+                            android:id="@+id/v1"
+                            android:layout_marginTop="@dimen/size_3dp"
+                            android:layout_width="@dimen/size_2dp"
+                            android:layout_height="@dimen/size_15dp"/>
+
+                        <TextView
+                            android:text="资产共享设置"
+                            android:id="@+id/tv9"
+                            android:layout_marginLeft="@dimen/size_5dp"
+                            android:layout_toRightOf="@+id/v1"
+                            android:textSize="@dimen/size_15dp"
+                            android:textColor="#333333"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:textColor="#666666"
+                            android:layout_marginLeft="@dimen/size_20dp"
+                            android:layout_toRightOf="@+id/tv9"
+                            android:layout_marginTop="@dimen/size_2dp"
+                            android:textSize="@dimen/size_11dp"
+                            android:text="共享后，账号之间将共同使用该资产"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_toRightOf="@+id/tv2"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:hint="请输入验证码"
-                        android:singleLine="true"
-                        android:textColor="#232131"
-                        android:textColorHint="#D5D5D5"
-                        android:textSize="15dp" />
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:background="#ffffff"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/size_10dp"
+                            android:layout_height="@dimen/size_45dp">
+
+                            <TextView
+                                android:text="是否共享积分"
+                                android:textColor="#333333"
+                                android:textSize="@dimen/size_15dp"
+                                android:layout_marginLeft="@dimen/size_20dp"
+                                android:layout_centerVertical="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/swipe"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="@dimen/size_30dp"
+                                android:layout_centerVertical="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:background="#ffffff"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/size_1dp"
+                            android:layout_height="@dimen/size_45dp">
+
+                            <TextView
+                                android:text="是否共享余额"
+                                android:textColor="#333333"
+                                android:textSize="@dimen/size_15dp"
+                                android:layout_marginLeft="@dimen/size_20dp"
+                                android:layout_centerVertical="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/swipe1"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="@dimen/size_30dp"
+                                android:layout_centerVertical="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:background="#ffffff"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/size_1dp"
+                            android:layout_height="@dimen/size_45dp">
+
+                            <TextView
+                                android:text="是否共享优惠券"
+                                android:textColor="#333333"
+                                android:textSize="@dimen/size_15dp"
+                                android:layout_marginLeft="@dimen/size_20dp"
+                                android:layout_centerVertical="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/swipe2"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="@dimen/size_30dp"
+                                android:layout_centerVertical="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </RelativeLayout>
+                    </LinearLayout>
 
 
-                </RelativeLayout>
+                </LinearLayout>
+                <!--333-->
 
-                <RelativeLayout
-                    android:orientation="vertical"
+                <LinearLayout
+                    android:layout_marginTop="@dimen/size_20dp"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp">
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_marginLeft="@dimen/size_15dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <View
+                            android:background="#FF3500"
+                            android:id="@+id/v4"
+                            android:layout_marginTop="@dimen/size_3dp"
+                            android:layout_width="@dimen/size_2dp"
+                            android:layout_height="@dimen/size_15dp"/>
+
+                        <TextView
+                            android:text="消费金额设置"
+                            android:id="@+id/tv5"
+                            android:layout_marginLeft="@dimen/size_5dp"
+                            android:layout_toRightOf="@+id/v4"
+                            android:textSize="@dimen/size_15dp"
+                            android:textColor="#333333"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/tv6"
+                            android:text="消费金额设置："
+                            android:layout_below="@+id/tv5"
+                            android:layout_marginTop="@dimen/size_20dp"
+                            android:layout_marginLeft="@dimen/size_5dp"
+                            android:layout_toRightOf="@+id/v4"
+                            android:textSize="@dimen/size_14dp"
+                            android:textColor="#333333"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
 
 
-                    <TextView
-                        android:text="请设置登录密码"
-                        android:id="@+id/tv3"
-                        android:textSize="@dimen/size_15dp"
-                        android:textColor="#333333"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="@dimen/size_20dp"
-                        android:layout_centerVertical="true"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content" />
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
-                    <EditText
-                        android:id="@+id/et_set_psd"
-                        android:layout_width="match_parent"
-                        android:layout_toRightOf="@+id/tv3"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:hint="请输入登录密码"
-                        android:singleLine="true"
-                        android:textColor="#232131"
-                        android:textColorHint="#D5D5D5"
-                        android:textSize="15dp" />
+                            <TextView
+                                android:id="@+id/tv7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:text="3000"
+                                android:layout_marginTop="@dimen/size_20dp"
+                                android:layout_below="@+id/tv7"
+                                android:layout_marginRight="@dimen/size_20dp"
+                                android:layout_alignParentRight="true"
+                                android:drawablePadding="@dimen/size_20dp"
+                                android:drawableRight="@mipmap/ic_mine_arrow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/tv8"
+                            android:text="消费金额提醒："
+                            android:layout_below="@+id/tv6"
+                            android:layout_marginTop="@dimen/size_20dp"
+                            android:layout_marginLeft="@dimen/size_5dp"
+                            android:layout_toRightOf="@+id/v4"
+                            android:textSize="@dimen/size_14dp"
+                            android:textColor="#333333"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+
+                        <TextView
+                            tools:text="满3000元提醒"
+                            android:layout_below="@+id/tv6"
+                            android:textSize="@dimen/size_11dp"
+                            android:textColor="#666666"
+                            android:layout_marginTop="@dimen/size_22dp"
+                            android:layout_toRightOf="@+id/tv8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:layout_below="@+id/tv6"
+                            android:layout_alignParentRight="true"
+                            android:textSize="@dimen/size_11dp"
+                            android:textColor="#666666"
+                            android:layout_marginTop="@dimen/size_15dp"
+                            android:layout_toRightOf="@+id/tv8"
+                            android:layout_marginRight="@dimen/size_30dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </RelativeLayout>
 
 
 
-                </RelativeLayout>
+                </LinearLayout>
 
-                <RelativeLayout
-                    android:orientation="vertical"
+                <!--<LinearLayout-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:background="#fff"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content">-->
+
+
+                    <!--<Button-->
+                        <!--android:id="@+id/btn_sub_account_add"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="50dp"-->
+                        <!--android:layout_marginBottom="20dp"-->
+                        <!--android:layout_marginLeft="20dp"-->
+                        <!--android:layout_marginRight="20dp"-->
+                        <!--android:layout_marginTop="60dp"-->
+                        <!--android:background="@drawable/app_sub_account_button"-->
+                        <!--android:text="确定"-->
+                        <!--android:textColor="@color/app_color_white"-->
+                        <!--android:textSize="18dp" />-->
+
+                <!--</LinearLayout>-->
+
+
+                <TextView
+                    android:text="确认添加"
+                    android:id="@+id/tv_add"
+                    android:layout_marginTop="@dimen/size_60dp"
+                    android:layout_marginBottom="@dimen/size_20dp"
+                    android:background="@drawable/app_feedback_btn"
+                    android:layout_alignParentBottom="true"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp">
-
-
-                    <TextView
-                        android:text="确认登录密码"
-                        android:id="@+id/tv4"
-                        android:textSize="@dimen/size_15dp"
-                        android:textColor="#333333"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="@dimen/size_20dp"
-                        android:layout_centerVertical="true"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content" />
-
-                    <EditText
-                        android:id="@+id/et_sure_psd"
-                        android:layout_width="match_parent"
-                        android:layout_toRightOf="@+id/tv4"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:hint="请确认登录密码"
-                        android:singleLine="true"
-                        android:textColor="#232131"
-                        android:textColorHint="#D5D5D5"
-                        android:textSize="15dp" />
-
-                </RelativeLayout>
-
+                    android:textSize="@dimen/size_15dp"
+                    android:textColor="#ffffff"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/size_20dp"
+                    android:layout_marginRight="@dimen/size_20dp"
+                    android:layout_height="@dimen/size_50dp" />
 
             </LinearLayout>
 
-            <RelativeLayout
-                android:background="#ffffff"
-                android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/size_10dp"
-                android:layout_height="@dimen/size_45dp">
+            <!--<TextView-->
+            <!--android:text="确认添加"-->
+            <!--android:id="@+id/tv_add"-->
+            <!--android:layout_marginBottom="@dimen/size_20dp"-->
+            <!--android:background="@drawable/app_feedback_btn"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:textSize="@dimen/size_15dp"-->
+            <!--android:textColor="#ffffff"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_marginLeft="@dimen/size_20dp"-->
+            <!--android:layout_marginRight="@dimen/size_20dp"-->
+            <!--android:layout_height="@dimen/size_50dp" />-->
+        </RelativeLayout>
+    </ScrollView>
 
-                <TextView
-                    android:text="是否共享积分"
-                    android:textColor="#333333"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/size_15dp"
-                    android:layout_marginLeft="@dimen/size_20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/swipe"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/size_20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:background="#ffffff"
-                android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/size_1dp"
-                android:layout_height="@dimen/size_45dp">
-
-                <TextView
-                    android:text="是否共享余额"
-                    android:textColor="#333333"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/size_15dp"
-                    android:layout_marginLeft="@dimen/size_20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/swipe1"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/size_20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:background="#ffffff"
-                android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/size_1dp"
-                android:layout_height="@dimen/size_45dp">
-
-                <TextView
-                    android:text="是否共享优惠券"
-                    android:textColor="#333333"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/size_15dp"
-                    android:layout_marginLeft="@dimen/size_20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/swipe2"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/size_20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <TextView
-            android:text="确认添加"
-            android:id="@+id/tv_add"
-            android:layout_marginBottom="@dimen/size_20dp"
-            android:background="@drawable/app_feedback_btn"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:textSize="@dimen/size_15dp"
-            android:textColor="#ffffff"
-            android:gravity="center"
-            android:layout_marginLeft="@dimen/size_20dp"
-            android:layout_marginRight="@dimen/size_20dp"
-            android:layout_height="@dimen/size_50dp" />
-    </RelativeLayout>
 
 
 </LinearLayout>

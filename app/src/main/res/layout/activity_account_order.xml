@@ -81,16 +81,4 @@
         </in.srain.cube.views.ptr.PtrClassicFrameLayout>
     </FrameLayout>
 
-    <Button
-        android:id="@+id/btn_sub_account_add"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/app_sub_account_button"
-        android:text="  ＋  添加子账号"
-        android:textColor="@color/app_color_white"
-        android:textSize="18dp" />
 </LinearLayout>
