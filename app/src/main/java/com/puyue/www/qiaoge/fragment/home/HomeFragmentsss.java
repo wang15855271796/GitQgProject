@@ -41,6 +41,8 @@ import com.puyue.www.qiaoge.activity.home.TeamGoodsDetailActivity;
 import com.puyue.www.qiaoge.activity.mine.MessageCenterActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LogoutsEvent;
+import com.puyue.www.qiaoge.activity.mine.login.RegisterActivity;
+import com.puyue.www.qiaoge.activity.mine.login.RegisterMessageActivity;
 import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletPointActivity;
@@ -63,6 +65,7 @@ import com.puyue.www.qiaoge.banner.Transformer;
 import com.puyue.www.qiaoge.banner.listener.OnBannerListener;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.CouponDialog;
 import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
@@ -204,6 +207,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     VerticalBannerView verticalBanner;
     @BindView(R.id.lav_activity_loading)
     AVLoadingIndicatorView lav_activity_loading;
+    CouponDialog couponDialog;
     private String cell; // 客服电话
     //司机信息
     List<DriverInfo.DataBean> driverList = new ArrayList<>();
@@ -370,8 +374,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                                                 int activeId = actives.get(position).getActiveId();
                                                 addCar(activeId, "", 2, "1");
                                             } else {
-                                                AppHelper.showMsg(mActivity, "请先登录");
-                                                startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                                                initDialog();
                                             }
                                         }
                                     });
@@ -447,8 +450,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                                                 int activeId = actives.get(position).getActiveId();
                                                 addCar(activeId, "", 11, "1");
                                             } else {
-                                                AppHelper.showMsg(mActivity, "请先登录");
-                                                startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                                                initDialog();
                                             }
                                         }
                                     });
@@ -477,8 +479,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                                                 Log.d("fsffffffff...",activeId+"");
                                                 addCar(activeId, "", 3, "1");
                                             } else {
-                                                AppHelper.showMsg(mActivity, "请先登录");
-                                                startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                                                initDialog();
                                             }
                                         }
                                     });
@@ -495,6 +496,26 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                         }
                     }
                 });
+    }
+
+    /**
+     * 提示用户去登录还是注册的弹窗
+     */
+    private void initDialog() {
+        couponDialog = new CouponDialog(mActivity) {
+            @Override
+            public void Login() {
+                startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                dismiss();
+            }
+
+            @Override
+            public void Register() {
+                startActivity(RegisterActivity.getIntent(mActivity, RegisterMessageActivity.class));
+                dismiss();
+            }
+        };
+        couponDialog.show();
     }
 
     private void addCar(int businessId, String productCombinationPriceVOList, int businessType, String totalNum) {
@@ -1473,8 +1494,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                     startActivityForResult(intents, 101);
 
                 } else {
-                    AppHelper.showMsg(getActivity(), "请先登录");
-                    startActivity(LoginActivity.getIntent(getActivity(), LoginActivity.class));
+                    initDialog();
                 }
                 break;
 
@@ -1495,8 +1515,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                     Intent secIntent = new Intent(getActivity(), HomeGoodsListActivity.class);
                     startActivity(secIntent);
                 } else {
-                    AppHelper.showMsg(getActivity(), "请先登录");
-                    startActivity(LoginActivity.getIntent(getActivity(), LoginActivity.class));
+                    initDialog();
                 }
 
 

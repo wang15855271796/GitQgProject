@@ -2,8 +2,10 @@ package com.puyue.www.qiaoge.api.mine.subaccount;
 
 import android.content.Context;
 
+import com.puyue.www.qiaoge.api.PostLoadAmountAPI;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
+import com.puyue.www.qiaoge.event.SubAccountListModel;
 import com.puyue.www.qiaoge.helper.RestHelper;
 import com.puyue.www.qiaoge.model.AccountDetailModel;
 
@@ -33,11 +35,12 @@ public class SubAccountAddAPI {
                                         @Field("verifyCode") String verifyCode,
                                         @Field("inPoint") String inPoint,
                                         @Field("inBalance") String inBalance,
-                                        @Field("inGift") String inGift);
+                                        @Field("inGift") String inGift,@Field("amountLimit") String amount_limit,@Field("amount") String amount
+                ,@Field("notification") String notification,@Field("warnAmount") String warnAmount);
     }
 
-    public static Observable<BaseModel> requestAddSubAccount(Context context, String phone, String name, String pwd, String verifyCode,String inPoint,String inBalance,String inGift) {
-        Observable<BaseModel> addSubAccountObservable = RestHelper.getBaseRetrofit(context).create(SubAccountAddService.class).setParams(phone, name, pwd,verifyCode,inPoint,inBalance,inGift);
+    public static Observable<BaseModel> requestAddSubAccount(Context context, String phone, String name, String pwd, String verifyCode,String inPoint,String inBalance,String inGift,String amountLimit,String amount,String notification,String warnAmount) {
+        Observable<BaseModel> addSubAccountObservable = RestHelper.getBaseRetrofit(context).create(SubAccountAddService.class).setParams(phone, name, pwd,verifyCode,inPoint,inBalance,inGift,amountLimit,amount,notification,warnAmount);
         return addSubAccountObservable;
     }
 
@@ -51,11 +54,12 @@ public class SubAccountAddAPI {
         Observable<BaseModel> setParams(@Field("subId") String subId,
                                         @Field("inPoint") String inPoint,
                                         @Field("inBalance") String inBalance,
-                                        @Field("inGift") String inGift);
+                                        @Field("inGift") String inGift,@Field("amountLimit") String amount_limit,@Field("amount") String amount
+                ,@Field("notification") String notification,@Field("warnAmount") String warnAmount);
     }
 
-    public static Observable<BaseModel> editAccount(Context context, String subId,String inPoint,String inBalance,String inGift) {
-        Observable<BaseModel> addSubAccountObservable = RestHelper.getBaseRetrofit(context).create(EditService.class).setParams(subId,inPoint,inBalance,inGift);
+    public static Observable<BaseModel> editAccount(Context context, String subId,String inPoint,String inBalance,String inGift,String amountLimit,String amount,String notification,String warnAmount) {
+        Observable<BaseModel> addSubAccountObservable = RestHelper.getBaseRetrofit(context).create(EditService.class).setParams(subId,inPoint,inBalance,inGift,amountLimit,amount,notification,warnAmount);
         return addSubAccountObservable;
     }
 
@@ -89,4 +93,35 @@ public class SubAccountAddAPI {
         Observable<AccountDetailModel> addSubAccountObservable = RestHelper.getBaseRetrofit(context).create(DeleteService.class).setParams(subId);
         return addSubAccountObservable;
     }
+
+
+    /**
+     * 子账户列表
+     */
+
+    public interface ListService {
+        @FormUrlEncoded
+        @POST(AppInterfaceAddress.Sub_Account_list)
+        Observable<SubAccountListModel> setParams(@Field("pageNum") int pageNum,@Field("pageSize") int pageSize);
+    }
+
+    public static Observable<SubAccountListModel> listAccount(Context context, int pageNum,int pageSize) {
+        Observable<SubAccountListModel> addSubAccountObservable = RestHelper.getBaseRetrofit(context).create(ListService.class).setParams(pageNum,pageSize);
+        return addSubAccountObservable;
+    }
+
+    /**
+     * 子账户已读消息
+     */
+    private interface MessageReadService {
+
+        @POST(AppInterfaceAddress.Sub_Account_Message)
+        Observable<BaseModel> setParams();
+    }
+
+    public static Observable<BaseModel> read(Context context) {
+        MessageReadService service = RestHelper.getBaseRetrofit(context).create(MessageReadService.class);
+        return service.setParams();
+    }
+
 }

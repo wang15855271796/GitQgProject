@@ -121,6 +121,17 @@ public class AppInterfaceAddress {
      * 删除子账户
      */
     public static final String DELETE_SUB_USER = "user/appUserDelSubAccount";
+    /**
+     * 子账户消息列表
+     */
+    public static final String Sub_Account_list = "user/querySubMessagePage";
+
+    /**
+     * 子账户消息全部已读
+     *
+     */
+    public static final String Sub_Account_Message = "user/allSubMessageRead";
+
     public static final String RECOVER_SUB_USER = "user/recoverSubUser";
     /**
      * 获取地址列表
@@ -136,6 +147,12 @@ public class AppInterfaceAddress {
     public static final String GET_ENABLEAREA_LIST = "common/area/getEnableAreaList";
     public static final String GET_COLLECTION_LIST = "commonCollect/myCollectProd";
     public static final String GET_ORDER_LIST = "commonOrder/getCommonOrderListByPage";
+    /**
+     *子账户订单列表
+     *
+     */
+    public static final String Sub_Account_List = "user/querySubAllOrderPage";
+
     public static final String FEEDBACK = "feedback/addFeedBack";
     public static final String EDIT_ADDRESS = "address/updateAddress";
     public static final String DELETE_ADDRESS = "address/deleteAddressById";

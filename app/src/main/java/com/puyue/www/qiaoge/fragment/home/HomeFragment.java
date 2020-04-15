@@ -1231,7 +1231,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginEvent(LogoutsEvent event) {
         //刷新UI
-        Log.d("sdfhdshjdlsk.......","sdfsdfsd");
         refreshLayout.autoRefresh();
 
     }

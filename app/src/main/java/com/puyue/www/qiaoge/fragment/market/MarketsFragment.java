@@ -42,6 +42,8 @@ import com.puyue.www.qiaoge.activity.home.TeamGoodsDetailActivity;
 import com.puyue.www.qiaoge.activity.mine.coupons.MyCouponsActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginEvent;
+import com.puyue.www.qiaoge.activity.mine.login.RegisterActivity;
+import com.puyue.www.qiaoge.activity.mine.login.RegisterMessageActivity;
 import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletPointActivity;
@@ -73,6 +75,7 @@ import com.puyue.www.qiaoge.banner.Transformer;
 import com.puyue.www.qiaoge.banner.listener.OnBannerListener;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.CouponDialog;
 import com.puyue.www.qiaoge.dialog.LoadingDialog;
 import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.event.LogoutEvent;
@@ -113,7 +116,7 @@ import rx.schedulers.Schedulers;
  */
 public class MarketsFragment extends BaseFragment {
     private RelativeLayout mLlSearch;
-
+    CouponDialog couponDialog;
     //左侧列表
     private RecyclerView mRvSecond;
     //右侧列表
@@ -920,8 +923,7 @@ public class MarketsFragment extends BaseFragment {
                         }
                     }
                 }else {
-                    AppHelper.showMsg(context, "请先登录");
-                    startActivity(LoginActivity.getIntent(context, LoginActivity.class));
+                    initDialog();
                 }
             }
         });
@@ -1590,5 +1592,25 @@ public class MarketsFragment extends BaseFragment {
         //刷新UI
         requestGoodsList();
         getData();
+    }
+
+    /**
+     * 提示用户去登录还是注册的弹窗
+     */
+    private void initDialog() {
+        couponDialog = new CouponDialog(mActivity) {
+            @Override
+            public void Login() {
+                startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                dismiss();
+            }
+
+            @Override
+            public void Register() {
+                startActivity(RegisterActivity.getIntent(mActivity, RegisterMessageActivity.class));
+                dismiss();
+            }
+        };
+        couponDialog.show();
     }
 }

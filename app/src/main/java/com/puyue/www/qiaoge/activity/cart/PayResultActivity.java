@@ -298,9 +298,6 @@ public class PayResultActivity extends BaseSwipeActivity {
     @Override
     public void setViewData() {
 
-
-
-
         IntentFilter filter = new IntentFilter(AppConstant.PAY_PASSWORD_ACTION);
         registerReceiver(broadcastReceiver, filter);
         if (payChannal == 1) {

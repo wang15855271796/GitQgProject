@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@color/app_color_white"
     android:layout_height="wrap_content">
 
     <com.puyue.www.qiaoge.view.CompatToolbar
@@ -42,11 +41,14 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:background="#ffffff"
+                android:paddingBottom="@dimen/size_10dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RelativeLayout
+                    android:layout_marginTop="@dimen/dp_10"
                     android:layout_marginLeft="@dimen/size_15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -54,7 +56,6 @@
                     <View
                         android:background="#FF3500"
                         android:id="@+id/v"
-
                         android:layout_marginTop="@dimen/size_3dp"
                         android:layout_width="@dimen/size_2dp"
                         android:layout_height="@dimen/size_15dp"/>
@@ -96,6 +97,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:layout_marginTop="@dimen/dp_10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
@@ -105,7 +107,7 @@
                         android:layout_height="wrap_content" />
 
                     <TextView
-                        android:id="@+id/tv3"
+                        android:id="@+id/tv_name"
                         tools:text="子账户管理员："
                         android:layout_below="@+id/tv"
                         android:layout_marginTop="@dimen/size_20dp"
@@ -118,7 +120,8 @@
 
                     <TextView
                         tools:text="13000000"
-                        android:layout_below="@+id/tv3"
+                        android:id="@+id/tv_phone"
+                        android:layout_below="@+id/tv_name"
                         android:layout_marginTop="@dimen/size_20dp"
                         android:layout_marginLeft="@dimen/size_5dp"
                         android:layout_toRightOf="@+id/tv"
@@ -131,13 +134,14 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="@dimen/size_20dp"
+                android:background="#ffffff"
+                android:layout_marginTop="@dimen/size_10dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RelativeLayout
-
+                    android:layout_marginTop="@dimen/size_10dp"
                     android:layout_marginLeft="@dimen/size_15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -151,7 +155,7 @@
 
                     <TextView
                         android:text="资产共享设置"
-                        android:id="@+id/tv4"
+                        android:id="@+id/tv9"
                         android:layout_marginLeft="@dimen/size_5dp"
                         android:layout_toRightOf="@+id/v1"
                         android:textSize="@dimen/size_15dp"
@@ -163,7 +167,7 @@
                     <TextView
                         android:textColor="#666666"
                         android:layout_marginLeft="@dimen/size_20dp"
-                        android:layout_toRightOf="@+id/tv4"
+                        android:layout_toRightOf="@+id/tv9"
                         android:layout_marginTop="@dimen/size_2dp"
                         android:textSize="@dimen/size_11dp"
                         android:text="共享后，账号之间将共同使用该资产"
@@ -258,12 +262,15 @@
             <!--333-->
 
             <LinearLayout
-                android:layout_marginTop="@dimen/size_20dp"
+                android:background="#ffffff"
+                android:layout_marginTop="@dimen/size_10dp"
                 android:orientation="horizontal"
+                android:paddingBottom="@dimen/size_25dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RelativeLayout
+                    android:layout_marginTop="@dimen/dp_10"
                     android:layout_marginLeft="@dimen/size_15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -300,6 +307,7 @@
 
 
                     <RelativeLayout
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
@@ -309,12 +317,17 @@
                             android:layout_height="wrap_content" />
 
                         <TextView
-                            android:text="3000"
+                            android:id="@+id/et_amount"
+                            tools:text="3000"
+                            android:inputType="number"
                             android:layout_marginTop="@dimen/size_20dp"
+                            android:background="@null"
+                            android:textColor="#F56D23"
                             android:layout_below="@+id/tv7"
-                            android:layout_marginRight="@dimen/size_20dp"
-                            android:layout_alignParentRight="true"
                             android:drawablePadding="@dimen/size_20dp"
+                            android:layout_marginRight="@dimen/size_40dp"
+                            android:layout_alignParentRight="true"
+                            android:paddingLeft="200dp"
                             android:drawableRight="@mipmap/ic_mine_arrow"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -335,29 +348,29 @@
 
 
                     <TextView
-                        tools:text="满3000元提醒"
+                        android:id="@+id/tv_amount_remind"
+                        android:hint="可设置消费金额提醒"
                         android:layout_below="@+id/tv6"
-                        android:textSize="@dimen/size_11dp"
+                        android:textSize="@dimen/size_14dp"
+                        android:paddingRight="@dimen/size_20dp"
                         android:textColor="#666666"
-                        android:layout_marginTop="@dimen/size_22dp"
+                        android:layout_marginTop="@dimen/size_20dp"
                         android:layout_toRightOf="@+id/tv8"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="@dimen/size_25dp" />
 
                     <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/swipe3"
                         android:layout_below="@+id/tv6"
                         android:layout_alignParentRight="true"
                         android:textSize="@dimen/size_11dp"
                         android:textColor="#666666"
                         android:layout_marginTop="@dimen/size_15dp"
-                        android:layout_toRightOf="@+id/tv8"
                         android:layout_marginRight="@dimen/size_30dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                 </RelativeLayout>
-
-
 
             </LinearLayout>
 
@@ -369,13 +382,12 @@
 
 
                 <Button
-                    android:id="@+id/btn_sub_account_add"
+                    android:id="@+id/tv_commit"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginTop="60dp"
                     android:background="@drawable/app_sub_account_button"
                     android:text="确定"
                     android:textColor="@color/app_color_white"

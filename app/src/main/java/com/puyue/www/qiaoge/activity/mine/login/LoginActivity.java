@@ -294,7 +294,7 @@ public class LoginActivity extends BaseSwipeActivity {
                     public void onClick(View v) {
 ////https://shaokao.qoger.com/apph5/html/OrderList.html
                         //http://120.55.55.99:8082/apph5/html/OrderList.html
-                        String url = "https://shaokao.qoger.com/apph5/html/OrderList.html";
+                        String url = "http://120.55.55.99:8082/apph5/html/OrderList.html";
 
                         Intent intent = new Intent(mContext, WebDriverActivity.class);
                         intent.putExtra("URL", url);

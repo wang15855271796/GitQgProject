@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.puyue.www.qiaoge.R;
@@ -25,13 +25,10 @@ import com.puyue.www.qiaoge.fragment.mine.order.EvaluatedOrderFragment;
 import com.puyue.www.qiaoge.fragment.mine.order.PaymentOrderFragment;
 import com.puyue.www.qiaoge.fragment.mine.order.ReceivedOrderFragment;
 import com.puyue.www.qiaoge.fragment.mine.order.ReturnOrderFragment;
-import com.puyue.www.qiaoge.fragment.mine.order.TestFragment;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.yanzhenjie.sofia.Sofia;
-
-import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -40,10 +37,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Administrator on 2018/4/10.
+ * Created by ${王涛} on 2020/4/9
  */
-//"我的"界面的"我的订单","待收货","待付款"种种都是跳转这个界面
-public class MyOrdersActivity extends BaseActivity {
+public class MySubOrderActivity extends BaseActivity {
+
     public static final String TYPE = "type";
     private List<String> mListTitles = new ArrayList<>();
     private List<String> mListType = new ArrayList<>();
@@ -59,6 +56,7 @@ public class MyOrdersActivity extends BaseActivity {
     private TextView tv_line_two;
 
     private int orderDeliveryType;
+    private String subId;
 
     public static Intent getIntent(Context context, Class<?> cls, String type) {
         Intent intent = new Intent();
@@ -77,11 +75,15 @@ public class MyOrdersActivity extends BaseActivity {
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
+        if(getIntent().getStringExtra("subId")!=null) {
+            subId = getIntent().getStringExtra("subId");
+        }
         mType = getIntent().getStringExtra(TYPE);
         orderDeliveryType = getIntent().getIntExtra("orderDeliveryType", 0);
+
+
         if (savedInstanceState != null) {
             mType = savedInstanceState.getString(TYPE);
-
         }
         return false;
     }
@@ -106,6 +108,8 @@ public class MyOrdersActivity extends BaseActivity {
 
     @Override
     public void setViewData() {
+
+
         Sofia.with(mActivity).statusBarDarkFont()
                 .statusBarBackground(Color.parseColor("#ffffff"));
         UserInfoHelper.saveDeliverType(mActivity, orderDeliveryType + "");
@@ -133,26 +137,18 @@ public class MyOrdersActivity extends BaseActivity {
         mListTitles.clear();
         mListFragment.clear();
         mViewPager.removeAllViews();
-
         mListType.clear();
-
         mListTitles.addAll(Arrays.asList("全部", "待付款", "待发货", "待收货", "待评价", "退货"));
-
         mListType.addAll(Arrays.asList(AppConstant.ALL, AppConstant.PAYMENT, AppConstant.DELIVERY, AppConstant.RECEIVED, AppConstant.EVALUATED, AppConstant.RETURN));
-
-
-
-        mListFragment.add(new AllOrderFragment());
-        mListFragment.add(new PaymentOrderFragment());
-        mListFragment.add(new DeliveryOrderFragment());
-        mListFragment.add(new ReceivedOrderFragment());
-        mListFragment.add(new EvaluatedOrderFragment());
-        mListFragment.add(new ReturnOrderFragment());
+        mListFragment.add(AllOrdersFragment.getInstance(subId));
+        mListFragment.add(PaymentOrdersFragment.getInstance(subId));
+        mListFragment.add(DeliveryOrdersFragment.getInstance(subId));
+        mListFragment.add(ReceivedOrderFragment.getInstance(subId));
+        mListFragment.add(EvaluatedOrdersFragment.getInstance(subId));
+        mListFragment.add(ReturnOrdersFragment.getInstance(subId));
 
         mAdapterViewPager = new MyOrdersViewPagerAdapter(getSupportFragmentManager(), mListTitles, mListFragment);
-
-
-    mViewPager.setOffscreenPageLimit(5);
+        mViewPager.setOffscreenPageLimit(5);
         mAdapterViewPager.clear(mViewPager);
         mViewPager.setAdapter(mAdapterViewPager);
         mTab.setupWithViewPager(mViewPager);
@@ -191,18 +187,13 @@ public class MyOrdersActivity extends BaseActivity {
         mViewPager.removeAllViews();
         mListType.clear();
 
-
-
         mListTitles.addAll(Arrays.asList("全部", "待付款", "待提货", "待评价", "退货"));
-
         mListType.addAll(Arrays.asList(AppConstant.ALL, AppConstant.PAYMENT, AppConstant.DELIVERY, AppConstant.EVALUATED, AppConstant.RETURN));
-
-
-        mListFragment.add(new AllOrderFragment());
-        mListFragment.add(new PaymentOrderFragment());
-        mListFragment.add(new DeliveryOrderFragment());
-        mListFragment.add(new EvaluatedOrderFragment());
-        mListFragment.add(new ReturnOrderFragment());
+        mListFragment.add(AllOrdersFragment.getInstance(subId));
+        mListFragment.add(PaymentOrdersFragment.getInstance(subId));
+        mListFragment.add(DeliveryOrdersFragment.getInstance(subId));
+        mListFragment.add(EvaluatedOrdersFragment.getInstance(subId));
+        mListFragment.add(ReturnOrdersFragment.getInstance(subId));
 
         mAdapterViewPager = new MyOrdersViewPagerAdapter(getSupportFragmentManager(), mListTitles, mListFragment);
 

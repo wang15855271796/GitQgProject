@@ -1,28 +1,17 @@
-package com.puyue.www.qiaoge.fragment.mine.order;
+package com.puyue.www.qiaoge.activity.mine.order;
 
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.activity.mine.order.OrderDetailActivity;
-import com.puyue.www.qiaoge.activity.mine.order.PaymentOrdersFragment;
 import com.puyue.www.qiaoge.adapter.mine.MyOrdersItemAdapter;
 import com.puyue.www.qiaoge.api.mine.order.ConfirmGetGoodsAPI;
-import com.puyue.www.qiaoge.api.mine.order.ConfirmOrderSelfAPI;
 import com.puyue.www.qiaoge.api.mine.order.CopyToCartAPI;
 import com.puyue.www.qiaoge.api.mine.order.MyOrderListAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
-import com.puyue.www.qiaoge.base.BaseModel;
-import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
@@ -44,10 +33,10 @@ import rx.schedulers.Schedulers;
 import static com.umeng.commonsdk.stateless.UMSLEnvelopeBuild.mContext;
 
 /**
- * Created by Administrator on 2018/4/21.
+ * Created by ${王涛} on 2020/4/9
  */
-//待收货订单
-public class ReceivedOrderFragment extends BaseFragment {
+public class ReceivedOrdersFragment extends BaseFragment {
+
     private PtrClassicFrameLayout mPtr;
     private RecyclerView mRv;
     private MyOrdersItemAdapter mAdapterMyOrders;
@@ -57,7 +46,7 @@ public class ReceivedOrderFragment extends BaseFragment {
     private MyOrdersModel mModelMyOrders;
     private List<MyOrdersModel.DataBean.ListBean> mListResult = new ArrayList<>();
     private CopyToCartModel mModelCopyToCart;
-    String subId;
+
     private int orderDeliveryType;
 
     @Override
@@ -69,24 +58,6 @@ public class ReceivedOrderFragment extends BaseFragment {
     public void initViews(View view) {
 
     }
-
-    public static ReceivedOrderFragment getInstance(String subId) {
-        ReceivedOrderFragment fragment = new ReceivedOrderFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("subId", subId);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Bundle getargs = getArguments();
-        if (getargs != null) {
-            subId = getargs.getString("subId");
-        }
-    }
-
 
     @Override
     public void findViewById(View view) {
@@ -309,7 +280,7 @@ public class ReceivedOrderFragment extends BaseFragment {
     }
 
     private void requestOrdersList(int orderStatus) {
-        MyOrderListAPI.getList(getContext(), orderStatus, pageNum, 20, orderDeliveryType,subId)
+        MyOrderListAPI.requestOrderList(getContext(), orderStatus, pageNum, 20, orderDeliveryType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<MyOrdersModel>() {

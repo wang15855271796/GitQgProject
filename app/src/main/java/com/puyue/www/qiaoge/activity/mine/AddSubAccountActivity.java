@@ -19,7 +19,13 @@ import com.puyue.www.qiaoge.api.mine.login.SendCodeAPI;
 import com.puyue.www.qiaoge.api.mine.subaccount.SubAccountAddAPI;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
+import com.puyue.www.qiaoge.dialog.AmountMaxDialog;
+import com.puyue.www.qiaoge.dialog.AmountSetDialog;
+import com.puyue.www.qiaoge.dialog.XieYiDialog;
 import com.puyue.www.qiaoge.event.BackEvent;
+import com.puyue.www.qiaoge.event.SetAmountMaxEvent;
+import com.puyue.www.qiaoge.event.SetAmountsEvent;
+import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -28,6 +34,8 @@ import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,17 +65,26 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
     SwitchCompat swipe1;
     @BindView(R.id.swipe2)
     SwitchCompat swipe2;
+    @BindView(R.id.swipe3)
+    SwitchCompat swipe3;
     @BindView(R.id.ll_yzm)
     RelativeLayout ll_yzm;
     @BindView(R.id.tv_yzm)
     TextView tv_yzm;
     @BindView(R.id.iv_back)
     ImageView iv_back;
+    @BindView(R.id.et_amount)
+    TextView et_amount;
+    @BindView(R.id.tv_amount_remind)
+    TextView tv_amount_remind;
     private BaseModel mModelAddSubAccount;
     private String phone;
     boolean isSendingCode;
     private BaseModel mModelSendCode;
     CountDownTimer countDownTimer;
+    private AmountSetDialog amountSetDialog;
+    private AmountMaxDialog amountMaxDialog;
+    String amountRemind;
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
         return false;
@@ -79,18 +96,29 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void findViewById() {
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         ll_yzm.setOnClickListener(this);
         iv_back.setOnClickListener(this);
+        tv_amount_remind.setOnClickListener(this);
+        et_amount.setOnClickListener(this);
         //关闭1 打开0
         SharedPreferencesUtil.saveString(mActivity,"inPoint","1");
         SharedPreferencesUtil.saveString(mActivity,"inBalance","1");
         SharedPreferencesUtil.saveString(mActivity,"inGift","1");
+//        //0不限制  1限制
+//        SharedPreferencesUtil.saveString(mActivity,"amount_limit","0");
+
         swipe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d("wodemingzi.........","000");
                 if(isChecked) {
                     SharedPreferencesUtil.saveString(mActivity,"inPoint","0");
                 }else {
@@ -103,7 +131,6 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
         swipe1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d("wodemingzi.........","111");
                 if(isChecked) {
                     SharedPreferencesUtil.saveString(mActivity,"inBalance","0");
                 }else {
@@ -115,11 +142,22 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
         swipe2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d("wodemingzi.........","222");
                 if(isChecked) {
                     SharedPreferencesUtil.saveString(mActivity,"inGift","0");
                 }else {
                     SharedPreferencesUtil.saveString(mActivity,"inGift","1");
+                }
+            }
+        });
+
+        swipe3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //0 不提醒 1 任意提醒 2 达到金额提醒
+                if(isChecked) {
+                    SharedPreferencesUtil.saveString(mActivity,"notification","0");
+                }else {
+                    SharedPreferencesUtil.saveString(mActivity,"notification","1");
                 }
             }
         });
@@ -130,6 +168,10 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
                 String inPoint = SharedPreferencesUtil.getString(mActivity, "inPoint");
                 String inBalance = SharedPreferencesUtil.getString(mActivity, "inBalance");
                 String inGift = SharedPreferencesUtil.getString(mActivity, "inGift");
+                String amount = et_amount.getText().toString();
+                SharedPreferencesUtil.saveString(mActivity, "amount",amount);
+                String amount_limit = SharedPreferencesUtil.getString(mActivity, "amount_limit");
+                String notification = SharedPreferencesUtil.getString(mActivity, "notification");
                 if (StringHelper.notEmptyAndNull(et_name.getText().toString())
                         && StringHelper.notEmptyAndNull(et_phone.getText().toString())
                         && StringHelper.notEmptyAndNull(et_set_psd.getText().toString())
@@ -144,7 +186,7 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
                                 //添加一个子账号,添加子账号会默认注册一个账号
 
                                 requestAddSubAccount(et_phone.getText().toString(), et_name.getText().toString(),
-                                        et_set_psd.getText().toString(), et_yzm.getText().toString(), inPoint, inBalance, inGift);
+                                        et_set_psd.getText().toString(), et_yzm.getText().toString(), inPoint, inBalance, inGift,amount_limit,amount,notification,amountRemind);
                             } else {
                                 AppHelper.showMsg(mContext, "密码由6-16位数字与字母组成");
                             }
@@ -165,8 +207,8 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
     /**
      * 添加子账户  SubAccountAddAPI.requestAddSubAccount(mContext, phone, name, pwd, yzm, inPonit,inBalance,inGift)
      */
-    private void requestAddSubAccount(String phone, String name, String pwd, String yzm, String inPoint, String inBalance, String inGift) {
-        SubAccountAddAPI.requestAddSubAccount(mContext, phone, name, pwd, yzm, inPoint,inBalance,inGift)
+    private void requestAddSubAccount(String phone, String name, String pwd, String yzm, String inPoint, String inBalance, String inGift,String amount_limit, String amount, String notification, String warn_amount) {
+        SubAccountAddAPI.requestAddSubAccount(mContext, phone, name, pwd, yzm, inPoint,inBalance,inGift,amount_limit,amount,notification,warn_amount)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<BaseModel>() {
@@ -177,7 +219,6 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("dangqiandeshujushi.....",e.getMessage());
                     }
 
                     @Override
@@ -218,13 +259,39 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
                     Toast.makeText(getApplicationContext(), "请输入正确的手机号", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    Log.d("woshisdagfdsg.....",phone);
                     requestSendCode(phone);
                 }
                 break;
 
             case R.id.iv_back:
                 finish();
+                break;
+
+            case R.id.tv_amount_remind:
+                amountSetDialog = new AmountSetDialog(mContext) {
+                    @Override
+                    public void Confirm() {
+                        amountSetDialog.dismiss();
+                    }
+                };
+
+                amountSetDialog.show();
+                break;
+
+            case R.id.et_amount:
+                amountMaxDialog = new AmountMaxDialog(mContext) {
+                    @Override
+                    public void Confirm() {
+                        amountMaxDialog.dismiss();
+                    }
+
+                    @Override
+                    public void Cancle() {
+                        dismiss();
+                    }
+                };
+
+                amountMaxDialog.show();
                 break;
         }
     }
@@ -292,6 +359,52 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
         }.start();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getAmount(SetAmountEvent event) {
+        if(SharedPreferencesUtil.getString(mActivity,"flag").equals("2")) {
+            if(event.amount.length()==0) {
+                tv_amount_remind.setText("请添加金额");
+            }else {
+                tv_amount_remind.setText("满"+event.amount+"元消费提醒");
+                swipe3.setChecked(true);
+                amountRemind = event.amount;
+                //0开启
+                SharedPreferencesUtil.saveString(mContext,"notification","2");
+            }
+
+        }else {
+//            swipe3.setChecked(false);
+//            amountRemind = "0";
+//            SharedPreferencesUtil.saveString(mContext,"notification","1");
+
+        }
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getAmounts(SetAmountsEvent event) {
+        if(SharedPreferencesUtil.getString(mActivity,"flag").equals("1")) {
+            tv_amount_remind.setText("任意金额提醒");
+            swipe3.setChecked(true);
+            amountRemind = "0";
+            SharedPreferencesUtil.saveString(mContext,"notification","1");
+        }
+
+        if(SharedPreferencesUtil.getString(mActivity,"flag").equals("0")) {
+            tv_amount_remind.setText("添加金额提醒");
+            swipe3.setChecked(false);
+            amountRemind = "0";
+            SharedPreferencesUtil.saveString(mContext,"notification","0");
+        }
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getAmountss(SetAmountMaxEvent event) {
+        et_amount.setText(event.amount);
+//        swipe3.setChecked(true);
+//        SharedPreferencesUtil.saveString(mContext,"notifaction","0");
+    }
     /**
      * 检验号码
      * @param phone

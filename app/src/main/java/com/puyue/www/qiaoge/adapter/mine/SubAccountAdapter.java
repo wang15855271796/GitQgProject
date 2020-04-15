@@ -3,6 +3,7 @@ package com.puyue.www.qiaoge.adapter.mine;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.ModifyActivity;
 import com.puyue.www.qiaoge.activity.mine.SubAccountOrderActivity;
+import com.puyue.www.qiaoge.activity.mine.order.MySubOrderActivity;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.mine.SubAccountModel;
 
@@ -51,6 +53,15 @@ public class SubAccountAdapter extends RecyclerView.Adapter<SubAccountAdapter.Su
         holder.mTvName.setText(mListData.get(position).name);
         holder.mTvPhone.setText(mListData.get(position).phone);
 
+        //点击到我的订单
+        holder.tv_look.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,MySubOrderActivity.class);
+                intent.putExtra("subId",mListData.get(position).subId+"");
+                context.startActivity(intent);
+            }
+        });
         //删除该子账号
         holder.mTvDelete.setOnClickListener(new NoDoubleClickListener() {
             @Override
@@ -69,13 +80,6 @@ public class SubAccountAdapter extends RecyclerView.Adapter<SubAccountAdapter.Su
             }
         });
 
-        holder.tv_look.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context,SubAccountOrderActivity.class);
-                context.startActivity(intent);
-            }
-        });
     }
 
 

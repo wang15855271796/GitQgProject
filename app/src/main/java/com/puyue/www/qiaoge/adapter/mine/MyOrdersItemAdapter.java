@@ -238,7 +238,7 @@ public class MyOrdersItemAdapter extends BaseQuickAdapter<MyOrdersModel.DataBean
 
                     if (orderState == 11){
                         Intent intent =new Intent(mContext,ReturnGoodDetailActivity.class);
-intent.putExtra("orderType" ,0);
+                        intent.putExtra("orderType" ,0);
                         intent.putExtra(AppConstant.RETURNPRODUCTMAINID, item.returnProductMainId);
 
                         mContext.startActivity(intent);

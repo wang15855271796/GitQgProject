@@ -55,7 +55,7 @@ import rx.schedulers.Schedulers;
  * Created by Administrator on 2018/4/8.
  */
 
-public class SubAccountActivity extends BaseSwipeActivity {
+public class SubAccountActivity extends BaseSwipeActivity implements View.OnClickListener {
 
     private ImageView mIvBack;
     private RecyclerView mRvSubAccount;
@@ -65,18 +65,16 @@ public class SubAccountActivity extends BaseSwipeActivity {
     private SubAccountAdapter mAdapterSubAccount;
     private PtrClassicFrameLayout mPtr;
     private SubAccountModel mModelSubAccount;
-
-    private BaseModel mModelAddSubAccount;
-    private BaseModel mModelDisableSubAccount;
     private BaseModel mModelDeleteSubAccount;
-    private BaseModel mModelEnableSubAccount;
-
     private boolean isSendingCode = false;
     private BaseModel mModelSendCode;
     private CountDownTimer countDownTimer;
-
+    ImageView iv_message;
+    TextView tv_number;
+    int message;
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
+
         return false;
     }
 
@@ -92,8 +90,9 @@ public class SubAccountActivity extends BaseSwipeActivity {
         mRvSubAccount = (RecyclerView) findViewById(R.id.rv_sub_account);//有子账号的显示
         mBtnAdd = (Button) findViewById(R.id.btn_sub_account_add);//增加子账号
         mPtr = (PtrClassicFrameLayout) findViewById(R.id.ptr_sub_account);
-
-
+        iv_message = (ImageView) findViewById(R.id.iv_message);
+        tv_number = (TextView) findViewById(R.id.tv_number);
+        iv_message.setOnClickListener(this);
     }
 
 
@@ -139,6 +138,15 @@ public class SubAccountActivity extends BaseSwipeActivity {
         mRvSubAccount.setLayoutManager(new LinearLayoutManager(mContext));
         mRvSubAccount.setAdapter(mAdapterSubAccount);
         requestSubAccountList();
+
+        message = getIntent().getIntExtra("message",0);
+
+        if(message==0) {
+            tv_number.setVisibility(View.GONE);
+        }else {
+            tv_number.setVisibility(View.VISIBLE);
+            tv_number.setText(message);
+        }
     }
 
     private void showEditSubAccountDialog(final int position, final String flag) {
@@ -274,180 +282,13 @@ public class SubAccountActivity extends BaseSwipeActivity {
         });
     }
 
-    private AlertDialog alertDialog;
-
-    private void showAddAccountDialog() {
-        alertDialog = new AlertDialog.Builder(mContext, R.style.DialogStyle).create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.setView(new EditText(mContext));
-        alertDialog.show();
-        Window window = alertDialog.getWindow();
-        window.setContentView(R.layout.dialog_add_sub_account);
-        //获取版本号
-        String version = AppHelper.getVersion(getApplicationContext());
-
-        final EditText mEditRemarks = (EditText) window.findViewById(R.id.edit_add_sub_account_remarks);
-        final EditText mEditPhone = (EditText) window.findViewById(R.id.edit_add_sub_account_phone);
-        final EditText mEditPasswordOnce = (EditText) window.findViewById(R.id.edit_add_sub_account_password_once);
-        final EditText mEditPasswordSecond = (EditText) window.findViewById(R.id.edit_add_sub_account_password_second);
-        final TextView mTVSendCode = (TextView) window.findViewById(R.id.tv_send_phone_code);
-        final EditText mEtGetCode = (EditText) window.findViewById(R.id.ed_edit_phone_code);
-
-        mEditPasswordOnce.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        mEditPasswordSecond.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        TextView mTvCancel = (TextView) window.findViewById(R.id.tv_add_sub_account_cancel);
-        TextView mTvConfirm = (TextView) window.findViewById(R.id.tv_add_sub_account_confirm);
-
-        mTVSendCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mEditPhone.getText().toString().length() == 11) {
-                    //获取到手机号,对这个手机号发送验证码
-                    if (!isSendingCode) {
-                        //现在不在倒计时中,可以重新发送验证码
-                        requestSendCode(mEditPhone.getText().toString(), mTVSendCode);
-                    }
-                } else {
-                    AppHelper.showMsg(mActivity, "手机号位数错误");
-                }
-            }
-        });
-
-        mTvConfirm.setOnClickListener(new NoDoubleClickListener() {
-            @Override
-            public void onNoDoubleClick(View view) {
-                if (StringHelper.notEmptyAndNull(mEditRemarks.getText().toString())
-                        && StringHelper.notEmptyAndNull(mEditPhone.getText().toString())
-                        && StringHelper.notEmptyAndNull(mEditPasswordOnce.getText().toString())
-                        && StringHelper.notEmptyAndNull(mEditPasswordSecond.getText().toString())
-                        && StringHelper.notEmptyAndNull(mEtGetCode.getText().toString())) {
-                    if (mEditPasswordOnce.getText().toString().equals(mEditPasswordSecond.getText().toString())) {
-                        //两次输入的密码一致才能请求注册
-                        //两次密码一致之后判断密码是不是6-16位字母与数字的组合,如果是纯数字或者纯字母,不允许往下走
-                        if (mEditPasswordOnce.getText().toString().length() >= 6
-                                && mEditPasswordSecond.getText().toString().length() >= 6) {
-                            if (StringHelper.isLetterDigit(mEditPasswordOnce.getText().toString())) {
-
-                                //添加一个子账号,添加子账号会默认注册一个账号
-//                                requestAddSubAccount(mEditPhone.getText().toString(), mEditRemarks.getText().toString(), mEditPasswordOnce.getText().toString(), mEtGetCode.getText().toString(), version);
-                                //alertDialog.dismiss();
-                            } else {
-                                AppHelper.showMsg(mContext, "密码由6-16位数字与字母组成");
-                            }
-                        } else {
-                            AppHelper.showMsg(mContext, "密码位数不足!");
-                        }
-                    } else {
-                        AppHelper.showMsg(mContext, "两次密码不一致!");
-                    }
-                } else {
-                    AppHelper.showMsg(mContext, "数据不全!");
-                }
-            }
-        });
-        mTvCancel.setOnClickListener(new NoDoubleClickListener() {
-            @Override
-            public void onNoDoubleClick(View view) {
-                alertDialog.dismiss();
-            }
-        });
-    }
-
-//    private void requestAddSubAccount(String phone, String name, String pwd, String gsc, String ver) {
-//        SubAccountAddAPI.requestAddSubAccount(mContext, phone, name, pwd, gsc, ver)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<BaseModel>() {
-//                    @Override
-//                    public void onCompleted() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(BaseModel baseModel) {
-//                        mModelAddSubAccount = baseModel;
-//                        if (mModelAddSubAccount.success) {
-//                            //添加子账号成功,刷新列表
-//                            AppHelper.showMsg(mContext, "添加成功");
-//                            alertDialog.dismiss();
-//                            mPtr.autoRefresh();
-//                        } else {
-//                            AppHelper.showMsg(mContext, mModelAddSubAccount.message);
-//                        }
-//                    }
-//                });
-//    }
-
-    /**
-     * 发送验证码
-     */
-    public void requestSendCode(String mEditPhone, TextView mTvSendCode) {
-        if (!NetWorkHelper.isNetworkAvailable(mContext)) {
-            AppHelper.showMsg(mContext, "网络不给力!");
-        } else {
-            //注册发送验证码,type为7
-            SendCodeAPI.requestSendCode(mContext, mEditPhone, 7)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<BaseModel>() {
-                        @Override
-                        public void onCompleted() {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onNext(BaseModel baseModel) {
-                            mModelSendCode = baseModel;
-                            if (mModelSendCode.success) {
-                                AppHelper.showMsg(mContext, "发送验证码成功!");
-
-                                handleCountDown(mTvSendCode);
-                            } else {
-
-                                AppHelper.showMsg(mActivity, "手机号已注册");
-                            }
-                        }
-                    });
-
-
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_message:
+                Intent intent = new Intent(mContext,SubAccountListActivity.class);
+                startActivity(intent);
+                break;
         }
-
-
-    }
-
-    /**
-     * 倒计时
-     *
-     * @param mTvSendCode
-     */
-    public void handleCountDown(TextView mTvSendCode) {
-        countDownTimer = new CountDownTimer(60000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                isSendingCode = true;
-                mTvSendCode.setEnabled(false);
-                mTvSendCode.setText(millisUntilFinished / 1000 + "秒后" + "重新发送");
-
-                mTvSendCode.setTextColor(Color.parseColor("#A7A7A7"));
-            }
-
-            @Override
-            public void onFinish() {
-                isSendingCode = false;
-                mTvSendCode.setText("发送验证码");
-                mTvSendCode.setTextColor(Color.parseColor("#F56D23"));
-                mTvSendCode.setEnabled(true);
-            }
-        }.start();
     }
 }

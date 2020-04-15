@@ -1007,6 +1007,21 @@
                                         android:src="@mipmap/ic_management_two" />
 
                                     <TextView
+                                        android:id="@+id/tv_number"
+                                        android:layout_width="15dp"
+                                        android:layout_height="15dp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginRight="25dp"
+                                        android:layout_marginTop="2dp"
+                                        android:background="@drawable/shape_car_num"
+                                        android:gravity="center"
+                                        android:text="99"
+                                        android:textColor="@color/white"
+                                        android:textSize="7dp"
+                                        android:visibility="gone" />
+
+
+                                    <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_below="@+id/image4"

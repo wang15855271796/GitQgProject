@@ -66,6 +66,15 @@ public class MyOrderNumModel extends BaseModel {
         private String giftNo;
         private String phone;
         int inviteOpen;
+        int subMessage;
+
+        public int getSubMessage() {
+            return subMessage;
+        }
+
+        public void setSubMessage(int subMessage) {
+            this.subMessage = subMessage;
+        }
 
         public int getInviteOpen() {
             return inviteOpen;

@@ -29,6 +29,7 @@ import com.puyue.www.qiaoge.activity.mine.FeedBackActivity;
 import com.puyue.www.qiaoge.activity.mine.MessageCenterActivity;
 import com.puyue.www.qiaoge.activity.mine.MyCollectionActivity;
 import com.puyue.www.qiaoge.activity.mine.SubAccountActivity;
+import com.puyue.www.qiaoge.activity.mine.SubAccountListActivity;
 import com.puyue.www.qiaoge.activity.mine.account.AccountCenterActivity;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListActivity;
 import com.puyue.www.qiaoge.activity.mine.coupons.MyCouponsActivity;
@@ -43,6 +44,8 @@ import com.puyue.www.qiaoge.api.mine.order.MyOrderNumAPI;
 import com.puyue.www.qiaoge.api.mine.subaccount.MineAccountAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.event.GoToMarketEvent;
+import com.puyue.www.qiaoge.event.MessageEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -54,6 +57,10 @@ import com.puyue.www.qiaoge.model.mine.order.MineCenterModel;
 import com.puyue.www.qiaoge.model.mine.order.MyOrderNumModel;
 import com.puyue.www.qiaoge.view.SuperTextView;
 import com.puyue.www.qiaoge.view.scrollview.MyRecyclerAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,13 +77,9 @@ import rx.schedulers.Schedulers;
 public class MineFragment extends BaseFragment {
 
     private static final String TAG = MineFragment.class.getSimpleName();
-
-
     private ImageView mIvAvatar;
-
     private TextView mTvPhone;
     private RelativeLayout rl_return_order;
-
     private LinearLayout mLlPayment;
     private LinearLayout mLlEvaluate;
     private LinearLayout mLlDelivery;
@@ -90,7 +93,6 @@ public class MineFragment extends BaseFragment {
     private TextView mTvVersion;
     private TextView mViewVersionPoint;
     private RelativeLayout mRlMyOrders;
-
     private AccountCenterModel mModelAccountCenter;
     private String mUserCell;
     private int mStateCode;
@@ -172,10 +174,9 @@ public class MineFragment extends BaseFragment {
 
     private MyOrderNumModel mModelMyOrderNum;
 
-
     private LinearLayout ll_self_sufficiency;
     private LinearLayout ll_deliver_order;
-
+    TextView tv_number;
     @Override
     public int setLayoutId() {
         setTranslucentStatus();
@@ -189,14 +190,23 @@ public class MineFragment extends BaseFragment {
 
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     @Override
     public void findViewById(View view) {
+
+        EventBus.getDefault().register(this);
         rl_zizhi = (view.findViewById(R.id.rl_zizhi));
         mIvAvatar = (view.findViewById(R.id.iv_mine_avatar));//头像
         mineIntegral = (view.findViewById(R.id.mineIntegral));//积分
         mTvPhone = (view.findViewById(R.id.tv_mine_phone));
         rl_return_order = (view.findViewById(R.id.rl_return_order));
-
+        tv_number = (view.findViewById(R.id.tv_number));
         mLlPayment = (view.findViewById(R.id.ll_mine_tips_payment));//待付款
         mLlEvaluate = (view.findViewById(R.id.ll_mine_tips_evaluate));//待评价
 
@@ -510,7 +520,10 @@ public class MineFragment extends BaseFragment {
 
             {
                 //子账户
-                startActivity(SubAccountActivity.getIntent(getContext(), SubAccountActivity.class));
+//                startActivity(SubAccountActivity.getIntent(getContext(), SubAccountActivity.class));
+                Intent intent = new Intent(getContext(),SubAccountActivity.class);
+                intent.putExtra("message",mModelMyOrderNum.getData().getSubMessage());
+                startActivity(intent);
 
             } else if (view == imageViewBanner)
 
@@ -778,6 +791,12 @@ public class MineFragment extends BaseFragment {
                     public void onNext(MyOrderNumModel myOrderNumModel) {
                         mListData.clear();
                         if (myOrderNumModel.success) {
+                            if(myOrderNumModel.getData().getSubMessage()==0) {
+                                tv_number.setVisibility(View.GONE);
+                            }else {
+                                tv_number.setText(myOrderNumModel.getData().getSubMessage());
+                                tv_number.setVisibility(View.VISIBLE);
+                            }
 
                             mListData.add(myOrderNumModel.getData());
                             day = myOrderNumModel.getData().getDay();
@@ -1139,5 +1158,8 @@ public class MineFragment extends BaseFragment {
                 });
     }
 
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void message(MessageEvent messageEvent) {
+        tv_number.setVisibility(View.GONE);
+    }
 }

@@ -75,6 +75,42 @@ public class AccountDetailModel {
         private int inPoint;
         private int inBalance;
         private int inGift;
+        private String amountLimit;
+        private String amount;
+        private String notification;
+        private String warnAmount;
+
+        public String getAmountLimit() {
+            return amountLimit;
+        }
+
+        public void setAmountLimit(String amountLimit) {
+            this.amountLimit = amountLimit;
+        }
+
+        public String getAmount() {
+            return amount;
+        }
+
+        public void setAmount(String amount) {
+            this.amount = amount;
+        }
+
+        public String getNotification() {
+            return notification;
+        }
+
+        public void setNotification(String notification) {
+            this.notification = notification;
+        }
+
+        public String getWarnAmount() {
+            return warnAmount;
+        }
+
+        public void setWarnAmount(String warnAmount) {
+            this.warnAmount = warnAmount;
+        }
 
         public int getSubId() {
             return subId;

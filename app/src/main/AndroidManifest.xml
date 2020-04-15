@@ -173,6 +173,7 @@
         <activity android:name=".fragment.home.HomeTest"></activity>
         <activity android:name=".activity.mine.SubAccountActivity"/>
         <activity android:name=".activity.mine.SubAccountOrderActivity"></activity>
+        <activity android:name=".activity.mine.SubAccountListActivity"></activity>
         <activity android:name=".adapter.home.SeckillGoodActivity"/>
         <activity android:name=".activity.mine.login.RegisterStep1Activity"/>
         <activity android:name=".activity.mine.login.RegisterMessageActivity"/>
@@ -212,9 +213,8 @@
         <activity android:name=".activity.mine.wallet.WithDrawActivity" />
         <activity android:name=".activity.mine.wallet.RechargeActivity" />
         <activity android:name=".activity.mine.MyCollectionActivity" />
-        <activity android:name=".activity.mine.order.MyOrdersActivity"
-
-            />
+        <activity android:name=".activity.mine.order.MyOrdersActivity" />
+        <activity android:name=".activity.mine.order.MySubOrderActivity"/>
         <activity android:name=".activity.home.SpikeGoodsDetailsActivity" />
         <activity android:name=".activity.mine.EquipmentReturnActivity" />
         <activity android:name=".activity.home.SearchReasultActivity" />

@@ -1,35 +1,27 @@
-package com.puyue.www.qiaoge.fragment.mine.order;
+package com.puyue.www.qiaoge.activity.mine.order;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.activity.mine.order.OrderDetailActivity;
-import com.puyue.www.qiaoge.activity.mine.order.PaymentOrdersFragment;
 import com.puyue.www.qiaoge.adapter.mine.MyOrdersItemAdapter;
-import com.puyue.www.qiaoge.api.mine.order.ConfirmGetGoodsAPI;
-import com.puyue.www.qiaoge.api.mine.order.ConfirmOrderSelfAPI;
 import com.puyue.www.qiaoge.api.mine.order.CopyToCartAPI;
 import com.puyue.www.qiaoge.api.mine.order.MyOrderListAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
-import com.puyue.www.qiaoge.base.BaseModel;
-import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
-import com.puyue.www.qiaoge.model.mine.order.ConfirmGetGoodsModel;
 import com.puyue.www.qiaoge.model.mine.order.CopyToCartModel;
 import com.puyue.www.qiaoge.model.mine.order.MyOrdersModel;
+import com.puyue.www.qiaoge.model.mine.order.OrderEvaluateListModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,13 +33,11 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static com.umeng.commonsdk.stateless.UMSLEnvelopeBuild.mContext;
-
 /**
- * Created by Administrator on 2018/4/21.
+ * Created by ${王涛} on 2020/4/9
  */
-//待收货订单
-public class ReceivedOrderFragment extends BaseFragment {
+public class EvaluatedOrdersFragment extends BaseFragment {
+
     private PtrClassicFrameLayout mPtr;
     private RecyclerView mRv;
     private MyOrdersItemAdapter mAdapterMyOrders;
@@ -57,9 +47,9 @@ public class ReceivedOrderFragment extends BaseFragment {
     private MyOrdersModel mModelMyOrders;
     private List<MyOrdersModel.DataBean.ListBean> mListResult = new ArrayList<>();
     private CopyToCartModel mModelCopyToCart;
+    private List<OrderEvaluateListModel> mListEvaluate = new ArrayList<>();
     String subId;
     private int orderDeliveryType;
-
     @Override
     public int setLayoutId() {
         return R.layout.fragment_my_orders;
@@ -70,8 +60,8 @@ public class ReceivedOrderFragment extends BaseFragment {
 
     }
 
-    public static ReceivedOrderFragment getInstance(String subId) {
-        ReceivedOrderFragment fragment = new ReceivedOrderFragment();
+    public static EvaluatedOrdersFragment getInstance(String subId) {
+        EvaluatedOrdersFragment fragment = new EvaluatedOrdersFragment();
         Bundle bundle = new Bundle();
         bundle.putString("subId", subId);
         fragment.setArguments(bundle);
@@ -87,7 +77,6 @@ public class ReceivedOrderFragment extends BaseFragment {
         }
     }
 
-
     @Override
     public void findViewById(View view) {
         mPtr = ((PtrClassicFrameLayout) view.findViewById(R.id.ptr_my_orders));
@@ -98,10 +87,10 @@ public class ReceivedOrderFragment extends BaseFragment {
     @Override
     public void setViewData() {
         mListResult.clear();
-        if (UserInfoHelper.getDeliverType(mActivity) != null && StringHelper.notEmptyAndNull(UserInfoHelper.getDeliverType(mActivity))) {
-            orderDeliveryType = Integer.parseInt(UserInfoHelper.getDeliverType(mActivity));
+        mListEvaluate.clear();
+        if (UserInfoHelper.getDeliverType(mActivity)!=null&&StringHelper.notEmptyAndNull(UserInfoHelper.getDeliverType(mActivity))){
+            orderDeliveryType=Integer.parseInt(UserInfoHelper.getDeliverType(mActivity));
         }
-
         mPtr.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
@@ -111,21 +100,21 @@ public class ReceivedOrderFragment extends BaseFragment {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
                 pageNum = 1;
-                requestOrdersList(3);
+                requestOrdersList(5);
             }
         });
-
         if (orderDeliveryType==0){
-            mAdapterMyOrders = new MyOrdersItemAdapter(R.layout.item_my_order, mListResult, 3, orderDeliveryType,new MyOrdersItemAdapter.OnClick() {
+            mAdapterMyOrders = new MyOrdersItemAdapter(R.layout.item_my_order, mListResult, 5,orderDeliveryType, new MyOrdersItemAdapter.OnClick() {
 
 
                 @Override
                 public void evaluateNowOnclick(int position) { // 立即评价
-
+                    MyOrdersModel.DataBean.ListBean listBean = mListResult.get(position);
+                    requestEvaluate(listBean);
                 }
 
                 @Override
-                public void againBayOnclick(int position) {  // 再次购买
+                public void againBayOnclick(int position) { // 在次购买
                     MyOrdersModel.DataBean.ListBean listBean = mListResult.get(position);
                     requestCopyToCart(listBean.orderId);
                 }
@@ -147,36 +136,7 @@ public class ReceivedOrderFragment extends BaseFragment {
 
                 @Override
                 public void requestConfirmGetGoods(String orderId) {
-                    ConfirmGetGoodsAPI.reuqestConfirmGetGoods(getContext(), orderId)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Subscriber<ConfirmGetGoodsModel>() {
-                                @Override
-                                public void onCompleted() {
 
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-
-                                }
-
-                                @Override
-                                public void onNext(ConfirmGetGoodsModel confirmGetGoodsModel) {
-
-                                    if (confirmGetGoodsModel.success) {
-                                        //确认收货成功
-                                        AppHelper.showMsg(mContext, "确认收货成功");
-                                        mPtr.autoRefresh();
-                                        requestOrdersList(3);
-
-                                        //刷新订单状态
-                                        //  getOrderDetail(orderId, orderState, returnProductMainId);
-                                    } else {
-                                        AppHelper.showMsg(mContext, confirmGetGoodsModel.message);
-                                    }
-                                }
-                            });
                 }
 
                 @Override
@@ -192,16 +152,17 @@ public class ReceivedOrderFragment extends BaseFragment {
 
             });
         }else if (orderDeliveryType==1){
-            mAdapterMyOrders = new MyOrdersItemAdapter(R.layout.item_my_order_self, mListResult, 3, orderDeliveryType,new MyOrdersItemAdapter.OnClick() {
+            mAdapterMyOrders = new MyOrdersItemAdapter(R.layout.item_my_order_self, mListResult, 5,orderDeliveryType, new MyOrdersItemAdapter.OnClick() {
 
 
                 @Override
                 public void evaluateNowOnclick(int position) { // 立即评价
-
+                    MyOrdersModel.DataBean.ListBean listBean = mListResult.get(position);
+                    requestEvaluate(listBean);
                 }
 
                 @Override
-                public void againBayOnclick(int position) {  // 再次购买
+                public void againBayOnclick(int position) { // 在次购买
                     MyOrdersModel.DataBean.ListBean listBean = mListResult.get(position);
                     requestCopyToCart(listBean.orderId);
                 }
@@ -223,36 +184,7 @@ public class ReceivedOrderFragment extends BaseFragment {
 
                 @Override
                 public void requestConfirmGetGoods(String orderId) {
-                    ConfirmGetGoodsAPI.reuqestConfirmGetGoods(getContext(), orderId)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Subscriber<ConfirmGetGoodsModel>() {
-                                @Override
-                                public void onCompleted() {
 
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-
-                                }
-
-                                @Override
-                                public void onNext(ConfirmGetGoodsModel confirmGetGoodsModel) {
-
-                                    if (confirmGetGoodsModel.success) {
-                                        //确认收货成功
-                                        AppHelper.showMsg(mContext, "确认收货成功");
-                                        mPtr.autoRefresh();
-                                        requestOrdersList(3);
-
-                                        //刷新订单状态
-                                        //  getOrderDetail(orderId, orderState, returnProductMainId);
-                                    } else {
-                                        AppHelper.showMsg(mContext, confirmGetGoodsModel.message);
-                                    }
-                                }
-                            });
                 }
 
                 @Override
@@ -268,6 +200,8 @@ public class ReceivedOrderFragment extends BaseFragment {
 
             });
         }
+
+
 
         mAdapterMyOrders.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -302,14 +236,14 @@ public class ReceivedOrderFragment extends BaseFragment {
             @Override
             public void onLoadMoreRequested() {
                 pageNum++;
-                requestOrdersList(3);
+                requestOrdersList(5);
             }
         });
-//        requestOrdersList(3);
+//        requestOrdersList(5);
     }
 
     private void requestOrdersList(int orderStatus) {
-        MyOrderListAPI.getList(getContext(), orderStatus, pageNum, 20, orderDeliveryType,subId)
+        MyOrderListAPI.getList(getContext(), orderStatus, pageNum, 20,orderDeliveryType,subId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<MyOrdersModel>() {
@@ -320,7 +254,7 @@ public class ReceivedOrderFragment extends BaseFragment {
 
                     @Override
                     public void onError(Throwable e) {
-//                        Toast.makeText(getContext(), "错误", Toast.LENGTH_SHORT).show();
+
                     }
 
                     @Override
@@ -350,7 +284,6 @@ public class ReceivedOrderFragment extends BaseFragment {
                 mRv.setVisibility(View.GONE);
             }
         } else {
-            //加载更多数据
             mListResult.addAll(mModelMyOrders.data.list);
             mAdapterMyOrders.notifyDataSetChanged();
         }
@@ -361,11 +294,6 @@ public class ReceivedOrderFragment extends BaseFragment {
             //没有下一页数据了
             mAdapterMyOrders.loadMoreEnd();
         }
-    }
-
-    @Override
-    public void setClickEvent() {
-
     }
 
     // 添加到购物车
@@ -398,12 +326,19 @@ public class ReceivedOrderFragment extends BaseFragment {
     }
 
     @Override
+    public void setClickEvent() {
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        if (getUserVisibleHint()) {
+        if (getUserVisibleHint()){
             mPtr.autoRefresh();
-            pageNum = 1;
-            requestOrdersList(3);
+            pageNum=1;
+            requestOrdersList(5);
+
+
         }
 
     }
@@ -417,4 +352,25 @@ public class ReceivedOrderFragment extends BaseFragment {
             onPause();
         }
     }
+
+    //立即评价
+    private void requestEvaluate(MyOrdersModel.DataBean.ListBean getOrderDetailModel) {
+        //去评价需要将订单里面的商品列表中的商品的商品名,商品ID组成list,传到评价的界面
+        mListEvaluate.clear();
+        if (getOrderDetailModel.productVOList != null && getOrderDetailModel.productVOList.size() > 0) {
+            for (int i = 0; i < getOrderDetailModel.productVOList.size(); i++) {
+                mListEvaluate.add(new OrderEvaluateListModel(getOrderDetailModel.productVOList.get(i).productId,
+                        getOrderDetailModel.productVOList.get(i).businessType,
+                        getOrderDetailModel.productVOList.get(i).name,getOrderDetailModel.productVOList.get(i).picUrl,5+"",""));
+            }
+        } else {
+            AppHelper.showMsg(mActivity, "订单商品数据错误!");
+        }
+        Intent intentPut = new Intent(mActivity, OrderEvaluateActivity.class);
+        intentPut.putExtra("evaluateList", (Serializable) mListEvaluate);
+        intentPut.putExtra("orderId", getOrderDetailModel.orderId);
+        intentPut.putExtra("orderDeliveryType",orderDeliveryType);
+        startActivityForResult(intentPut, 12);
+    }
+
 }
