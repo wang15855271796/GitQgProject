@@ -292,6 +292,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
 
 
 
+
     /*  if (city!=null&&StringHelper.notEmptyAndNull(city)){
 
       }else {
@@ -444,7 +445,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     };
 
     private void switchTab(String tab) {
-
+        mLocationClient.stop();
         //开始事务
         mFragmentTransaction = getSupportFragmentManager().beginTransaction();
         //隐藏所有的Fragment

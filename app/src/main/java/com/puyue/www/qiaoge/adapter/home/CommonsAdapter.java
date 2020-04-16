@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -98,6 +102,9 @@ public class CommonsAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean
                     onclick.addDialog();
                 }
                 commonDialog = new ShouyeDialog(mContext,item.getProductMainId());
+                Window window = commonDialog.getWindow();
+                WindowManager.LayoutParams lp = window.getAttributes();
+                window.clearFlags( WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                 commonDialog.show();
             }
         });
