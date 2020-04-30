@@ -143,9 +143,10 @@
                 android:layout_height="15dp"
                 android:clickable="false"
                 android:enabled="false"
-                android:layout_marginLeft="@dimen/size_10dp"
+                android:button="@null"
                 android:background="@drawable/app_checkbox_style"
-                android:button="@null" />
+                android:layout_marginLeft="@dimen/size_10dp"
+           />
 
             <TextView
                 android:id="@+id/tv_set"

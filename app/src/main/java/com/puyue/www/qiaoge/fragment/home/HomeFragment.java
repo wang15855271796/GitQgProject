@@ -595,10 +595,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void setupTabIcons() {
-        tabLayout.getTabAt(0).setCustomView(getTabView(0));
-        tabLayout.getTabAt(1).setCustomView(getTabView(1));
-        tabLayout.getTabAt(2).setCustomView(getTabView(2));
-        tabLayout.getTabAt(3).setCustomView(getTabView(3));
+//        tabLayout.getTabAt(0).setCustomView(getTabView(0));
+//        tabLayout.getTabAt(1).setCustomView(getTabView(1));
+//        tabLayout.getTabAt(2).setCustomView(getTabView(2));
+//        tabLayout.getTabAt(3).setCustomView(getTabView(3));
         tabLayout.setTabTextColors(Color.WHITE,Color.YELLOW);
     }
 
@@ -607,7 +607,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 //        if(view==null) {
             view = LayoutInflater.from(getActivity()).inflate(R.layout.test,null);
             title = view.findViewById(R.id.tv_title);
-            tv_small_title = view.findViewById(R.id.tv_small_title);
+//            tv_small_title = view.findViewById(R.id.tv_small_title);
             title.setText(lists.get(position));
             Log.d("ererererere....",lists.get(position));
 //        }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 内部用颜色 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- 填充颜色 -->
+    <gradient
+        android:startColor="#FF8A00"
+        android:endColor="#FF680A"
+        android:angle="0"/>
+    <!-- 边框的颜色和宽度 -->
+
+    <corners
+        android:bottomLeftRadius="@dimen/size_10dp"
+        android:bottomRightRadius="@dimen/size_10dp"
+        android:topLeftRadius="@dimen/size_10dp"
+        android:topRightRadius="@dimen/size_10dp" />
+
+</shape>

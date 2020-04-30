@@ -159,7 +159,7 @@ public class SearchView extends LinearLayout implements View.OnClickListener {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            Log.d("wosjiwangggggg....",charSequence.length()+"");
+
             if (!"".equals(charSequence.toString())) {
 //                ivDelete.setVisibility(VISIBLE);
 //                lvTips.setVisibility(VISIBLE);

@@ -143,7 +143,6 @@ public class CascadingMenuView extends LinearLayout {
 		// 初始化二级主菜单
 		secondItem = menuItem.get(firstPosition).getList();
 		thirdItem = secondItem.get(secondPosition).getList();
-		Log.d("eeeeeeeeeeeeeeeeew....","ssssssss");
 		secondMenuListViewAdapter = new Menu2ItemAdapter(context, secondItem, R.color.white, R.color.white);
 		secondMenuListViewAdapter.setTextSize(15);
 //		secondMenuListViewAdapter.setSelectedPositionNoNotify(secondPosition, secondItem);

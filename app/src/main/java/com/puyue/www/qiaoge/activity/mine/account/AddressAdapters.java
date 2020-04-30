@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.activity.mine.account;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;

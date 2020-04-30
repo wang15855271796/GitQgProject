@@ -483,7 +483,6 @@ public class DateUtils {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Log.d("wffffdefdfdfdf.....",hours+"");
 			if (hours > 1) {
 				return true;
 			} else {

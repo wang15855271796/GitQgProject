@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_gravity="center"
+        android:background="@drawable/orange_bg"
+        android:layout_width="305dp"
+        android:layout_height="360dp">
+
+        <TextView
+            android:text="恭喜你获得"
+            android:textSize="18sp"
+            android:id="@+id/tv"
+            android:textColor="#fff"
+            android:layout_marginTop="@dimen/size_15dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv1"
+            android:text="翘歌优惠券"
+            android:textSize="24sp"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_below="@+id/tv"
+            android:layout_marginTop="@dimen/size_10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_below="@+id/tv1"
+            android:layout_marginTop="@dimen/size_5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <ImageView
+            android:layout_alignParentBottom="true"
+            android:src="@mipmap/icon_oval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_use"
+            android:text="立即使用"
+            android:padding="@dimen/size_20dp"
+            android:textColor="#fff"
+            android:textSize="@dimen/size_14dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_marginTop="@dimen/size_30dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/iv_close_inform"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+</LinearLayout>

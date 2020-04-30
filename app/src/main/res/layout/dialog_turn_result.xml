@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_height="match_parent">
+
+
+
+    <ImageView
+        android:id="@+id/iv_result"
+        android:src="@mipmap/icon_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="手起不错哦!"
+        android:textColor="#fff"
+        android:textSize="@dimen/size_18dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        tools:text="1000"
+        android:layout_below="@+id/tv"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:id="@+id/tv_num"
+        android:textSize="@dimen/size_26dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="已放入优惠券包!"
+        android:layout_below="@+id/tv_num"
+        android:textColor="#fff"
+        android:textSize="@dimen/size_12dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_marginTop="@dimen/size_20dp"
+        android:layout_below="@+id/iv_result"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/iv_close_inform"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>

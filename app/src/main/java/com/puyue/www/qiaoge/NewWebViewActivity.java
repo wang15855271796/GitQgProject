@@ -154,7 +154,6 @@ public class NewWebViewActivity extends BaseSwipeActivity {
     @Override
     public void setViewData() {
         mUrl = getIntent().getStringExtra("URL");
-        Log.d("wwwwwwww......",mUrl);
         type = getIntent().getIntExtra("TYPE", 0);
         name = getIntent().getStringExtra("name");
         if (name.equals("consult") || name.equals("协议")) {

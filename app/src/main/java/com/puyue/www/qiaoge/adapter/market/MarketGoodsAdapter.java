@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.adapter.market;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -92,6 +93,7 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
 
                 chooseDialog = new ChoosesDialog(mContext,item);
                 chooseDialog.show();
+
 
             }
         });

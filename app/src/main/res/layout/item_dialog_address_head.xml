@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/rl_root"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:text="超出配送范围"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_marginTop="@dimen/size_30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/size_22dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_check"
+            android:layout_marginLeft="@dimen/sp_16"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_address_oval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/size_42dp"
+            android:layout_height="@dimen/size_70dp">
+
+            <TextView
+                android:textStyle="bold"
+                android:id="@+id/tv_title"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:layout_marginRight="@dimen/size_60dp"
+                tools:text="杭州翘歌网络科技有限公司"
+                android:textSize="@dimen/sp_16"
+                android:textColor="#333333"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                tools:text="最强王者"
+                android:textColor="#999999"
+                android:textSize="@dimen/sp_14"
+                android:id="@+id/tv_name"
+                android:layout_below="@+id/tv_title"
+                android:layout_marginTop="@dimen/size_8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_num"
+                tools:text="18757104843"
+                android:textColor="#999999"
+                android:textSize="@dimen/sp_14"
+                android:layout_marginLeft="@dimen/size_18dp"
+                android:layout_toRightOf="@+id/tv_name"
+                android:layout_below="@+id/tv_title"
+                android:layout_marginTop="@dimen/size_8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/iv_edit"
+                android:layout_marginRight="@dimen/size_15dp"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/size_10dp"
+                android:src="@mipmap/icon_address_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_below="@+id/rl"
+        android:layout_marginLeft="@dimen/size_42dp"
+        android:background="#F1F1F2"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"/>
+</RelativeLayout>

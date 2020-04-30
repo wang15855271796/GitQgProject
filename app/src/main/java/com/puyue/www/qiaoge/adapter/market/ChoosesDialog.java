@@ -72,13 +72,14 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
         super(context, R.style.dialog);
         this.context = context;
         this.listBean = listBean;
-        init();
+
         if(listBean.getBusinessType()==11) {
             exchangeLists(listBean.getActiveId(),listBean.getBusinessType());
         }else {
             exchangeLists(listBean.getProductId(),listBean.getBusinessType());
         }
 
+        init();
     }
 
     private void exchangeLists(int activeId,int businessType) {
@@ -100,6 +101,7 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
                         if(exchangeProductModel.isSuccess()) {
+
                             exchangeProductModels = exchangeProductModel;
                             tv_name.setText(exchangeProductModel.getData().getProductName());
                             tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
@@ -107,15 +109,18 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
                             tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
                             tv_stock.setText(exchangeProductModel.getData().getInventory());
                             Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
-                            Log.d("wssssssssssss....",exchangeProductModel.getData().getProductName());
                             if(businessType==11) {
                                 itemChooseAdapter = new ItemChooseAdapter(businessType, exchangeProductModel.getData().getActiveId(), R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
                             }else {
                                 itemChooseAdapter = new ItemChooseAdapter(businessType, exchangeProductModel.getData().getProdSpecs().get(pos).getProductId(), R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
+
                             }
+
                             recyclerView.setLayoutManager(new LinearLayoutManager(context));
                             recyclerView.setAdapter(itemChooseAdapter);
                             itemChooseAdapter.notifyDataSetChanged();
+
+
                         }else {
                             AppHelper.showMsg(context,exchangeProductModel.getMessage());
                         }
@@ -148,7 +153,6 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
                 specAdapter.selectPosition(position);
                 if(listBean.getBusinessType()==11) {
                     exchangeLists(listBean.getActiveId(),11);
-                    Log.d("wdddddddd.....",listBean.getActiveId()+"");
                 }else {
                     exchangeLists(exchangeProductModels.getData().getProdSpecs().get(position).getProductId(),1);
 

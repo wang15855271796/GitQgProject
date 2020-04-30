@@ -31,11 +31,13 @@ public class CityChangeAdapter extends BaseQuickAdapter<CityChangeModel.DataBean
     CityDialog cityDialog;
     public List<CityChangeModel.DataBean.CityNamesBean.AreaNamesBean> areaNames;
     Activity mActivity;
-    public CityChangeAdapter(Activity mActivity, int layoutResId, @Nullable List<CityChangeModel.DataBean> data, Onclick onclick) {
+    String flag;
+    public CityChangeAdapter(String flag,Activity mActivity, int layoutResId, @Nullable List<CityChangeModel.DataBean> data, Onclick onclick) {
         super(layoutResId, data);
         this.data = data;
         this.onclick = onclick;
         this.mActivity = mActivity;
+        this.flag = flag;
     }
 
 
@@ -53,7 +55,7 @@ public class CityChangeAdapter extends BaseQuickAdapter<CityChangeModel.DataBean
                 citysAdapter.selectPosition(position);
                 areaNames = item.getCityNames().get(position).getAreaNames();
                 UserInfoHelper.saveCity(mContext, item.getCityNames().get(position).getCityName());
-                cityDialog = new CityDialog(mActivity,item.getCityNames().get(position).getAreaNames()) {
+                cityDialog = new CityDialog(flag,mActivity,item.getCityNames().get(position).getAreaNames()) {
                     @Override
                     public void Confirm() {
                         mActivity.finish();

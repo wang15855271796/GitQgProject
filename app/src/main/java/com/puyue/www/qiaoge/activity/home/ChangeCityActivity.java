@@ -68,9 +68,9 @@ public class ChangeCityActivity extends BaseActivity {
 
     @Override
     public void setViewData() {
-
+        String flag = getIntent().getStringExtra("flag");
         rl_city_change.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new CityChangeAdapter(mActivity,R.layout.city_item, listCity, new CityChangeAdapter.Onclick() {
+        mAdapter = new CityChangeAdapter(flag,mActivity,R.layout.city_item, listCity, new CityChangeAdapter.Onclick() {
             @Override
             public void addDialog(int position, List<CityChangeModel.DataBean.CityNamesBean.AreaNamesBean> areaNames, View view) {
 

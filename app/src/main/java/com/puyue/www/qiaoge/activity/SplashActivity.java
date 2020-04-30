@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.base.BaseActivity;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 
 import java.util.List;
 
@@ -89,12 +90,10 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-
                 Intent intent = new Intent(mContext, HomeActivity.class);
                 intent.putExtra("go_home", "goHome");
                 startActivity(intent);
                 finish();
-                Log.d("wsswsswswssw.....","sssss");
             }
         });
     }

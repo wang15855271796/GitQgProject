@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <ImageView
+        android:id="@+id/iv_bg"
+        android:background="@mipmap/bg_turn"
+        android:layout_centerInParent="true"
+        android:layout_width="400dp"
+        android:layout_height="400dp" />
+
+    <com.puyue.www.qiaoge.view.LuckPan
+        android:layout_centerInParent="true"
+        android:id="@+id/pan"
+        android:layout_width="337dp"
+        android:layout_height="337dp" />
+
+    <ImageView
+        android:id="@+id/iv_start"
+        android:src="@drawable/icon_start"
+        android:layout_centerInParent="true"
+        android:layout_width="115dp"
+        android:layout_height="115dp" />
+
+    <ImageView
+        android:layout_below="@+id/iv_bg"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/ic_turn_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

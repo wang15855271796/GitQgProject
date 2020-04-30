@@ -2,7 +2,13 @@ package com.puyue.www.qiaoge.api.home;
 
 import android.content.Context;
 
+import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
+import com.puyue.www.qiaoge.event.CouponListModel;
+import com.puyue.www.qiaoge.event.IsTurnModel;
+import com.puyue.www.qiaoge.event.PrivacyModel;
+import com.puyue.www.qiaoge.event.TurnModel;
+import com.puyue.www.qiaoge.event.TurnReceiveModel;
 import com.puyue.www.qiaoge.helper.RestHelper;
 import com.puyue.www.qiaoge.model.home.CouponModel;
 import com.puyue.www.qiaoge.model.home.HomeNewRecommendModel;
@@ -138,6 +144,107 @@ public class IndexHomeAPI {
     public static Observable<CouponModel> getCouponList(Context context,  String activityType) {
         CouponService service = RestHelper.getBaseRetrofit(context).create(CouponService.class);
         return service.getData(activityType);
+    }
+
+
+    /**
+     * 首页优惠券弹窗列表
+     */
+    private interface CouponsService {
+        @POST(AppInterfaceAddress.Coupon_List)
+        Observable<CouponListModel> getData();
+
+    }
+
+    public static Observable<CouponListModel> getCouponLists(Context context) {
+        CouponsService spikeActiveQueryService = RestHelper.getBaseRetrofit(context).create(CouponsService.class);
+        return spikeActiveQueryService.getData();
+    }
+
+    /**
+     * 首页优惠券关闭弹窗列表
+     */
+    private interface CouponCloseService {
+        @FormUrlEncoded
+        @POST(AppInterfaceAddress.Coupon_Close_List)
+        Observable<BaseModel> getData(@Field("id") String id);
+
+    }
+
+    public static Observable<BaseModel> getCouponClose(Context context,String id) {
+        CouponCloseService spikeActiveQueryService = RestHelper.getBaseRetrofit(context).create(CouponCloseService.class);
+        return spikeActiveQueryService.getData(id);
+    }
+
+    /**
+     * 隐私政策  Privacy
+     */
+
+    private interface PrivacyService {
+        @POST(AppInterfaceAddress.Privacy)
+        Observable<PrivacyModel> getData();
+    }
+
+    public static Observable<PrivacyModel> getPrivacy(Context context) {
+        PrivacyService privacyService = RestHelper.getBaseRetrofit(context).create(PrivacyService.class);
+        return privacyService.getData();
+    }
+
+    /**
+     *
+     * 转盘数据
+     */
+    private interface TurnService {
+        @POST(AppInterfaceAddress.Turn_Table)
+        Observable<TurnModel> getData();
+    }
+
+    public static Observable<TurnModel> getTurn(Context context) {
+        TurnService privacyService = RestHelper.getBaseRetrofit(context).create(TurnService.class);
+        return privacyService.getData();
+    }
+
+    /**
+     *
+     * 是否显示转盘
+     */
+    private interface IsTurnService {
+        @POST(AppInterfaceAddress.Is_Turn_Table)
+        Observable<IsTurnModel> getData();
+    }
+
+    public static Observable<IsTurnModel> isTurn(Context context) {
+        IsTurnService privacyService = RestHelper.getBaseRetrofit(context).create(IsTurnService.class);
+        return privacyService.getData();
+    }
+
+    /**
+     *
+     * 转盘点击领取
+     */
+    private interface TurnReceiveService {
+        @POST(AppInterfaceAddress.Turn_Table_Receive)
+        Observable<TurnReceiveModel> getData();
+    }
+
+    public static Observable<TurnReceiveModel> TurnReceive(Context context) {
+        TurnReceiveService privacyService = RestHelper.getBaseRetrofit(context).create(TurnReceiveService.class);
+        return privacyService.getData();
+    }
+
+    /**
+     * 隐私政策已读  common/readPrivacyPolicy
+     */
+
+    private interface ReadService {
+        @POST(AppInterfaceAddress.Read_Privacy)
+        Observable<BaseModel> getData();
+    }
+
+
+    public static Observable<BaseModel> readPrivacy(Context context) {
+        ReadService readService = RestHelper.getBaseRetrofit(context).create(ReadService.class);
+        return readService.getData();
     }
 
 }

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.adapter.mine.AreaAdapter;
 import com.puyue.www.qiaoge.fragment.home.CityEvent;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
@@ -33,12 +34,13 @@ public abstract class CityDialog extends Dialog implements View.OnClickListener 
     LinearLayout ll_root;
     ImageView iv_close;
     List<CityChangeModel.DataBean.CityNamesBean.AreaNamesBean> areaNames;
-
-    public CityDialog(@NonNull Activity context, List<CityChangeModel.DataBean.CityNamesBean.AreaNamesBean> areaNames) {
+    String flag;
+    public CityDialog(String flag, Activity context, List<CityChangeModel.DataBean.CityNamesBean.AreaNamesBean> areaNames) {
         super(context, R.style.promptDialog);
         setContentView(R.layout.dialog_city);
         this.mContext = context;
         this.areaNames = areaNames;
+        this.flag = flag;
         initView();
         initAction();
     }
@@ -56,13 +58,25 @@ public abstract class CityDialog extends Dialog implements View.OnClickListener 
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Confirm();
                 dismiss();
-                UserInfoHelper.saveAreaName(mContext, areaNames.get(position).getAreaName());
-                SharedPreferencesUtil.saveInt(mContext,"isClick",1);
-                UserInfoHelper.saveChangeFlag(mContext,1+"");
-                Intent intent = new Intent();//跳回首页
-                EventBus.getDefault().post(new CityEvent());
-                mContext.setResult(104,intent);
-                mContext.finish();
+
+                if(flag!=null) {
+                    UserInfoHelper.saveAreaName(mContext, areaNames.get(position).getAreaName());
+                    SharedPreferencesUtil.saveInt(mContext,"isClick",1);
+                    UserInfoHelper.saveChangeFlag(mContext,1+"");
+                    Intent intent = new Intent();//跳回首页
+                    mContext.setResult(104,intent);
+                    EventBus.getDefault().post(new CityEvent());
+                    mContext.finish();
+                }else {
+                    UserInfoHelper.saveAreaName(mContext, areaNames.get(position).getAreaName());
+                    SharedPreferencesUtil.saveInt(mContext,"isClick",1);
+                    UserInfoHelper.saveChangeFlag(mContext,1+"");
+                    Intent intent = new Intent();//跳回首页
+                    mContext.setResult(104,intent);
+                    EventBus.getDefault().post(new CityEvent());
+                    mContext.finish();
+                }
+
 
 
             }

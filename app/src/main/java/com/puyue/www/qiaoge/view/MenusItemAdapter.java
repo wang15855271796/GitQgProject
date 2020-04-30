@@ -21,6 +21,5 @@ public class MenusItemAdapter extends BaseQuickAdapter<AddressBean.DataBean,Base
 
     @Override
     protected void convert(BaseViewHolder helper, AddressBean.DataBean item) {
-        Log.d("ggtgtggtgggggg...",item.toString());
     }
 }

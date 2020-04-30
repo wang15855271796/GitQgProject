@@ -1594,6 +1594,14 @@ public class MarketsFragment extends BaseFragment {
         getData();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void change(CityEvent cityEvent) {
+        Log.d("wwwwwwwwwwwvvv....","0000000000");
+        requestGoodsList();
+        getData();
+
+    }
+
     /**
      * 提示用户去登录还是注册的弹窗
      */
@@ -1613,4 +1621,8 @@ public class MarketsFragment extends BaseFragment {
         };
         couponDialog.show();
     }
+
+
+
+
 }

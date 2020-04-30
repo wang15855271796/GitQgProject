@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_marginTop="@dimen/size_15dp"
+        android:layout_marginLeft="@dimen/sp_12"
+        android:layout_marginRight="@dimen/size_12dp"
+        android:background="@mipmap/coupon_bg"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+        <RelativeLayout
+            android:id="@+id/rl1"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/rl"
+                android:layout_width="100dp"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="￥"
+                    android:id="@+id/tv"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/size_15dp"
+                    android:textColor="#E1003F"
+                    android:layout_alignBaseline="@+id/tv_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    tools:text="25"
+                    android:id="@+id/tv_money"
+                    android:layout_toRightOf="@+id/tv"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/size_25dp"
+                    android:textColor="#E1003F"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+
+            <TextView
+                tools:text="无门槛"
+                android:textSize="@dimen/sp_12"
+                android:id="@+id/tv_user"
+                android:layout_centerHorizontal="true"
+                android:textColor="#999999"
+                android:layout_below="@+id/rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/size_30dp"
+            android:layout_toRightOf="@+id/rl1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_title"
+                tools:text="翘歌五一大促优惠券"
+                android:textSize="@dimen/sp_16"
+                android:textColor="#333333"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_factor"
+                tools:text="翘歌优惠券"
+                android:textSize="@dimen/sp_12"
+                android:textColor="#999999"
+                android:layout_below="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_below="@+id/tv_factor"
+                android:textSize="@dimen/sp_12"
+                android:textColor="#999999"
+                tools:text="有效期至 2020-12-3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

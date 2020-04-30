@@ -27,7 +27,27 @@ public class AppInterfaceAddress {
     public static final String LOG_OUT = "user/loginOut";
     public static final String CHANGE_LOGIN_PASSWORD = "auth/resetPwd";
     public static final String CHANGE_PAY_PASSWORD = "pay/updatePayPwd";
-    //common/product/getGuessYourLikeProductList
+
+    /**
+     * 转盘数据
+     */
+    public static final String Turn_Table = "user/getRegisterPoolInfo";
+
+
+    /**
+     * 转盘数据
+     */
+    public static final String Is_Turn_Table = "user/getRegisterPoolState";
+
+    /**
+     *
+     * 转盘点击领取
+     */
+    public static final String Turn_Table_Receive = "user/getRegisterPool";
+    /**
+     * 获取隐私政策
+     */
+    public static final String Privacy = "common/getPrivacyPolicyBtn";
 
     /**
      * 猜你喜欢
@@ -78,6 +98,12 @@ public class AppInterfaceAddress {
      * 首页其他信息
      */
     public static final String COUPONINFO = "common/getAreaHomeActiveInfo";
+
+    /**
+     * 首页优惠券弹窗列表
+     */
+    public static final String Coupon_List = "common/getUserPopups";
+
 
     public static final String HOMENEW = "common/prodHomeIndexInfo";
     public static final String GETPRODUCTLIST = "common/product/getProductList?";
@@ -172,6 +198,9 @@ public class AppInterfaceAddress {
     public static final String GETEQUIPMENTCOMMENTLISTBYPAGE = "equipment/getCommentListByPage?";
     public static final String GETPRODUCTDETAIL = "common/querySpecProductDetail";
     public static final String COMMENTORDER = "commonOrder/commentOrder?";
+    /**
+     * 切换商品规格
+     */
     public static final String EXCHANGEPRODUCT = "common/prodChangeSpec";
     /**
      * 商品详情用户评论
@@ -482,4 +511,14 @@ public class AppInterfaceAddress {
      * 取消退货申请
      */
     public static final String USERCANCELORDER = "commonOrder/userCancelReturnOrder";
+
+    /**
+     * 首页关闭优惠券列表弹窗
+     */
+    public static final String Coupon_Close_List = "common/viewedUserPopups";
+    /**
+     * 隐私政策已读
+     */
+    public static final String Read_Privacy = "common/readPrivacyPolicy";
+
 }

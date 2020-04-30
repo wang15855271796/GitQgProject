@@ -102,9 +102,6 @@ public class CommonsAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean
                     onclick.addDialog();
                 }
                 commonDialog = new ShouyeDialog(mContext,item.getProductMainId());
-                Window window = commonDialog.getWindow();
-                WindowManager.LayoutParams lp = window.getAttributes();
-                window.clearFlags( WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                 commonDialog.show();
             }
         });

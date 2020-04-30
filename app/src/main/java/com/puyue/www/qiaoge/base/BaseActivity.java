@@ -46,7 +46,6 @@ public abstract class BaseActivity extends AppCompatActivity  {
 
 
         setContentView();
-        Log.d("wdddddddddddd....","wssss");
 
         mResources = this.getResources();
         mBundle = savedInstanceState;

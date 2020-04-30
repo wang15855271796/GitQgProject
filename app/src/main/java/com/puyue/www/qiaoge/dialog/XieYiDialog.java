@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.CommonH5Activity;
 import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 
@@ -19,7 +20,7 @@ import org.greenrobot.eventbus.EventBus;
  */
 public abstract class XieYiDialog extends Dialog {
     Context mContext;
-
+    TextView tv_account;
     public TextView tv_sure,hint;
     TextView tv_cancle;
     public TextView title;
@@ -39,8 +40,15 @@ public abstract class XieYiDialog extends Dialog {
         webView = (WebView) findViewById(R.id.webView);
         title = findViewById(R.id.title);
         tv_cancle = findViewById(R.id.tv_cancle);
+        tv_account = findViewById(R.id.tv_account);
         webView.loadUrl(url);
         checkbox = (CheckBox) findViewById(R.id.checkbox);
+        tv_account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContext.startActivity(CommonH5Activity.getIntent(mContext, CommonH5Activity.class, url));
+            }
+        });
     }
 
 

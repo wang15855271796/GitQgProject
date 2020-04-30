@@ -25,6 +25,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -46,6 +47,7 @@ import com.puyue.www.qiaoge.activity.mine.login.RegisterMessageActivity;
 import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletPointActivity;
+import com.puyue.www.qiaoge.adapter.CouponListAdapter;
 import com.puyue.www.qiaoge.adapter.home.CommonAdapter;
 import com.puyue.www.qiaoge.adapter.home.CommonProductActivity;
 import com.puyue.www.qiaoge.adapter.home.HotProductActivity;
@@ -66,9 +68,16 @@ import com.puyue.www.qiaoge.banner.listener.OnBannerListener;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.CouponDialog;
+import com.puyue.www.qiaoge.dialog.CouponListDialog;
+import com.puyue.www.qiaoge.dialog.PrivacyDialog;
+import com.puyue.www.qiaoge.dialog.TurnTableDialog;
 import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.event.BackEvent;
+import com.puyue.www.qiaoge.event.CouponListModel;
+import com.puyue.www.qiaoge.event.IsTurnModel;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
+import com.puyue.www.qiaoge.event.PrivacyModel;
+import com.puyue.www.qiaoge.event.TurnModel;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
@@ -84,7 +93,10 @@ import com.puyue.www.qiaoge.model.mine.UpdateModel;
 import com.puyue.www.qiaoge.model.mine.order.HomeBaseModel;
 import com.puyue.www.qiaoge.model.mine.order.MyOrderNumModel;
 import com.puyue.www.qiaoge.utils.DateUtils;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.utils.Utils;
+
+import com.puyue.www.qiaoge.view.LuckPanAnimEndCallBack;
 import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 import com.puyue.www.qiaoge.view.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -109,6 +121,8 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import static cn.com.chinatelecom.account.api.CtAuth.mContext;
 
 /**
  * Created by ${王涛} on 2020/1/4
@@ -209,6 +223,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     AVLoadingIndicatorView lav_activity_loading;
     CouponDialog couponDialog;
     private String cell; // 客服电话
+    private PrivacyDialog privacyDialog;
     //司机信息
     List<DriverInfo.DataBean> driverList = new ArrayList<>();
     //八个icon集合
@@ -217,10 +232,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     List<HomeBaseModel.DataBean.SecKillListBean.KillsBean> skillList = new ArrayList<>();
     //秒杀预告集合
     List<HomeBaseModel.DataBean.SecKillListBean.KillsBean> skillAdvList = new ArrayList<>();
-    //特惠集合
-    List<HomeBaseModel.DataBean.OfferListBean> couponList = new ArrayList<>();
-    //组合集合
-    List<HomeBaseModel.DataBean.TeamListBean> teamList = new ArrayList<>();
+
     //新品集合
     List<HomeNewRecommendModel.DataBean.ListBean> newList = new ArrayList<>();
     //banner集合
@@ -235,13 +247,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     private boolean forceUpdate;
     private String content;
     private String url;//更新所用的url
-    private boolean isShowed = false;//店铺类型是否展示
     private AlertDialog mTypedialog;
-    private String invitationCode;
-    private boolean isFirst = true;
-    int isSelected;
-    boolean isChecked = false;
-    int shopTypeId;
     boolean flag;
     //banner集合
     List<String> list = new ArrayList<>();
@@ -249,41 +255,33 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     //分类列表
     private List<IndexInfoModel.DataBean.ClassifyListBean> classifyList = new ArrayList<>();
     private TypesAdapter typeAdapter;
-    private DriverAdapter driverAdapter;
-    SpikeFragment spikeFragment;
-    CouponsFragment couponsFragment;
-    TeamsFragment teamsFragment;
-    boolean isFirsts = false;
     NewFragment newFragment;
     MustFragment mustFragment;
     InfoFragment infoFragment;
     CommonFragment commonFragment;
     private String questUrl;
     private CouponModel.DataBean data1;
-    private CouponModel.DataBean data2;
-    private CouponModel.DataBean data3;
     private int showType;
     private CommonAdapter commonAdapter;
     private LinearLayoutManager linearLayoutManager;
     private List<CouponModel.DataBean.ActivesBean> actives = new ArrayList<>();
-    private View view;
     private int spikeNum;
     private int teamNum;
     private int specialNum;
     private long currentTime;
     private long startTime;
     private long endTime;
-
     private Date currents;
     private Date starts;
-    private CouponModel.DataBean data4;
     private VerticalBannerAdapter verticalBannerAdapter;
-    private State state;
-    public enum State {
-        EXPANDED,
-        COLLAPSED,
-        INTERNEDIATE
-    }
+    private CouponListDialog couponListDialog;
+    CouponListModel couponListModels;
+    private CouponListAdapter couponListAdapter;
+    private List<CouponListModel.DataBean.GiftsBean> lists;
+    private List<TurnModel.DataBean> data2;
+    private TurnTableDialog turnTableDialog;
+
+
     @Override
     public int setLayoutId() {
         return R.layout.home_fragmentss;
@@ -352,7 +350,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                     public void onNext(CouponModel couponModel) {
                         if(couponModel.isSuccess()) {
                             actives.clear();
-                            data4 = couponModel.getData();
 
                             if(type==2) {
                                 data1 = couponModel.getData();
@@ -476,7 +473,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                                         public void shoppingCartOnClick(int position) {
                                             if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
                                                 int activeId = actives.get(position).getActiveId();
-                                                Log.d("fsffffffff...",activeId+"");
                                                 addCar(activeId, "", 3, "1");
                                             } else {
                                                 initDialog();
@@ -561,9 +557,8 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         context = getActivity();
         initStatusBarWhiteColor();
         token = UserInfoHelper.getUserId(mActivity);
-//        rb_new.setChecked(true);
-//        switchRb4();
         getProductsList(1,10,"commonBuy");
+
         appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -578,9 +573,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                 if(flag) {
                     ll_small_title.setVisibility(View.GONE);
                     ll_line.setVisibility(View.VISIBLE);
-                    Log.d("qqqqqqqqqq....","ppppppppp");
                 }else {
-                    Log.d("qqqqqqqqqq....","wwwwwwwwww");
                     ll_small_title.setVisibility(View.VISIBLE);
                     ll_line.setVisibility(View.GONE);
 
@@ -647,7 +640,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                         rb_3.setTextColor(Color.parseColor("#333333"));
                         rb_3.setBackgroundResource(R.drawable.shape_white);
                         getSpikeList(2);
-                        Log.d("swsssssssssssss.....","sswwss");
                         break;
 
                     case R.id.rb_2:
@@ -683,11 +675,8 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         rg_new.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-//                hideFragment();
                 switch (checkedId) {
                     case R.id.rb_new:
-                        Log.d("wssssssssssss....",checkedId+"ss");
                         rb_info.setTextColor(Color.parseColor("#333333"));
                         rb_common.setTextColor(Color.parseColor("#333333"));
                         rb_must_common.setTextColor(Color.parseColor("#333333"));
@@ -703,12 +692,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
                         tv_title4.setTextColor(Color.parseColor("#999999"));
                         tv_title4.setBackgroundResource(R.drawable.shape_white);
-//                        if (newFragment == null){
-//                            newFragment=new NewFragment();
-//
-//                            fragmentTransaction.add(R.id.content,newFragment);
-//                        }
-//                        fragmentTransaction.show(newFragment);
                         switchRb4();
                         break;
 
@@ -780,9 +763,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
             }
         });
 
-        //司机信息Adapter
-        driverAdapter = new DriverAdapter(R.layout.item_driver,driverList);
-
         //八个icon Adapter
         rvIconAdapter = new RvIconAdapter(R.layout.item_home_icon,iconList);
         rv_icon.setLayoutManager(new GridLayoutManager(context,4));
@@ -793,7 +773,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         rv_type.setLayoutManager(new GridLayoutManager(context,2));
         rv_type.setAdapter(typeAdapter);
 
-
         tv_search.setOnClickListener(this);
         rl_message.setOnClickListener(this);
         tv_city.setOnClickListener(this);
@@ -801,6 +780,43 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         rl_more2.setOnClickListener(this);
         rl_more3.setOnClickListener(this);
 
+    }
+
+    /**
+     * 获取权限
+     */
+    private void getPrivacy() {
+        IndexHomeAPI.getPrivacy(mActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<PrivacyModel>() {
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(PrivacyModel privacyModel) {
+                        if(privacyModel.isSuccess()) {
+                            String content = privacyModel.getData().getContent();
+                            privacyDialog = new PrivacyDialog(mActivity,content);
+                            if(privacyModel.getData().getOpen().equals("1")) {
+                                privacyDialog.show();
+                            } else {
+                                privacyDialog.dismiss();
+                            }
+
+                        }else {
+                            AppHelper.showMsg(mContext,privacyModel.getMessage());
+                        }
+                    }
+                });
     }
 
     private void getProductsList(int pageNums, int pageSize, String type) {
@@ -820,6 +836,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
                     @Override
                     public void onNext(ProductNormalModel getCommonProductModel) {
+                        Log.d("wwwwwwwwwwwwwwww.....","00000");
                         if (getCommonProductModel.isSuccess()) {
                             if(getCommonProductModel.getData().getList().size()>0) {
                                 switchRb7();
@@ -1007,13 +1024,16 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         requestUpdate();
         refreshLayout.autoRefresh();
         lav_activity_loading.show();
+        couponListAdapter = new CouponListAdapter(R.layout.item_home_coupon_list,lists);
+
+        isTurn();
+        getCouponList();
         getCustomerPhone();
+        getPrivacy();
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
         mTypedialog.setCancelable(false);
 
-        if (token != null && StringHelper.notEmptyAndNull(token)) {
-//            requestOrderNum();
-        }
+
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -1029,6 +1049,109 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                 refreshLayout.finishRefresh();
             }
         });
+    }
+
+    private void isTurn() {
+        IndexHomeAPI.isTurn(mActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<IsTurnModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(IsTurnModel turnModel) {
+                        if(turnModel.isSuccess()) {
+                            int isShow = turnModel.getData();
+                            //1显示 0不显示
+                            if(isShow==1) {
+                                getTurn();
+                            }else {
+
+                            }
+                        }else {
+                            AppHelper.showMsg(mActivity,turnModel.getMessage());
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 优惠券列表弹窗
+     */
+    private void getCouponList() {
+        IndexHomeAPI.getCouponLists(mActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<CouponListModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(CouponListModel couponListModel) {
+                        if(couponListModel.isSuccess()) {
+                            couponListModels = couponListModel;
+                            lists = couponListModel.getData().getGifts();
+                            couponListAdapter.notifyDataSetChanged();
+                            if(lists.size()>0) {
+                                couponListDialog = new CouponListDialog(mActivity,couponListModel,lists);
+                                couponListDialog.show();
+                            }
+
+                        }else {
+                            AppHelper.showMsg(mContext,couponListModel.getMessage());
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 转盘数据
+     */
+    private void getTurn() {
+        IndexHomeAPI.getTurn(mActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<TurnModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(TurnModel turnModel) {
+                        if(turnModel.isSuccess()) {
+                            data2 = turnModel.getData();
+                            List<String> list = new ArrayList<>();
+                            for (int i = 0; i <data2.size() ; i++) {
+                                list.add(data2.get(i).getPoolNo());
+                            }
+                            turnTableDialog = new TurnTableDialog(mActivity,list);
+                            turnTableDialog.show();
+                        }else {
+                            AppHelper.showMsg(mActivity,turnModel.getMessage());
+                        }
+                    }
+                });
     }
 
     private void getCustomerPhone() {
@@ -1428,42 +1551,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         });
     }
 
-    /**
-     * 获取消息
-     */
-    private void requestOrderNum() {
-        MyOrderNumAPI.requestOrderNum(getContext())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<MyOrderNumModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(MyOrderNumModel myOrderNumModel) {
-                        mModelMyOrderNum = myOrderNumModel;
-                        if (mModelMyOrderNum.success) {
-                            if (mModelMyOrderNum.getData().getNotice() > 0) {
-                                tv_num.setVisibility(View.VISIBLE);
-
-                                tv_num.setText("  " + mModelMyOrderNum.getData().getNotice() + "  ");
-                            } else {
-                                tv_num.setVisibility(View.GONE);
-                            }
-                        } else {
-                            AppHelper.showMsg(mActivity, mModelMyOrderNum.message);
-                        }
-                    }
-                });
-    }
-
 
     @Override
     public void setClickEvent() {
@@ -1557,6 +1644,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
             skillAdvList.clear();
             getBaseLists();
             EventBus.getDefault().post(new BackEvent());
+
         }
     }
 
@@ -1581,19 +1669,15 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginEvent(LogoutsEvent event) {
         //刷新UI
-//        newList.clear();
-//        skillList.clear();
-//        skillAdvList.clear();
-        Log.d("sdfhdshjdlsk.......","sdfsdfsd");
         refreshLayout.autoRefresh();
-
+        getCouponList();
+        isTurn();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginsEvent(AddressEvent event) {
         //刷新UI
         refreshLayout.autoRefresh();
-        Log.d("sdfhdshjdlsk.......","sdfsdfsd");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

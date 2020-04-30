@@ -49,7 +49,6 @@ public class QiaoGeApplication extends MultiDexApplication {
 
 
         UserInfoHelper.saveDate(this, 0+"");
-        Log.d("sdedwqedweffdfdsfdf...",UserInfoHelper.getDate(this));
         api = WXAPIFactory.createWXAPI(this, "wxbc18d7b8fee86977");
         api.registerApp("wxbc18d7b8fee86977");
         JPushInterface.setDebugMode(false);

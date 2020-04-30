@@ -53,10 +53,8 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
 
     @Override
     protected void convert(BaseViewHolder helper, ExchangeProductModel.DataBean.ProdPricesBean item) {
-
         tv_price = helper.getView(R.id.tv_price);
         tv_price.setText(item.getPrice());
-        Log.d("wwwssssssssss.....",item.getPrice());
         tv_reduce = helper.getView(R.id.tv_reduce);
         helper.setText(R.id.tv_unit, item.getUnitDesc());
         TextView tv_old_price = helper.getView(R.id.tv_old_price);

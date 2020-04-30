@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:background="@drawable/shape_choose_address"
+        android:layout_width="match_parent"
+        android:layout_height="450dp">
+
+        <TextView
+            android:text="选择收货地址"
+            android:textColor="#333333"
+            android:id="@+id/tv"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/size_17dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/sp_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/tv"
+            android:layout_marginTop="@dimen/size_20dp"
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv1"
+            android:layout_marginTop="@dimen/size_20dp"
+            android:layout_below="@+id/recyclerView"
+            android:text="超出配送范围"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/tv1"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/size_20dp"
+            android:id="@+id/recyclerView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+        <RelativeLayout
+            android:layout_below="@+id/recyclerView"
+            android:background="@drawable/shape_grey_button"
+            android:layout_marginLeft="@dimen/size_13dp"
+            android:layout_marginRight="@dimen/size_13dp"
+            android:layout_marginBottom="@dimen/size_11dp"
+            android:layout_marginTop="@dimen/dp_40"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40">
+
+            <TextView
+                android:text="新增收货地址"
+                android:textSize="@dimen/sp_16"
+                android:textColor="#333333"
+                android:drawablePadding="@dimen/size_8dp"
+                android:drawableLeft="@mipmap/icon_add_address"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>

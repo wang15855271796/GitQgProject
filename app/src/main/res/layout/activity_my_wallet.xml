@@ -298,8 +298,9 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/size_30dp"
                 android:layout_marginTop="@dimen/size_50dp"
                 android:layout_marginRight="@dimen/size_15dp"
                 android:layout_marginLeft="@dimen/size_15dp"
@@ -308,9 +309,9 @@
                 <CheckBox
                     android:id="@+id/checkbox"
                     android:button="@null"
-                    android:background="@drawable/check"
-                    android:layout_width="@dimen/size_18dp"
-                    android:layout_height="@dimen/size_18dp" />
+                    android:background="@drawable/select_checkbox"
+                    android:layout_width="@dimen/size_16dp"
+                    android:layout_height="@dimen/size_16dp" />
 
                 <TextView
                     android:layout_marginLeft="@dimen/size_5dp"

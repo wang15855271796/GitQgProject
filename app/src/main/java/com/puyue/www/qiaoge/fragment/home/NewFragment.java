@@ -295,28 +295,7 @@ public class NewFragment extends BaseFragment {
                             }
 
                             refreshLayout.setEnableLoadMore(true);
-//                        Log.d("sddsssssss......",getCommonProductModel.getData().getList().size()+"");
-//                        if (getCommonProductModel.isSuccess()) {
-//                            if (getCommonProductModel.getData()!=null) {
-//                                if(productNormalModel.getData().isHasNextPage()) {
-//                                    pageNum++;
-//                                    list.addAll(getCommonProductModel.getData().getList());
-//                                    adapterNewArrival.notifyDataSetChanged();
-//                                    refreshLayout.finishLoadMore();
-//                                }else {
-//                                    list.addAll(getCommonProductModel.getData().getList());
-//                                    adapterNewArrival.notifyDataSetChanged();
-//                                    refreshLayout.finishLoadMoreWithNoMoreData();
-//                                }
-//                        if(productNormalModel.getData().isHasNextPage()) {
-//                            pageNum++;
-//                            getProductsList(pageNum, 10,"new");
-//                            refreshLayout.finishLoadMore();
-//                        }else {
-//                            refreshLayout.finishLoadMoreWithNoMoreData();
-//                        }
-//                    }
-//                            }
+
                         }
                         else {
                             AppHelper.showMsg(mActivity, getCommonProductModel.getMessage());

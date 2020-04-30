@@ -31,6 +31,7 @@ import com.puyue.www.qiaoge.api.mine.coupon.userChooseDeductAPI;
 import com.puyue.www.qiaoge.api.mine.order.GenerateOrderAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.ChooseAddressDialog;
 import com.puyue.www.qiaoge.dialog.LoadingDialog;
 import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -243,10 +244,13 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
         public void onNoDoubleClick(View view) {
             switch (view.getId()) {
                 case R.id.linearLayoutAddressHead: // 地址切换
-                    Intent intent_ = new Intent(mActivity, AddressListsActivity.class);
-                    intent_.putExtra("type", 1);
-                    intent_.putExtra("mineAddress", "mineAddress");
-                    startActivityForResult(intent_, 31);
+//                    Intent intent_ = new Intent(mActivity, AddressListsActivity.class);
+//                    intent_.putExtra("type", 1);
+//                    intent_.putExtra("mineAddress", "mineAddress");
+//                    startActivityForResult(intent_, 31);
+                    ChooseAddressDialog chooseAddressDialog = new ChooseAddressDialog(mActivity,orderId);
+                    chooseAddressDialog.show();
+
                     break;
                 case R.id.LinearLayoutAddress: // 添加地址
                     Intent intent1 = AddressListActivity.getIntent(mActivity, AddressListsActivity.class);

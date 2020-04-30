@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_marginLeft="@dimen/size_47dp"
+        android:layout_marginRight="@dimen/size_47dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/app_my_wallet_bg"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/icon_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textColor="#333"
+            android:textStyle="bold"
+            android:id="@+id/tv"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_11dp"
+            android:textSize="@dimen/sp_16"
+            android:layout_centerHorizontal="true"
+            android:text="该地址不属于本地区配送范围"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv1"
+            android:textColor="#333"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_11dp"
+            android:textSize="@dimen/sp_14"
+            android:layout_below="@+id/tv"
+            android:layout_centerHorizontal="true"
+            android:text="亲，是否要切换城市下单呢 ？"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/size_10dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D8D8D8" />
+
+            <LinearLayout
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_cancle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="取消"
+                    android:textColor="#333333"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:background="#D8D8D8"
+                    android:layout_height="@dimen/size_60dp"/>
+
+                <TextView
+                    android:id="@+id/tv_sure"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="切换城市"
+                    android:textColor="#FF680A"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

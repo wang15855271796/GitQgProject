@@ -98,6 +98,7 @@ public class ExchangeProductModel {
          * prodPrices : [{"price":"￥0.6/包","oldPrice":"","priceId":1376,"productUnit":540},{"price":"￥11/箱","oldPrice":"","priceId":1377,"productUnit":539},{"price":"￥12/2包","oldPrice":"","priceId":1378,"productUnit":540},{"price":"￥13/3包","oldPrice":"","priceId":1379,"productUnit":540},{"price":"￥14/4包","oldPrice":"","priceId":1380,"productUnit":540}]
          */
         int activeId;
+        int productId;
         private String type;
         private int productMainId;
         private String productName;
@@ -111,6 +112,14 @@ public class ExchangeProductModel {
         private List<ProdSpecsBean> prodSpecs;
         private String inventory;
         private List<ProdPricesBean> prodPrices;
+
+        public int getProductId() {
+            return productId;
+        }
+
+        public void setProductId(int productId) {
+            this.productId = productId;
+        }
 
         public int getActiveId() {
             return activeId;
