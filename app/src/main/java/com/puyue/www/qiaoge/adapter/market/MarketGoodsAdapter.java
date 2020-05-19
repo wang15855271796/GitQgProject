@@ -78,8 +78,6 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
 
         helper.setText(R.id.tv_sale,item.getSalesVolume());
         helper.setText(R.id.tv_price,item.getMinMaxPrice());
-        helper.setText(R.id.tv_desc,item.getSpecialOffer());
-        helper.setText(R.id.tv_stock,item.getInventory());
         helper.setText(R.id.tv_stock_total,item.getInventory());
 
         TextView tv_choose_spec = helper.getView(R.id.tv_choose_spec);

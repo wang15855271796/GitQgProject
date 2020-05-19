@@ -52,7 +52,6 @@ public class ConfirmNewOrderActivity extends BaseSwipeActivity {
 
     @Override
     public void setContentView() {
-
         setContentView(R.layout.confirm_new_order_acitivity);
     }
 
@@ -148,7 +147,6 @@ public class ConfirmNewOrderActivity extends BaseSwipeActivity {
                 if (mFragmentDeliver == null) {
 
                     mFragmentDeliver = new ConfirmOrderDeliverFragment();
-
                     mFragmentTransaction.add(R.id.fr_confirm_oder, mFragmentDeliver);
 
                 } else {

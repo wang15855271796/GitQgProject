@@ -19,14 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="@dimen/size_15dp"
+            android:layout_marginLeft="@dimen/size_22dp"
+            android:layout_marginRight="@dimen/size_22dp"
             android:background="@drawable/app_market_search_bg"
             android:gravity="center"
             android:padding="@dimen/size_5dp"
             android:text="@string/input_commodity"
-            android:textColor="#666666"
-            android:textSize="@dimen/size_11dp" />
+            android:textColor="#0A0A0A"
+            android:textSize="@dimen/size_14dp" />
     </RelativeLayout>
 
     <com.daimajia.slider.library.SliderLayout
@@ -137,14 +137,12 @@
                                     android:id="@+id/tv_select_good"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-
-
                                     android:layout_centerHorizontal="true"
                                     android:gravity="center_vertical"
                                     android:paddingTop="5dp"
                                     android:text="筛选"
                                     android:textColor="#666666"
-                                    android:textSize="12dp" />
+                                    android:textSize="13dp" />
 
                                 <ImageView
                                     android:layout_width="wrap_content"

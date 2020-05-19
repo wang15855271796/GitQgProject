@@ -41,6 +41,7 @@ import android.widget.Toast;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CartActivity;
+import com.puyue.www.qiaoge.activity.home.ChangeCityActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.adapter.cart.ImageViewAdapter;
 import com.puyue.www.qiaoge.adapter.market.GoodsRecommendAdapter;
@@ -138,19 +139,13 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
     private int pageNum = 1;
     private int pageSize = 10;
     private byte businessType = 11;
-    private byte productType = 1;
     private boolean isCollection = false;
-    private int inventory = 0;
     private int amount = 0;
     private Date currents;
     private Date starts;
-    private Date ends;
-    //搜索集合
-    private List<ChoiceSpecModel> account = new ArrayList<>();
-    private String totalMoney = "0";
     private String cell;
     private String type;
-
+    TextView tv_change;
     private AppBarLayout appBarLayout;
     private CollapsingToolbarLayoutStateHelper state;
     private Toolbar toolbar;
@@ -165,7 +160,6 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
 
     private StarBarView sbv_star_bar;
     private TextView tv_status;
-    private GoodsRecommendAdapter adapterRecommend;
     // 商品详情
     private RecyclerView recyclerViewImage;
 
@@ -240,6 +234,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+        tv_change = FVHelper.fv(this, R.id.tv_change);
         pb = FVHelper.fv(this, R.id.pb);
         tv_cut_down = FVHelper.fv(this, R.id.tv_cut_down);
         tv_time = (TextView) findViewById(R.id.tv_time);
@@ -285,6 +280,15 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
         mTvAdd = FVHelper.fv(this, R.id.tv_activity_special_add);
         sbv_star_bar = findViewById(R.id.sbv_star_bar);
         tv_status = findViewById(R.id.tv_status);
+
+        tv_change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,ChangeCityActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     @Override

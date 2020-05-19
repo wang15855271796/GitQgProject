@@ -108,7 +108,7 @@
     <color name="colorWhite">#ffffffff</color>
     <!--透明度百分之33的黑色-->
     <color name="color333333">#333333</color>
-
+    <color name="color_black">#dd000000</color>
     <!--标题颜色-->
     <color name="public_orange">#fd910e</color>
     <color name="select_title">#ffff680a</color>

@@ -938,7 +938,6 @@ public class MarketsFragment extends BaseFragment {
                 if (isCheck) {
                     pageNum = 1;
                     getDataThree();
-
                     hasPage  = true;
                 } else {
                     pageNum = 1;
@@ -995,12 +994,12 @@ public class MarketsFragment extends BaseFragment {
                 .subscribe(new Subscriber<UpdateUserInvitationModel>() {
                     @Override
                     public void onCompleted() {
-//                        ptr.refreshComplete();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-//                        ptr.refreshComplete();
+
                     }
 
                     @Override
@@ -1051,7 +1050,6 @@ public class MarketsFragment extends BaseFragment {
                             attributes.width = LinearLayout.LayoutParams.MATCH_PARENT;
                             attributes.height = LinearLayout.LayoutParams.MATCH_PARENT;
                             window.setAttributes(attributes);
-                            Log.i("cccao.......",attributes+"");
                             RecyclerView rl_type = window.findViewById(R.id.rl_type);
                             TextView tv_ok = window.findViewById(R.id.tv_ok);
                             rl_type.setLayoutManager(new GridLayoutManager(mActivity, 3));
@@ -1232,7 +1230,6 @@ public class MarketsFragment extends BaseFragment {
     }
 
     private void getData() {
-        Log.d("wodeswhuedhddhjjd.....","111");
         isCheck = false;
         if (Imposition == 0) {
             sendSelectGood("", "", "", selectBrandName, minPrice, maxPrice);
@@ -1269,7 +1266,6 @@ public class MarketsFragment extends BaseFragment {
                     @Override
                     public void onNext(ClassIfyModel marketGoodsModel) {
                         AppHelper.UserLogout(getContext(), marketGoodsModel.getCode(), 0);
-                        Log.d("zuoceshujujihe...",marketGoodsModel.getData()+"");
                         mModelMarketGoodsClassify = marketGoodsModel;
                         if (mModelMarketGoodsClassify.isSuccess()) {
                             updateGoodsList();
@@ -1313,25 +1309,24 @@ public class MarketsFragment extends BaseFragment {
                 mListGoods.clear();
                 mListGoods.addAll(mModelMarketGoods.getData().getProdClassify().getList());
                 mAdapterMarketDetail.notifyDataSetChanged();
-                Log.d("putongshujushaixin,,","0000");
 
             } else {
                 mRvDetail.setVisibility(View.GONE);
                 mIvNoData.setVisibility(View.VISIBLE);
-                Log.d("putongshujushaixin,,","1111");
+
             }
         } else {
-            Log.d("putongshujushaixin,,","2222");
+
             mListGoods.addAll(mModelMarketGoods.getData().getProdClassify().getList());
             mAdapterMarketDetail.notifyDataSetChanged();
             // mAdapterMarketDetail.loadMoreComplete();
         }
 
         if (mModelMarketGoods.getData().getProdClassify().isHasNextPage()) {
-            Log.d("putongshujushaixin,,","3333");
+
             hasPage = true;
         } else {
-            Log.d("putongshujushaixin,,","4444");
+
             hasPage = false;
 
         }
@@ -1532,12 +1527,6 @@ public class MarketsFragment extends BaseFragment {
     List<String> list = new ArrayList<>();
     private List<String> bannerList = new ArrayList<>();
 
-    @Override
-    public void onStop() {
-//        mViewBanner.stopAutoCycle();
-        super.onStop();
-    }
-
     public interface onClick {
         void refreshCartNum(int pos);
     }
@@ -1596,7 +1585,6 @@ public class MarketsFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void change(CityEvent cityEvent) {
-        Log.d("wwwwwwwwwwwvvv....","0000000000");
         requestGoodsList();
         getData();
 
@@ -1621,8 +1609,4 @@ public class MarketsFragment extends BaseFragment {
         };
         couponDialog.show();
     }
-
-
-
-
 }

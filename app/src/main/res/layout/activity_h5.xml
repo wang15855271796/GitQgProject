@@ -6,11 +6,9 @@
     android:orientation="vertical">
 
     <com.puyue.www.qiaoge.view.CompatToolbar
-        android:layout_marginTop="@dimen/size_30dp"
         android:id="@+id/toolbar_h5"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/app_border_bottom_bg">
+        android:layout_height="?attr/actionBarSize">
 
         <ImageView
             android:id="@+id/iv_h5_back"

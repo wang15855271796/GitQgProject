@@ -5,6 +5,7 @@
     android:background="@color/app_color_white"
     android:orientation="vertical">
 
+
     <com.puyue.www.qiaoge.view.CompatToolbar
         android:layout_marginTop="@dimen/size_30dp"
         android:layout_width="match_parent"
@@ -27,6 +28,7 @@
             android:textColor="@color/app_top_bar_text"
             android:textSize="18dp" />
     </com.puyue.www.qiaoge.view.CompatToolbar>
+
 
     <in.srain.cube.views.ptr.PtrClassicFrameLayout
         android:id="@+id/ptr_message_center"

@@ -31,6 +31,7 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
+import com.puyue.www.qiaoge.fragment.home.CityEvent;
 import com.puyue.www.qiaoge.fragment.market.TestAdapter;
 import com.puyue.www.qiaoge.helper.AlwaysMarqueeTextViewHelper;
 import com.puyue.www.qiaoge.helper.BigDecimalUtils;
@@ -135,14 +136,17 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
 
     @Override
     public int setLayoutId() {
-        setTranslucentStatus();
         return R.layout.fragment_cart;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        setTranslucentStatus();
+    }
 
     @Override
     public void initViews(View view) {
-        Log.d("wojiaoanwwngghf....","3333");
         binder = ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
         tv_delete.setOnClickListener(this);
@@ -194,7 +198,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
 
     @Override
     public void findViewById(View view) {
-        Log.d("wojiaoanwwngghf....","111111");
     }
 
 
@@ -405,9 +408,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                     activityBalanceVOStr = mModelCartActivityGoods.toString();
                 }
 
-                Log.d("wodemingzishiss000.....",activityBalanceVOStr);
-                Log.d("wodemingzishiss111.....",cartListStr);
-
                 requestCartBalance();
 
                 break;
@@ -548,6 +548,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
      * 更新购物车角标数量
      */
     private void getCartNum() {
+
         PublicRequestHelper.getCartNum(mActivity, new OnHttpCallBack<GetCartNumModel>() {
             @Override
             public void onSuccessful(GetCartNumModel getCartNumModel) {
@@ -846,6 +847,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
 
     }
 
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cityEvent(CityEvent event) {
+        requestCartList();
+    }
 
 }

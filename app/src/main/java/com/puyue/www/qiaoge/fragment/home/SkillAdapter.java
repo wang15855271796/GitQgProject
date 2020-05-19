@@ -6,55 +6,87 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
 import com.puyue.www.qiaoge.activity.home.SpikeGoodsDetailsActivity;
+import com.puyue.www.qiaoge.adapter.home.CommonAdapter;
+import com.puyue.www.qiaoge.adapter.home.SeckillGoodActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.model.home.CouponModel;
 import com.puyue.www.qiaoge.model.mine.order.HomeBaseModel;
 
 import java.util.List;
 
-public class SkillAdapter extends BaseQuickAdapter<HomeBaseModel.DataBean.SecKillListBean.KillsBean,BaseViewHolder> {
+public class SkillAdapter extends BaseQuickAdapter<CouponModel.DataBean.ActivesBean,BaseViewHolder> {
 
-    private OnClick onClick;
-
-    public SkillAdapter(int layoutResId, @Nullable List<HomeBaseModel.DataBean.SecKillListBean.KillsBean> data) {
+    private ImageView iv_pic;
+    private ImageView iv_add;
+    private RelativeLayout rl_group;
+    String flag;
+    ImageView iv_flag;
+    private TextView tv_old_price;
+    private TextView tv_coupon;
+    RelativeLayout rl_coupon;
+    String style;
+    public CommonAdapter.OnClick onClick;
+    ImageView iv_sale_done;
+    public SkillAdapter(int layoutResId, @Nullable List<CouponModel.DataBean.ActivesBean> data) {
         super(layoutResId, data);
+
     }
-    public void setOnclick(OnClick onClick) {
+
+    public void setOnclick(CommonAdapter.OnClick onClick) {
         this.onClick = onClick;
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, HomeBaseModel.DataBean.SecKillListBean.KillsBean item) {
-        helper.setText(R.id.tv_title,item.getTitle());
-        ImageView iv_sold = helper.getView(R.id.iv_sold);
-        if(item.getSoldOut()==1) {
-            iv_sold.setVisibility(View.VISIBLE);
-            Glide.with(mContext).load(item.getFlagUrl()).into(iv_sold);
-        }else {
-            iv_sold.setVisibility(View.GONE);
-        }
-            ImageView iv_skill = helper.getView(R.id.iv_skill);
-        Glide.with(mContext).load(item.getPic()).into(iv_skill);
+    protected void convert(BaseViewHolder helper, CouponModel.DataBean.ActivesBean item) {
+        iv_pic = helper.getView(R.id.iv_pic);
+        iv_sale_done = helper.getView(R.id.iv_sale_done);
+        iv_flag = helper.getView(R.id.iv_flag);
+        iv_add = helper.getView(R.id.iv_add);
+        tv_coupon = helper.getView(R.id.tv_coupon);
+        rl_coupon = helper.getView(R.id.rl_coupon);
+        rl_group = helper.getView(R.id.rl_group);
+        Glide.with(mContext).load(item.getDefaultPic()).into(iv_pic);
+        helper.setText(R.id.tv_name,item.getActiveName());
         helper.setText(R.id.tv_price,item.getPrice());
-        LinearLayout ll = helper.getView(R.id.ll);
-        TextView tv_old_price = helper.getView(R.id.tv_old_price);
-        if(item.getOldPrice().equals("")) {
-            ll.setVisibility(View.INVISIBLE);
+        tv_old_price = helper.getView(R.id.tv_old_price);
+        tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        helper.setText(R.id.tv_old_price,item.getOldPrice());
+        tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
+        if(item.getDiscount()!=null) {
+            tv_coupon.setText(item.getDiscount());
+            rl_coupon.setVisibility(View.VISIBLE);
         }else {
-            helper.setText(R.id.tv_old_price,item.getOldPrice());
-            tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            ll.setVisibility(View.VISIBLE);
-            tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
+            rl_coupon.setVisibility(View.GONE);
         }
 
-        helper.setText(R.id.tv_sale,item.getSales());
-        helper.getView(R.id.iv_cart).setOnClickListener(new View.OnClickListener() {
+        if(item.getFlag()==1) {
+            iv_sale_done.setVisibility(View.VISIBLE);
+            Glide.with(mContext).load(item.getSoldOutPic()).into(iv_sale_done);
+        }else {
+            iv_sale_done.setVisibility(View.GONE);
+        }
+
+
+        rl_group.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,SeckillGoodActivity.class);
+                intent.putExtra(AppConstant.ACTIVEID,item.getActiveId());
+                mContext.startActivity(intent);
+
+            }
+        });
+
+        iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(onClick!=null) {
@@ -62,21 +94,10 @@ public class SkillAdapter extends BaseQuickAdapter<HomeBaseModel.DataBean.SecKil
                 }
             }
         });
-        iv_skill.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, SpikeGoodsDetailsActivity.class);
-                intent.putExtra(AppConstant.ACTIVEID, item.getActiveId());
-                mContext.startActivity(intent);
-            }
-        });
-
-
-
     }
 
     public interface OnClick {
         void shoppingCartOnClick(int position);
-    }
 
+    }
 }

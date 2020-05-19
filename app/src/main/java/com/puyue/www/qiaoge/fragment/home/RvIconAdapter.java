@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -27,14 +28,35 @@ import java.util.List;
 
 public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.IconsBean,BaseViewHolder> {
 
-    public RvIconAdapter(int item_home_icon, List<IndexInfoModel.DataBean.IconsBean> iconList) {
+    String deductstr;
+    public RvIconAdapter(int item_home_icon, List<IndexInfoModel.DataBean.IconsBean> iconList,String deductstr) {
         super(item_home_icon, iconList);
+        this.deductstr = deductstr;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, IndexInfoModel.DataBean.IconsBean item) {
         helper.setText(R.id.tv_desc,item.getConfigDesc());
+        ImageView iv_tip = helper.getView(R.id.iv_tip);
         ImageView iv_icon = helper.getView(R.id.iv_icon);
+        TextView tv_tip = helper.getView(R.id.tv_tip);
+        if(deductstr.isEmpty()) {
+            iv_tip.setVisibility(View.GONE);
+            tv_tip.setVisibility(View.GONE);
+        }else {
+            tv_tip.setText(deductstr);
+
+            if(AppConstant.REDUCTIONTYPE.equals(item.getConfigCode())) {
+                iv_tip.setVisibility(View.VISIBLE);
+                tv_tip.setVisibility(View.VISIBLE);
+            }else {
+                iv_tip.setVisibility(View.GONE);
+                tv_tip.setVisibility(View.GONE);
+            }
+
+        }
+
+
         Glide.with(mContext)
                 .load(item.getUrl())
                 .apply(new RequestOptions().placeholder(R.mipmap.ic_launcher))

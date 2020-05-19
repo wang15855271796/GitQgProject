@@ -1,6 +1,7 @@
 package com.puyue.www.qiaoge.adapter.market;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,18 +33,17 @@ class InnerAdapter extends BaseQuickAdapter<ClassIfyModel.DataBean.SecondClassif
     protected void convert(BaseViewHolder helper, ClassIfyModel.DataBean.SecondClassifyBean item) {
         TextView tv_name = helper.getView(R.id.tv_name_second);
         helper.addOnClickListener(R.id.ll_bg);
-        RelativeLayout ll_bg = helper.getView(R.id.ll_bg);
         tv_name.setText(item.getName());
-        View view = helper.getView(R.id.v);
-        ImageView iv_point = helper.getView(R.id.iv_point);
+        View iv_point = helper.getView(R.id.iv_point);
         if(selectPosition==helper.getAdapterPosition()) {
             tv_name.setTextColor(Color.parseColor("#F56D23"));
-            iv_point.setBackgroundResource(R.drawable.shape_ring);
-//            ll_bg.setBackgroundColor(Color.parseColor("#ffffff"));
+            iv_point.setBackgroundColor(Color.parseColor("#FF680A"));
 
         }else {
             tv_name.setTextColor(Color.parseColor("#666666"));
-            iv_point.setBackgroundResource(R.drawable.shape_ring_grey);
+            iv_point.setBackgroundColor(Color.parseColor("#ffffff"));
+
+
         }
     }
 

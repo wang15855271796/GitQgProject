@@ -1,6 +1,8 @@
 package com.puyue.www.qiaoge.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
@@ -375,9 +378,6 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                     activityBalanceVOStr = mModelCartActivityGoods.toString();
                 }
 
-                Log.d("wodemingzishiss000.....",activityBalanceVOStr);
-                Log.d("wodemingzishiss111.....",cartListStr);
-
                 requestCartBalance();
 
                 break;
@@ -610,7 +610,6 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
             ll_service.setVisibility(View.VISIBLE);
             double result = Double.parseDouble(String.format("%.2f", diff));
             tv_price_desc.setText(""+result);
-            Log.d("opiopiopipoi......",result+"");
         }else {
             ll_service.setVisibility(View.GONE);
         }
@@ -624,15 +623,19 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
 
     @Override
     public void setContentView() {
-//        setTranslucentStatus();
         setContentView(R.layout.fragment_cart);
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setTranslucentStatus();
+    }
 
     @Override
     public void findViewById() {
         binder = ButterKnife.bind(this);
-        setTranslucentStatus();
         EventBus.getDefault().register(this);
         tv_delete.setOnClickListener(this);
         cb_select_all.setOnClickListener(this);
@@ -806,4 +809,20 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
         requestCartList();
 
     }
+
+    protected void setTranslucentStatus() {
+        // 5.0以上系统状态栏透明
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+    }
+
+
 }

@@ -1,9 +1,11 @@
 package com.puyue.www.qiaoge.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
+import com.puyue.www.qiaoge.activity.home.ChangeCityActivity;
 import com.puyue.www.qiaoge.activity.mine.account.AddressAdapters;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListActivity;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListsActivity;
@@ -54,8 +57,6 @@ import rx.schedulers.Schedulers;
 public class ChooseAddressDialog extends Dialog {
 
     Context mContext;
-    TextView tv_num;
-    ImageView iv_result;
     ImageView iv_close;
     View view;
     AddressModel mModelAddress;
@@ -97,6 +98,7 @@ public class ChooseAddressDialog extends Dialog {
                 Intent intent1 = AddressListActivity.getIntent(mContext, AddressListsActivity.class);
                 intent1.putExtra("mineAddress", "mineAddress");
                 mContext.startActivity(intent1);
+
                 dismiss();
             }
         });
@@ -124,9 +126,6 @@ public class ChooseAddressDialog extends Dialog {
                         if (mModelAddress.success) {
                             if (mModelAddress.data.size() > 0 && mModelAddress.data != null) {
                                 mListData.clear();
-
-
-
                                 mListData.addAll(mModelAddress.data);
 
                                 for (int i = 0; i <mListData.size() ; i++) {
@@ -166,6 +165,7 @@ public class ChooseAddressDialog extends Dialog {
                                                         defaultId = mListData.get(i).id;
                                                         changeAddress = mListData.get(i).provinceName + mListData.get(i).cityName + mListData.get(i).areaName + mListData.get(i).detailAddress;
                                                         requestEditDefaultAddress(defaultId, orderId);
+                                                        dismiss();
                                                     }
                                                 } else {
                                                     mListData.get(i).isDefault = 0;
@@ -173,34 +173,6 @@ public class ChooseAddressDialog extends Dialog {
                                             }
                                             addressAdapters.notifyDataSetChanged();
                                         }
-
-//                    startActivityForResult(EditAndAddActivity.getIntent(mContext, EditAndAddActivity.class, "edit", mListData.get(position).userName, mListData.get(position).contactPhone, mListData.get(position).shopName, (mListData.get(position).provinceName + " " + mListData.get(position).cityName + " " + mListData.get(position).areaName), mListData.get(position).detailAddress, "false", String.valueOf(mListData.get(position).id), mListData.get(position).provinceCode, mListData.get(position).cityCode, mListData.get(position).areaCode, orderId), 22);
-//                    for (int i = 0; i < mListData.size(); i++) {
-//                        if (i == position) {
-//                            if (mListData.get(i).isDefault == 1) {
-//                                //原来就是默认地址,这里点击没有效果,原来也设置了原来是默认地址这里就没有效果
-//                                defaultId = mListData.get(i).id;
-//                                requestEditDefaultAddress(mListData.get(i).id, orderId);
-//                                //点击原来的默认地址,不会有操作,跳出界面的时候也不会有调接口操作
-//
-//                            } else if (mListData.get(i).isDefault == 0) {
-//                                //原来不是默认地址,可以点击
-//                                //一旦点击,这个即变成默认地址了
-//                                //关键是,不能让用户点击一次就调一次接口重新刷新列表,需要在用户准备跳出这个界面的时候调接口
-//                                mListData.get(i).isDefault = 1;
-//                                //这里代表着切换了默认地址
-//                                defaultId = mListData.get(i).id;
-//                            }
-//                        } else {
-//                            mListData.get(i).isDefault = 0;
-//                        }
-//                    }
-//                    mAdapterAddress.notifyDataSetChanged();
-//                    if (defaultId != -1) {
-//                        //说明修改过默认地址,在退出界面的时候请求接口来
-//                        requestEditDefaultAddress(defaultId, orderId);
-//                    }
-//                    //跳转到编辑界面使用startActivityForResult,在完成操作之后回到地址列表的界面,重新请求一次地址列表的数据
 
                                     }
 
@@ -224,7 +196,16 @@ public class ChooseAddressDialog extends Dialog {
                                 addressAdapterss.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                                        ChangeCityDialog changeCityDialog = new ChangeCityDialog(mContext);
+                                        ChangeCityDialog changeCityDialog = new ChangeCityDialog(mContext) {
+                                            @Override
+                                            public void close() {
+                                                Intent intent = new Intent(mContext,ChangeCityActivity.class);
+                                                intent.putExtra("flag","1");
+                                                mContext.startActivity(intent);
+                                                ((Activity)mContext).finish();
+                                                dismiss();
+                                            }
+                                        };
                                         changeCityDialog.show();
 
                                     }

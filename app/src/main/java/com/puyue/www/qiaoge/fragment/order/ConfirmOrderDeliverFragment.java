@@ -151,7 +151,6 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
 
     @Override
     public void initViews(View view) {
-
     }
 
     @Override
@@ -248,7 +247,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
 //                    intent_.putExtra("type", 1);
 //                    intent_.putExtra("mineAddress", "mineAddress");
 //                    startActivityForResult(intent_, 31);
-                    ChooseAddressDialog chooseAddressDialog = new ChooseAddressDialog(mActivity,orderId);
+                    ChooseAddressDialog chooseAddressDialog = new ChooseAddressDialog(getContext(),orderId);
                     chooseAddressDialog.show();
 
                     break;
@@ -362,7 +361,6 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
                     @Override
                     public void onNext(CartBalanceModel cartBalanceModel) {
                         if (cartBalanceModel.success) {
-//                            Log.d("WWWWWWWWW......",cartBalanceModel.getData().getAddressOK()+"");
                             cModel = cartBalanceModel;
                             toRechargeAmount = cModel.getData().getToRechargeAmount();
                             toRecharge = cModel.getData().isToRecharge();

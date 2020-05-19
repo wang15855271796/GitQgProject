@@ -170,6 +170,8 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     RecyclerView recyclerViewImage;
     @BindView(R.id.iv_flag)
     ImageView iv_flag;
+    @BindView(R.id.tv_change)
+    TextView tv_change;
     private AlertDialog mTypedialog;
     public List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs;
     private List<String> detailPic;
@@ -190,7 +192,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         if (getIntent() != null && getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             productId = bundle.getInt(AppConstant.ACTIVEID);
-            Log.d("dsgfgrer........",productId+"");
             if (!TextUtils.isEmpty(bundle.getString("equipment"))) {
                 businessType = 7;
             }
@@ -292,6 +293,14 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         linearLayoutOnclick.setOnClickListener(noDoubleClickListener);
         linearLayoutShare.setOnClickListener(noDoubleClickListener);
         state = CollapsingToolbarLayoutStateHelper.EXPANDED;
+        tv_change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,ChangeCityActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private NoDoubleClickListener noDoubleClickListener = new NoDoubleClickListener() {
@@ -337,8 +346,8 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
             } else if (view == mTvAddCar) {
                 if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
                     if(chooseDialog==null) {
-                        chooseDialog = new ChooseDialog(mContext,productId);
-
+                        chooseDialog = new ChooseDialog(mContext,productId1);
+                        Log.d("swwswwwwwww....",productId1+"");
                     }
                 }else {
                     AppHelper.showMsg(mContext, "请先登录");
@@ -470,7 +479,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                                             chooseSpecAdapter.selectPosition(position);
                                             if(chooseDialog==null){
                                                 productMainId = model.getData().getProductMainId();
-                                                chooseDialog = new ChooseDialog(mContext, productMainId);
+                                                chooseDialog = new ChooseDialog(mContext, productId1);
 
                                             }
                                             chooseDialog.show();

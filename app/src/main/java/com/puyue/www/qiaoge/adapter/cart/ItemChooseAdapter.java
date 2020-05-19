@@ -10,6 +10,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -40,10 +42,11 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
     int productId;
     private TextView tv_price;
     int businessType;
+    TextView tv_coupon_desc;
     List<ExchangeProductModel.DataBean.ProdPricesBean> data;
     com.puyue.www.qiaoge.listener.OnItemClickListener onItemClickListener;
     private TextView tv_reduce;
-
+    LinearLayout rl_desc;
     public ItemChooseAdapter(int businessType,int productId,int layoutResId, @Nullable List<ExchangeProductModel.DataBean.ProdPricesBean> data) {
         super(layoutResId, data);
         this.productId = productId;
@@ -53,6 +56,15 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
 
     @Override
     protected void convert(BaseViewHolder helper, ExchangeProductModel.DataBean.ProdPricesBean item) {
+        tv_coupon_desc = helper.getView(R.id.tv_coupon_desc);
+        rl_desc = helper.getView(R.id.rl_desc);
+        if(item.getSpecialOffer().equals("")) {
+            rl_desc.setVisibility(View.GONE);
+        }else {
+            tv_coupon_desc.setText(item.getSpecialOffer());
+            rl_desc.setVisibility(View.VISIBLE);
+        }
+
         tv_price = helper.getView(R.id.tv_price);
         tv_price.setText(item.getPrice());
         tv_reduce = helper.getView(R.id.tv_reduce);
@@ -193,7 +205,6 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                     public void onNext(AddCartGoodModel addMountReduceModel) {
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num+"");
-                            Log.d("woshidaxueshujj...",num+"");
                             ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
                             EventBus.getDefault().post(new UpDateNumEvent());
                         } else {
@@ -222,7 +233,6 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                     public void onNext(AddCartGoodModel addMountReduceModel) {
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num+"");
-                            Log.d("woshidaxueshujj...",num+"");
                             EventBus.getDefault().post(new UpDateNumEvent());
                         } else {
                             ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());

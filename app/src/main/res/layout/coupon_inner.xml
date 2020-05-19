@@ -23,6 +23,9 @@
 
         <TextView
             tools:text="标题"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:id="@+id/tv_name"
             android:textSize="@dimen/size_14dp"
             android:textColor="#333333"
@@ -60,6 +63,9 @@
 
         <TextView
             tools:text="规格"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:id="@+id/tv_spec"
             android:textSize="@dimen/size_12dp"
             android:textColor="#999999"
@@ -115,7 +121,7 @@
             android:textSize="8dp"
             android:layout_alignBaseline="@+id/pb"
             android:layout_marginTop="12dp"
-            android:layout_marginLeft="@dimen/size_15dp"
+            android:layout_marginLeft="@dimen/size_10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

@@ -280,18 +280,7 @@ public class CommonFragment extends BaseFragment {
                     public void onNext(ProductNormalModel getCommonProductModel) {
                         productNormalModel = getCommonProductModel;
                         if (getCommonProductModel.isSuccess()) {
-//                            if (getCommonProductModel.getData().getList()!=null&&getCommonProductModel.getData().getList().size()!=0) {
-//                                if (productNormalModel.getData().isHasNextPage()) {
-////                                    pageNum++;
-//                                    list.addAll(getCommonProductModel.getData().getList());
-//                                    adapterNewArrival.notifyDataSetChanged();
-//                                    refreshLayout.finishLoadMore();
-//                                } else {
-//                                    list.addAll(getCommonProductModel.getData().getList());
-//                                    adapterNewArrival.notifyDataSetChanged();
-//                                    refreshLayout.finishLoadMoreWithNoMoreData();
-//                                }
-//                            }
+                            Log.d("wssddddddd....","000000");
                             if(getCommonProductModel.getData().getList().size()>0) {
                                 list.addAll(getCommonProductModel.getData().getList());
                                 adapterNewArrival.notifyDataSetChanged();

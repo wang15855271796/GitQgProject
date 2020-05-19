@@ -2,8 +2,11 @@ package com.puyue.www.qiaoge.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +19,23 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.adapter.cart.ItemChooseAdapter;
+import com.puyue.www.qiaoge.adapter.cart.SearchSpecAdapter;
+import com.puyue.www.qiaoge.adapter.home.SearchSpecsAdapter;
+import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
+import com.puyue.www.qiaoge.event.LogoutEvent;
+import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
+import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -41,7 +53,6 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
 
     Context context;
     public View view;
-    String productName;
     public Unbinder binder;
     @BindView(R.id.tv_desc)
     TextView tv_desc;
@@ -59,102 +70,37 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
     ImageView iv_close;
     @BindView(R.id.tv_stock)
     TextView tv_stock;
+    @BindView(R.id.tv_price_total)
+    TextView tv_price_total;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.tv_confirm)
     TextView tv_confirm;
     public String salesVolume;
     int productId;
+    int pos = 0;
+    @BindView(R.id.tv_num)
+    TextView tv_num;
+    @BindView(R.id.tv_free_desc)
+    TextView tv_free_desc;
+    private SearchSpecAdapter searchSpecAdapter;
+    ExchangeProductModel exchangeProductModels;
     public List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs;
-    private ChooseSpecAdapters chooseSpecAdapter;
     public ChooseDialog(Context context,int productId) {
         super(context, R.style.dialog);
         this.context = context;
         this.productId = productId;
-
+        exchangeList(productId);
+        getCartNum();
         init();
-        getDetailSpec(productId);
     }
 
-    /***
-     * 获取多规格详情
-     */
-    private void getDetailSpec(int productId) {
-        GetProductDetailAPI.requestData(context, productId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GetProductDetailModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(GetProductDetailModel model) {
-                        if (model.isSuccess()) {
-                            productName = model.getData().getProductName();
-                            tv_name.setText(productName);
-
-                            tv_price.setText(model.getData().getMinMaxPrice());
-                            salesVolume = model.getData().getSalesVolume();
-                            tv_sale.setText(salesVolume);
-                            Glide.with(context).load(model.getData().getDefaultPic()).into(iv_head);
-                            tv_desc.setText(model.getData().getSpecialOffer());
-                            prodSpecs = model.getData().getProdSpecs();
-                            int productId1 = prodSpecs.get(0).getProductId();
-                            exchangeList(productId1);
-
-
-                            fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    chooseSpecAdapter.selectPosition(position);
-                                    int productId2 = prodSpecs.get(position).getProductId();
-                                    GetProductDetailAPI.getExchangeList(context,productId2,1)
-                                            .subscribeOn(Schedulers.io())
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribe(new Subscriber<ExchangeProductModel>() {
-
-                                                @Override
-                                                public void onCompleted() {
-
-                                                }
-
-                                                @Override
-                                                public void onError(Throwable e) {
-
-                                                }
-
-                                                @Override
-                                                public void onNext(ExchangeProductModel exchangeProductModel) {
-                                                    ItemChooseAdapter itemChooseAdapter = new ItemChooseAdapter(1, exchangeProductModel.getData().getProdSpecs().get(position).getProductId(),
-                                                            R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
-                                                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                                                    recyclerView.setAdapter(itemChooseAdapter);
-                                                    tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
-                                                    tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
-                                                    tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
-                                                    tv_stock.setText(exchangeProductModel.getData().getInventory());
-                                                    Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
-                                                }
-                                            });
-
-                                }
-                            });
-
-                            chooseSpecAdapter = new ChooseSpecAdapters(context,prodSpecs);
-                            fl_container.setAdapter(chooseSpecAdapter);
-
-                        } else {
-                        }
-                    }
-                });
+    @Override
+    public void show() {
+        super.show();
+        EventBus.getDefault().register(this);
     }
+
 
     /**
      * 切换商品规格列表
@@ -178,6 +124,7 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
 
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
+                        exchangeProductModels = exchangeProductModel;
                         ItemChooseAdapter itemChooseAdapter = new ItemChooseAdapter(1, productId, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
                         recyclerView.setAdapter(itemChooseAdapter);
@@ -185,7 +132,44 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
                         tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
                         tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
                         tv_stock.setText(exchangeProductModel.getData().getInventory());
+                        tv_name.setText(exchangeProductModel.getData().getProductName());
                         Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
+                        searchSpecAdapter = new SearchSpecAdapter(context,exchangeProductModels.getData().getProdSpecs());
+                        fl_container.setAdapter(searchSpecAdapter);
+                    }
+                });
+    }
+
+    private void exchangeLists(int productId) {
+        GetProductDetailAPI.getExchangeList(context,productId,1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ExchangeProductModel>() {
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(ExchangeProductModel exchangeProductModel) {
+                        exchangeProductModels = exchangeProductModel;
+                        ItemChooseAdapter itemChooseAdapter = new ItemChooseAdapter(1, productId, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
+                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                        recyclerView.setAdapter(itemChooseAdapter);
+                        tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
+                        tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
+                        tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
+                        tv_stock.setText(exchangeProductModel.getData().getInventory());
+                        tv_name.setText(exchangeProductModel.getData().getProductName());
+                        Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
+//                        searchSpecAdapter = new SearchSpecAdapter(context,exchangeProductModels.getData().getProdSpecs());
+//                        fl_container.setAdapter(searchSpecAdapter);
                     }
                 });
     }
@@ -201,6 +185,16 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
         getWindow().setAttributes(attributes);
         iv_close.setOnClickListener(this);
         tv_confirm.setOnClickListener(this);
+        fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                pos = position;
+                searchSpecAdapter.selectPosition(position);
+                int productId = exchangeProductModels.getData().getProdSpecs().get(position).getProductId();
+                exchangeLists(productId);
+            }
+        });
+
     }
 
     @Override
@@ -221,7 +215,58 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
         }
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getTotal(UpDateNumEvent upDateNumEvent) {
+        getCartNum();
+    }
+
     public interface Onclick {
         void addDialog(int num);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 获取角标数据
+     */
+    private void getCartNum() {
+        GetCartNumAPI.requestData(context)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<GetCartNumModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(GetCartNumModel getCartNumModel) {
+                        if (getCartNumModel.isSuccess()) {
+                            if (Integer.valueOf(getCartNumModel.getData().getNum()) > 0) {
+                                tv_num.setVisibility(View.VISIBLE);
+                                tv_num.setText(getCartNumModel.getData().getNum());
+                                tv_price_total.setText(getCartNumModel.getData().getTotalPrice());
+                                tv_free_desc.setText(getCartNumModel.getData().getDeliveryFee());
+                            } else {
+                                tv_free_desc.setText("未选购商品");
+                                tv_num.setVisibility(View.GONE);
+                                tv_price_total.setText(getCartNumModel.getData().getTotalPrice());
+//                                tv_price_total.setVisibility(View.GONE);
+                            }
+                        } else {
+                            AppHelper.showMsg(context, getCartNumModel.getMessage());
+                        }
+                    }
+                });
     }
 }

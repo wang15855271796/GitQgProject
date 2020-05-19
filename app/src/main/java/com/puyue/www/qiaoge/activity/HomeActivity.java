@@ -27,6 +27,7 @@ import com.chuanglan.shanyan_sdk.OneKeyLoginManager;
 import com.chuanglan.shanyan_sdk.listener.GetPhoneInfoListener;
 import com.chuanglan.shanyan_sdk.listener.InitListener;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.home.ChangeCityActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LogoutsEvent;
 import com.puyue.www.qiaoge.api.PostLoadAmountAPI;
@@ -90,6 +91,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     private TextView mTvMine;
     private long mExitTime = 0;
     private TextView mTvCarNum;
+    private TextView tv_change;
     // 弹窗
     private HomePopuWindow popuWindow;
     private String popuWindowImage;
@@ -114,11 +116,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-//            mTabHome = (HomeFragmentsss) fm.findFragmentByTag(HomeFragmentsss.class.getCanonicalName());
-//            mTabMarket = (MarketsFragment) fm.findFragmentByTag(MarketsFragment.class.getCanonicalName());
-//            mTabCart = (CartFragment) fm.findFragmentByTag(CartFragment.class.getCanonicalName());
-//            mTabMine = (MineFragment) fm.findFragmentByTag(MineFragment.class.getCanonicalName());
-
             try {
                 mTabHome = (HomeFragmentsss)getSupportFragmentManager().getFragment(savedInstanceState,KEY_MSG_FRAGMENT);
                 mTabMarket = (MarketsFragment)getSupportFragmentManager().getFragment(savedInstanceState,KEY_CONTACTS_FRAGMENT);
@@ -180,17 +177,10 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
             public void getPhoneInfoStatus(int code, String result) {
                 //预取号回调
                 Log.e("VVV", "预取号： code==" + code + "   result==" + result);
-//                Intent intent = new Intent(HomeActivity.this, HomeActivity.class);
-//                startActivity(intent);
-//                finish();
+
             }
         });
         setContentView(R.layout.activity_home);
-        //在首页中写运行时权限设置tv_home_car_number
-//        setNewPosition();
-
-
-
 
     }
 
@@ -199,6 +189,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
 
     @Override
     public void findViewById() {
+        tv_change = (TextView) findViewById(R.id.tv_change);
         mLlHome = (LinearLayout) findViewById(R.id.layout_tab_bar_home);
         mIvHome = (ImageView) findViewById(R.id.iv_tab_bar_home_icon);
         mTvHome = (TextView) findViewById(R.id.tv_tab_bar_home_title);
@@ -217,6 +208,13 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         mTvCarNum = (TextView) findViewById(R.id.tv_home_car_number);
         rootview = findViewById(R.id.rootview);
 
+        tv_change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,ChangeCityActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -270,41 +268,16 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
           */
         if (guide.equals("")) {
             showDialogGuide();
-            //startActivity(new Intent(HandlerActivity.this, MainActivity.class));
-        } else {
-            //startActivity(new Intent(HandlerActivity.this, LoginActivity.class));
         }
-//finish();
-        //   JPushInterface.setDebugMode(true);//测试版为true
+
         JPushInterface.init(this);
         String registrationID = JPushInterface.getRegistrationID(this);
 
         UserInfoHelper.saveRegistionId(mContext, registrationID);
 
 
-      /*  if (UserInfoHelper.getCity(mContext) != null&&StringHelper.notEmptyAndNull(UserInfoHelper.getCity(mContext))) {
-
-        }else {
-            mLocationClient.start();
-        }*/
-
             mLocationClient.start();
 
-
-
-
-    /*  if (city!=null&&StringHelper.notEmptyAndNull(city)){
-
-      }else {
-          new Handler().postDelayed(new Runnable() {
-              @Override
-              public void run() {
-                  switchTab(TAB_HOME);
-              }
-          }, 5000);
-      }*/
-
-//        switchTab(TAB_HOME);
 }
 
 
@@ -334,24 +307,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                         ivGuideOne.setVisibility(View.GONE);
                         ivGuideTwo.setVisibility(View.GONE);
                         alertDialog.dismiss();
-                     /*   //alertDialog1.dismiss();
-                        final AlertDialog alertDialog2 = new AlertDialog.Builder(mContext, R.style.DialogStyle).create();
-                        alertDialog2.setCanceledOnTouchOutside(false);
-                        alertDialog2.show();
-                        Window window = alertDialog2.getWindow();
-                        window.setContentView(R.layout.home_guide);*/
-//                        ImageView ivGuideThree = window.findViewById(R.id.iv_guide_three);
-//                        ivGuideThree.setVisibility(View.GONE);
-//                        ivGuideThree.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                alertDialog.dismiss();
-//
-//
-//                                UserInfoHelper.saveLoadAmount(mContext, "已下载");
-//
-//                            }
-//                        });
                     }
                 });
 
@@ -408,22 +363,18 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         public void onNoDoubleClick(View view) {
             if (view == mLlHome) {
                 switchTab(TAB_HOME);
-//                setTranslucentStatus();
+                Log.d("fffeeeee.......","00000");
                 Window window = getWindow();
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
             } else if (view == mLlMarket) {
                 switchTab(TAB_MARKET);
-                //  StatusBarCompat.setStatusBarColor(mActivity, Color.parseColor("#ffffff"), true);
-
 
             } else if (view == mLlCart) {
                 //从首页判断用户没有登录跳转到登录界面,登录成功回来的时候要重新请求数据,
                 //由于是从首页和商城页点击进入的登录界面,回到原来界面的时候需要首页刷新或者商城界面刷新分类和细节数据
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
                     switchTab(TAB_CART);
-//                     StatusBarCompat.setStatusBarColor(mActivity, R.mipmap.ic_car_title,true);
-//                    setTranslucentStatus();
                     Window window = getWindow();
                     window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 } else {
@@ -433,7 +384,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
             } else if (view == mLlMine) {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
                     switchTab(TAB_MINE);
-//                    setTranslucentStatus();
                     Window window = getWindow();
                     window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 } else {
@@ -531,7 +481,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getMessageEvent(LogoutEvent logoutEvent) {
-//        switchTab(TAB_HOME);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -574,8 +523,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     protected void onResume() {
         super.onResume();
         if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-            getCartNum();
-
             sendRegistionId();
             if (!isSend) {
                 if (UserInfoHelper.getLoadAmount(mActivity) != null && StringHelper.notEmptyAndNull(UserInfoHelper.getLoadAmount(mContext))) {
@@ -603,14 +550,11 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LogoutsEvent mainEvent) {
         switchTab(TAB_HOME);
-        Log.d("weweeeewwwww....","1111");
         if (city != null) {
             UserInfoHelper.saveCity(mContext, city);
             UserInfoHelper.saveAreaName(mContext,district);
         } else {
             UserInfoHelper.saveCity(mContext, "杭州市");
-
-//                switchTab(TAB_HOME);
         }
 
     }
@@ -663,11 +607,8 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                         if (baseModel.success) {
 
                         }
-
                     }
                 });
-
-
     }
 
 
@@ -675,6 +616,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
      * 获取购物车角标数据
      */
     private void getCartNum() {
+
         PublicRequestHelper.getCartNum(mContext, new OnHttpCallBack<GetCartNumModel>() {
             @Override
             public void onSuccessful(GetCartNumModel getCartNumModel) {
@@ -696,20 +638,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
             }
         });
     }
-
-//    protected void setTranslucentStatus() {
-//        // 5.0以上系统状态栏透明
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            Window window = getWindow();
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            window.setStatusBarColor(Color.TRANSPARENT);
-//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        }
-//    }
 
     private String toPage;
 
@@ -756,13 +684,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-      /*  String spikeFlag = UserInfoHelper.getSpikeFlag(mContext);
-        Log.i("cccc", "onNewIntent: " + spikeFlag);
-        if (spikeFlag.equals("popu")) {
-
-        } else {
-            QueryHomePropup();
-        }*/
         if (intent != null) {
             String marketGood = intent.getStringExtra("collect");
 
@@ -790,11 +711,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         switchTab(TAB_MARKET);
     }
 
-//    @Override
-//    public void jumpMarket() {
-//        switchTab(TAB_MARKET);
-//    }
-
 
 public class MyLocationListener extends BDAbstractLocationListener {
     @Override
@@ -813,18 +729,14 @@ public class MyLocationListener extends BDAbstractLocationListener {
         city = location.getCity();
         UserInfoHelper.saveAreaName(mContext, district);
         UserInfoHelper.saveLocation(mContext,location.getAddrStr());
-        Log.d("hahhaaahahhaha....",city+"");
         isGet = true;
-//
 
         if (type.equals("goHome")) {
             if (city != null) {
                 UserInfoHelper.saveCity(mContext, city);
-//                Log.d("hahhaaahahhaha....",city+"");
-//
+
             } else {
                 UserInfoHelper.saveCity(mContext, "杭州市");
-//                switchTab(TAB_HOME);
             }
         }
         type = "";

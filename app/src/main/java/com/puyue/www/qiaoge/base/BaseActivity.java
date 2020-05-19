@@ -54,7 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
         findViewById();
         setViewData();
         setClickEvent();
-        StatusBarCompat.setStatusBarColor(mActivity, Color.parseColor("#ffffff"), true);
+//        StatusBarCompat.setStatusBarColor(mActivity, Color.parseColor("#cccccc"), true);
 
 //        //进行Android 6.0的动态权限申请
 //        requestAndroidSixPermissions();

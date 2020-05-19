@@ -18,10 +18,12 @@ import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import static io.dcloud.feature.audio.mp3.SimpleLame.close;
+
 /**
  * Created by ${王涛} on 2020/4/29
  */
-public class ChangeCityDialog extends Dialog implements View.OnClickListener {
+public abstract class ChangeCityDialog extends Dialog implements View.OnClickListener {
 
     Context mContext;
     TextView tv_sure;
@@ -55,15 +57,12 @@ public class ChangeCityDialog extends Dialog implements View.OnClickListener {
                 break;
 
             case R.id.tv_sure:
-                Intent intent = new Intent(mContext,ChangeCityActivity.class);
-                intent.putExtra("flag","1");
-                mContext.startActivity(intent);
-                dismiss();
+                close();
                 break;
 
         }
 
     }
-
+    public abstract void close();
 
 }

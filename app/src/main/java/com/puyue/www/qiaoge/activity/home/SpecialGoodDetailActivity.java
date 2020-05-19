@@ -196,7 +196,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     int shopTypeId;
     boolean isChecked = false;
     RegisterShopAdapterTwo mRegisterAdapter;
-
+    TextView tv_change;
 
     class MyHandler extends Handler {
         @Override
@@ -233,6 +233,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+        tv_change = FVHelper.fv(this, R.id.tv_change);
         pb = FVHelper.fv(this, R.id.pb);
         tv_cut_down = FVHelper.fv(this, R.id.tv_cut_down);
         tv_time = (TextView) findViewById(R.id.tv_time);
@@ -278,6 +279,16 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         mTvAdd = FVHelper.fv(this, R.id.tv_activity_special_add);
         sbv_star_bar = findViewById(R.id.sbv_star_bar);
         tv_status = findViewById(R.id.tv_status);
+
+        tv_change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,ChangeCityActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
     @Override

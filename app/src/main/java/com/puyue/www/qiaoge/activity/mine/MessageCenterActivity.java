@@ -1,11 +1,15 @@
 package com.puyue.www.qiaoge.activity.mine;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -326,5 +330,8 @@ public class MessageCenterActivity extends BaseSwipeActivity {
     protected void onResume() {
         super.onResume();
         requestMessageList();
+
     }
+
+
 }

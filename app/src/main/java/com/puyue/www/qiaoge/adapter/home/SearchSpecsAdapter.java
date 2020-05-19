@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.adapter.home;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import java.util.List;
 
 
-class SearchSpecsAdapter extends BaseAdapter {
+public class SearchSpecsAdapter extends BaseAdapter {
     Context context;
     List<SearchResultsModel.DataBean.SearchProdBean.ListBean.ProdSpecsBean> prodSpecs;
     int selectPosition;
@@ -55,28 +56,16 @@ class SearchSpecsAdapter extends BaseAdapter {
         if(selectPosition==position) {
             holder.tv_spec.setTextColor(Color.parseColor("#FF680A"));
             holder.tv_spec.setBackgroundColor(Color.parseColor("#FEF5EF"));
+            Log.d("weeeeeeeeeee...........","00");
         }else {
             holder.tv_spec.setTextColor(Color.parseColor("#333333"));
             holder.tv_spec.setBackgroundColor(Color.parseColor("#eeeeee"));
+            Log.d("weeeeeeeeeee...........","11");
         }
 
         holder.tv_spec.setText(prodSpecs.get(position).getSpec());
         holder.tv_spec.setEnabled(true);
         holder.tv_spec.setSelected(false);
-//        holder.tv_spec.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!v.isEnabled()) {
-//                    return;
-//                }
-//                for (int i = 0; i < prodSpecs.size(); i++) {
-//                    prodSpecs.get(i).selected = false;
-//                }
-//                prodSpecs.get(position).selected = !holder.tv_spec.isSelected();
-//                notifyDataSetChanged();
-//            }
-//        });
-
 
         return convertView;
     }

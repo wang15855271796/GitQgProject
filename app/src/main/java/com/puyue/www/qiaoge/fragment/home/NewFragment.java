@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -60,6 +61,8 @@ public class NewFragment extends BaseFragment {
     RecyclerView recyclerView;
     @BindView(R.id.smart)
     SmartRefreshLayout refreshLayout;
+    @BindView(R.id.iv_back)
+    ImageView iv_back;
     CommonsAdapter adapterNewArrival;
     public int pageNum = 1;
     ProductNormalModel productNormalModel;
@@ -131,6 +134,7 @@ public class NewFragment extends BaseFragment {
                 getProductsList(1,10,"new");
                 adapterNewArrival.notifyDataSetChanged();
                 refreshLayout.finishRefresh();
+                iv_back.setVisibility(View.GONE);
             }
         });
 
@@ -142,16 +146,23 @@ public class NewFragment extends BaseFragment {
                             pageNum++;
                             getProductsList(pageNum, 10,"new");
                             refreshLayout.finishLoadMore();
+
                         }else {
                             refreshLayout.finishLoadMoreWithNoMoreData();
                         }
                     }
 //                getProductsList(pageNum, 10,"new");
                 refreshLayout.finishLoadMore();
-
+                iv_back.setVisibility(View.VISIBLE);
                 }
         });
 
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.scrollToPosition(0);
+            }
+        });
 
     }
 

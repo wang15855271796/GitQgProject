@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.SophixStubApplication;
+import com.puyue.www.qiaoge.UnicornManager;
 import com.puyue.www.qiaoge.activity.CommonH5Activity;
 import com.puyue.www.qiaoge.activity.mine.FeedBackActivity;
 import com.puyue.www.qiaoge.activity.mine.MessageCenterActivity;
@@ -51,6 +53,7 @@ import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
+import com.puyue.www.qiaoge.model.User;
 import com.puyue.www.qiaoge.model.mine.AccountCenterModel;
 import com.puyue.www.qiaoge.model.mine.UpdateModel;
 import com.puyue.www.qiaoge.model.mine.order.MineCenterModel;
@@ -455,7 +458,19 @@ public class MineFragment extends BaseFragment {
             {
                 //联系客服
                 if (StringHelper.notEmptyAndNull(mCustomerPhone)) {
+//
+
+//                    User userBean = SophixStubApplication.getInstance().getUser();
+//                    UnicornManager.setUnicornUserInfo(userBean);
+//
+//                    // 设置七鱼客服对话页面的UI
+//                    UnicornManager.setUiCustomization(userBean);
+                    // 设置未读消息监听
+//                    setCountChangeListener();
+
+                    // 进入七鱼客服首页（即智能机器人页面）
                     showPhoneDialog(mCustomerPhone);
+                    UnicornManager.inToUnicorn(getContext());
                 }
             } else if (view == mRlFeedback)
 

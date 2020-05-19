@@ -18,15 +18,22 @@ import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.adapter.cart.ChooseSpecAdapter;
 import com.puyue.www.qiaoge.adapter.cart.ItemChooseAdapter;
+import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 //import com.puyue.www.qiaoge.dialog.ChooseSpecAdapters;
 import com.puyue.www.qiaoge.dialog.ChooseSpecAdapters;
+import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -63,11 +70,20 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
     ImageView iv_head;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.tv_num)
+    TextView tv_num;
+    @BindView(R.id.iv_cart)
+    ImageView iv_cart;
+    @BindView(R.id.tv_price_total)
+    TextView tv_price_total;
+    @BindView(R.id.tv_free_desc)
+    TextView tv_free_desc;
     private SpecAdapter specAdapter;
     MarketRightModel.DataBean.ProdClassifyBean.ListBean listBean;
     int pos = 0;
     private ItemChooseAdapter itemChooseAdapter;
     ExchangeProductModel exchangeProductModels;
+
     public ChoosesDialog(Context context, MarketRightModel.DataBean.ProdClassifyBean.ListBean listBean) {
         super(context, R.style.dialog);
         this.context = context;
@@ -80,6 +96,8 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
         }
 
         init();
+
+        getCartNum();
     }
 
     private void exchangeLists(int activeId,int businessType) {
@@ -136,13 +154,11 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
         view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         binder = ButterKnife.bind(this, view);
         setContentView(view);
-
         getWindow().setGravity(Gravity.BOTTOM);
         WindowManager.LayoutParams attributes = getWindow().getAttributes();
         attributes.width = Utils.getScreenWidth(context);
         getWindow().setAttributes(attributes);
         iv_close.setOnClickListener(this);
-
         List<MarketRightModel.DataBean.ProdClassifyBean.ListBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
 
         //切换规格
@@ -171,4 +187,61 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
                 break;
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getTotal(UpDateNumEvent upDateNumEvent) {
+        getCartNum();
+    }
+
+    /**
+     *
+     */
+    private void getCartNum() {
+        GetCartNumAPI.requestData(context)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<GetCartNumModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(GetCartNumModel getCartNumModel) {
+                        if (getCartNumModel.isSuccess()) {
+                            if (Integer.valueOf(getCartNumModel.getData().getNum()) > 0) {
+                                tv_num.setVisibility(View.VISIBLE);
+                                tv_num.setText(getCartNumModel.getData().getNum());
+                                tv_price_total.setText(getCartNumModel.getData().getTotalPrice());
+                                tv_free_desc.setText(getCartNumModel.getData().getDeliveryFee());
+                            } else {
+                                tv_free_desc.setText("未选购商品");
+                                tv_num.setVisibility(View.GONE);
+                                tv_price_total.setText(getCartNumModel.getData().getTotalPrice());
+//                                tv_price_total.setVisibility(View.GONE);
+                            }
+                        } else {
+                            AppHelper.showMsg(context, getCartNumModel.getMessage());
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.show();
+        EventBus.getDefault().unregister(this);
+    }
+
 }

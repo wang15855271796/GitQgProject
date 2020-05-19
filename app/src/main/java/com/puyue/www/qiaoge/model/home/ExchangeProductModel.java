@@ -63,24 +63,6 @@ public class ExchangeProductModel {
     }
 
     public static class DataBean {
-        @Override
-        public String toString() {
-            return "DataBean{" +
-                    "type='" + type + '\'' +
-                    ", productMainId=" + productMainId +
-                    ", productName='" + productName + '\'' +
-                    ", defaultPic='" + defaultPic + '\'' +
-                    ", flag=" + flag +
-                    ", typeUrl='" + typeUrl + '\'' +
-                    ", spec='" + spec + '\'' +
-                    ", salesVolume='" + salesVolume + '\'' +
-                    ", minMaxPrice=" + minMaxPrice +
-                    ", specialOffer='" + specialOffer + '\'' +
-                    ", prodSpecs=" + prodSpecs +
-                    ", inventory='" + inventory + '\'' +
-                    ", prodPrices=" + prodPrices +
-                    '}';
-        }
 
         /**
          * type : 批发
@@ -112,6 +94,27 @@ public class ExchangeProductModel {
         private List<ProdSpecsBean> prodSpecs;
         private String inventory;
         private List<ProdPricesBean> prodPrices;
+
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "activeId=" + activeId +
+                    ", productId=" + productId +
+                    ", type='" + type + '\'' +
+                    ", productMainId=" + productMainId +
+                    ", productName='" + productName + '\'' +
+                    ", defaultPic='" + defaultPic + '\'' +
+                    ", flag=" + flag +
+                    ", typeUrl='" + typeUrl + '\'' +
+                    ", spec='" + spec + '\'' +
+                    ", salesVolume='" + salesVolume + '\'' +
+                    ", minMaxPrice='" + minMaxPrice + '\'' +
+                    ", specialOffer='" + specialOffer + '\'' +
+                    ", prodSpecs=" + prodSpecs +
+                    ", inventory='" + inventory + '\'' +
+                    ", prodPrices=" + prodPrices +
+                    '}';
+        }
 
         public int getProductId() {
             return productId;
@@ -284,6 +287,14 @@ public class ExchangeProductModel {
             private int priceId;
             private int productUnit;
             private String unitDesc;
+            private String specialOffer;
+            public String getSpecialOffer() {
+                return specialOffer;
+            }
+
+            public void setSpecialOffer(String specialOffer) {
+                this.specialOffer = specialOffer;
+            }
 
             public int getCartNum() {
                 return cartNum;

@@ -49,14 +49,14 @@ public abstract class BaseSwipeActivity extends FragmentActivity {
         mBundle = savedInstanceState;
 
         StatusBarCompat.setStatusBarColor(mActivity, Color.parseColor("#ffffff"), true);
-
-        /*Sofia.with(mActivity).statusBarDarkFont()
-                .statusBarBackground(Color.parseColor("#ffffff"));*/
         findViewById();
         setViewData();
         setClickEvent();
     }
 
+    /**
+     * 设置为白色状态栏
+     */
     protected void setTranslucentStatus() {
         // 5.0以上系统状态栏透明
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -143,17 +143,5 @@ public abstract class BaseSwipeActivity extends FragmentActivity {
             EventBus.getDefault().post(new LogoutsEvent());
             finish();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        MobclickAgent.onPause(this);
     }
 }

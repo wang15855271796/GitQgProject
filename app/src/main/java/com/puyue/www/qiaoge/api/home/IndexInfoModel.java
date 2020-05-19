@@ -1,5 +1,7 @@
 package com.puyue.www.qiaoge.api.home;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.util.List;
 
 /**
@@ -92,9 +94,27 @@ public class IndexInfoModel {
         String questUrl;
         String areaName;
         String cityName;
+        String deductAmountStr;
+        String offerStr;
         private List<BannersBean> banners;
         private List<IconsBean> icons;
         private List<ClassifyListBean> classifyList;
+
+        public String getDeductAmountStr() {
+            return deductAmountStr;
+        }
+
+        public void setDeductAmountStr(String deductAmountStr) {
+            this.deductAmountStr = deductAmountStr;
+        }
+
+        public String getOfferStr() {
+            return offerStr;
+        }
+
+        public void setOfferStr(String offerStr) {
+            this.offerStr = offerStr;
+        }
 
         public String getAreaName() {
             return areaName;
@@ -356,16 +376,45 @@ public class IndexInfoModel {
             }
         }
 
-        public static class ClassifyListBean {
+        public static class ClassifyListBean implements MultiItemEntity {
             /**
              * title : js123
              * img :
              * id : 100
              */
-
+            public static final int SHORT = 0;
+            public static final int LONG = 1;
             private String title;
             private String img;
             private int id;
+            private int spanSize;
+            private String secTitle;
+            private List<String> prodPics;
+            private int itemType;
+//
+            public String getSecTitle() {
+                return secTitle;
+            }
+
+            public void setSecTitle(String secTitle) {
+                this.secTitle = secTitle;
+            }
+
+            public List<String> getProdPics() {
+                return prodPics;
+            }
+
+            public void setProdPics(List<String> prodPics) {
+                this.prodPics = prodPics;
+            }
+
+            public int getSpanSize() {
+                return spanSize;
+            }
+
+            public void setSpanSize(int spanSize) {
+                this.spanSize = spanSize;
+            }
 
             public String getTitle() {
                 return title;
@@ -389,6 +438,14 @@ public class IndexInfoModel {
 
             public void setId(int id) {
                 this.id = id;
+            }
+
+            public void setItemType(int itemType) {
+                this.itemType = itemType;
+            }
+            @Override
+            public int getItemType() {
+                return itemType;
             }
         }
     }

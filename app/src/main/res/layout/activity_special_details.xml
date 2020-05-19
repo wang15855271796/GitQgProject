@@ -449,6 +449,51 @@
 
         </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>
+    <LinearLayout
+        android:id="@+id/ll_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#FFFFF3C1"
+        android:orientation="horizontal"
+        >
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <TextView
+                tools:text="该商品为宁波地区商品，请切换到该地区购买"
+                android:textSize="12dp"
+                android:layout_marginLeft="@dimen/size_15dp"
+                android:paddingTop="12dp"
+                android:textColor="#666666"
+                android:paddingBottom="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_change"
+                android:drawablePadding="@dimen/size_5dp"
+                android:layout_marginRight="@dimen/size_15dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="立即切换"
+                android:paddingTop="@dimen/size_12dp"
+                android:paddingBottom="@dimen/size_12dp"
+                android:drawableRight="@mipmap/qg_cart_jump"
+                android:textColor="#FFF6551A"
+                android:textSize="12dp" />
+
+        </RelativeLayout>
+
+
+
+
+    </LinearLayout>
     <include layout="@layout/view_include_common_detail" />
 </LinearLayout>

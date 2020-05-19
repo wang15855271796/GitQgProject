@@ -6,7 +6,6 @@
 
     <RelativeLayout
         android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginRight="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_10"
         android:id="@+id/rl_group"
         android:orientation="vertical"
@@ -24,11 +23,18 @@
 
             <ImageView
                 android:id="@+id/iv_pic"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/size_15dp"
                 android:layout_centerHorizontal="true"
                 tools:src="@mipmap/icon_baidu"
-                android:layout_width="162dp"
-                android:layout_height="162dp" />
+                android:layout_width="140dp"
+                android:layout_height="140dp" />
+
+            <View
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@drawable/app_sub_account_item_btn"
+                android:layout_width="152dp"
+                android:layout_height="152dp"/>
 
             <ImageView
                 android:visibility="gone"
@@ -67,7 +73,7 @@
             android:ellipsize="end"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginRight="@dimen/dp_10"
-            android:textSize="@dimen/sp_12"
+            android:textSize="@dimen/sp_14"
             tools:text="华清源腿排腿排华排......................"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -78,7 +84,7 @@
             android:id="@+id/tv_price"
             android:layout_marginTop="@dimen/dp_10"
             android:layout_marginLeft="@dimen/dp_10"
-            android:textSize="@dimen/size_15dp"
+            android:textSize="@dimen/size_16dp"
             android:layout_below="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -86,12 +92,13 @@
         <ImageView
             android:id="@+id/iv_add"
             android:src="@mipmap/app_add"
-            android:layout_marginRight="@dimen/dp_10"
-            android:padding="@dimen/dp_10"
+            android:layout_marginRight="@dimen/size_15dp"
+            android:padding="5dp"
             android:layout_below="@+id/tv_name"
+            android:layout_marginTop="@dimen/size_3dp"
             android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="@dimen/size_32dp"
+            android:layout_height="@dimen/size_32dp" />
 
         <ImageView
             android:id="@+id/iv_icon"

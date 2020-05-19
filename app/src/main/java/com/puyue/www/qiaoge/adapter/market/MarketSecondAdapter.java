@@ -1,6 +1,7 @@
 package com.puyue.www.qiaoge.adapter.market;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -65,6 +66,9 @@ public class MarketSecondAdapter extends BaseQuickAdapter<ClassIfyModel.DataBean
         if(selectPosition==helper.getLayoutPosition()) {
             if(pos != helper.getLayoutPosition()) {
                 pos = helper.getLayoutPosition();
+                tv_name.setTextColor(Color.parseColor("#333333"));
+                tv_name.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                tv_name.setTextSize(14);
                 if(item.getSecondClassify()==null) {
                     recyclerView.setVisibility(View.GONE);
                 }else {
@@ -74,8 +78,6 @@ public class MarketSecondAdapter extends BaseQuickAdapter<ClassIfyModel.DataBean
 
                         }else {
                             recyclerView.setVisibility(View.VISIBLE);
-//                            recyclerView.setPadding(0,0,0,0);
-//                            rl_bg.setBackgroundResource(R.drawable.h);
                         }
                         opens = false;
                     }else {
@@ -99,7 +101,9 @@ public class MarketSecondAdapter extends BaseQuickAdapter<ClassIfyModel.DataBean
                 }
             }
 
-            tv_name.setTextColor(Color.parseColor("#333333"));
+            tv_name.setTextColor(Color.parseColor("#676767"));
+            tv_name.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            tv_name.setTextSize(14);
             rl_bg.setBackgroundResource(R.drawable.hh);
             rl.setVisibility(View.GONE);
             rl_bg.setPadding(0,0,0,0);

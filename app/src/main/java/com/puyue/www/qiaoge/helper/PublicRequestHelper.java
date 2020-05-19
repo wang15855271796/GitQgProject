@@ -51,6 +51,7 @@ public class PublicRequestHelper {
      * 获取角标数据
      */
     public static void getCartNum(Context context, final OnHttpCallBack<GetCartNumModel> callBack) {
+
         GetCartNumAPI.requestData(context)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -75,6 +75,8 @@ public class CommonAdapter extends BaseQuickAdapter<CouponModel.DataBean.Actives
         }else {
             iv_sale_done.setVisibility(View.GONE);
         }
+
+
         rl_group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

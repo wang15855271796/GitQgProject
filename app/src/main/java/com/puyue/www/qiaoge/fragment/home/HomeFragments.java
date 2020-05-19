@@ -714,12 +714,12 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
         driverAdapter = new DriverAdapter(R.layout.item_driver,driverList);
 
         //八个icon Adapter
-        rvIconAdapter = new RvIconAdapter(R.layout.item_home_icon,iconList);
+//        rvIconAdapter = new RvIconAdapter(R.layout.item_home_icon,iconList);
         rv_icon.setLayoutManager(new GridLayoutManager(context,4));
         rv_icon.setAdapter(rvIconAdapter);
 
         //六个品种点击
-        typeAdapter = new TypesAdapter(R.layout.item_type,classifyList);
+//        typeAdapter = new TypesAdapter(R.layout.item_type,classifyList);
         rv_type.setLayoutManager(new GridLayoutManager(context,2));
         rv_type.setAdapter(typeAdapter);
 
@@ -878,7 +878,6 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
         fragmentTransaction = supportFragmentManager.beginTransaction();
         if (newFragment == null) {
             newFragment = new NewFragment();
-            Log.d("wssssssssssss....","000000000");
             fragmentTransaction.add(R.id.content, newFragment, NewFragment.class.getCanonicalName());
         }
         fragmentTransaction.show(newFragment);

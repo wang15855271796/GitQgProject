@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,7 @@ public class SearchDialog extends Dialog implements View.OnClickListener {
         this.listBean = listBean;
         init();
         exchangeList(listBean.getProductId());
+
     }
 
     //初始化布局

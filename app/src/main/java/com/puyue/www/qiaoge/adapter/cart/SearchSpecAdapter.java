@@ -1,6 +1,8 @@
 package com.puyue.www.qiaoge.adapter.cart;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 
 import java.util.List;
@@ -18,9 +21,9 @@ import java.util.List;
 public class SearchSpecAdapter extends BaseAdapter {
 
     Context context;
-    List<SearchResultsModel.DataBean.RecommendProdBean.ProdSpecsBean> prodSpecs;
-
-    public SearchSpecAdapter(Context context, List<SearchResultsModel.DataBean.RecommendProdBean.ProdSpecsBean> prodSpecs) {
+    List<ExchangeProductModel.DataBean.ProdSpecsBean> prodSpecs;
+    int selectPosition;
+    public SearchSpecAdapter(Context context, List<ExchangeProductModel.DataBean.ProdSpecsBean> prodSpecs) {
         this.context = context;
         this.prodSpecs = prodSpecs;
     }
@@ -52,23 +55,20 @@ public class SearchSpecAdapter extends BaseAdapter {
         } else {
             holder = (Holder) convertView.getTag();
         }
+
+        if(selectPosition==position) {
+            holder.tv_spec.setTextColor(Color.parseColor("#FF680A"));
+            holder.tv_spec.setBackgroundColor(Color.parseColor("#FEF5EF"));
+
+        }else {
+            holder.tv_spec.setTextColor(Color.parseColor("#333333"));
+            holder.tv_spec.setBackgroundColor(Color.parseColor("#eeeeee"));
+
+        }
+
         holder.tv_spec.setText(prodSpecs.get(position).getSpec());
         holder.tv_spec.setEnabled(true);
         holder.tv_spec.setSelected(false);
-//        holder.tv_spec.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!v.isEnabled()) {
-//                    return;
-//                }
-//                for (int i = 0; i < prodSpecs.size(); i++) {
-//                    prodSpecs.get(i).selected = false;
-//                }
-//                prodSpecs.get(position).selected = !holder.tv_spec.isSelected();
-//                notifyDataSetChanged();
-//            }
-//        });
-
 
         return convertView;
     }
@@ -76,4 +76,11 @@ public class SearchSpecAdapter extends BaseAdapter {
     static class Holder {
         public TextView tv_spec;
     }
+
+    public void selectPosition(int position) {
+        this.selectPosition = position;
+
+        notifyDataSetChanged();
+    }
+
 }

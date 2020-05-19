@@ -53,10 +53,14 @@ public class ChooseAddresssAdapter extends BaseQuickAdapter<AddressModel.DataBea
         TextView tv_name = helper.getView(R.id.tv_name);
         TextView tv_num = helper.getView(R.id.tv_num);
         ImageView iv_edit = helper.getView(R.id.iv_edit);
+        CheckBox iv_check = helper.getView(R.id.iv_check);
         if(item.sendType==1) {
             tv_title.setText(item.provinceName+item.cityName+item.areaName+item.detailAddress);
             tv_name.setText(item.userName);
             tv_num.setText(item.contactPhone);
+            iv_check.setVisibility(View.VISIBLE);
+        }else {
+            iv_check.setVisibility(View.GONE);
         }
         if (item.isDefault == 0) {
             //不是默认地址
@@ -70,7 +74,6 @@ public class ChooseAddresssAdapter extends BaseQuickAdapter<AddressModel.DataBea
         iv_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if(onclick!=null) {
                     onclick.jump(helper.getAdapterPosition());
                 }
