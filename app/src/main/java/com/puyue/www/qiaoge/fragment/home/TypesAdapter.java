@@ -30,6 +30,7 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
     List<IndexInfoModel.DataBean.ClassifyListBean> data;
     private double random;
     private int anInt;
+    private CountDownTimer countDownTimer1;
 
     public TypesAdapter(List<IndexInfoModel.DataBean.ClassifyListBean> data) {
         super(data);
@@ -40,6 +41,7 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
 
     @Override
     protected void convert(BaseViewHolder helper, IndexInfoModel.DataBean.ClassifyListBean item) {
+
         RelativeLayout rl_bg = helper.getView(R.id.rl_bg);
         TextView tv_small_title = helper.getView(R.id.tv_small_title);
         TextView tv_title = helper.getView(R.id.tv_title);
@@ -71,26 +73,33 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                     }else if(helper.getLayoutPosition()==1) {
 
                         if (data.get(1).getProdPics().size()>0) {
-//                            new CountDownTimer(1000,1000) {
-//                                int i = 0;
-//                                @Override
-//                                public void onTick(long millisUntilFinished) {
-//
-//                                }
-//
-//                                @Override
-//                                public void onFinish() {
-//                                    Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
-//                                    i++;
-//
-//                                    if(i==data.get(1).getProdPics().size()) {
-//                                        i = 0;
-//                                    }
-//                                    start();
-//                                }
-//                            }.start();
+                            Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
+                            if(countDownTimer1==null) {
+                                countDownTimer1 = new CountDownTimer(5000,1000) {
+                                    int i = 0;
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+                                        try {
+                                            Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
+                                            i++;
+                                            if(i==data.get(1).getProdPics().size()) {
+                                                i = 0;
+                                            }
+                                        }catch (Exception e) {
+
+                                        }
+                                        start();
+                                    }
+                                }.start();
+                            }
 
                         }
+
                         rl_bg.setBackgroundResource(R.drawable.shouye_hot_red_bg);
                     }else if(helper.getLayoutPosition()==2) {
                         if (data.get(2).getProdPics().size()>0) {
@@ -195,5 +204,9 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                 break;
     }
 
+    }
+
+    public void cancle() {
+        countDownTimer1.cancel();
     }
 }

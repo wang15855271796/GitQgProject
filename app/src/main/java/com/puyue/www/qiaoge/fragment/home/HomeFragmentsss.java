@@ -591,6 +591,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     public void onDestroy() {
         super.onDestroy();
         verticalBanner.stop();
+        typeAdapter.cancle();
         EventBus.getDefault().unregister(this);
     }
     private int mMaxScrollSize;
@@ -893,6 +894,8 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         tv_change_address.setOnClickListener(this);
 //        iv_back.setOnClickListener(this);
     }
+
+
 
     /**
      * 获取权限

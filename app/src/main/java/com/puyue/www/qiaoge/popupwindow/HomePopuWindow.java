@@ -205,7 +205,11 @@ public class HomePopuWindow extends PopupWindow {
                                 case "disable":
                                     Intent intent1 = new Intent(context, HomeActivity.class);
                                     context.startActivity(intent1);
-
+                                    break;
+                                case "offer":
+                                    Intent intent5 = new Intent(context, CouponDetailActivity.class);
+                                    context.startActivity(intent5);
+                                    break;
 
                                 default:
                                     Intent intent4 = new Intent(context, NewWebViewActivity.class);

@@ -470,7 +470,7 @@ public class MineFragment extends BaseFragment {
 
                     // 进入七鱼客服首页（即智能机器人页面）
                     showPhoneDialog(mCustomerPhone);
-                    UnicornManager.inToUnicorn(getContext());
+
                 }
             } else if (view == mRlFeedback)
 
@@ -1010,8 +1010,7 @@ public class MineFragment extends BaseFragment {
         mDialog = new AlertDialog.Builder(getActivity()).create();
         mDialog.show();
         mDialog.getWindow().setContentView(R.layout.dialog_call_phone);
-        TextView mTvCell = (TextView) mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_phone);
-        mTvCell.setText(cell);
+
         mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1021,13 +1020,14 @@ public class MineFragment extends BaseFragment {
         mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isTablet(getActivity())) {
-                    AppHelper.showMsg(getActivity(), "当前设备不具备拨号功能");
-                } else {
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + cell));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }
+                UnicornManager.inToUnicorn(getContext());
+//                if (isTablet(getActivity())) {
+//                    AppHelper.showMsg(getActivity(), "当前设备不具备拨号功能");
+//                } else {
+//                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + cell));
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(intent);
+//                }
                 mDialog.dismiss();
             }
         });
