@@ -289,17 +289,17 @@ public class RegisterStep1Activity extends BaseSwipeActivity implements View.OnC
 
         if(getIntent().getStringExtra("phone")!=null) {
             phone = getIntent().getStringExtra("phone");
-            Log.d("wodesfgndufu...",phone);
+
         }
 
         if(getIntent().getStringExtra("yzm")!=null) {
             yzm = getIntent().getStringExtra("yzm");
-            Log.d("wodesfgndufu........",yzm);
+
         }
 
         if(getIntent().getStringExtra("token1")!=null) {
             token1 = getIntent().getStringExtra("token1");
-            Log.d("wodesfgndufu........",token1);
+
         }
 
 

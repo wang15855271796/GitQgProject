@@ -568,12 +568,12 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
                                     mTvAddCar.setText("     添加提醒     ");
                                     mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
                                     SharedPreferencesUtil.saveInt(mActivity,"warnMe",0);
-                                    Log.d("woshidajiadedef","111111111111");
+
                                 }else {
                                     mTvAddCar.setText("     取消提醒     ");
                                     mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
                                     SharedPreferencesUtil.saveInt(mActivity,"warnMe",1);
-                                    Log.d("woshidajiadedef","222222222222");
+
                                 }
                             }
 

@@ -425,7 +425,6 @@ public class HomeFragments extends BaseFragment implements View.OnClickListener,
                                         public void shoppingCartOnClick(int position) {
                                             if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
                                                 int activeId = actives.get(position).getActiveId();
-                                                Log.d("fsffffffff...",activeId+"");
                                                 addCar(activeId, "", 3, "1");
                                             } else {
                                                 AppHelper.showMsg(mActivity, "请先登录");

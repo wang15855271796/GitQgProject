@@ -41,7 +41,7 @@ public class LoginUtil {
         OneKeyLoginManager.getInstance().openLoginAuth(false, new OpenLoginAuthListener() {
             @Override
             public void getOpenLoginAuthStatus(int code, String result) {
-                Log.d("sfdfffefefe",code+"...0000");
+
                 if (1000 == code) {
                     Log.e("VVV", "拉起授权页成功： code==" + code + "   result==" + result);
                 } else {

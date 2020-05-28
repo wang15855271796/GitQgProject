@@ -192,7 +192,7 @@ class WebappModeListener implements ICore.ICoreStatusListener, IOnCreateSplashVi
                         if(view.getParent() != null){
                             ((ViewGroup)view.getParent()).removeView(view);
                         }
-                        Log.d("wangtao..","dangqianjiemian ");
+
 
                         rootView.addView(view, 0);
                         break;

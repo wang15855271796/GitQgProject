@@ -105,7 +105,7 @@ public class RegisterMessageActivity extends BaseSwipeActivity implements View.O
                     Toast.makeText(getApplicationContext(), "请输入正确的手机号", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    Log.d("woshisdagfdsg.....",phone);
+
                     requestSendCode(phone);
                 }
 
@@ -186,7 +186,7 @@ public class RegisterMessageActivity extends BaseSwipeActivity implements View.O
 
                             } else {
                                 ToastUtil.showSuccessMsg(mContext, mModelSendCode.message);
-                                Log.d("swsdgggttttt........","swddd");
+
                             }
                         }
                     });

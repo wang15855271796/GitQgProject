@@ -616,7 +616,7 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
                 mTvAddCar.setBackgroundColor(Color.parseColor("#F6551A"));
             }
         }
-        Log.d("swddddddddddd",model.getData().getSaleDone()+"");
+
         if(startTime == 0) {
             tv_time.setVisibility(View.VISIBLE);
             if (model.getData().getSaleDone() == 0) {

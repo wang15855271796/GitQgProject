@@ -731,7 +731,7 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
 
                     @Override
                     public void onNext(SpecialGoodModel spikeActiveQueryByIdModel) {
-                        Log.d("swssssssddd...",spikeActiveQueryByIdModel.getData().getActiveName());
+
                         if (spikeActiveQueryByIdModel.isSuccess()) {
                             productName =  spikeActiveQueryByIdModel.getData().getActiveName();
                             mTvTitle.setText(spikeActiveQueryByIdModel.getData().getActiveName());
@@ -954,7 +954,7 @@ public class SpikeGoodsDetailsActivity extends BaseSwipeActivity {
                             if(recommendModel.getData()!=null) {
                                 searchList.addAll(recommendModel.getData());
                                 adapterRecommend.notifyDataSetChanged();
-                                Log.d("weorishssss....",searchList.size()+"");
+
                             }
 
                         } else {

@@ -178,7 +178,7 @@ public class SubAccountActivity extends BaseSwipeActivity implements View.OnClic
             @Override
             public void onNoDoubleClick(View view) {
                     //删除该子账号
-                Log.d("woshidajiashudd....",mModelSubAccount.data.get(position).subId+"");
+
                 requestDeleteSubAccount(mModelSubAccount.data.get(position).subId+"");
                 alertDialog.dismiss();
             }

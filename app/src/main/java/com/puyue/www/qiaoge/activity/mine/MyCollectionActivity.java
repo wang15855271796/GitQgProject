@@ -185,7 +185,7 @@ public class MyCollectionActivity extends BaseSwipeActivity {
                     public void onNext(CollectionListModel collectionListModel) {
                         mPtr.refreshComplete();
                         logoutAndToHome(mContext, collectionListModel.code);
-                        Log.d("woshiddsdsasvdss....",collectionListModel.getData().size()+"");
+
                         mModelCollectionList = collectionListModel;
                         if (mModelCollectionList.success) {
                             updateCollectionList();

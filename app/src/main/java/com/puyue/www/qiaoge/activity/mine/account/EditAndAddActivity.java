@@ -289,7 +289,7 @@ public class EditAndAddActivity extends BaseSwipeActivity  implements OnGetSugge
 
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                Log.d("sddddddd......",cs.length()+"");
+
                 if (cs.length() <= 0) {
                     ry_suggest.setVisibility(View.GONE);
                     tv_target.setVisibility(View.GONE);
@@ -563,7 +563,7 @@ public class EditAndAddActivity extends BaseSwipeActivity  implements OnGetSugge
         options1Items = data;
 ////     遍历省
         for(int i = 0; i <data.size() ; i++) {
-            Log.d("cccccccccccc.......",data.size()+"");
+
 //         存放城市
             ArrayList<AreaModel.DataBean.ChildrenBeanX> cityList = new ArrayList<>();
 //         存放区
@@ -584,7 +584,7 @@ public class EditAndAddActivity extends BaseSwipeActivity  implements OnGetSugge
                     List<AreaModel.DataBean.ChildrenBeanX.ChildrenBean> children = data.get(i).getChildren().get(c).getChildren();
                     city_AreaList.addAll(children);
                     province_AreaList.add(city_AreaList);
-                    Log.d("cccccccccccc.......",province_AreaList.size()+"");
+
                 }
             }
             /**
@@ -711,7 +711,7 @@ public class EditAndAddActivity extends BaseSwipeActivity  implements OnGetSugge
      */
     @Override
     public void onGetSuggestionResult(SuggestionResult res) {
-        Log.d("sddddddeedeee....","ssss");
+
         if (res == null || res.getAllSuggestions() == null) {
             //permission_unfinished
             return;

@@ -80,7 +80,7 @@ public class WalletResultPointActivity extends BaseSwipeActivity {
 
     @Override
     public void setViewData() {
-        Log.d("wswsddewdwdwdwddd...","swwwssssssssssssssss");
+
         mTvOrderDetail.setText("完成");
         if ("recharge".equals(pageType)) {
 //            mLavLoading.setVisibility(View.VISIBLE);

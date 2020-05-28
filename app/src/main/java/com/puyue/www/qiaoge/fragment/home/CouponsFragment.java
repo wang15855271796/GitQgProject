@@ -97,7 +97,7 @@ public class CouponsFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getBack(BackEvent backEvent) {
-        Log.d("sddddd....","333");
+
         actives.clear();
         getSpikeList();
     }
@@ -136,7 +136,7 @@ public class CouponsFragment extends BaseFragment {
                                 tv_title.setText(couponModel.getData().getTitle());
                                 actives.addAll(couponModel.getData().getActives());
                                 tv_desc.setText(couponModel.getData().getDesc());
-                                Log.d("weweeerrrrr....",actives.size()+"");
+
                                 commonAdapter.notifyDataSetChanged();
                             }else {
                                 rl_more.setVisibility(View.GONE);
@@ -156,7 +156,6 @@ public class CouponsFragment extends BaseFragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getActivity().getWindow().setStatusBarColor(Color.WHITE);
-            Log.d("sssssssOOOOO..","ssss");
             StatusBarUtil.setStatusBarLightMode(getActivity());
         }
     }

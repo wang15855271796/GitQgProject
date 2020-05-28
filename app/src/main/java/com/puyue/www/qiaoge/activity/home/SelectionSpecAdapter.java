@@ -62,11 +62,11 @@ public class SelectionSpecAdapter extends BaseAdapter {
         holder.tv_spec.setText(prodSpecs.get(position).getSpec());
 
         if(selectPosition==position) {
-            Log.d("eeeeeeeeee.......",selectPosition+"");
+
             holder.tv_spec.setTextColor(Color.parseColor("#FF680A"));
             holder.tv_spec.setBackgroundColor(Color.parseColor("#FEF5EF"));
         }else {
-            Log.d("eeeeeeeeee............",selectPosition+"");
+
             holder.tv_spec.setTextColor(Color.parseColor("#333333"));
             holder.tv_spec.setBackgroundColor(Color.parseColor("#eeeeee"));
         }

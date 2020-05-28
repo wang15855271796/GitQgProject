@@ -174,7 +174,7 @@ public class SelectionInnerAdapter extends BaseQuickAdapter<MarketRightModel.Dat
                     public void onNext(AddCartGoodModel addMountReduceModel) {
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num + "");
-                            Log.d("dfdfsdfssfeffff......",num+"");
+
                             ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
                             EventBus.getDefault().post(new UpDateNumEvent());
                         } else {

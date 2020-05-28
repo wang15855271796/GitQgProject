@@ -189,7 +189,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                                 fl.setVisibility(View.VISIBLE);
                             } else {
                                 fl.setVisibility(View.GONE);
-                                Log.d("ewewvdfdqwdvfdss...",cartGetReductModel.getData());
+
                             }
 
                         }
@@ -400,7 +400,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                     normalProductBalanceVOStr = mModelCartCommonGoods.toString();
                 }
 
-                Log.d("wodemingzishiss.....",normalProductBalanceVOStr);
 
 
                 activityBalanceVOStr = "";

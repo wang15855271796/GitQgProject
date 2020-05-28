@@ -391,7 +391,6 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
                                 tv_num.setVisibility(View.GONE);
                             }else {
                                 tv_num.setVisibility(View.VISIBLE);
-                                Log.d("wooooooooo.....",getCartNumModel.getData().getNum());
                                 tv_num.setText(getCartNumModel.getData().getNum());
                             }
                         } else {
@@ -410,7 +409,7 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(Color.WHITE);
-            Log.d("sssssssOOOOO..","ssss");
+
             StatusBarUtil.setStatusBarLightMode(mActivity);
         }
     }

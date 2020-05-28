@@ -55,7 +55,7 @@ public class Team1InnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.Dat
         helper.setText(R.id.tv_spec,item.getSpec());
         helper.setText(R.id.tv_price,item.getPrice());
         helper.setText(R.id.tv_old_price,item.getOldPrice());
-        Log.d("wodemingchenghsi.....",item.getPrice());
+
         rl_root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

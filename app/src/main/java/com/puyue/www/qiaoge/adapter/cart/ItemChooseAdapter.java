@@ -201,7 +201,6 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                     @Override
                     public void onNext(AddCartGoodModel addMountReduceModel) {
                         if (addMountReduceModel.isSuccess()) {
-                            Log.d("adffagadadddd......","dwdwdwwd");
                             tv_num.setText(num+"");
                             ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
                             EventBus.getDefault().post(new UpDateNumEvent());

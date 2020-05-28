@@ -164,7 +164,7 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                                 fl.setVisibility(View.VISIBLE);
                             } else {
                                 fl.setVisibility(View.GONE);
-                                Log.d("ewewvdfdqwdvfds.s...",cartGetReductModel.getData());
+
                             }
 
                         }
@@ -369,7 +369,6 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                     normalProductBalanceVOStr = mModelCartCommonGoods.toString();
                 }
 
-                Log.d("wodemingzishiss.....",normalProductBalanceVOStr);
 
 
                 activityBalanceVOStr = "";
@@ -542,7 +541,7 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                             intent.putExtra("normalProductBalanceVOStr", normalProductBalanceVOStr);
                             intent.putExtra("activityBalanceVOStr", activityBalanceVOStr);
                             intent.putExtra("cartListStr", cartListStr);
-                            Log.d("wfdffbfkljnbkljnf..","dds");
+
                             startActivity(intent);
                         }else {
                             ToastUtil.showSuccessMsg(mActivity, cartBalanceModel.message);
@@ -726,7 +725,7 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                         //可用列表
                         List<CartsListModel.DataBean.ValidListBean> validList = cartListModel.getData().getValidList();
                         mListCart.addAll(validList);
-                        Log.d("sdadyuttuangou..",validList.size()+"");
+
                         testAdapter = new TestAdapter(R.layout.item_carts, mListCart,CartActivity.this);
                         mRv.setAdapter(testAdapter);
                         //过期列表
@@ -754,7 +753,7 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                             ll.setVisibility(View.VISIBLE);
 
                             getAllPrice(validList);
-                            Log.d("sdwqqgggflf...",unList.size()+"");
+
 
                         }
 

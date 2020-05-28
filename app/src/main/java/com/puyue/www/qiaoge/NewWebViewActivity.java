@@ -505,7 +505,6 @@ public class NewWebViewActivity extends BaseSwipeActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("wwwwwwwww......",resultCode+"");
         if (requestCode == REQUEST_CODE_LOLIPOP) {  // 选择文件返回 5.0+
             Uri[] results = null;
             if (resultCode == RESULT_OK) {

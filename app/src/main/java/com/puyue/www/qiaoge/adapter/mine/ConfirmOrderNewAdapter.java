@@ -108,7 +108,7 @@ public class ConfirmOrderNewAdapter extends BaseQuickAdapter<CartBalanceModel.Da
         }
         if (StringHelper.notEmptyAndNull(item.getProdTypeUrl())) {
             GlideModel.disPlayError(mContext, item.getProdTypeUrl(), imageIcon);
-            Log.d("swdswdswdwdwdssss..",item.getProdTypeUrl());
+
            /* Glide.with(mContext).load(item.getProdTypeUrl()).
                     transform(new GlideRoundTransform(mContext, 3)).into(imageIcon);*/
         }

@@ -177,7 +177,7 @@ public class EditPasswordInputCodeActivity extends BaseSwipeActivity {
                 mTvTitle.setText("忘记密码");
                 //忘记密码的请求验证码也是重置密码的code
                 mCode = 3;
-                Log.d("weCode...",mType);
+
                 //handleCountDown();
             }
         }

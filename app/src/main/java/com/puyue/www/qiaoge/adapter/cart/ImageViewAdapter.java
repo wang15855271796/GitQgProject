@@ -30,7 +30,6 @@ public class ImageViewAdapter extends BaseQuickAdapter<String,BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, String item) {
         imageView = helper.getView(R.id.iv_image);
-        Log.d("woshiqutui....",item);
         Glide.with(mContext).load(item).into(imageView);
     }
 }

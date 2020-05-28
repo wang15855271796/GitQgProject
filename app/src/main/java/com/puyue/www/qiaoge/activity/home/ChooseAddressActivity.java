@@ -227,7 +227,7 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
                             if(mModelAddress.data!=null&&mModelAddress.data.size()>0) {
                                 list.clear();
                                 list.addAll(addressModel.data);
-                                Log.d("swrsdgdfgfg.....",list.size()+"");
+
                                 addressListAdapter.notifyDataSetChanged();
                                 for (int i = 0; i <list.size() ; i++) {
                                     isDefault = addressModel.data.get(i).isDefault;

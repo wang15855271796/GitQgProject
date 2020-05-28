@@ -287,16 +287,16 @@ public class RegisterActivity extends BaseSwipeActivity implements View.OnClickL
 
                     @Override
                     public void onNext(BaseModel baseModel) {
-                        Log.d("sowhi..",token1);
+
                         if (baseModel.success) {
                             isAuthSuccess = true;
                             AppHelper.showMsg(mContext, "认证成功");
-                            Log.d("sowhi....",baseModel.success+"");
+
                             Intent intent = new Intent(RegisterActivity.this, RegisterStep1Activity.class);
                             intent.putExtra("phone",phone1);
                             intent.putExtra("token1",token1);
                             startActivity(intent);
-                            Log.d("sowhi........",baseModel.message);
+
                             finish();
 
                         } else {
@@ -309,7 +309,7 @@ public class RegisterActivity extends BaseSwipeActivity implements View.OnClickL
 
                             promptDialog.hint.setText("请使用短信验证码验证");
                             promptDialog.title.setText(baseModel.message);
-                            Log.d("wwweeerrrrr....",baseModel.message+"");
+
                             promptDialog.show();
                         }
                     }

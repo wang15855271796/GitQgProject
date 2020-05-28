@@ -133,7 +133,6 @@ public class AddressListActivity extends BaseSwipeActivity {
                                 mListData.get(i).isDefault = 1;
                                 //这里代表着切换了默认地址
                                 defaultId = mListData.get(i).id;
-                                Log.d("wdddddwdddd.....",defaultId+"");
                                 changeAddress = mListData.get(i).provinceName + mListData.get(i).cityName + mListData.get(i).areaName + mListData.get(i).detailAddress;
                             }
                         } else {
@@ -452,7 +451,7 @@ public class AddressListActivity extends BaseSwipeActivity {
                             //删除地址之后重新请求一次地址列表
                             mPtr.autoRefresh();
                             EventBus.getDefault().post(new AddressEvent());
-                            Log.d("swxddddddddddd.....","wwddddddd");
+
                         } else {
                             AppHelper.showMsg(mContext, mModelDeleteAddress.message);
                         }

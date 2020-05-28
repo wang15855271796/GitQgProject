@@ -56,11 +56,11 @@ public class SearchSpecsAdapter extends BaseAdapter {
         if(selectPosition==position) {
             holder.tv_spec.setTextColor(Color.parseColor("#FF680A"));
             holder.tv_spec.setBackgroundColor(Color.parseColor("#FEF5EF"));
-            Log.d("weeeeeeeeeee...........","00");
+
         }else {
             holder.tv_spec.setTextColor(Color.parseColor("#333333"));
             holder.tv_spec.setBackgroundColor(Color.parseColor("#eeeeee"));
-            Log.d("weeeeeeeeeee...........","11");
+
         }
 
         holder.tv_spec.setText(prodSpecs.get(position).getSpec());

@@ -460,7 +460,7 @@ public class EquipmentGoodsDetailActivity extends BaseSwipeActivity {
                             if(recommendModel.getData().getSearchProd()!=null) {
                                 searchList.addAll(recommendModel.getData().getSearchProd().getList());
                                 mAdapterRecommend.notifyDataSetChanged();
-                                Log.d("weorishssss....",searchList.size()+"");
+
                             }
 
                         } else {

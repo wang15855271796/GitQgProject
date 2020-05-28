@@ -106,7 +106,7 @@ public class SpikeActiveNewAdapter extends RecyclerView.Adapter<SpikeActiveNewAd
             holder.tv.setText("距离结束");
             holder.snap.setVisibility(View.VISIBLE);
             holder.tv.setVisibility(View.VISIBLE);
-            Log.d("swsssdddddd...",l+"");
+
             holder.snap.setTime(true,l, this.startTime, this.endTime);
             holder.snap.start();
         }

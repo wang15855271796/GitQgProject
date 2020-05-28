@@ -683,7 +683,7 @@ public class ReturnGoodActivity extends BaseSwipeActivity {
                 }
                 jsonObject.put("returnNums", jsonArray1);
                 jsonArray.put(jsonObject);
-                Log.d("danqianshuju大小。。。",jsonArray.getString(i));
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
