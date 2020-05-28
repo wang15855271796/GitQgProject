@@ -107,12 +107,11 @@
             android:enabled="true"
             android:process=":remote">
         </service>
-        <!--  -->
         <activity
             android:name=".activity.HomeActivity"
             android:launchMode="singleTask"
             android:theme="@style/FullTheme"
-            android:screenOrientation="portrait"
+             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateVisible">
             <!-- 商品分享出去打开app -->
             <!-- Main /LAUNCHER之前存放的位置 -->
@@ -147,88 +146,152 @@
             android:name=".activity.mine.FeedBackActivity"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <!--  -->
-        <activity android:name=".activity.mine.login.LoginActivity" />
+        <activity android:name=".activity.mine.login.LoginActivity"
+            android:screenOrientation="portrait" ></activity>
+        />
 
-        <activity android:name=".activity.mine.login.ShopTypeActivity"></activity>
-        <activity android:name=".fragment.home.HomeTest"></activity>
-        <activity android:name=".activity.mine.SubAccountActivity"/>
-        <activity android:name=".activity.mine.SubAccountOrderActivity"></activity>
-        <activity android:name=".activity.mine.SubAccountListActivity"></activity>
-        <activity android:name=".adapter.home.SeckillGoodActivity"/>
-        <activity android:name=".activity.mine.login.RegisterStep1Activity"/>
-        <activity android:name=".activity.mine.login.RegisterMessageActivity"/>
-        <activity android:name=".activity.home.CouponDetailActivity"/>
-        <activity android:name=".activity.home.TeamDetailActivity"/>
+        <activity android:name=".activity.mine.login.ShopTypeActivity"
+            android:screenOrientation="portrait" ></activity>
+        <activity android:name=".fragment.home.HomeTest"
+            android:screenOrientation="portrait" ></activity>
+        <activity android:name=".activity.mine.SubAccountActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.SubAccountOrderActivity"
+            android:screenOrientation="portrait" ></activity>
+        <activity android:name=".activity.mine.SubAccountListActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".adapter.home.SeckillGoodActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.login.RegisterStep1Activity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.login.RegisterMessageActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.CouponDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.TeamDetailActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.home.NewProductActivity"
+            android:screenOrientation="portrait"
             />
-        <activity android:name=".activity.home.SelectionGoodActivity"/>
-        <activity android:name=".adapter.home.HotProductActivity"/>
+        <activity android:name=".activity.home.SelectionGoodActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".adapter.home.HotProductActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".adapter.home.CommonProductActivity"/>
+        <activity android:name=".adapter.home.CommonProductActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".adapter.home.ReductionProductActivity"/>
-        <activity android:name=".fragment.mine.IntelliGencyActivity"/>
-        <activity android:name=".activity.mine.login.DcloudActvity" />
+        <activity android:name=".adapter.home.ReductionProductActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".fragment.mine.IntelliGencyActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.login.DcloudActvity"
+            android:screenOrientation="portrait" />
         <!-- android:screenOrientation="portrait" -->
         <activity
             android:name=".activity.mine.login.RegisterActivity"
-            android:windowSoftInputMode="stateUnchanged|adjustPan" />
+            android:windowSoftInputMode="stateUnchanged|adjustPan"
+            android:screenOrientation="portrait" />
         <!--  -->
-        <activity android:name=".activity.mine.account.AccountCenterActivity" />
-        <activity android:name=".activity.mine.AddSubAccountActivity"/>
-        <activity android:name=".activity.home.ChooseAddressActivity"/>
+        <activity android:name=".activity.mine.account.AccountCenterActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.AddSubAccountActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.ChooseAddressActivity"
+            android:screenOrientation="portrait" />
         <!--  -->
         <!--  -->
-        <activity android:name=".activity.mine.MessageCenterActivity" />
+        <activity android:name=".activity.mine.MessageCenterActivity"
+            android:screenOrientation="portrait" />
         <!--  -->
-        <activity android:name=".activity.TestActivity"/>
-        <activity android:name=".activity.mine.account.EditAccountInputPhoneActivity" />
+        <activity android:name=".activity.TestActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.account.EditAccountInputPhoneActivity"
+            android:screenOrientation="portrait" />
         <!--  -->
-        <activity android:name=".activity.mine.account.EditPasswordInputCodeActivity" />
+        <activity android:name=".activity.mine.account.EditPasswordInputCodeActivity"
+            android:screenOrientation="portrait" />
         <!--  -->
-        <activity android:name=".activity.mine.account.EditPasswordInputPasswordActivity" />
+        <activity android:name=".activity.mine.account.EditPasswordInputPasswordActivity"
+            android:screenOrientation="portrait" />
         <!--  -->
-        <activity android:name=".activity.mine.account.EditAccountOrPasswordResultActivity" />
+        <activity android:name=".activity.mine.account.EditAccountOrPasswordResultActivity"
+            android:screenOrientation="portrait" />
         <!-- <activity android:name=".activity.mine.wallet.MineWalletActivity" />-->
-        <activity android:name=".activity.mine.wallet.WithDrawActivity" />
-        <activity android:name=".activity.mine.wallet.RechargeActivity" />
-        <activity android:name=".activity.mine.MyCollectionActivity" />
-        <activity android:name=".activity.mine.order.MyOrdersActivity" />
-        <activity android:name=".activity.mine.order.MySubOrderActivity"/>
-        <activity android:name=".activity.home.SpikeGoodsDetailsActivity" />
-        <activity android:name=".activity.mine.EquipmentReturnActivity" />
-        <activity android:name=".activity.home.SearchReasultActivity" />
+        <activity android:name=".activity.mine.wallet.WithDrawActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.wallet.RechargeActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.MyCollectionActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.order.MyOrdersActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.order.MySubOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.SpikeGoodsDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.EquipmentReturnActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.SearchReasultActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.home.SearchStartActivity"
-            android:windowSoftInputMode="stateAlwaysVisible|adjustPan" />
-        <activity android:name=".activity.mine.account.AddressListActivity" />
-        <activity android:name=".activity.mine.account.AddressListsActivity" />
+            android:windowSoftInputMode="stateAlwaysVisible|adjustPan"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.account.AddressListActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.account.AddressListsActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.mine.account.EditAddressActivity"
-            android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activity.mine.account.EditAndAddActivity"></activity>
-        <activity android:name=".activity.mine.order.OrderDetailActivity" />
-        <activity android:name=".activity.mine.order.ReturnGoodsListActivity" />
-        <activity android:name=".activity.mine.order.ReturnReasonActivity" />
-        <activity android:name=".activity.home.HomeGoodsListActivity" />
-        <activity android:name=".activity.CommonH5Activity" />
-        <activity android:name=".activity.home.TeamGoodsDetailActivity" />
-        <activity android:name=".activity.home.PlaceGoodsDetailActivity" />
-        <activity android:name=".activity.home.MasterGoodsDetailActivity" />
-        <activity android:name=".activity.home.CommonGoodsDetailActivity" />
-        <activity android:name=".activity.home.EquipmentGoodsDetailActivity" />
-        <activity android:name=".activity.home.ScenicListActivity" />
-        <activity android:name=".activity.cart.ConfirmOrderActivity" />
-        <activity android:name=".activity.mine.MessageDetailActivity" />
-        <activity android:name=".activity.cart.PayResultActivity" />
-        <activity android:name=".activity.mine.wallet.WalletResultActivity" />
-        <activity android:name=".activity.home.MapActivity" />
-        <activity android:name=".activity.mine.coupons.MyCouponsActivity" />
-        <activity android:name=".activity.mine.coupons.UseOrNotUseActivity" />
-        <activity android:name=".activity.mine.wallet.MyWalletActivity" />
-        <activity android:name=".activity.mine.wallet.MyWalletDetailActivity" />
-        <activity android:name=".activity.mine.coupons.ChooseCouponsActivity" />
-        <activity android:name=".activity.mine.order.ConfirmOrderNewActivity" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.account.EditAndAddActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.order.OrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.order.ReturnGoodsListActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.order.ReturnReasonActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.HomeGoodsListActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.CommonH5Activity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.TeamGoodsDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.PlaceGoodsDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.MasterGoodsDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.CommonGoodsDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.EquipmentGoodsDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.ScenicListActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.cart.ConfirmOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.MessageDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.cart.PayResultActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.wallet.WalletResultActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.MapActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.coupons.MyCouponsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.coupons.UseOrNotUseActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.wallet.MyWalletActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.wallet.MyWalletDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.coupons.ChooseCouponsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.order.ConfirmOrderNewActivity"
+            android:screenOrientation="portrait" />
         <!--  -->
 
         <!--  **********************联通授权页activity**************************-->
@@ -264,21 +327,36 @@
         <!--  -->
         <activity
             android:name=".activity.mine.order.OrderEvaluateActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".activity.mine.order.ReturnGoodsAgainListActivity" />
-        <activity android:name=".activity.CartActivity" />
-        <activity android:name=".activity.home.NoticeListActivity" />
-        <activity android:name=".activity.home.HomeUseActivity" />
-        <activity android:name=".activity.mine.order.MyConfireOrdersActivity" />
-        <activity android:name=".activity.mine.wallet.MyWalletNewActivity" />
-        <activity android:name=".activity.mine.order.NewOrderDetailActivity" />
-        <activity android:name=".NewWebViewActivity" />
-        <activity android:name=".activity.mine.wallet.MinerIntegralActivity" />
-        <activity android:name=".activity.home.EvaluationActivity" />
-        <activity android:name=".activity.home.SpecialGoodDetailActivity" />
-        <activity android:name=".activity.home.SelectionGoodsActivity" />
-        <activity android:name=".activity.mine.IntegralPayActivity" />
-        <activity android:name=".activity.mine.order.VipPayResultActivity" />
+        <activity android:name=".activity.mine.order.ReturnGoodsAgainListActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.CartActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.NoticeListActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.HomeUseActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.order.MyConfireOrdersActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.wallet.MyWalletNewActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.order.NewOrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".NewWebViewActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.wallet.MinerIntegralActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.EvaluationActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.SpecialGoodDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home.SelectionGoodsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.IntegralPayActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.order.VipPayResultActivity"
+            android:screenOrientation="portrait" />
         <!--  -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
@@ -317,15 +395,21 @@
                    android:resource="@xml/custom_filepaths" />
            </provider>-->
 
-        <activity android:name=".activity.cart.CartPoint"></activity>
-        <activity android:name=".activity.mine.wallet.MyWalletPointActivity"></activity>
-        <activity android:name=".activity.mine.wallet.WalletResultPointActivity"></activity>
+        <activity android:name=".activity.cart.CartPoint"
+            android:screenOrientation="portrait" >
+
+        </activity>
+        <activity android:name=".activity.mine.wallet.MyWalletPointActivity"
+            android:screenOrientation="portrait" ></activity>
+        <activity android:name=".activity.mine.wallet.WalletResultPointActivity"
+            android:screenOrientation="portrait" ></activity>
 
         <activity android:name=".activity.mine.order.ReturnGoodActivity"
-
+            android:screenOrientation="portrait"
             ></activity>
 
-        <activity android:name=".activity.mine.ModifyActivity"/>
+        <activity android:name=".activity.mine.ModifyActivity"
+            android:screenOrientation="portrait" />
 
 
         <provider
@@ -339,12 +423,16 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activity.mine.order.MapOrderMessageActivity"></activity>
-        <activity android:name=".activity.WebDriverActivity"></activity>
+        <activity android:name=".activity.mine.order.MapOrderMessageActivity"
+            android:screenOrientation="portrait" ></activity>
+        <activity android:name=".activity.WebDriverActivity"
+            android:screenOrientation="portrait" ></activity>
 
-        <activity android:name=".view.scrollview.NestingScrollActivity"></activity>
+        <activity android:name=".view.scrollview.NestingScrollActivity"
+            android:screenOrientation="portrait" ></activity>
         <!--ShopListActivity-->
-        <activity android:name=".activity.mine.login.ShopListActivity"/>
+        <activity android:name=".activity.mine.login.ShopListActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.android.CaptureActivity"
@@ -357,21 +445,28 @@
             android:name=".activity.mine.order.ConfirmNewOrderActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             />
 
         <activity
             android:name=".activity.mine.order.ConfirmActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             />
 
-        <activity android:name=".activity.mine.order.SelfSufficiencyOrderDetailActivity"></activity>
+        <activity android:name=".activity.mine.order.SelfSufficiencyOrderDetailActivity"
+            android:screenOrientation="portrait" ></activity>
 
-        <activity android:name=".activity.home.ChangeCityActivity" />
+        <activity android:name=".activity.home.ChangeCityActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.mine.wallet.MyCountDetailActivity" />
-        <activity android:name=".activity.mine.order.UserEvaluateActivity"></activity>
-        <activity android:name=".activity.mine.order.ReturnGoodDetailActivity"></activity>
+        <activity android:name=".activity.mine.wallet.MyCountDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.mine.order.UserEvaluateActivity"
+            android:screenOrientation="portrait" ></activity>
+        <activity android:name=".activity.mine.order.ReturnGoodDetailActivity"
+            android:screenOrientation="portrait" ></activity>
     </application>
 
 

@@ -128,6 +128,7 @@ public class ReturnGoodDetailActivity extends BaseActivity {
         rl_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //0配送 1自提
                 if (orderDeliveryType == 0) {
                     Intent intent = new Intent(mContext, NewOrderDetailActivity.class);
                     intent.putExtra(AppConstant.ORDERID, orderId);
@@ -299,7 +300,7 @@ public class ReturnGoodDetailActivity extends BaseActivity {
                                 mProductList.clear();
                                 mProductList.addAll(newReturnOrderModel.getData().getProducts());
                                 recycler_good.setLayoutManager(new LinearLayoutManager(mContext));
-                                returnDetailOrderAdapter = new ReturnDetailOrderAdapter(R.layout.return_order_detail_item, mProductList,returnState);
+                                returnDetailOrderAdapter = new ReturnDetailOrderAdapter(R.layout.return_order_detail_item, mProductList,returnState,orderId);
                                 recycler_good.setAdapter(returnDetailOrderAdapter);
                             }
 

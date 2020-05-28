@@ -159,6 +159,7 @@
                             android:layout_toRightOf="@+id/tv2"
                             android:layout_height="match_parent"
                             android:background="@null"
+                            android:maxLength="6"
                             android:hint="请输入验证码"
                             android:singleLine="true"
                             android:textColor="#232131"

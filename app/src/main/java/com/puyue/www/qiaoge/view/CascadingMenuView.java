@@ -78,14 +78,11 @@ public class CascadingMenuView extends LinearLayout {
 		firstMenuListView.setAdapter(firstMenuListViewAdapter);
 		firstMenuListViewAdapter.setTextSize(17);
 
-//		firstMenuListViewAdapter.setSelectedPositionNoNotify(firstPosition, menuItem);
-
 		firstMenuListViewAdapter.setOnItemClickListener(new MenuItemAdapter.OnItemClickListener() {
 
 					@Override
 					public void onItemClick(View view, int position) {
 						// 选择主菜单，清空原本子菜单内容，增加新内容
-//						secondItem.clear();
 						if (mOnSelectListener != null) {
 							mOnSelectListener.getValuess(menuItem.get(position));
 						}
@@ -98,13 +95,6 @@ public class CascadingMenuView extends LinearLayout {
 							secondMenuListViewAdapter.notifyDataSetChanged();
 							secondMenuListViewAdapter.setSelectedPositionNoNotifys(0, secondItem);
 
-//							if (mOnSelectListener != null) {
-//								mOnSelectListener.getValuess(menuItem.get(position));
-//							}
-//							if (mOnSelectListener != null) {
-//								mOnSelectListener.getValues(secondItem.get(secondPosition));
-//							}
-
 							if(secondItem.get(secondPosition).getList()!=null&&secondItem.get(secondPosition).getList().size()!=0) {
 								thirdItem = secondItem.get(secondPosition).getList();
 								// 通知适配器刷新
@@ -113,29 +103,15 @@ public class CascadingMenuView extends LinearLayout {
 								thirdMenuListViewAdapter.setSelectedPositionNoNotifys(0,thirdItem);
 
 							}else {
-//								thirdItem.clear();
+
 								thirdMenuListView.setVisibility(View.GONE);
 							}
 
 						}else {
-//							secondItem.clear();
+
 							secondMenuListView.setVisibility(View.GONE);
 							thirdMenuListView.setVisibility(View.GONE);
 						}
-
-//						// 通知适配器刷新
-//						secondMenuListViewAdapter.notifyDataSetChanged();
-//						secondMenuListViewAdapter.setSelectedPositionNoNotify(0, secondItem);
-
-//						thirdItem.clear();
-//						if(secondItem.get(secondPosition).getList()!=null&&secondItem.get(secondPosition).getList().size()!=0) {
-//							thirdItem = secondItem.get(secondPosition).getList();
-//						}else {
-//
-//						}
-//						// 通知适配器刷新
-//						thirdMenuListViewAdapter.notifyDataSetChanged();
-//						thirdMenuListViewAdapter.setSelectedPositionNoNotify(0,thirdItem);
 					}
 				});
 
@@ -145,7 +121,6 @@ public class CascadingMenuView extends LinearLayout {
 		thirdItem = secondItem.get(secondPosition).getList();
 		secondMenuListViewAdapter = new Menu2ItemAdapter(context, secondItem, R.color.white, R.color.white);
 		secondMenuListViewAdapter.setTextSize(15);
-//		secondMenuListViewAdapter.setSelectedPositionNoNotify(secondPosition, secondItem);
 		secondMenuListView.setAdapter(secondMenuListViewAdapter);
 		secondMenuListViewAdapter.setOnItemClickListener(new MenuItemAdapter.OnItemClickListener() {
 
@@ -163,16 +138,9 @@ public class CascadingMenuView extends LinearLayout {
                             thirdMenuListViewAdapter.setSelectedPositionNoNotifys(0,thirdItem);
                             thirdMenuListView.setVisibility(View.VISIBLE);
 
-
-
-
                         }else {
                             thirdMenuListView.setVisibility(View.GONE);
                         }
-
-//						AddressBean.DataBean.ListBeanX.ListBean menuItem = thirdItem.get(position);
-
-
 					}
 				});
 
@@ -180,7 +148,6 @@ public class CascadingMenuView extends LinearLayout {
 		thirdItem = secondItem.get(secondPosition).getList();
 		thirdMenuListViewAdapter = new Menu3ItemAdapter(context, thirdItem, R.color.white,R.color.white);
 		thirdMenuListViewAdapter.setTextSize(13);
-//		thirdMenuListViewAdapter.setSelectedPositionNoNotify(thirdPosition,thirdItem);
 		thirdMenuListView.setAdapter(thirdMenuListViewAdapter);
 		thirdMenuListViewAdapter.setOnItemClickListener(new MenuItemAdapter.OnItemClickListener() {
 					@Override

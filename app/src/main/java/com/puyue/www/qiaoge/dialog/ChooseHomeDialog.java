@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.puyue.www.qiaoge.R;
@@ -58,6 +59,7 @@ public class ChooseHomeDialog extends Dialog {
     private RecyclerView recyclerView1;
     RelativeLayout rl_add_address;
     String orderId;
+    TextView tv1;
     private AddressModel.DataBean dataBean;
     public String changeAddress;
     public ChooseHomeDialog(@NonNull Context context, String orderId) {
@@ -75,6 +77,7 @@ public class ChooseHomeDialog extends Dialog {
         view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         setContentView(view);
         recyclerView = view.findViewById(R.id.recyclerView);
+        tv1 = view.findViewById(R.id.tv1);
         rl_add_address = view.findViewById(R.id.rl_add_address);
         recyclerView1 = view.findViewById(R.id.recyclerView1);
         getWindow().setGravity(Gravity.BOTTOM);
@@ -180,7 +183,11 @@ public class ChooseHomeDialog extends Dialog {
 
                                 //不可配送
                                 addressAdapterss = new ChooseAddressssAdapter(R.layout.item_dialog_address,data1);
-
+                                if(data1.size()==0) {
+                                    tv1.setVisibility(View.GONE);
+                                }else {
+                                    tv1.setVisibility(View.VISIBLE);
+                                }
                                 recyclerView1.setLayoutManager(new LinearLayoutManager(mContext));
                                 recyclerView1.setAdapter(addressAdapterss);
 

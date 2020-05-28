@@ -9,7 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +38,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.RoundImageView;
 import com.puyue.www.qiaoge.activity.home.ChangeCityActivity;
 import com.puyue.www.qiaoge.activity.home.ChooseAddressActivity;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
@@ -45,6 +48,8 @@ import com.puyue.www.qiaoge.activity.home.SearchStartActivity;
 import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
 import com.puyue.www.qiaoge.activity.home.TeamDetailActivity;
 import com.puyue.www.qiaoge.activity.home.TeamGoodsDetailActivity;
+import com.puyue.www.qiaoge.activity.home.ViewPagerAdapters;
+import com.puyue.www.qiaoge.activity.home.myViewPagerAdapter;
 import com.puyue.www.qiaoge.activity.mine.MessageCenterActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LogoutsEvent;
@@ -60,6 +65,7 @@ import com.puyue.www.qiaoge.adapter.home.CommonProductActivity;
 import com.puyue.www.qiaoge.adapter.home.HotProductActivity;
 import com.puyue.www.qiaoge.adapter.home.ReductionProductActivity;
 import com.puyue.www.qiaoge.adapter.home.SeckillGoodActivity;
+import com.puyue.www.qiaoge.adapter.mine.ViewPagerAdapter;
 import com.puyue.www.qiaoge.api.cart.AddCartAPI;
 import com.puyue.www.qiaoge.api.home.DriverInfo;
 import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
@@ -73,6 +79,7 @@ import com.puyue.www.qiaoge.banner.GlideImageLoader;
 import com.puyue.www.qiaoge.banner.Transformer;
 import com.puyue.www.qiaoge.banner.listener.OnBannerListener;
 import com.puyue.www.qiaoge.base.BaseFragment;
+import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.ChooseHomeDialog;
 import com.puyue.www.qiaoge.dialog.CouponDialog;
@@ -91,6 +98,7 @@ import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
+import com.puyue.www.qiaoge.model.SendModel;
 import com.puyue.www.qiaoge.model.cart.AddCartModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.CouponModel;
@@ -101,6 +109,7 @@ import com.puyue.www.qiaoge.model.mine.UpdateModel;
 import com.puyue.www.qiaoge.model.mine.order.HomeBaseModel;
 import com.puyue.www.qiaoge.model.mine.order.MyOrderNumModel;
 import com.puyue.www.qiaoge.utils.DateUtils;
+import com.puyue.www.qiaoge.utils.LoginUtil;
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.utils.Utils;
 
@@ -162,8 +171,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     ImageView homeMessage;
     @BindView(R.id.rv_type)
     RecyclerView rv_type;
-    @BindView(R.id.fl_content)
-    FrameLayout fl_content;
     @BindView(R.id.rg_group)
     LinearLayout rg_group;
     @BindView(R.id.rb_1)
@@ -172,8 +179,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     RadioButton rb_2;
     @BindView(R.id.rb_3)
     RadioButton rb_3;
-    @BindView(R.id.content)
-    FrameLayout frameLayout;
     @BindView(R.id.rg_new)
     RadioGroup rg_new;
     @BindView(R.id.rb_new)
@@ -208,6 +213,8 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     LinearLayout ll_small_title;
     @BindView(R.id.ll_active)
     LinearLayout ll_active;
+    @BindView(R.id.iv_empty)
+    RoundImageView iv_empty;
     @BindView(R.id.recyclerViewTest)
     RecyclerView recyclerViewTest;
     @BindView(R.id.tv_more)
@@ -310,9 +317,18 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     private SkillAdapter skillAdapter;
     private String deductAmountStr;
     private String offerStr;
+
+    private ArrayList<Fragment> fragmentList;
+
+    public static HomeFragmentsss getInstance() {
+        HomeFragmentsss fragment = new HomeFragmentsss();
+        Bundle bundle = new Bundle();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public int setLayoutId() {
-//        initStatusBarWhiteColor(true);
         return R.layout.test1;
 
     }
@@ -320,21 +336,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        requestOrderNumTwo();
-        setState();
-    }
 
-    /**
-     * 设置沉浸式状态栏
-     */
-    private void setState() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getActivity().getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        }
     }
 
     private void requestOrderNumTwo() {
@@ -357,6 +359,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                         mModelMyOrderNum = myOrderNumModel;
                         if (mModelMyOrderNum.success) {
                             updateOrderNum();
+
                         } else {
                             AppHelper.showMsg(mActivity, mModelMyOrderNum.message);
                         }
@@ -366,6 +369,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
     private void updateOrderNum() {
         //消息中心
+        Log.d("wwwwwwwwww.....","swdwdssss");
         if (mModelMyOrderNum.getData().getNotice() > 0) {
             tv_num.setVisibility(View.VISIBLE);
             tv_num.setText("  " + mModelMyOrderNum.getData().getNotice() + "  ");
@@ -551,7 +555,8 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
             @Override
             public void Register() {
-                startActivity(RegisterActivity.getIntent(mActivity, RegisterMessageActivity.class));
+//                startActivity(RegisterActivity.getIntent(mActivity, RegisterMessageActivity.class));
+                LoginUtil.initRegister(mActivity);
                 dismiss();
             }
         };
@@ -603,17 +608,16 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
         token = UserInfoHelper.getUserId(mActivity);
         getProductsList(1,10,"commonBuy");
-
+        requestOrderNumTwo();
         appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if(Math.abs(verticalOffset)>30) {
                     toolbar1.setVisibility(View.VISIBLE);
-                    initStatusBarWhiteColor(true);
                 }else {
                     toolbar1.setVisibility(View.GONE);
-                    setTranslucentStatus();
                 }
+
                 int totalScrollRange = appBarLayout.getTotalScrollRange();
                 if(totalScrollRange ==Math.abs(verticalOffset)) {
                     flag = true;
@@ -630,17 +634,10 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
                 }
 
-                if (mMaxScrollSize == 0){
-                    mMaxScrollSize = appBarLayout.getTotalScrollRange();
-                }
-                int currentScrollPercentage = (Math.abs(verticalOffset)) * 100 / mMaxScrollSize;
-                float alpha=(float) (1 - currentScrollPercentage/20.0);
-                tv_city.setAlpha(alpha);
-                homeMessage.setAlpha(alpha);
-                tv_search.setAlpha(alpha);
-                iv_bg.setAlpha(alpha);
             }
         });
+
+
 
         ll_small_title.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -798,10 +795,10 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                         tv_title4.setTextColor(Color.parseColor("#999999"));
                         tv_title4.setBackgroundResource(R.drawable.shape_white);
                         switchRb4();
+
                         break;
 
                     case R.id.rb_must_common:
-
                         rb_info.setTextColor(Color.parseColor("#333333"));
                         rb_common.setTextColor(Color.parseColor("#333333"));
                         rb_must_common.setTextColor(Color.parseColor("#333333"));
@@ -819,7 +816,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
                         tv_title4.setTextColor(Color.parseColor("#999999"));
                         tv_title4.setBackgroundResource(R.drawable.shape_white);
-
                         switchRb5();
                         break;
 
@@ -839,7 +835,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
                         tv_title4.setTextColor(Color.parseColor("#999999"));
                         tv_title4.setBackgroundResource(R.drawable.shape_white);
-
                         switchRb6();
                         break;
 
@@ -863,6 +858,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                         tv_title4.setBackgroundResource(R.drawable.shape_orange);
 
                         switchRb7();
+
                         break;
                 }
             }
@@ -967,24 +963,24 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                 });
     }
 
-    private void hideFragment() {
-        if (newFragment!=null){
-            //隐藏
-            fragmentTransaction.hide(newFragment);
-        }
-        if (mustFragment!=null){
-            //隐藏
-            fragmentTransaction.hide(mustFragment);
-        }
-        if (infoFragment!=null){
-            //隐藏
-            fragmentTransaction.hide(infoFragment);
-        }
-        if (commonFragment!=null){
-            //隐藏
-            fragmentTransaction.hide(commonFragment);
-        }
-    }
+//    private void hideFragment() {
+//        if (newFragment!=null){
+//            //隐藏
+//            fragmentTransaction.hide(newFragment);
+//        }
+//        if (mustFragment!=null){
+//            //隐藏
+//            fragmentTransaction.hide(mustFragment);
+//        }
+//        if (infoFragment!=null){
+//            //隐藏
+//            fragmentTransaction.hide(infoFragment);
+//        }
+//        if (commonFragment!=null){
+//            //隐藏
+//            fragmentTransaction.hide(commonFragment);
+//        }
+//    }
 
 
     /**
@@ -1140,15 +1136,30 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         refreshLayout.autoRefresh();
         lav_activity_loading.show();
         couponListAdapter = new CouponListAdapter(R.layout.item_home_coupon_list,lists);
+//        NewFragment newFragment = new NewFragment();
+//        MustFragment mustFragment = new MustFragment();
+//        InfoFragment infoFragment = new InfoFragment();
+//        CommonFragment commonFragment = new CommonFragment();
+//        fragmentList=new ArrayList<>();
+//        fragmentList.add(newFragment);
+//        fragmentList.add(mustFragment);
+//        fragmentList.add(infoFragment);
+//        fragmentList.add(commonFragment);
+//
+//        //ViewPager设置适配器
+//        viewPager.setAdapter(new myViewPagerAdapter(getChildFragmentManager(),fragmentList));
+//        //ViewPager显示第一个Fragment
+//        viewPager.setCurrentItem(0);
+//        //ViewPager页面切换监听
+//        viewPager.setOnPageChangeListener(new myOnPageChangeListener());
 
         isTurn();
         getCouponList();
         getCustomerPhone();
         getPrivacy();
+        isSend();
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
         mTypedialog.setCancelable(false);
-
-
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -1164,6 +1175,37 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                 refreshLayout.finishRefresh();
             }
         });
+    }
+
+    private void isSend() {
+        IndexHomeAPI.isSend(mActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<SendModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(SendModel sendModel) {
+                        if(sendModel.isSuccess()) {
+                            if(sendModel.isData()) {
+                                rl_address.setVisibility(View.GONE);
+                            }else {
+                                rl_address.setVisibility(View.VISIBLE);
+                            }
+
+                        }else {
+                            AppHelper.showMsg(mActivity,sendModel.getMessage());
+                        }
+                    }
+                });
     }
 
     private void isTurn() {
@@ -1355,9 +1397,12 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                             data = indexInfoModel.getData();
                             classifyList.clear();
                             classifyList.addAll(data.getClassifyList());
+                            if(indexInfoModel.getData().getHomeBackPic()!=null) {
+                                Glide.with(mActivity).load(indexInfoModel.getData().getHomeBackPic()).into(iv_bg);
+
+                            }
 
                             for (int i = 0; i <classifyList.size() ; i++) {
-
                                 if(classifyList.size()%2 == 1 && i == classifyList.size()-1) {
                                     classifyList.get(i).setItemType(1);
                                     classifyList.get(i).setSpanSize(2);
@@ -1483,6 +1528,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                             }
 
                             if (data.getBanners().size() > 0) {
+                                iv_empty.setVisibility(View.GONE);
                                 banner.setVisibility(View.VISIBLE);
                                 banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
                                 banner.setImageLoader(new GlideImageLoader());
@@ -1498,6 +1544,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                                 banner.start();
                             } else {
                                 banner.setVisibility(View.GONE);
+                                iv_empty.setVisibility(View.VISIBLE);
                             }
                             lav_activity_loading.hide();
                         }else {
@@ -1506,31 +1553,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                         }
                     }
                 });
-    }
-
-    /**
-     * 显示最低折扣角标信息
-     */
-    TextView tv_coupon;
-    CustomPopWindow mCustomPopWindow;
-    private void showPopWindow() {
-        View contentView = LayoutInflater.from(mActivity).inflate(R.layout.popwindow,null);
-        tv_coupon = (TextView) contentView.findViewById(R.id.tv_coupon);
-//        int width = layoutCommit.getMeasuredWidth()/2;
-//        int height = (int) (-layoutCommit.getMeasuredHeight()*1.5);
-
-        //当前界面没关闭，不是售罄产品才显示
-
-//        if (mCustomPopWindow == null){
-            mCustomPopWindow= new CustomPopWindow.PopupWindowBuilder(mActivity)
-                    .setFocusable(false)
-                    .setOutsideTouchable(false)
-//                    .setAnimationStyle(R.style.Animation)
-                    .setView(contentView)
-                    .create()
-                    .showAsDropDown(rb_2,20,-70);
-
-//        }
     }
 
     private void ClickBanner(List<IndexInfoModel.DataBean.BannersBean> banners) {
@@ -1860,12 +1882,14 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         refreshLayout.autoRefresh();
         getCouponList();
         isTurn();
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginsEvent(AddressEvent event) {
         //刷新UI
         refreshLayout.autoRefresh();
+        isTurn();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1882,35 +1906,48 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         chooseAddressDialog.dismiss();
 
     }
-
-    protected void initStatusBarWhiteColor(boolean isLight) {
-        //设置状态栏颜色为白色，状态栏图标为黑色
-        if (Build.VERSION.SDK_INT >= 21) {
+    protected void settranslucentStatus() {
+        // 5.0以上系统状态栏透明
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = mActivity.getWindow();
-            //取消设置透明状态栏,使 ContentView 内容不再覆盖状态栏
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            //设置状态栏颜色
-            if (isLight) {
-                window.setStatusBarColor(getResources().getColor(R.color.white));
-            } else {
-                window.setStatusBarColor(getResources().getColor(R.color.color333333));
-            }
-
-            //状态栏颜色接近于白色，文字图标变成黑色
-            View decor = window.getDecorView();
-            int ui = decor.getSystemUiVisibility();
-            if (isLight) {
-                //light --> a|=b的意思就是把a和b按位或然后赋值给a,   按位或的意思就是先把a和b都换成2进制，然后用或操作，相当于a=a|b
-                ui |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            } else {
-                //dark  --> &是位运算里面，与运算,  a&=b相当于 a = a&b,  ~非运算符
-                ui &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            }
-            decor.setSystemUiVisibility(ui);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-
     }
 
+
+    private class myOnPageChangeListener implements ViewPager.OnPageChangeListener {
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            switch (position){
+                case 0:
+                    rg_new.check(R.id.rb_new);
+                    break;
+                case 1:
+                    rg_new.check(R.id.rb_must_common);
+                    break;
+                case 2:
+                    rg_new.check(R.id.rb_info);
+                    break;
+                case 3:
+                    rg_new.check(R.id.rb_common);
+                    break;
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+
+        }
+    }
 }

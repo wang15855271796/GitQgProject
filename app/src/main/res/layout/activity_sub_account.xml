@@ -8,13 +8,13 @@
     <com.puyue.www.qiaoge.view.CompatToolbar
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/size_30dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/size_60dp"
         android:background="@drawable/app_border_bottom_bg">
 
         <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/iv_sub_account_back"
@@ -48,8 +48,8 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="18dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/shape_car_num"
                 android:gravity="center"
                 android:text="99"

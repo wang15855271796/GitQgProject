@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,6 +49,7 @@ import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.MessageEvent;
+import com.puyue.www.qiaoge.fragment.cart.CartFragment;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -180,9 +182,15 @@ public class MineFragment extends BaseFragment {
     private LinearLayout ll_self_sufficiency;
     private LinearLayout ll_deliver_order;
     TextView tv_number;
+
+    public static MineFragment getInstance() {
+        MineFragment fragment = new MineFragment();
+        Bundle bundle = new Bundle();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
     @Override
     public int setLayoutId() {
-        setTranslucentStatus();
         return R.layout.fragment_mine;
     }
 
@@ -280,6 +288,34 @@ public class MineFragment extends BaseFragment {
     public void setViewData() {
         mViewVersionPoint.setVisibility(View.GONE);
         mTvVersion.setText(getString(R.string.textVersion) + AppHelper.getVersion(getContext()));
+
+        if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(getContext()))) {
+            //有userId,显示userId,
+            requestUserInfo();
+            requestOrderNum();
+//            requestOrderNumTwo();
+            //getPagerAdapter();
+
+        } else {
+            //没有就显示"请登录"
+            mTvPhone.setText("请登录");
+            mTvPhone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(LoginActivity.getIntent(getContext(), LoginActivity.class));
+                }
+            });
+            //没有userId,就将所有的角标清空
+            mViewWaitPaymentNum.setVisibility(View.GONE);
+            mViewWaitShipmentNum.setVisibility(View.GONE);
+            mViewWaitReceivingNum.setVisibility(View.GONE);
+            mViewWaitEvaluateNum.setVisibility(View.GONE);
+            mViewReturnNum.setVisibility(View.GONE);
+            mViewCollectionNum.setVisibility(View.GONE);
+            if (mViewMessageNum != null) {
+                mViewMessageNum.setVisibility(View.GONE);
+            }
+        }
 
 
         requestUpdate();
@@ -531,18 +567,14 @@ public class MineFragment extends BaseFragment {
                 intent.putExtra("mineAddress","mineAddress");
                 startActivity(intent);
 
-            } else if (view == accountManagement)
+            } else if (view == accountManagement) {
 
-            {
                 //子账户
-//                startActivity(SubAccountActivity.getIntent(getContext(), SubAccountActivity.class));
                 Intent intent = new Intent(getContext(),SubAccountActivity.class);
-                intent.putExtra("message",mModelMyOrderNum.getData().getSubMessage());
+                intent.putExtra("message",mModelMyOrderNum.getData().getSubMessage()+"");
                 startActivity(intent);
 
-            } else if (view == imageViewBanner)
-
-            {
+            } else if (view == imageViewBanner) {
                 if (StringHelper.notEmptyAndNull(MyBannerUrl)) {
                     //我直接让他跳转到NewWebViewActivity 中去。
 //                    String newWebViewUrl="http://116.62.67.230:8082/apph5/html/member.html";
@@ -551,7 +583,6 @@ public class MineFragment extends BaseFragment {
                     intent.putExtra("TYPE", 2);
                     intent.putExtra("name", "");
                     startActivity(intent);
-//                    startActivity(CommonH5Activity.getIntent(getContext(), CommonH5Activity.class, MyBannerUrl));
                 }
             } else if (view == ll_account)
 
@@ -711,35 +742,7 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(getContext()))) {
 
-
-            //有userId,显示userId,
-            requestUserInfo();
-            requestOrderNum();
-            requestOrderNumTwo();
-            //getPagerAdapter();
-
-        } else {
-            //没有就显示"请登录"
-            mTvPhone.setText("请登录");
-            mTvPhone.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(LoginActivity.getIntent(getContext(), LoginActivity.class));
-                }
-            });
-            //没有userId,就将所有的角标清空
-            mViewWaitPaymentNum.setVisibility(View.GONE);
-            mViewWaitShipmentNum.setVisibility(View.GONE);
-            mViewWaitReceivingNum.setVisibility(View.GONE);
-            mViewWaitEvaluateNum.setVisibility(View.GONE);
-            mViewReturnNum.setVisibility(View.GONE);
-            mViewCollectionNum.setVisibility(View.GONE);
-            if (mViewMessageNum != null) {
-                mViewMessageNum.setVisibility(View.GONE);
-            }
-        }
     }
 
     private void requestUpdate() {
@@ -806,25 +809,26 @@ public class MineFragment extends BaseFragment {
                     public void onNext(MyOrderNumModel myOrderNumModel) {
                         mListData.clear();
                         if (myOrderNumModel.success) {
-                            if(myOrderNumModel.getData().getSubMessage()==0) {
-                                tv_number.setVisibility(View.GONE);
-                            }else {
-                                tv_number.setText(myOrderNumModel.getData().getSubMessage());
-                                tv_number.setVisibility(View.VISIBLE);
-                            }
+                            mModelMyOrderNum = myOrderNumModel;
+                            Log.d("wwwwwwwwww.....","swdwd");
 
+//                            if(myOrderNumModel.getData().getSubMessage()==0) {
+//                                tv_number.setVisibility(View.GONE);
+//                            }else {
+//                                tv_number.setText(myOrderNumModel.getData().getSubMessage());
+//                                tv_number.setVisibility(View.VISIBLE);
+//                            }
                             mListData.add(myOrderNumModel.getData());
                             day = myOrderNumModel.getData().getDay();
                             giftNo = myOrderNumModel.getData().getGiftNo();
                             commissionUrl = myOrderNumModel.getData().getCommissionUrl();
-//                             updateOrderNum();
-
-
-                                    if(myOrderNumModel.getData().getInviteOpen()==1) {
-                                        ll_inviteAward.setVisibility(View.GONE);
-                                    }else {
-                                        ll_inviteAward.setVisibility(View.VISIBLE);
-                                    }
+                            mTvPhone.setVisibility(View.VISIBLE);
+                            mTvPhone.setText(myOrderNumModel.getData().getPhone());
+                            if(myOrderNumModel.getData().getInviteOpen()==1) {
+                                ll_inviteAward.setVisibility(View.GONE);
+                            }else {
+                                ll_inviteAward.setVisibility(View.VISIBLE);
+                            }
 
                             if (myOrderNumModel.getData().isVipUser()) {
                                 tv_vip.setText("翘歌会员");
@@ -867,8 +871,7 @@ public class MineFragment extends BaseFragment {
                             } else {
                                 ll_expiredInfo.setVisibility(View.GONE);
                             }
-                            mTvPhone.setVisibility(View.VISIBLE);
-                            mTvPhone.setText(myOrderNumModel.getData().getPhone());
+
                             //  mViewPager.setAdapter(mPagerAdapter);
                             // 会员中心 url
                             if (!TextUtils.isEmpty(myOrderNumModel.getData().getVipCenter())) {
@@ -924,30 +927,6 @@ public class MineFragment extends BaseFragment {
                                 mViewReturnNum.setVisibility(View.GONE);
                             }
 
-                       /*     if (!TextUtils.isEmpty(myOrderNumModel.getData().getRecSendNum())) {
-                                textCouponsPoint.setText(myOrderNumModel.getData().getRecSendNum());
-                                textCouponsPoint.setVisibility(View.VISIBLE);
-                            } else {
-                                textCouponsPoint.setVisibility(View.GONE);
-                            }*/
-
-                          /*  if (!TextUtils.isEmpty(myOrderNumModel.getData().getOverSoonNum())) {
-                                couponsNum.setText(myOrderNumModel.getData().getOverSoonNum());
-                                couponsNum.setVisibility(View.VISIBLE);
-
-
-                            } else {
-                                couponsNum.setVisibility(View.GONE);
-
-                            }*/
-
-                           /* if (myOrderNumModel.getData().getMyBanner().size() > 0) {
-                                Glide.with(mActivity).load(myOrderNumModel.getData().getMyBanner().get(0).getBannerUrl())
-                                        .into(imageViewBanner);
-                                MyBannerUrl = myOrderNumModel.getData().getMyBanner().get(0).getBannerDetailUrl();
-
-                            }*/
-
                             //消息中心
                             if (myOrderNumModel.getData().getNotice() > 0) {
                                 mViewMessageNum.setVisibility(View.VISIBLE);
@@ -955,6 +934,7 @@ public class MineFragment extends BaseFragment {
                             } else {
                                 mViewMessageNum.setVisibility(View.GONE);
                             }
+
                         } else {
                             AppHelper.showMsg(mActivity, myOrderNumModel.message);
                         }
@@ -1163,9 +1143,10 @@ public class MineFragment extends BaseFragment {
 
                     @Override
                     public void onNext(MyOrderNumModel myOrderNumModel) {
-                        mModelMyOrderNum = myOrderNumModel;
-                        if (mModelMyOrderNum.success) {
+
+                        if (myOrderNumModel.success) {
                             updateOrderNum();
+
                         } else {
                             AppHelper.showMsg(mActivity, mModelMyOrderNum.message);
                         }

@@ -29,6 +29,7 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CartActivity;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListActivity;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListsActivity;
+import com.puyue.www.qiaoge.adapter.mine.MyWalletAdapter;
 import com.puyue.www.qiaoge.adapter.mine.NewOrderDetailAdapter;
 import com.puyue.www.qiaoge.api.cart.CancelOrderAPI;
 import com.puyue.www.qiaoge.api.cart.DeleteOrderAPI;
@@ -324,8 +325,6 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
 
     @Override
     public void setViewData() {
-
-        // setTranslucentStatus();
         EventBus.getDefault().register(this);
         orderId = getIntent().getStringExtra(AppConstant.ORDERID);
         orderState = getIntent().getStringExtra(AppConstant.ORDERSTATE);
@@ -338,23 +337,11 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
                 if (orderStatusRequest == 1) {
                     cancelOrder(orderId);
                 }
-                Log.i("abc", "getStop: aaaaaaaaaaaa");
             }
         });
 
-        adapter = new NewOrderDetailAdapter(R.layout.new_order_detail, list);
-      /*  LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-
-
-        };
-    recyclerView.setLayoutManager(linearLayoutManager);*/
+        adapter = new NewOrderDetailAdapter(R.layout.new_order_detail, list,orderId);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
         recyclerView.setAdapter(adapter);
         getOrderDetail(orderId, orderState, returnProductMainId);
         // 文字渐变色
@@ -400,7 +387,8 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            backEvent();
+//            backEvent();
+            finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -978,7 +966,8 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
         public void onNoDoubleClick(View view) {
             switch (view.getId()) {
                 case R.id.imageViewBreak: //返回按钮
-                    backEvent();
+//                    backEvent();
+                    finish();
                     break;
                 case R.id.buttonCancelOrder:// 取消订单
                     showCancleOrder();

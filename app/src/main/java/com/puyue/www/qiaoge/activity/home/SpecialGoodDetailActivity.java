@@ -197,7 +197,10 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     boolean isChecked = false;
     RegisterShopAdapterTwo mRegisterAdapter;
     TextView tv_change;
-
+    String num = null;
+    String city;
+    LinearLayout ll_service;
+    TextView tv_city;
     class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -212,7 +215,13 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         if (getIntent() != null && getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             productId = bundle.getInt(AppConstant.ACTIVEID);
-            Log.d("wodeproductId....",productId+"");
+            if(bundle.getString("num")!=null) {
+                num = bundle.getString("num");
+            }
+
+            if(bundle.getString("city")!=null) {
+                city = bundle.getString("city");
+            }
 
         }
 
@@ -234,6 +243,8 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     @Override
     public void findViewById() {
         tv_change = FVHelper.fv(this, R.id.tv_change);
+        tv_city = FVHelper.fv(this, R.id.tv_city);
+        ll_service = FVHelper.fv(this, R.id.ll_service);
         pb = FVHelper.fv(this, R.id.pb);
         tv_cut_down = FVHelper.fv(this, R.id.tv_cut_down);
         tv_time = (TextView) findViewById(R.id.tv_time);
@@ -289,6 +300,10 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
             }
         });
 
+        if(city!=null) {
+            tv_city.setText("该商品为"+city+"地区商品，请切换到该地区购买");
+        }
+
     }
 
     @Override
@@ -298,7 +313,27 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         //获取数据
-        getProductDetail(productId);
+        if(num!=null) {
+            if(num.equals("-1")) {
+                getProductDetail(productId,null);
+                ll_service.setVisibility(View.GONE);
+                mTvAddCar.setEnabled(true);
+                mTvAddCar.setText("加入购物车");
+                mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
+
+            }else if(num.equals("0")){
+                getProductDetail(productId,num);
+                ll_service.setVisibility(View.VISIBLE);
+                mTvAddCar.setEnabled(false);
+                mTvAddCar.setBackgroundResource(R.drawable.app_car);
+
+            }
+        }else {
+            getProductDetail(productId,num);
+            mTvAddCar.setEnabled(true);
+            mTvAddCar.setText("加入购物车");
+            mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
+        }
         getCustomerPhone();
         getAllCommentList(pageNum, pageSize, productId, businessType);
         imageViewAdapter = new ImageViewAdapter(mContext,R.layout.item_imageview,detailList);
@@ -311,7 +346,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         super.onResume();
         if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
             hasCollectState(productId, businessType);
-            getProductDetail(productId);
+//            getProductDetail(productId);
             getCartNum();
         } else {
             mIvCollection.setImageResource(R.mipmap.icon_collection_null);
@@ -485,7 +520,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     /**
      * 获取详情
      */
-    private void getProductDetail(final int productId) {
+    private void getProductDetail(final int productId,String jumpFlag) {
         GetSpecialDetailAPI.requestData(mContext, productId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -503,8 +538,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                     @Override
                     public void onNext(SpecialGoodModel model) {
                         if (model.isSuccess()) {
-
-                            //  addViewForChoice(model);
                             detailList.clear();
                             detailList.addAll(model.getData().getDetailPics());
                             imageViewAdapter.notifyDataSetChanged();
@@ -525,7 +558,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                             tvOldPrice.setText(model.getData().getShowOldPrice());
 
                             tv_title.setText(model.getData().getActiveName());
-                            Log.d("fsffffffff......",model.getData().getActiveName());
                             tv_surplus.setText(model.getData().getRemainNum());
                             mTvGroupPrice.setText(model.getData().getPrice());
                             tv_time.setText(model.getData().getStartTime()+"");
@@ -563,9 +595,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
 
                                 }
                             }else {
-//                                long abs = Math.abs(startTime - currentTime);
-//                                int s = (int) (abs/1000);
-//                                int hours = s/ 3600;
                                 boolean hours = DateUtils.isExceed24(currents, starts);
                                 if(hours) {
                                     //大于24
@@ -651,7 +680,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                                 } else {
                                     mTvAddCar.setEnabled(true);
                                     mTvAddCar.setText("加入购物车");
-                                    mTvAddCar.setBackgroundColor(Color.parseColor("#F6551A"));
+//                                    mTvAddCar.setBackgroundColor(Color.parseColor("#F6551A"));
                                 }
                             }
 
@@ -1269,7 +1298,7 @@ private float star;
                     public void onNext(UpdateUserInvitationModel updateUserInvitationModel) {
                         if (updateUserInvitationModel.isSuccess()) {
                             UserInfoHelper.saveUserType(mContext, AppConstant.USER_TYPE_WHOLESALE);
-                            getProductDetail(productId);
+                            getProductDetail(productId,num);
                         } else {
                             AppHelper.showMsg(mContext, updateUserInvitationModel.getMessage());
                         }

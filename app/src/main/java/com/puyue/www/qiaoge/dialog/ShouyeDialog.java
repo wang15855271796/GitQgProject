@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,9 +17,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.adapter.cart.ItemChooseAdapter;
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
+import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -49,6 +52,8 @@ public class ShouyeDialog extends Dialog implements View.OnClickListener{
     public View view;
     String productName;
     public Unbinder binder;
+    @BindView(R.id.iv_cart)
+    ImageView iv_cart;
     @BindView(R.id.tv_desc)
     TextView tv_desc;
     @BindView(R.id.iv_head)
@@ -94,6 +99,13 @@ public class ShouyeDialog extends Dialog implements View.OnClickListener{
         EventBus.getDefault().register(this);
     }
 
+
+    @Override
+    public void cancel() {
+        super.cancel();
+        EventBus.getDefault().unregister(this);
+    }
+
     public void init() {
         view = View.inflate(context, R.layout.dialog_choice, null);
         view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -105,13 +117,14 @@ public class ShouyeDialog extends Dialog implements View.OnClickListener{
         getWindow().setAttributes(attributes);
         iv_close.setOnClickListener(this);
         tv_confirm.setOnClickListener(this);
+        iv_cart.setOnClickListener(this);
     }
 
     /***
      * 获取多规格详情
      */
     private void getDetailSpec(int productId) {
-        GetProductDetailAPI.requestData(context, productId)
+        GetProductDetailAPI.requestData(context, productId,"")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<GetProductDetailModel>() {
@@ -233,6 +246,11 @@ public class ShouyeDialog extends Dialog implements View.OnClickListener{
                 EventBus.getDefault().post(new ReduceNumEvent());
                 dismiss();
                 break;
+            case R.id.iv_cart:
+                context.startActivity(new Intent(context, HomeActivity.class));
+                EventBus.getDefault().post(new GoToCartFragmentEvent());
+                dismiss();
+                break;
             default:
                 break;
 
@@ -264,17 +282,15 @@ public class ShouyeDialog extends Dialog implements View.OnClickListener{
                     @Override
                     public void onNext(GetCartNumModel getCartNumModel) {
                         if (getCartNumModel.isSuccess()) {
-                            Log.d("wwwwwwwwwww.......","popop");
                             if (Integer.valueOf(getCartNumModel.getData().getNum()) > 0) {
                                 tv_num.setVisibility(View.VISIBLE);
                                 tv_num.setText(getCartNumModel.getData().getNum());
                                 tv_price_total.setText(getCartNumModel.getData().getTotalPrice());
-                                tv_free_desc.setText("满"+getCartNumModel.getData().getDeliveryFee()+"元免配送费");
+                                tv_free_desc.setText("满"+getCartNumModel.getData().getSendAmount()+"元免配送费");
                             } else {
                                 tv_free_desc.setText("未选购商品");
                                 tv_num.setVisibility(View.GONE);
                                 tv_price_total.setText(getCartNumModel.getData().getTotalPrice());
-//                                tv_price_total.setVisibility(View.GONE);
                             }
                         } else {
                             AppHelper.showMsg(context, getCartNumModel.getMessage());
@@ -286,5 +302,4 @@ public class ShouyeDialog extends Dialog implements View.OnClickListener{
     public interface Onclick {
         void addDialog(int num);
     }
-
 }

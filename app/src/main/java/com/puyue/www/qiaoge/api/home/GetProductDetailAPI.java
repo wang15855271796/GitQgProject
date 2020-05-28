@@ -21,12 +21,12 @@ public class GetProductDetailAPI {
     private interface GetProductDetailService {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.GETPRODUCTDETAIL)
-        Observable<GetProductDetailModel> getData(@Field("productMainId") int productId);
+        Observable<GetProductDetailModel> getData(@Field("productMainId") int productId,@Field("jumpFlag") String jumpFlag);
     }
 
-    public static Observable<GetProductDetailModel> requestData(Context context, int productMainId) {
+    public static Observable<GetProductDetailModel> requestData(Context context, int productMainId,String jumpFlag) {
         GetProductDetailService service = RestHelper.getBaseRetrofit(context).create(GetProductDetailService.class);
-        return service.getData(productMainId);
+        return service.getData(productMainId,jumpFlag);
     }
 
 

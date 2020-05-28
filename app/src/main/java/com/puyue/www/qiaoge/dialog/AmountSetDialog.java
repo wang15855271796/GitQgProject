@@ -57,6 +57,7 @@ public abstract class AmountSetDialog extends Dialog implements View.OnClickList
                     if(radioButton1.isChecked()) {
                         SharedPreferencesUtil.saveString(mContext,"notification","1");
                         SharedPreferencesUtil.saveString(mContext,"flag","1");
+                        Confirm();
                     }else if(radioButton2.isChecked()) {
                         if(amount.equals("")||amount.equals("0")) {
                             ToastUtil.showErroMsg(mContext,"请输入正确金额");
@@ -64,11 +65,13 @@ public abstract class AmountSetDialog extends Dialog implements View.OnClickList
                         }else {
                             SharedPreferencesUtil.saveString(mContext,"notification","2");
                             SharedPreferencesUtil.saveString(mContext,"flag","2");
+                            Confirm();
                         }
 
                     }else {
                         SharedPreferencesUtil.saveString(mContext,"notification","0");
                         SharedPreferencesUtil.saveString(mContext,"flag","0");
+                        Confirm();
                     }
                     EventBus.getDefault().post(new SetAmountEvent(amount));
                     EventBus.getDefault().post(new SetAmountsEvent());

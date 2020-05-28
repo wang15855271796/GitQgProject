@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.SetAmountEvent;
 import com.puyue.www.qiaoge.event.SetAmountMaxEvent;
+import com.puyue.www.qiaoge.event.SetAmountMaxsEvent;
 import com.puyue.www.qiaoge.event.SetAmountsEvent;
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.utils.ToastUtil;
@@ -76,12 +77,13 @@ public abstract class AmountMaxDialog extends Dialog implements View.OnClickList
                     if(amount.equals("")||amount.equals("0")) {
                         ToastUtil.showErroMsg(mContext,"请输入正确金额");
                         break;
+                    } else {
+                        EventBus.getDefault().post(new SetAmountMaxEvent(amount));
                     }
+                }else {
+                    EventBus.getDefault().post(new SetAmountMaxsEvent(""));
                 }
-
-                EventBus.getDefault().post(new SetAmountMaxEvent(amount));
                 Confirm();
-
 
                 break;
 

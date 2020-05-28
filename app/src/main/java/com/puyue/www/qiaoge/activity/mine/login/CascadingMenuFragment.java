@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.activity.mine.login;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,7 @@ public class CascadingMenuFragment extends Fragment {
         public void getValue(AddressBean.DataBean.ListBeanX.ListBean area) {
             if(menuViewOnSelectListener!=null){
                 menuViewOnSelectListener.getValue(area);
+
             }
         }
 

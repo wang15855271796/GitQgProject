@@ -3,6 +3,7 @@ package com.puyue.www.qiaoge.fragment.cart;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -32,6 +33,7 @@ import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.fragment.home.CityEvent;
+import com.puyue.www.qiaoge.fragment.market.MarketsFragment;
 import com.puyue.www.qiaoge.fragment.market.TestAdapter;
 import com.puyue.www.qiaoge.helper.AlwaysMarqueeTextViewHelper;
 import com.puyue.www.qiaoge.helper.BigDecimalUtils;
@@ -117,7 +119,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     private GoToMarket mlisenter;
     private TestAdapter testAdapter;
     List<CartsListModel.DataBean.ValidListBean> data;
-    private CollapsingToolbarLayoutStateHelper state;
 
     //可用列表
     private List<CartsListModel.DataBean.ValidListBean> mListCart = new ArrayList<>();
@@ -133,17 +134,17 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     private String cartListStr;
     private double discribe;
 
-
+    public static CartFragment getInstance() {
+        CartFragment fragment = new CartFragment();
+        Bundle bundle = new Bundle();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
     @Override
     public int setLayoutId() {
         return R.layout.fragment_cart;
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        setTranslucentStatus();
-    }
 
     @Override
     public void initViews(View view) {
@@ -534,7 +535,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                         if (mModelDeleteCart.success) {
                             //删除成功,重新请求列表数据
                             ToastUtil.showSuccessMsg(mActivity, "删除商品成功");
-                            state = CollapsingToolbarLayoutStateHelper.EXPANDED;
                             getCartNum();
                             requestCartList();
                         } else {
@@ -669,7 +669,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
         discribe = Double.parseDouble(event.getDiscribe());
 
         tv_total_price.setText("￥"+discribe);
-        Log.d("opiopiopipoi......",discribe+"");
         getScrollData(discribe);
 
         if(sendAmount> discribe) {
@@ -687,7 +686,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     @Override
     public void setViewData() {
         requestCartList();
-        Log.d("wojiaoanwwngghf....","00000");
     }
 
     private void getAllPrice(List<CartsListModel.DataBean.ValidListBean> validList) {

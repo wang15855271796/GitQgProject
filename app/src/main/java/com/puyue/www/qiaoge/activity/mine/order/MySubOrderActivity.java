@@ -38,6 +38,7 @@ import java.util.List;
 
 /**
  * Created by ${王涛} on 2020/4/9
+ * (我的订单界面)
  */
 public class MySubOrderActivity extends BaseActivity {
 
@@ -271,8 +272,8 @@ public class MySubOrderActivity extends BaseActivity {
     }
 
     private void backEvent() {
-        startActivity(HomeActivity.getIntent(mContext, HomeActivity.class));
-        EventBus.getDefault().post(new GoToMineEvent());
+//        startActivity(HomeActivity.getIntent(mContext, HomeActivity.class));
+//        EventBus.getDefault().post(new GoToMineEvent());
         finish();
     }
 

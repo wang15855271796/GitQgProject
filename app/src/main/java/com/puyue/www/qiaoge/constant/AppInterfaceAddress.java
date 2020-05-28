@@ -15,6 +15,10 @@ public class AppInterfaceAddress {
 
     //http://192.168.101.41:8088/
 
+    /**
+     * 是否能跳转产品详情
+     */
+    public static final String JumpDetail = "commonOrder/orderProdJump";
 
     public static final String ProdRECOMMEND = "common/queryBrandProdBrandName";
     public static final String SEARCHRESULT = "common/queryProductByName";
@@ -28,6 +32,12 @@ public class AppInterfaceAddress {
     public static final String CHANGE_LOGIN_PASSWORD = "auth/resetPwd";
     public static final String CHANGE_PAY_PASSWORD = "pay/updatePayPwd";
 
+    /**
+     *
+     * 判断地址是否在配送范围内
+     */
+
+    public static final String Is_Send = "common/judgeAddressIsInSend";
     /**
      * 转盘数据
      */

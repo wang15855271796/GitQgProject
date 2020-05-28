@@ -18,17 +18,27 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
+import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
+import com.puyue.www.qiaoge.activity.home.SpikeGoodsDetailsActivity;
+import com.puyue.www.qiaoge.adapter.market.MarketGoodBrandAdapter;
+import com.puyue.www.qiaoge.api.home.GetAllCommentListByPageAPI;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.GlideRoundTransform;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.model.cart.CartBalanceModel;
 import com.puyue.www.qiaoge.model.cart.GetOrderDetailModel;
+import com.puyue.www.qiaoge.model.home.GetAllCommentListByPageModel;
+import com.puyue.www.qiaoge.model.home.JumpModel;
 import com.puyue.www.qiaoge.model.mine.order.NewOrderDetailModel;
 import com.puyue.www.qiaoge.view.GlideModel;
 import com.puyue.www.qiaoge.view.LineBreakLayout;
 
 import java.util.List;
+
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by ${daff}
@@ -47,9 +57,11 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
     TextView coupon;
     private LinearLayout ll_good;
     RecyclerView recyclerView;
-    public NewOrderDetailAdapter(int layoutResId, @Nullable List<GetOrderDetailModel.DataBean.ProductVOListBean> data) {
-        super(layoutResId, data);
+    String orderId;
 
+    public NewOrderDetailAdapter(int layoutResId, @Nullable List<GetOrderDetailModel.DataBean.ProductVOListBean> data, String orderId) {
+        super(layoutResId, data);
+        this.orderId = orderId;
     }
 
     @Override
@@ -65,45 +77,15 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
         ll_good = helper.getView(R.id.ll_good);
         lineBreakLayout.removeAllViews();
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        OrderAdapter orderAdapter = new OrderAdapter(R.layout.item_order_desc,item.productDescVOList);
+        OrderAdapter orderAdapter = new OrderAdapter(R.layout.item_order_desc, item.productDescVOList);
         recyclerView.setAdapter(orderAdapter);
-        // 添加 什么规格购买了多少
-//        for (int i = 0; i < item.productDescVOList.size(); i++) {
-//            Log.e(NODATAG, "convert: " + item.productDescVOList.size());
-//            TextView tv = new TextView(mContext);
-//            tv.setTextColor(Color.parseColor("#939393"));
-//            tv.setTextSize(11);
-
-//            if(!item.productDescVOList.get(i).getAfterPrice().equals("")) {
-//                coupon.setText(item.productDescVOList.get(i).getAfterPrice());
-//                coupon.setVisibility(View.VISIBLE);
-//            }else {
-//                coupon.setVisibility(View.GONE);
-//            }
-
-//            Log.d("weewewewewew....","wwssss");
-//            if (!TextUtils.isEmpty(item.productDescVOList.get(i).detailDesc)) {
-//                tv.setText(item.productDescVOList.get(i).newDesc + "  ");
-//                Log.e(TAG, "convert: " + item.productDescVOList.get(i).newDesc);
-//            } else {
-//                tv.setText("");
-//            }
-//
-//            lineBreakLayout.addView(tv);
-
-//        }
         ll_good.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (item.businessType == 1) {
-                    if (item.onShelves == 1) {
-//                        Intent intent = new Intent(mContext, CommonGoodsDetailActivity.class);
-//                        intent.putExtra(AppConstant.ACTIVEID, item.productMainId);
-//                        mContext.startActivity(intent);
-                    }else if (item.onShelves == 0){
-//                        AppHelper.showMsg(mContext,"商品已下架");
-                    }
+                    jumpDetail(orderId, item.productMainId, item.businessType,item);
+                }else {
+                    jumpDetails(orderId, item.productId, item.businessType,item);
                 }
             }
         });
@@ -111,18 +93,15 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
 
         if (item.returnNum != null && StringHelper.notEmptyAndNull(item.returnNum)) {
             tv_return_status.setVisibility(View.VISIBLE);
-
             tv_return_status.setText(item.returnNum);
         } else {
             tv_return_status.setVisibility(View.GONE);
         }
 
-
         if (item.businessType == 2 || item.businessType == 11) { // 有原价 有规格
             if (item.oldPrice != null && StringHelper.notEmptyAndNull(item.oldPrice)) {
                 oldPrice.setVisibility(View.GONE);
                 oldPrice.setText(item.oldPrice + "");
-
                 oldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
                 textSpe.setVisibility(View.VISIBLE);
             } else {
@@ -142,10 +121,7 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
 
         if (StringHelper.notEmptyAndNull(item.picUrl)) {
             GlideModel.disPlayError(mContext, item.picUrl, imageView);
-          /*  Glide.with(mContext).load(item.picUrl).crossFade().transform(new GlideRoundTransform(mContext, 3)).
-                    error(R.mipmap.icon_default_rec).into(imageView);*/
         }
-
 
         if (item.businessType != 1) {
             imageIcon.setVisibility(View.VISIBLE);
@@ -154,22 +130,90 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
             imageIcon.setVisibility(View.GONE);
         }
 
-      /*  if (item.businessType == 2) { ///businessType这个字段判断是秒杀还是团购  ，2秒杀，3团购
-            imageIcon.setImageResource(R.mipmap.ic_order);
-            imageIcon.setVisibility(View.VISIBLE);
-        } else if (item.businessType == 3) {
-            imageIcon.setImageResource(R.mipmap.ic_order_two);
-            imageIcon.setVisibility(View.VISIBLE);
-        } else {
-            imageIcon.setVisibility(View.GONE);
-        }*/
-
-
         if (!TextUtils.isEmpty(item.spec)) {
             helper.setText(R.id.textSpe, item.spec);
         }
-//        if (!TextUtils.isEmpty(item.amount)) {
-//            helper.setText(R.id.Price, "¥" + item.amount);
-//        }
     }
+
+    private void jumpDetails(String orderId, int productId, int businessType, GetOrderDetailModel.DataBean.ProductVOListBean item) {
+        GetAllCommentListByPageAPI.jumpDetail(mContext, orderId, productId, businessType)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<JumpModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(JumpModel jumpModel) {
+                        if(jumpModel.isSuccess()) {
+                            if(jumpModel.getData()!=null) {
+                                if(jumpModel.getData().equals("-1")) {
+                                    Intent intent = new Intent(mContext, SpecialGoodDetailActivity.class);
+                                    intent.putExtra(AppConstant.ACTIVEID,productId);
+                                    intent.putExtra("num",jumpModel.getData());
+                                    mContext.startActivity(intent);
+                                }else {
+                                    Intent intent = new Intent(mContext, SpecialGoodDetailActivity.class);
+                                    intent.putExtra(AppConstant.ACTIVEID,productId);
+                                    intent.putExtra("num",jumpModel.getData());
+                                    intent.putExtra("city",jumpModel.getMessage());
+                                    mContext.startActivity(intent);
+                                }
+                            }else {
+                                AppHelper.showMsg(mContext,jumpModel.getMessage());
+                            }
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 跳转详情
+     */
+    private void jumpDetail(String orderId, int businessId, int businessType, GetOrderDetailModel.DataBean.ProductVOListBean item) {
+        GetAllCommentListByPageAPI.jumpDetail(mContext, orderId, businessId, businessType)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<JumpModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(JumpModel jumpModel) {
+                        if(jumpModel.isSuccess()) {
+                            if(jumpModel.getData()!=null) {
+                                if(jumpModel.getData().equals("-1")) {
+                                    Intent intent = new Intent(mContext, CommonGoodsDetailActivity.class);
+                                    intent.putExtra(AppConstant.ACTIVEID,item.productMainId);
+                                    intent.putExtra("num",jumpModel.getData());
+                                    mContext.startActivity(intent);
+                                }else {
+                                    Intent intent = new Intent(mContext, CommonGoodsDetailActivity.class);
+                                    intent.putExtra(AppConstant.ACTIVEID,item.productMainId);
+                                    intent.putExtra("num",jumpModel.getData());
+                                    intent.putExtra("city",jumpModel.getMessage());
+                                    mContext.startActivity(intent);
+                                }
+                            }else {
+                                AppHelper.showMsg(mContext,jumpModel.getMessage());
+                            }
+                        }
+                    }
+                });
+    }
+
 }

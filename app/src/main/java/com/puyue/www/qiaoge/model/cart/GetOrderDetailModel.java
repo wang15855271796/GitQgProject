@@ -205,8 +205,6 @@ public class GetOrderDetailModel {
             public String oldPrice;
             public String returnNum;
             public String prodTypeUrl;
-
-
             public int onShelves;
             public static class ProductDescVOListBean implements Serializable {
                 /**

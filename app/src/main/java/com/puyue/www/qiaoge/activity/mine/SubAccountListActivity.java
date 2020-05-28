@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -13,6 +14,8 @@ import com.dcloud.android.annotation.NonNull;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.order.MySubOrderActivity;
 import com.puyue.www.qiaoge.activity.mine.order.NewOrderDetailActivity;
+import com.puyue.www.qiaoge.activity.mine.order.ReturnGoodDetailActivity;
+import com.puyue.www.qiaoge.activity.mine.order.SelfSufficiencyOrderDetailActivity;
 import com.puyue.www.qiaoge.adapter.SubAccountListAdapter;
 import com.puyue.www.qiaoge.api.mine.subaccount.SubAccountAddAPI;
 import com.puyue.www.qiaoge.api.mine.subaccount.SubAccountListAPI;
@@ -24,6 +27,7 @@ import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.MessageEvent;
 import com.puyue.www.qiaoge.event.SubAccountListModel;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.AccountDetailModel;
 import com.puyue.www.qiaoge.model.mine.SubAccountModel;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -47,15 +51,16 @@ import rx.schedulers.Schedulers;
  * 子账户订单列表
  */
 public class SubAccountListActivity extends BaseSwipeActivity implements View.OnClickListener{
-
+    @BindView(R.id.iv_back)
+    ImageView iv_back;
     @BindView(R.id.smart)
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.tv_read)
     TextView tv_read;
-    int pageSize = 1;
-    int pageNum = 10;
+    int pageSize = 10;
+    int pageNum = 1;
     List<SubAccountListModel.DataBean.ListBean> lists = new ArrayList<>();
     private SubAccountListAdapter subAccountAdapter;
     SubAccountListModel subAccountListModels;
@@ -86,12 +91,19 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
         subAccountAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(mContext,NewOrderDetailActivity.class);
-                intent.putExtra(AppConstant.RETURNPRODUCTMAINID,lists.get(position).getOrderId());
-                intent.putExtra(AppConstant.ORDERID,"3");
-                mContext.startActivity(intent);
+                String deliverType = UserInfoHelper.getDeliverType(mContext);
+//                Intent intent = new Intent(mContext,NewOrderDetailActivity.class);
+//                intent.putExtra(AppConstant.ORDERID,lists.get(position).getOrderId());
+//                intent.putExtra(AppConstant.ORDERSTATE, "");
+//                intent.putExtra(AppConstant.RETURNPRODUCTMAINID, "");
+//                mContext.startActivity(intent);
+//                int orderState = Integer.parseInt(lists.get(position).getState());
+                //0配送 1自提
+
+
             }
         });
+
         recyclerView.setAdapter(subAccountAdapter);
         subAccountAdapter.setEmptyView(emptyView);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -123,6 +135,7 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
         });
 
         tv_read.setOnClickListener(this);
+        iv_back.setOnClickListener(this);
     }
 
 
@@ -148,6 +161,7 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
                     public void onNext(SubAccountListModel subAccountListModel) {
                         if (subAccountListModel.isSuccess()) {
                             if(subAccountListModel.getData()!=null&&subAccountListModel.getData().getList().size()>0) {
+                                lists.clear();
                                 subAccountListModels = subAccountListModel;
                                 List<SubAccountListModel.DataBean.ListBean> list = subAccountListModel.getData().getList();
                                 lists.addAll(list);
@@ -177,9 +191,13 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
 
                     @Override
                     public void Cancle() {
-                        messageDialog.dismiss();
+                        dismiss();
                     }
                 };
+                messageDialog.show();
+                break;
+            case R.id.iv_back:
+                finish();
                 break;
         }
     }
@@ -207,6 +225,10 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
                         if (baseModel.success) {
                             AppHelper.showMsg(mContext, baseModel.message);
                             EventBus.getDefault().post(new MessageEvent());
+                            subAccountAdapter.notifyDataSetChanged();
+                            refreshLayout.autoRefresh();
+                            messageDialog.dismiss();
+
                         } else {
                             AppHelper.showMsg(mContext, baseModel.message);
                         }

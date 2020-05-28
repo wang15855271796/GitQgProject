@@ -26,7 +26,7 @@ import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 
 /**
  * Created by ${王文博} on 2019/7/18
- * 改版确认订单，增加门店自提
+ * 最新版确认订单，增加门店自提
  */
 
 public class ConfirmNewOrderActivity extends BaseSwipeActivity {
@@ -93,9 +93,7 @@ public class ConfirmNewOrderActivity extends BaseSwipeActivity {
                 tv_sufficiency_order.setVisibility(View.VISIBLE);
                 tv_sufficiency_order_two.setVisibility(View.GONE);
                 tv_deliver_order_two.setVisibility(View.GONE);
-
                 switchTab(TAB_DELIVER);
-                Log.d("egfasdad....","00000");
             }
         });
 

@@ -16,6 +16,7 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.dialog.AmountMaxDialog;
 import com.puyue.www.qiaoge.dialog.AmountSetDialog;
 import com.puyue.www.qiaoge.event.SetAmountMaxEvent;
+import com.puyue.www.qiaoge.event.SetAmountMaxsEvent;
 import com.puyue.www.qiaoge.event.SetAmountsEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
@@ -138,13 +139,39 @@ public class ModifyActivity extends BaseSwipeActivity implements View.OnClickLis
             }
         });
 
-        swipe3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//        swipe3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if(isChecked) {
+//                    SharedPreferencesUtil.saveString(mActivity,"notification","0");
+//                }else {
+//                    SharedPreferencesUtil.saveString(mActivity,"notification","1");
+//                }
+//                if(isChecked) {
+//                    amountSetDialog = new AmountSetDialog(mContext) {
+//                        @Override
+//                        public void Confirm() {
+//                            amountSetDialog.dismiss();
+//                        }
+//                    };
+//                    amountSetDialog.show();
+//                }
+//            }
+//        });
+
+        swipe3.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    SharedPreferencesUtil.saveString(mActivity,"notification","1");
+            public void onClick(View v) {
+                if(swipe3.isChecked()) {
+                    amountSetDialog = new AmountSetDialog(mContext) {
+                        @Override
+                        public void Confirm() {
+                            amountSetDialog.dismiss();
+                        }
+                    };
+                    amountSetDialog.show();
                 }else {
-                    SharedPreferencesUtil.saveString(mActivity,"notification","0");
+                    SharedPreferencesUtil.saveString(mContext,"notification","0");
                 }
             }
         });
@@ -162,13 +189,11 @@ public class ModifyActivity extends BaseSwipeActivity implements View.OnClickLis
                 String amount_limit = SharedPreferencesUtil.getString(mActivity, "amount_limit");
                 String amount = SharedPreferencesUtil.getString(mActivity, "amount");
                 String notification = SharedPreferencesUtil.getString(mActivity, "notification");
-                Log.d("wsssssssssssss.....",notification);
                 String warn_amount = SharedPreferencesUtil.getString(mActivity, "warn_amount");
                 editSubAccount(subId,inPoint,inBalance,inGift,amount_limit,amount,notification,warn_amount);
-
             }
         });
-        getSubDetail();
+
     }
 
     /**
@@ -198,8 +223,16 @@ public class ModifyActivity extends BaseSwipeActivity implements View.OnClickLis
                             inPoint = String.valueOf(baseModel.getData().getInPoint());
                             inGift = String.valueOf(baseModel.getData().getInGift());
                             inBalance = String.valueOf(baseModel.getData().getInBalance());
-                            et_amount.setText(baseModel.getData().getAmount());
+                            if(SharedPreferencesUtil.getString(mActivity, "amount_limit").equals("0")) {
+                                et_amount.setText("");
+                                SharedPreferencesUtil.saveString(mContext,"amount","0");
+                            }else {
+                                et_amount.setText(baseModel.getData().getAmount());
+                                SharedPreferencesUtil.saveString(mContext,"amount",baseModel.getData().getAmount());
+                            }
+
                             tv_amount_remind.setText(baseModel.getData().getWarnAmount());
+
                             if(baseModel.getData().getNotification().equals("0")) {
                                 swipe3.setChecked(false);
                             }else {
@@ -297,21 +330,20 @@ public class ModifyActivity extends BaseSwipeActivity implements View.OnClickLis
                 break;
 
             case R.id.tv_amount_remind:
-                amountSetDialog = new AmountSetDialog(mContext) {
-                    @Override
-                    public void Confirm() {
-                        amountSetDialog.dismiss();
-                    }
-                };
-
-                amountSetDialog.show();
+//                amountSetDialog = new AmountSetDialog(mContext) {
+//                    @Override
+//                    public void Confirm() {
+//                        amountSetDialog.dismiss();
+//                    }
+//                };
+//
+//                amountSetDialog.show();
                 break;
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getAmount(SetAmountEvent event) {
-
         if(SharedPreferencesUtil.getString(mActivity,"flag").equals("2")) {
             if(event.amount.length()==0) {
                 tv_amount_remind.setText("请添加金额");
@@ -331,7 +363,6 @@ public class ModifyActivity extends BaseSwipeActivity implements View.OnClickLis
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getAmounts(SetAmountsEvent event) {
-
         if(SharedPreferencesUtil.getString(mActivity,"flag").equals("1")) {
             tv_amount_remind.setText("任意金额提醒");
             swipe3.setChecked(true);
@@ -356,6 +387,16 @@ public class ModifyActivity extends BaseSwipeActivity implements View.OnClickLis
     public void getAmountss(SetAmountMaxEvent event) {
         et_amount.setText(event.amount);
         SharedPreferencesUtil.saveString(mContext,"amount",event.amount);
+        SharedPreferencesUtil.saveString(mContext,"amount_limit","1");
     }
+
+    //设置最大金额
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getAmountsss(SetAmountMaxsEvent event) {
+        et_amount.setText(event.amount);
+        SharedPreferencesUtil.saveString(mContext,"amount","0");
+        SharedPreferencesUtil.saveString(mContext,"amount_limit","0");
+    }
+
 
 }

@@ -35,8 +35,8 @@
         <RadioGroup
             android:id="@+id/rg"
             android:layout_below="@+id/v"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="115dp">
 
             <RadioButton
                 android:id="@+id/radio1"
@@ -46,45 +46,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <RadioButton
-                android:layout_below="@+id/v"
-                android:id="@+id/radio2"
-                android:text="达到消费金额提醒"
-                android:layout_marginTop="@dimen/size_20dp"
-                android:layout_marginLeft="@dimen/size_20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_90dp">
+
+                <RadioButton
+                    android:layout_centerVertical="true"
+                    android:id="@+id/radio2"
+                    android:text="达到消费金额提醒"
+                    android:layout_marginLeft="@dimen/size_20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/ed_amount"
+                    android:background="@null"
+                    android:inputType="number"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="请输入金额"
+                    android:layout_toRightOf="@+id/radio2"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:textSize="@dimen/size_14dp" />
+            </RelativeLayout>
 
         </RadioGroup>
 
-        <EditText
-            android:id="@+id/ed_amount"
-            android:background="@null"
-            android:inputType="number"
-            android:layout_toRightOf="@+id/rg"
-            android:layout_marginTop="148dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="请输入金额"
-            android:layout_marginLeft="@dimen/size_15dp"
-            android:textSize="@dimen/size_14dp" />
-
-        <LinearLayout
-            android:visibility="gone"
-            android:layout_toRightOf="@+id/rg"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/size_20dp"
-            android:layout_marginTop="165dp"
-            android:layout_marginRight="80dp"
-            android:background="@color/color_BDBDBD"
-            android:orientation="vertical" />
 
         <View
+            android:layout_below="@+id/rg"
             android:layout_width="match_parent"
             android:background="#F0F0F0"
             android:id="@+id/v1"
-            android:layout_below="@+id/ed_amount"
             android:layout_marginLeft="@dimen/size_20dp"
             android:layout_marginRight="@dimen/size_20dp"
             android:layout_marginTop="@dimen/size_45dp"

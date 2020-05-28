@@ -7,6 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
+        android:id="@+id/tv_over"
         android:text="超出配送范围"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="@dimen/dp_10"

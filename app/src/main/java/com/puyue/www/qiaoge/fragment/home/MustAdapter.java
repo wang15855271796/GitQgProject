@@ -16,6 +16,9 @@ import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.adapter.home.CommonDialog;
 import com.puyue.www.qiaoge.adapter.home.CommonsAdapter;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.ShouyeDialog;
+import com.puyue.www.qiaoge.helper.StringHelper;
+import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.home.MustModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 
@@ -73,8 +76,11 @@ public class MustAdapter extends BaseQuickAdapter<MustModel.DataBean, BaseViewHo
                 if(onclick!=null) {
                     onclick.addDialog();
                 }
-                commonDialog = new CommonDialog(mContext,item);
-                commonDialog.show();
+
+                if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
+                    commonDialog = new CommonDialog(mContext,item);
+                    commonDialog.show();
+                }
             }
         });
     }

@@ -28,8 +28,11 @@ import com.chuanglan.shanyan_sdk.listener.GetPhoneInfoListener;
 import com.chuanglan.shanyan_sdk.listener.InitListener;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.ChangeCityActivity;
+import com.puyue.www.qiaoge.activity.mine.MessageCenterActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LogoutsEvent;
+import com.puyue.www.qiaoge.activity.mine.login.RegisterActivity;
+import com.puyue.www.qiaoge.activity.mine.login.RegisterMessageActivity;
 import com.puyue.www.qiaoge.api.PostLoadAmountAPI;
 import com.puyue.www.qiaoge.api.SendJsPushAPI;
 import com.puyue.www.qiaoge.api.home.QueryHomePropupAPI;
@@ -37,6 +40,8 @@ import com.puyue.www.qiaoge.api.home.SendLocationAPI;
 import com.puyue.www.qiaoge.base.BaseActivity;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.CouponDialog;
+import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.GoToMineEvent;
 import com.puyue.www.qiaoge.event.LogoutEvent;
@@ -57,6 +62,7 @@ import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.GetAddressModel;
 import com.puyue.www.qiaoge.model.home.QueryHomePropupModel;
 import com.puyue.www.qiaoge.popupwindow.HomePopuWindow;
+import com.puyue.www.qiaoge.utils.LoginUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -91,7 +97,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     private TextView mTvMine;
     private long mExitTime = 0;
     private TextView mTvCarNum;
-    private TextView tv_change;
     // 弹窗
     private HomePopuWindow popuWindow;
     private String popuWindowImage;
@@ -108,6 +113,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     private boolean isGet = false;
     private String type;
     private String district;
+    CouponDialog couponDialog;
     public static final String KEY_MSG_FRAGMENT = "msg_fragment";
     public static final String KEY_CONTACTS_FRAGMENT = "contacts_fragment";
     public static final String KEY_NEWS_FRAGMENT = "news_fragment";
@@ -189,7 +195,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
 
     @Override
     public void findViewById() {
-        tv_change = (TextView) findViewById(R.id.tv_change);
         mLlHome = (LinearLayout) findViewById(R.id.layout_tab_bar_home);
         mIvHome = (ImageView) findViewById(R.id.iv_tab_bar_home_icon);
         mTvHome = (TextView) findViewById(R.id.tv_tab_bar_home_title);
@@ -208,13 +213,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         mTvCarNum = (TextView) findViewById(R.id.tv_home_car_number);
         rootview = findViewById(R.id.rootview);
 
-        tv_change.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext,ChangeCityActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
 
@@ -363,7 +361,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         public void onNoDoubleClick(View view) {
             if (view == mLlHome) {
                 switchTab(TAB_HOME);
-                Log.d("fffeeeee.......","00000");
                 Window window = getWindow();
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
@@ -378,8 +375,9 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                     Window window = getWindow();
                     window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 } else {
-                    AppHelper.showMsg(mContext, "请先登录");
-                    startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
+//                    AppHelper.showMsg(mContext, "请先登录");
+//                    startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
+                    initDialog();
                 }
             } else if (view == mLlMine) {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
@@ -387,12 +385,29 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                     Window window = getWindow();
                     window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 } else {
-                    AppHelper.showMsg(mContext, "请先登录");
-                    startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
+                    initDialog();
                 }
             }
         }
     };
+
+    private void initDialog() {
+        couponDialog = new CouponDialog(mActivity) {
+            @Override
+            public void Login() {
+                startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                dismiss();
+            }
+
+            @Override
+            public void Register() {
+//                startActivity(RegisterActivity.getIntent(mActivity, LoginActivity.class));
+                LoginUtil.initRegister(getContext());
+                dismiss();
+            }
+        };
+        couponDialog.show();
+    }
 
     private void switchTab(String tab) {
         mLocationClient.stop();
@@ -491,6 +506,11 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getMessageEvent(GoToMarketEvent goToMarketEvent) {
         switchTab(TAB_MARKET);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void goToCartFragment(GoToCartFragmentEvent goToCartFragmentEvent) {
+        switchTab(TAB_CART);
     }
 
     @Override

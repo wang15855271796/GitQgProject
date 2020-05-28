@@ -218,7 +218,7 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
                                 tv_num.setVisibility(View.VISIBLE);
                                 tv_num.setText(getCartNumModel.getData().getNum());
                                 tv_price_total.setText(getCartNumModel.getData().getTotalPrice());
-                                tv_free_desc.setText("满"+getCartNumModel.getData().getDeliveryFee()+"元免配送费");
+                                tv_free_desc.setText("满"+getCartNumModel.getData().getSendAmount()+"元免配送费");
                             } else {
                                 tv_free_desc.setText("未选购商品");
                                 tv_num.setVisibility(View.GONE);

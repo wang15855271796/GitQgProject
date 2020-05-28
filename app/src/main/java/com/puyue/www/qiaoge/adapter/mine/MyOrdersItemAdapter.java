@@ -234,40 +234,29 @@ public class MyOrdersItemAdapter extends BaseQuickAdapter<MyOrdersModel.DataBean
             @Override
             public void onClick(View view) {
                 String deliverType = UserInfoHelper.getDeliverType(mContext);
+                //0配送 1自提
                 if (deliverType.equals("0")) {
-
                     if (orderState == 11){
                         Intent intent =new Intent(mContext,ReturnGoodDetailActivity.class);
                         intent.putExtra("orderType" ,0);
                         intent.putExtra(AppConstant.RETURNPRODUCTMAINID, item.returnProductMainId);
-
                         mContext.startActivity(intent);
+
                     }else {
                         Intent intent = new Intent(mContext, NewOrderDetailActivity.class);
                         intent.putExtra(AppConstant.ORDERID, item.orderId);
                         intent.putExtra(AppConstant.ORDERSTATE, "");
-
                         intent.putExtra(AppConstant.RETURNPRODUCTMAINID, "");
                         mContext.startActivity(intent);
                     }
-                /*
-                    if (orderState == 11) {
-                        //退货订单
-                        intent.putExtra(AppConstant.ORDERSTATE, "11");
-                        intent.putExtra(AppConstant.RETURNPRODUCTMAINID, item.returnProductMainId);
-                    } else {
-
-                    }*/
 
                 } else if (deliverType.equals("1")) {
-
-
                     if (orderState == 11){
                         Intent intent =new Intent(mContext,ReturnGoodDetailActivity.class);
                         intent.putExtra("orderType" ,1);
                         intent.putExtra(AppConstant.RETURNPRODUCTMAINID, item.returnProductMainId);
-
                         mContext.startActivity(intent);
+
                     }else {
                         Intent intent = new Intent(mContext, SelfSufficiencyOrderDetailActivity.class);
                         intent.putExtra(AppConstant.ORDERID, item.orderId);
@@ -275,10 +264,7 @@ public class MyOrdersItemAdapter extends BaseQuickAdapter<MyOrdersModel.DataBean
                         intent.putExtra(AppConstant.RETURNPRODUCTMAINID, "");
                         mContext.startActivity(intent);
                     }
-
                 }
-
-
             }
         });
 

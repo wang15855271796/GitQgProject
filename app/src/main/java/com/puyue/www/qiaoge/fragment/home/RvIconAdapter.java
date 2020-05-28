@@ -12,6 +12,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.Test1Activity;
+import com.puyue.www.qiaoge.activity.TestActivity;
 import com.puyue.www.qiaoge.activity.home.HomeGoodsListActivity;
 import com.puyue.www.qiaoge.activity.home.NewProductActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
@@ -113,7 +115,6 @@ public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.Icon
                     setIntent(item.getUrl());
                 }else if(AppConstant.CONSULT.equals(item.getConfigCode())) {
                     //行业资讯
-                    Log.d("sweeeeeeee....",item.getUrl());
                     setIntentConsult(item.getRemark());
                 }
             }
@@ -128,7 +129,7 @@ public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.Icon
     }
 
     private void setIntentConsult(String URL) {
-        Intent intent = new Intent(mContext, NewWebViewActivity.class);
+        Intent intent = new Intent(mContext, TestActivity.class);
         intent.putExtra("URL", URL);
         intent.putExtra("TYPE", 2);
         intent.putExtra("name","consult");

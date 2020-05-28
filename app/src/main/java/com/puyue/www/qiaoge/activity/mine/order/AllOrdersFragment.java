@@ -121,7 +121,7 @@ public class AllOrdersFragment extends BaseFragment {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
                 pageNum = 1;
-                requestOrdersList(0);
+//                requestOrdersList(0);
             }
         });
         if (orderDeliveryType == 0) {

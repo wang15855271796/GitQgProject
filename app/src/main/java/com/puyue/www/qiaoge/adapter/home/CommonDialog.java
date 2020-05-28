@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.adapter.home;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -15,13 +16,24 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.HomeActivity;
+import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
+import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
+import com.puyue.www.qiaoge.event.GoToMarketEvent;
+import com.puyue.www.qiaoge.event.UpDateNumEvent;
+import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
 import com.puyue.www.qiaoge.model.home.MustModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -58,6 +70,14 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
     ImageView iv_head;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.iv_cart)
+    ImageView iv_cart;
+    @BindView(R.id.tv_num)
+    TextView tv_num;
+    @BindView(R.id.tv_free_desc)
+    TextView tv_free_desc;
+    @BindView(R.id.tv_price_total)
+    TextView tv_price_total;
     MustModel.DataBean listBean;
     int pos = 0;
     NewPriceAdapter searchInnerAdapter;
@@ -68,6 +88,18 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
         this.context = mContext;
         this.listBean = item;
         init();
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void cancel() {
+        super.cancel();
+        EventBus.getDefault().unregister(this);
     }
 
     //初始化布局
@@ -85,6 +117,7 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
         }
 
         iv_close.setOnClickListener(this);
+        iv_cart.setOnClickListener(this);
         tv_name.setText(listBean.getProductName());
         tv_sale.setText(listBean.getSalesVolume());
         tv_price.setText(listBean.getMinMaxPrice());
@@ -113,32 +146,6 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
         });
         searchSpecAdapter = new NewSpecAdapter(context,listBean.getProdSpecs());
         fl_container.setAdapter(searchSpecAdapter);
-    }
-
-    private void getDetailSpec(int productId) {
-        GetProductDetailAPI.requestData(context, productId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GetProductDetailModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(GetProductDetailModel model) {
-                        if (model.isSuccess()) {
-
-                        } else {
-
-                        }
-                    }
-                });
     }
 
     /**
@@ -186,6 +193,55 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
             case R.id.iv_close:
                 dismiss();
                 break;
+
+            case R.id.iv_cart:
+                context.startActivity(new Intent(context, HomeActivity.class));
+                EventBus.getDefault().post(new GoToCartFragmentEvent());
+                dismiss();
+                break;
+
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getTotal(UpDateNumEvent upDateNumEvent) {
+        getCartNum();
+    }
+    /**
+     * 获取角标数据
+     */
+    private void getCartNum() {
+        GetCartNumAPI.requestData(context)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<GetCartNumModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(GetCartNumModel getCartNumModel) {
+                        if (getCartNumModel.isSuccess()) {
+                            if (Integer.valueOf(getCartNumModel.getData().getNum()) > 0) {
+                                tv_num.setVisibility(View.VISIBLE);
+                                tv_num.setText(getCartNumModel.getData().getNum());
+                                tv_price_total.setText(getCartNumModel.getData().getTotalPrice());
+                                tv_free_desc.setText("满"+getCartNumModel.getData().getSendAmount()+"元免配送费");
+                            } else {
+                                tv_free_desc.setText("未选购商品");
+                                tv_num.setVisibility(View.GONE);
+                                tv_price_total.setText(getCartNumModel.getData().getTotalPrice());
+                            }
+                        } else {
+                            AppHelper.showMsg(context, getCartNumModel.getMessage());
+                        }
+                    }
+                });
     }
 }

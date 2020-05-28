@@ -36,6 +36,12 @@ public abstract class MessageDialog extends Dialog{
             @Override
             public void onClick(View v) {
                 Confirm();
+            }
+        });
+
+        tv_cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Cancle();
             }
         });

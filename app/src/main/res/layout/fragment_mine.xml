@@ -86,7 +86,7 @@
                 android:layout_marginLeft="@dimen/size_10dp"
                 android:layout_marginTop="120dp"
                 android:layout_toRightOf="@+id/iv_mine_avatar"
-                android:text="sssssssssss"
+                tools:text="sssssssssss"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_19dp" />
 

@@ -467,7 +467,7 @@ public class SelfSufficiencyOrderDetailActivity extends BaseSwipeActivity {
             }
         });
 
-        adapter = new NewOrderDetailAdapter(R.layout.new_order_detail, list);
+        adapter = new NewOrderDetailAdapter(R.layout.new_order_detail, list,orderId);
       /*  LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollVertically() {

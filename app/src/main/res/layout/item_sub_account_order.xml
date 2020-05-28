@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:background="#ffffff"
     android:paddingBottom="@dimen/size_20dp"
+    android:id="@+id/ll_root"
     xmlns:tools="http://schemas.android.com/tools">
 
     <View
@@ -167,7 +168,7 @@
         <TextView
             android:layout_alignParentRight="true"
             android:id="@+id/tv_read"
-            android:text="已读"
+            android:text="未读"
             android:textColor="#666666"
             android:textSize="@dimen/sp_12"
             android:layout_marginTop="@dimen/size_15dp"

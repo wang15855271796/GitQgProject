@@ -11,7 +11,7 @@
         android:layout_marginLeft="12dp"
         android:background="@drawable/shouye_bg_long"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="75dp">
 
         <TextView
             android:id="@+id/tv_title"
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content" />
 
         <ImageView
-
+            android:id="@+id/iv"
             android:layout_marginLeft="@dimen/size_12dp"
             android:layout_marginBottom="@dimen/size_5dp"
             android:layout_marginTop="@dimen/size_5dp"
@@ -48,28 +48,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/iv_type1"
-            android:layout_marginRight="@dimen/size_7dp"
-            android:layout_marginTop="@dimen/size_5dp"
-            android:layout_alignParentRight="true"
-            android:layout_width="@dimen/size_62dp"
-            android:layout_height="@dimen/size_62dp" />
 
-        <ImageView
-            android:id="@+id/iv_type2"
-            android:layout_marginRight="@dimen/size_81dp"
-            android:layout_marginTop="@dimen/size_5dp"
-            android:layout_alignParentRight="true"
-            android:layout_width="@dimen/size_62dp"
-            android:layout_height="@dimen/size_62dp" />
+        <RelativeLayout
+            android:layout_toRightOf="@+id/iv"
+            android:layout_marginLeft="@dimen/size_60dp"
+            android:layout_width="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_type3"
-            android:layout_marginRight="155dp"
-            android:layout_marginTop="@dimen/size_5dp"
-            android:layout_alignParentRight="true"
-            android:layout_width="@dimen/size_62dp"
-            android:layout_height="@dimen/size_62dp" />
+            <com.puyue.www.qiaoge.RoundImageView
+                android:id="@+id/iv_type1"
+                android:scaleType="fitXY"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/iv_type2"
+                android:layout_marginLeft="@dimen/size_25dp"
+                android:layout_marginRight="@dimen/size_7dp"
+                android:layout_width="@dimen/size_62dp"
+                android:layout_height="@dimen/size_62dp" />
+
+            <com.puyue.www.qiaoge.RoundImageView
+                android:id="@+id/iv_type2"
+                android:scaleType="fitXY"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/iv_type3"
+                android:layout_marginLeft="@dimen/size_25dp"
+                android:layout_width="@dimen/size_62dp"
+                android:layout_height="@dimen/size_62dp" />
+
+            <com.puyue.www.qiaoge.RoundImageView
+                android:id="@+id/iv_type3"
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY"
+                android:layout_width="@dimen/size_62dp"
+                android:layout_height="@dimen/size_62dp" />
+        </RelativeLayout>
     </RelativeLayout>
+
+
+
 </LinearLayout>

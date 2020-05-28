@@ -11,9 +11,9 @@
 
     <RelativeLayout
         android:background="@drawable/app_my_wallet_bg"
-        android:layout_marginTop="@dimen/size_50dp"
+        android:layout_marginTop="@dimen/size_70dp"
         android:layout_width="match_parent"
-        android:layout_height="250dp">
+        android:layout_height="230dp">
 
         <TextView
             android:id="@+id/tv"
@@ -49,50 +49,58 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_below="@+id/tv1"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginRight="@dimen/dp_10"
-            android:layout_marginTop="@dimen/size_25dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#f0f0f0" />
+
 
 
 
         <LinearLayout
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
-            android:layout_height="68dp"
-            android:orientation="horizontal">
+            android:layout_height="50dp"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_register"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="账号注册"
-                android:textColor="#FF680A"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_below="@+id/tv1"
-                android:layout_toRightOf="@+id/tv_register"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
+            <View
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
                 android:background="#f0f0f0" />
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tv_login"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="账号登录"
-                android:textColor="#FF680A"
-                android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/tv_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="账号注册"
+                    android:textColor="#FF680A"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_below="@+id/tv1"
+                    android:layout_toRightOf="@+id/tv_register"
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:background="#f0f0f0" />
+
+
+                <TextView
+                    android:id="@+id/tv_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="账号登录"
+                    android:textColor="#FF680A"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+
 
         </LinearLayout>
 

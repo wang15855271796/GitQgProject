@@ -164,9 +164,26 @@ public class SubAccountListModel {
             private String orderAmount;
             private String dateTime;
             private String state;
-
+            private int orderState;
+            private String returnProductMainId;
             public int getId() {
                 return id;
+            }
+
+            public int getOrderState() {
+                return orderState;
+            }
+
+            public void setOrderState(int orderState) {
+                this.orderState = orderState;
+            }
+
+            public String getReturnProductMainId() {
+                return returnProductMainId;
+            }
+
+            public void setReturnProductMainId(String returnProductMainId) {
+                this.returnProductMainId = returnProductMainId;
             }
 
             public void setId(int id) {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +15,7 @@ import com.puyue.www.qiaoge.api.home.GetScenicSpotDetailByIdAndDateAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.home.AddressBean;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.CascadingMenuView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,6 +39,8 @@ public class ShopListActivity extends BaseSwipeActivity {
     LinearLayout linearLayout;
     @BindView(R.id.tv_save)
     TextView tv_save;
+    @BindView(R.id.iv_back)
+    ImageView iv_back;
     // 两级联动菜单数据
     private CascadingMenuFragment cascadingMenuFragment = null;
 
@@ -59,6 +63,13 @@ public class ShopListActivity extends BaseSwipeActivity {
     public void setViewData() {
         mContext = this;
         tv_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtil.showSuccessMsg(mContext,"请选择具体店铺类型");
+//                finish();
+            }
+        });
+        iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -90,11 +101,6 @@ public class ShopListActivity extends BaseSwipeActivity {
                         if (addressBean.isSuccess()) {
 
                             showFragmentMenu();
-//                            //实例化级联菜单
-//                            cascadingMenuView=new CascadingMenuView(mContext,addressBean.getData());
-//                            //设置回调接口
-//                            cascadingMenuView.setCascadingMenuViewOnSelectListener(new MCascadingMenuViewOnSelectListener());
-
                             FragmentTransaction fragmentTransaction = getSupportFragmentManager()
                                     .beginTransaction();
 
@@ -119,24 +125,61 @@ public class ShopListActivity extends BaseSwipeActivity {
     private void showFragmentMenu() {
 
     }
+    AddressBean.DataBean.ListBeanX.ListBean area1;
+    AddressBean.DataBean.ListBeanX area2;
+    AddressBean.DataBean area3;
 
     // 级联菜单选择回调接口
     class NMCascadingMenuViewOnSelectListener implements CascadingMenuViewOnSelectListener {
 
         @Override
         public void getValue(AddressBean.DataBean.ListBeanX.ListBean area) {
+            area1 = area;
+
+            tv_save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
             cascadingMenuFragment = null;
             EventBus.getDefault().post(new ShopEvent(area.getName()));
         }
 
         @Override
         public void getValues(AddressBean.DataBean.ListBeanX area) {
+            area2 = area;
+            tv_save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(area!=null&&area.getList()==null) {
+                        finish();
+                    }else {
+                        ToastUtil.showSuccessMsg(mContext,"请选择具体店铺类型");
+                    }
+                }
+            });
+
             cascadingMenuFragment = null;
             EventBus.getDefault().post(new ShopEvent(area.getName()));
         }
 
         @Override
         public void getValuess(AddressBean.DataBean area) {
+            area3 = area;
+
+            tv_save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(area!=null&&area.getList()==null) {
+                        finish();
+                    }else {
+                        ToastUtil.showSuccessMsg(mContext,"请选择具体店铺类型");
+                    }
+                }
+            });
+
             cascadingMenuFragment = null;
             EventBus.getDefault().post(new ShopEvent(area.getName()));
         }

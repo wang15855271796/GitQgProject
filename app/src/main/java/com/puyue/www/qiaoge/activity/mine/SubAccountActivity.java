@@ -30,6 +30,7 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.GoToMineEvent;
+import com.puyue.www.qiaoge.event.MessageEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -71,7 +72,7 @@ public class SubAccountActivity extends BaseSwipeActivity implements View.OnClic
     private CountDownTimer countDownTimer;
     ImageView iv_message;
     TextView tv_number;
-    int message;
+    String message;
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
 
@@ -139,13 +140,13 @@ public class SubAccountActivity extends BaseSwipeActivity implements View.OnClic
         mRvSubAccount.setAdapter(mAdapterSubAccount);
         requestSubAccountList();
 
-        message = getIntent().getIntExtra("message",0);
+        message = getIntent().getStringExtra("message");
 
-        if(message==0) {
+        if(message.equals("0")) {
             tv_number.setVisibility(View.GONE);
         }else {
             tv_number.setVisibility(View.VISIBLE);
-            tv_number.setText(message);
+            tv_number.setText(message+"");
         }
     }
 
@@ -290,5 +291,10 @@ public class SubAccountActivity extends BaseSwipeActivity implements View.OnClic
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void message(MessageEvent messageEvent) {
+        tv_number.setVisibility(View.GONE);
     }
 }

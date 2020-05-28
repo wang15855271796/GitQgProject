@@ -13,12 +13,11 @@
         android:background="@drawable/app_border_bottom_bg">
 
         <RelativeLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="@dimen/size_60dp">
 
             <ImageView
-                android:id="@+id/iv_sub_account_back"
+                android:id="@+id/iv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -39,13 +38,11 @@
                 android:id="@+id/tv_read"
                 android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="13dp"
-                android:layout_marginTop="13dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
                 android:text="全部已读"
                 android:layout_marginRight="@dimen/size_20dp"
-                android:textColor="@color/color_666"
+                android:textColor="#F56D23"
                 android:textSize="12dp" />
 
 

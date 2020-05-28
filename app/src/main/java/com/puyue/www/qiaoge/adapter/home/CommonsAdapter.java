@@ -17,9 +17,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
+import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.CouponDialog;
 import com.puyue.www.qiaoge.dialog.ShouyeDialog;
+import com.puyue.www.qiaoge.helper.StringHelper;
+import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
+import com.puyue.www.qiaoge.utils.LoginUtil;
 
 import java.util.List;
 
@@ -101,8 +106,11 @@ public class CommonsAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean
                 if(onclick!=null) {
                     onclick.addDialog();
                 }
-                commonDialog = new ShouyeDialog(mContext,item.getProductMainId());
-                commonDialog.show();
+
+                if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
+                    commonDialog = new ShouyeDialog(mContext,item.getProductMainId());
+                    commonDialog.show();
+                }
             }
         });
     }
@@ -110,5 +118,4 @@ public class CommonsAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean
     public interface Onclick {
         void addDialog();
     }
-
 }

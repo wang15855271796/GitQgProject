@@ -68,6 +68,40 @@ public class MyOrderNumModel extends BaseModel {
         int inviteOpen;
         int subMessage;
 
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "point=" + point +
+                    ", vipUser=" + vipUser +
+                    ", balance='" + balance + '\'' +
+                    ", commission='" + commission + '\'' +
+                    ", inviteAward='" + inviteAward + '\'' +
+                    ", commissionUrl='" + commissionUrl + '\'' +
+                    ", expiredInfo='" + expiredInfo + '\'' +
+                    ", day=" + day +
+                    ", giftNo='" + giftNo + '\'' +
+                    ", phone='" + phone + '\'' +
+                    ", inviteOpen=" + inviteOpen +
+                    ", subMessage=" + subMessage +
+                    ", waitPayment=" + waitPayment +
+                    ", waitShipments=" + waitShipments +
+                    ", waitReceiving=" + waitReceiving +
+                    ", waitEvaluate=" + waitEvaluate +
+                    ", returnSale=" + returnSale +
+                    ", returnEquipment=" + returnEquipment +
+                    ", collectNum=" + collectNum +
+                    ", notice=" + notice +
+                    ", deductNum=" + deductNum +
+                    ", overSoonNum='" + overSoonNum + '\'' +
+                    ", recSendNum='" + recSendNum + '\'' +
+                    ", isVip=" + isVip +
+                    ", vipDesc='" + vipDesc + '\'' +
+                    ", activeBanner=" + activeBanner +
+                    ", vipCenter='" + vipCenter + '\'' +
+                    ", myBanner=" + myBanner +
+                    '}';
+        }
+
         public int getSubMessage() {
             return subMessage;
         }

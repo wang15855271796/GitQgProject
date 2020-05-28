@@ -315,14 +315,14 @@ public class WebDriverActivity extends BaseSwipeActivity {
             @Nullable
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                Log.d("---request->", request.getUrl() + "");
-                requestURl = request.getUrl();
-                if (request.getUrl().toString().contains("callback")) {
-                    String[] strings1 = request.getUrl().toString().split("[?]");
-                    urlRequest = strings1[0].split("ajax://")[1];
-                    arg = strings1[1].split("&");
-                    requestUrl();
-                }
+//                Log.d("---request->", request.getUrl() + "");
+//                requestURl = request.getUrl();
+//                if (request.getUrl().toString().contains("callback")) {
+//                    String[] strings1 = request.getUrl().toString().split("[?]");
+//                    urlRequest = strings1[0].split("ajax://")[1];
+//                    arg = strings1[1].split("&");
+//                    requestUrl();
+//                }
                 return super.shouldInterceptRequest(view, request);
 
 

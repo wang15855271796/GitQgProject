@@ -24,6 +24,7 @@ import com.puyue.www.qiaoge.dialog.AmountSetDialog;
 import com.puyue.www.qiaoge.dialog.XieYiDialog;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.SetAmountMaxEvent;
+import com.puyue.www.qiaoge.event.SetAmountMaxsEvent;
 import com.puyue.www.qiaoge.event.SetAmountsEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -113,8 +114,7 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
         SharedPreferencesUtil.saveString(mActivity,"inPoint","1");
         SharedPreferencesUtil.saveString(mActivity,"inBalance","1");
         SharedPreferencesUtil.saveString(mActivity,"inGift","1");
-//        //0不限制  1限制
-//        SharedPreferencesUtil.saveString(mActivity,"amount_limit","0");
+
 
         swipe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -150,17 +150,35 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
             }
         });
 
-        swipe3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//        swipe3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                //0 不提醒 1 任意提醒 2 达到金额提醒
+//                if(isChecked) {
+//                    SharedPreferencesUtil.saveString(mActivity,"notification","0");
+//                }else {
+//                    SharedPreferencesUtil.saveString(mActivity,"notification","1");
+//                }
+//            }
+//        });
+
+        swipe3.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //0 不提醒 1 任意提醒 2 达到金额提醒
-                if(isChecked) {
-                    SharedPreferencesUtil.saveString(mActivity,"notification","0");
+            public void onClick(View v) {
+                if(swipe3.isChecked()) {
+                    amountSetDialog = new AmountSetDialog(mContext) {
+                        @Override
+                        public void Confirm() {
+                            amountSetDialog.dismiss();
+                        }
+                    };
+                    amountSetDialog.show();
                 }else {
-                    SharedPreferencesUtil.saveString(mActivity,"notification","1");
+                    SharedPreferencesUtil.saveString(mContext,"notification","0");
                 }
             }
         });
+
 
         tv_add.setOnClickListener(new NoDoubleClickListener() {
             @Override
@@ -268,14 +286,14 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
                 break;
 
             case R.id.tv_amount_remind:
-                amountSetDialog = new AmountSetDialog(mContext) {
-                    @Override
-                    public void Confirm() {
-                        amountSetDialog.dismiss();
-                    }
-                };
-
-                amountSetDialog.show();
+//                amountSetDialog = new AmountSetDialog(mContext) {
+//                    @Override
+//                    public void Confirm() {
+//                        amountSetDialog.dismiss();
+//                    }
+//                };
+//
+//                amountSetDialog.show();
                 break;
 
             case R.id.et_amount:
@@ -373,10 +391,6 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
             }
 
         }else {
-//            swipe3.setChecked(false);
-//            amountRemind = "0";
-//            SharedPreferencesUtil.saveString(mContext,"notification","1");
-
         }
 
     }
@@ -396,14 +410,23 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
             amountRemind = "0";
             SharedPreferencesUtil.saveString(mContext,"notification","0");
         }
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getAmountss(SetAmountMaxEvent event) {
         et_amount.setText(event.amount);
+        SharedPreferencesUtil.saveString(mContext,"amount",event.amount);
+        SharedPreferencesUtil.saveString(mContext,"amount_limit","1");
 //        swipe3.setChecked(true);
 //        SharedPreferencesUtil.saveString(mContext,"notifaction","0");
+    }
+
+    //设置最大金额
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getAmountsss(SetAmountMaxsEvent event) {
+        et_amount.setText(event.amount);
+        SharedPreferencesUtil.saveString(mContext,"amount",null);
+        SharedPreferencesUtil.saveString(mContext,"amount_limit","0");
     }
     /**
      * 检验号码

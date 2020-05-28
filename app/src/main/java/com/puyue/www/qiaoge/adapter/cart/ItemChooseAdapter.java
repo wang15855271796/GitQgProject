@@ -116,13 +116,10 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                         | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
                 window.setContentView(R.layout.dialog_cart_num_set);
-
                 EditText et_num = window.findViewById(R.id.et_num);
                 TextView tv_ok = window.findViewById(R.id.tv_ok);
                 TextView tv_cancel = window.findViewById(R.id.tv_cancel);
-
                 window.setGravity(Gravity.CENTER);
-
                 tv_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -204,6 +201,7 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                     @Override
                     public void onNext(AddCartGoodModel addMountReduceModel) {
                         if (addMountReduceModel.isSuccess()) {
+                            Log.d("adffagadadddd......","dwdwdwwd");
                             tv_num.setText(num+"");
                             ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
                             EventBus.getDefault().post(new UpDateNumEvent());

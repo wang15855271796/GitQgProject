@@ -14,6 +14,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.RoundImageView;
 import com.puyue.www.qiaoge.activity.home.SelectionGoodActivity;
 import com.puyue.www.qiaoge.api.home.IndexInfoModel;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -28,10 +29,12 @@ import java.util.TimerTask;
 public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataBean.ClassifyListBean,BaseViewHolder> {
 
     List<IndexInfoModel.DataBean.ClassifyListBean> data;
-    private double random;
-    private int anInt;
     private CountDownTimer countDownTimer1;
-
+    private CountDownTimer countDownTimer2;
+    private CountDownTimer countDownTimer3;
+    private CountDownTimer countDownTimer4;
+    private CountDownTimer countDownTimer5;
+    private CountDownTimer countDownTimer6;
     public TypesAdapter(List<IndexInfoModel.DataBean.ClassifyListBean> data) {
         super(data);
         this.data = data;
@@ -67,15 +70,38 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                         rl_bg.setBackgroundResource(R.drawable.shouye_orange_bg);
 
                         if (data.get(0).getProdPics().size()>0) {
-
-                            Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
-                        }
-                    }else if(helper.getLayoutPosition()==1) {
-
-                        if (data.get(1).getProdPics().size()>0) {
                             Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
                             if(countDownTimer1==null) {
                                 countDownTimer1 = new CountDownTimer(5000,1000) {
+                                    int i = 0;
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+                                        try {
+                                            Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
+                                            i++;
+                                            if(i==data.get(0).getProdPics().size()) {
+                                                i = 0;
+                                            }
+                                        }catch (Exception e) {
+
+                                        }
+                                        start();
+                                    }
+                                }.start();
+                            }
+
+                        }
+
+                    }else if(helper.getLayoutPosition()==1) {
+                        if (data.get(1).getProdPics().size()>0) {
+                            Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
+                            if(countDownTimer2==null) {
+                                countDownTimer2 = new CountDownTimer(5000,1000) {
                                     int i = 0;
                                     @Override
                                     public void onTick(long millisUntilFinished) {
@@ -103,101 +129,148 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                         rl_bg.setBackgroundResource(R.drawable.shouye_hot_red_bg);
                     }else if(helper.getLayoutPosition()==2) {
                         if (data.get(2).getProdPics().size()>0) {
-//                            new CountDownTimer(5000,1000) {
-//                                int i = 0;
-//                                @Override
-//                                public void onTick(long millisUntilFinished) {
-//
-//                                }
-//
-//                                @Override
-//                                public void onFinish() {
-//                                    Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
-//                                    i++;
-//                                    if(i==data.get(1).getProdPics().size()) {
-//                                        i = 0;
-//
-//                                    }
-//
-//                                }
-//                            }.start();
+                            Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
+                            if(countDownTimer3==null) {
+                                countDownTimer3 = new CountDownTimer(5000,1000) {
+                                    int i = 0;
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+                                        try {
+                                            Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
+                                            i++;
+                                            if(i==data.get(2).getProdPics().size()) {
+                                                i = 0;
+                                            }
+                                        }catch (Exception e) {
+
+                                        }
+                                        start();
+                                    }
+                                }.start();
+                            }
+
                         }
                         rl_bg.setBackgroundResource(R.drawable.shouye_pink_bg);
                     }else if(helper.getLayoutPosition()==3) {
 
                         rl_bg.setBackgroundResource(R.drawable.shouye_red_bg);
                         if (data.get(3).getProdPics().size()>0) {
-//                            new CountDownTimer(5000,1000) {
-//                                int i = 0;
-//                                @Override
-//                                public void onTick(long millisUntilFinished) {
-//
-//                                }
-//
-//                                @Override
-//                                public void onFinish() {
-//                                    Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
-//                                    i++;
-//                                    if(i==data.get(1).getProdPics().size()) {
-//                                        i = 0;
-//                                    }
-//
-//                                }
-//                            }.start();
+                            Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
+                            if(countDownTimer4==null) {
+                                countDownTimer4 = new CountDownTimer(5000,1000) {
+                                    int i = 0;
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+                                        try {
+                                            Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
+                                            i++;
+                                            if(i==data.get(3).getProdPics().size()) {
+                                                i = 0;
+                                            }
+                                        }catch (Exception e) {
+
+                                        }
+                                        start();
+                                    }
+                                }.start();
+                            }
                         }
 
                     }else if(helper.getLayoutPosition()==4) {
                         if (data.get(4).getProdPics().size()>0) {
-//                            new CountDownTimer(5000,1000) {
-//                                int i = 0;
-//                                @Override
-//                                public void onTick(long millisUntilFinished) {
-//
-//                                }
-//
-//                                @Override
-//                                public void onFinish() {
-//                                    Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
-//                                    i++;
-//                                    if(i==data.get(1).getProdPics().size()) {
-//                                        i = 0;
-//                                    }
-//
-//                                }
-//                            }.start();
+                            Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
+                            if(countDownTimer5==null) {
+                                countDownTimer5 = new CountDownTimer(5000,1000) {
+                                    int i = 0;
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+                                        try {
+                                            Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
+                                            i++;
+                                            if(i==data.get(4).getProdPics().size()) {
+                                                i = 0;
+                                            }
+                                        }catch (Exception e) {
+
+                                        }
+                                        start();
+                                    }
+                                }.start();
+                            }
+
                         }
                         rl_bg.setBackgroundResource(R.drawable.shouye_yellow_bg);
                     }else if(helper.getLayoutPosition()==5) {
                         if (data.get(5).getProdPics().size()>0) {
-//                            new CountDownTimer(5000,1000) {
-//                                int i = 0;
-//                                @Override
-//                                public void onTick(long millisUntilFinished) {
-//
-//                                }
-//
-//                                @Override
-//                                public void onFinish() {
-//                                    Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
-//                                    i++;
-//                                    if(i==data.get(1).getProdPics().size()) {
-//                                        i = 0;
-//                                    }
-//
-//                                }
-//                            }.start();
+                            Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
+                            if(countDownTimer6==null) {
+                                countDownTimer6 = new CountDownTimer(5000,1000) {
+                                    int i = 0;
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+                                        try {
+                                            Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
+                                            i++;
+                                            if(i==data.get(5).getProdPics().size()) {
+                                                i = 0;
+                                            }
+                                        }catch (Exception e) {
+
+                                        }
+                                        start();
+                                    }
+                                }.start();
+                            }
+
                         }
                         rl_bg.setBackgroundResource(R.drawable.shouye_purple_bg);
                 }
              }
                 break;
             case IndexInfoModel.DataBean.ClassifyListBean.LONG:
-                ImageView iv_type1 = helper.getView(R.id.iv_type1);
-                ImageView iv_type2 = helper.getView(R.id.iv_type2);
-                ImageView iv_type3 = helper.getView(R.id.iv_type3);
+                RoundImageView iv_type1 = helper.getView(R.id.iv_type1);
+                RoundImageView iv_type2 = helper.getView(R.id.iv_type2);
+                RoundImageView iv_type3 = helper.getView(R.id.iv_type3);
                 tv_small_title.setText(item.getSecTitle());
                 tv_title.setText(item.getTitle());
-                Glide.with(mContext).load(data.get(3).getProdPics().get(0)).into(iv_type1);
+
+                if(data.get(data.size()-1).getProdPics().size()>0) {
+                    if(data.get(data.size()-1).getProdPics().size()==1) {
+                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(0)).into(iv_type1);
+                    }else if(data.get(data.size()-1).getProdPics().size()==2) {
+                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(0)).into(iv_type1);
+                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(1)).into(iv_type2);
+                    }else if(data.get(data.size()-1).getProdPics().size()==3) {
+                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(0)).into(iv_type1);
+                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(1)).into(iv_type2);
+                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(2)).into(iv_type3);
+                    }else if(data.get(data.size()-1).getProdPics().size()>3) {
+                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(0)).into(iv_type1);
+                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(1)).into(iv_type2);
+                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(2)).into(iv_type3);
+                    }
+                }
+
                 break;
 
             default:
@@ -208,5 +281,9 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
 
     public void cancle() {
         countDownTimer1.cancel();
+        countDownTimer2.cancel();
+        countDownTimer3.cancel();
+        countDownTimer4.cancel();
+        countDownTimer5.cancel();
     }
 }

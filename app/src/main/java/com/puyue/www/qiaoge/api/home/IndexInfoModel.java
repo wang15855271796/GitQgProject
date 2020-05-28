@@ -80,7 +80,7 @@ public class IndexInfoModel {
          * addAddress : 0
          * userIsBuy : 0
          */
-
+        private String homeBackPic;
         private String address;
         private int noticeNum;
         private int spikeNum;
@@ -104,8 +104,12 @@ public class IndexInfoModel {
             return deductAmountStr;
         }
 
-        public void setDeductAmountStr(String deductAmountStr) {
-            this.deductAmountStr = deductAmountStr;
+        public String getHomeBackPic() {
+            return homeBackPic;
+        }
+
+        public void setHomeBasicInfo(String homeBackPic) {
+            this.homeBackPic = homeBackPic;
         }
 
         public String getOfferStr() {

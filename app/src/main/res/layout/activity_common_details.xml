@@ -313,8 +313,10 @@
         </RelativeLayout>
 
     </android.support.design.widget.CoordinatorLayout>
+
     <LinearLayout
         android:id="@+id/ll_service"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -329,6 +331,7 @@
 
 
             <TextView
+                android:id="@+id/tv_city"
                 tools:text="该商品为宁波地区商品，请切换到该地区购买"
                 android:textSize="12dp"
                 android:layout_marginLeft="@dimen/size_15dp"

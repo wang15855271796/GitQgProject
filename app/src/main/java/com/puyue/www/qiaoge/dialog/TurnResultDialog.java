@@ -48,7 +48,7 @@ public class TurnResultDialog extends Dialog {
     private void initView() {
         tv_num = findViewById(R.id.tv_num);
         iv_result = findViewById(R.id.iv_result);
-
+        iv_close = findViewById(R.id.iv_close);
         iv_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

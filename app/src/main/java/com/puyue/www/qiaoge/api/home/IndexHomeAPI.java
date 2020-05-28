@@ -10,7 +10,9 @@ import com.puyue.www.qiaoge.event.PrivacyModel;
 import com.puyue.www.qiaoge.event.TurnModel;
 import com.puyue.www.qiaoge.event.TurnReceiveModel;
 import com.puyue.www.qiaoge.helper.RestHelper;
+import com.puyue.www.qiaoge.model.SendModel;
 import com.puyue.www.qiaoge.model.home.CouponModel;
+import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.HomeNewRecommendModel;
 import com.puyue.www.qiaoge.model.home.IndexHomeModel;
 import com.puyue.www.qiaoge.model.home.MustModel;
@@ -244,6 +246,21 @@ public class IndexHomeAPI {
 
     public static Observable<BaseModel> readPrivacy(Context context) {
         ReadService readService = RestHelper.getBaseRetrofit(context).create(ReadService.class);
+        return readService.getData();
+    }
+
+    /**
+     * 判断地址是否在配送范围内
+     */
+
+    private interface SendService {
+        @POST(AppInterfaceAddress.Is_Send)
+        Observable<SendModel> getData();
+    }
+
+
+    public static Observable<SendModel> isSend(Context context) {
+        SendService readService = RestHelper.getBaseRetrofit(context).create(SendService.class);
         return readService.getData();
     }
 

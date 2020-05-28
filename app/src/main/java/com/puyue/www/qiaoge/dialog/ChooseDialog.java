@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,11 +19,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.adapter.cart.ItemChooseAdapter;
 import com.puyue.www.qiaoge.adapter.cart.SearchSpecAdapter;
 import com.puyue.www.qiaoge.adapter.home.SearchSpecsAdapter;
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
+import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
 import com.puyue.www.qiaoge.event.LogoutEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
@@ -83,6 +86,8 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
     TextView tv_num;
     @BindView(R.id.tv_free_desc)
     TextView tv_free_desc;
+    @BindView(R.id.iv_cart)
+    ImageView iv_cart;
     private SearchSpecAdapter searchSpecAdapter;
     ExchangeProductModel exchangeProductModels;
     public List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs;
@@ -100,7 +105,11 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
         super.show();
         EventBus.getDefault().register(this);
     }
-
+    @Override
+    public void cancel() {
+        super.cancel();
+        EventBus.getDefault().unregister(this);
+    }
 
     /**
      * 切换商品规格列表
@@ -168,8 +177,6 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
                         tv_stock.setText(exchangeProductModel.getData().getInventory());
                         tv_name.setText(exchangeProductModel.getData().getProductName());
                         Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
-//                        searchSpecAdapter = new SearchSpecAdapter(context,exchangeProductModels.getData().getProdSpecs());
-//                        fl_container.setAdapter(searchSpecAdapter);
                     }
                 });
     }
@@ -184,6 +191,7 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
         attributes.width = Utils.getScreenWidth(context);
         getWindow().setAttributes(attributes);
         iv_close.setOnClickListener(this);
+        iv_cart.setOnClickListener(this);
         tv_confirm.setOnClickListener(this);
         fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -207,6 +215,12 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
 
             case R.id.tv_confirm:
                 EventBus.getDefault().post(new ReduceNumEvent());
+                dismiss();
+                break;
+
+            case R.id.iv_cart:
+                context.startActivity(new Intent(context, HomeActivity.class));
+                EventBus.getDefault().post(new GoToCartFragmentEvent());
                 dismiss();
                 break;
             default:
@@ -256,8 +270,7 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
                                 tv_num.setVisibility(View.VISIBLE);
                                 tv_num.setText(getCartNumModel.getData().getNum());
                                 tv_price_total.setText(getCartNumModel.getData().getTotalPrice());
-                                tv_free_desc.setText("满"+getCartNumModel.getData().getDeliveryFee()+"元免配送费");
-
+                                tv_free_desc.setText("满"+getCartNumModel.getData().getSendAmount()+"元免配送费");
                             } else {
                                 tv_free_desc.setText("未选购商品");
                                 tv_num.setVisibility(View.GONE);

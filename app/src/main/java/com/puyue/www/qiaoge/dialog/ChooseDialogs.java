@@ -83,7 +83,7 @@ public class ChooseDialogs extends Dialog implements View.OnClickListener {
      * 获取多规格详情
      */
     private void getDetailSpec(int productId) {
-        GetProductDetailAPI.requestData(context, productId)
+        GetProductDetailAPI.requestData(context, productId,"")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<GetProductDetailModel>() {

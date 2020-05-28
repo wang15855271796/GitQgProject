@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -82,6 +83,7 @@ import com.puyue.www.qiaoge.event.LogoutEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.fragment.home.CityEvent;
+import com.puyue.www.qiaoge.fragment.home.HomeFragmentsss;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -95,6 +97,7 @@ import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
 import com.puyue.www.qiaoge.model.market.MarketAlreadyGoodModel;
 import com.puyue.www.qiaoge.model.market.MarketSelectGoodModel;
+import com.puyue.www.qiaoge.utils.LoginUtil;
 import com.puyue.www.qiaoge.view.FlowLayout;
 import com.puyue.www.qiaoge.view.selectmenu.MenuBar;
 import com.puyue.www.qiaoge.view.selectmenu.MyListView;
@@ -202,6 +205,15 @@ public class MarketsFragment extends BaseFragment {
     private AlertDialog mTypedialog;
     int shopTypeId;
     boolean flag = false;
+
+    public static MarketsFragment getInstance() {
+        MarketsFragment fragment = new MarketsFragment();
+        Bundle bundle = new Bundle();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+
     @Override
     public int setLayoutId() {
         return R.layout.fragment_market;
@@ -1603,7 +1615,8 @@ public class MarketsFragment extends BaseFragment {
 
             @Override
             public void Register() {
-                startActivity(RegisterActivity.getIntent(mActivity, RegisterMessageActivity.class));
+//                startActivity(RegisterActivity.getIntent(mActivity, RegisterMessageActivity.class));
+                LoginUtil.initRegister(mActivity);
                 dismiss();
             }
         };

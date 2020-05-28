@@ -168,14 +168,31 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content">
 
-                                            <com.puyue.www.qiaoge.banner.Banner
-                                                android:id="@+id/banner"
-                                                android:layout_marginTop="@dimen/size_30dp"
+                                            <RelativeLayout
                                                 android:layout_width="match_parent"
-                                                android:layout_height="142dp"
-                                                android:layout_marginLeft="@dimen/dp_10"
-                                                android:layout_marginRight="@dimen/dp_10"
-                                                />
+                                                android:layout_height="wrap_content">
+
+                                                <com.puyue.www.qiaoge.banner.Banner
+                                                    android:id="@+id/banner"
+                                                    android:layout_marginTop="@dimen/size_30dp"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="142dp"
+                                                    android:layout_marginLeft="@dimen/dp_10"
+                                                    android:layout_marginRight="@dimen/dp_10"
+                                                    />
+
+                                                <com.puyue.www.qiaoge.RoundImageView
+                                                    android:id="@+id/iv_empty"
+                                                    android:scaleType="fitXY"
+                                                    android:layout_marginLeft="@dimen/dp_10"
+                                                    android:layout_marginRight="@dimen/dp_10"
+                                                    android:visibility="gone"
+                                                    android:layout_marginTop="@dimen/size_30dp"
+                                                    android:src="@drawable/default_bg"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="142dp" />
+                                            </RelativeLayout>
+
 
                                             <ImageView
                                                 android:id="@+id/iv_pic"
@@ -448,6 +465,7 @@
 
                                             <android.support.v7.widget.RecyclerView
                                                 android:id="@+id/rv_type"
+                                                android:visibility="gone"
                                                 android:layout_marginBottom="@dimen/size_12dp"
                                                 android:layout_marginRight="@dimen/size_12dp"
                                                 android:layout_width="match_parent"
@@ -538,6 +556,7 @@
             />
 
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/rl_address"
             android:layout_alignParentBottom="true"
             android:background="#FFFACA"
