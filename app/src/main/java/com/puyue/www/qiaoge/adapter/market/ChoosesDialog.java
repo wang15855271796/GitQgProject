@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.adapter.market;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.adapter.cart.ChooseSpecAdapter;
 import com.puyue.www.qiaoge.adapter.cart.ItemChooseAdapter;
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
@@ -23,6 +25,7 @@ import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 //import com.puyue.www.qiaoge.dialog.ChooseSpecAdapters;
 import com.puyue.www.qiaoge.dialog.ChooseSpecAdapters;
+import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
@@ -100,6 +103,7 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
         getCartNum();
     }
 
+
     private void exchangeLists(int activeId,int businessType) {
         GetProductDetailAPI.getExchangeList(context,activeId,businessType)
                 .subscribeOn(Schedulers.io())
@@ -159,6 +163,7 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
         attributes.width = Utils.getScreenWidth(context);
         getWindow().setAttributes(attributes);
         iv_close.setOnClickListener(this);
+        iv_cart.setOnClickListener(this);
         List<MarketRightModel.DataBean.ProdClassifyBean.ListBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
 
         //切换规格
@@ -183,6 +188,12 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_close:
+                dismiss();
+                break;
+
+            case R.id.iv_cart:
+                context.startActivity(new Intent(context, HomeActivity.class));
+                EventBus.getDefault().post(new GoToCartFragmentEvent());
                 dismiss();
                 break;
         }
@@ -239,9 +250,8 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
     }
 
     @Override
-    public void onStop() {
-        super.show();
+    public void cancel() {
+        super.cancel();
         EventBus.getDefault().unregister(this);
     }
-
 }

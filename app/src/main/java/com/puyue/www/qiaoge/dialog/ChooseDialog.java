@@ -90,11 +90,13 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
     ImageView iv_cart;
     private SearchSpecAdapter searchSpecAdapter;
     ExchangeProductModel exchangeProductModels;
+    GetProductDetailModel model;
     public List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs;
-    public ChooseDialog(Context context,int productId) {
+    public ChooseDialog(Context context,int productId,GetProductDetailModel model) {
         super(context, R.style.dialog);
         this.context = context;
         this.productId = productId;
+        this.model = model;
         exchangeList(productId);
         getCartNum();
         init();
@@ -133,50 +135,20 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
 
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
-                        exchangeProductModels = exchangeProductModel;
-                        ItemChooseAdapter itemChooseAdapter = new ItemChooseAdapter(1, productId, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(itemChooseAdapter);
-                        tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
-                        tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
-                        tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
-                        tv_stock.setText(exchangeProductModel.getData().getInventory());
-                        tv_name.setText(exchangeProductModel.getData().getProductName());
-                        Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
-                        searchSpecAdapter = new SearchSpecAdapter(context,exchangeProductModels.getData().getProdSpecs());
-                        fl_container.setAdapter(searchSpecAdapter);
-                    }
-                });
-    }
-
-    private void exchangeLists(int productId) {
-        GetProductDetailAPI.getExchangeList(context,productId,1)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ExchangeProductModel>() {
-
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(ExchangeProductModel exchangeProductModel) {
-                        exchangeProductModels = exchangeProductModel;
-                        ItemChooseAdapter itemChooseAdapter = new ItemChooseAdapter(1, productId, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(itemChooseAdapter);
-                        tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
-                        tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
-                        tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
-                        tv_stock.setText(exchangeProductModel.getData().getInventory());
-                        tv_name.setText(exchangeProductModel.getData().getProductName());
-                        Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
+                        if(exchangeProductModel.isSuccess()) {
+                            if(exchangeProductModel.getData()!=null) {
+                                exchangeProductModels = exchangeProductModel;
+                                ItemChooseAdapter itemChooseAdapter = new ItemChooseAdapter(1, productId, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
+                                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                                recyclerView.setAdapter(itemChooseAdapter);
+                                tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
+                                tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
+                                tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
+                                tv_stock.setText(exchangeProductModel.getData().getInventory());
+                                tv_name.setText(exchangeProductModel.getData().getProductName());
+                                Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
+                            }
+                        }
                     }
                 });
     }
@@ -199,10 +171,12 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
                 pos = position;
                 searchSpecAdapter.selectPosition(position);
                 int productId = exchangeProductModels.getData().getProdSpecs().get(position).getProductId();
-                exchangeLists(productId);
+                exchangeList(productId);
             }
         });
 
+        searchSpecAdapter = new SearchSpecAdapter(context,model.getData().getProdSpecs());
+        fl_container.setAdapter(searchSpecAdapter);
     }
 
     @Override

@@ -172,7 +172,7 @@ public class AppHelper {
         mDialog.show();
         mDialog.getWindow().setContentView(R.layout.dialog_call_phone);
         TextView mTvCell = (TextView) mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_phone);
-        mTvCell.setText(cell);
+//        mTvCell.setText(cell);
         mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

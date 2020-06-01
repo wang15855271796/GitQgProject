@@ -22,12 +22,14 @@ import com.puyue.www.qiaoge.adapter.cart.ItemChooseAdapter;
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
+
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
+import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
@@ -84,14 +86,20 @@ public class ShouyeDialog extends Dialog implements View.OnClickListener{
     TextView tv_price_total;
     public List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs;
     private ChooseSpecAdapters chooseSpecAdapter;
-    public ShouyeDialog(Context context,int productId) {
+    ProductNormalModel.DataBean.ListBean item;
+    int pos = 0;
+    private ExchangeProductModel exchangeProductModel1s;
+
+    public ShouyeDialog(Context context,int productId,ProductNormalModel.DataBean.ListBean item) {
         super(context, R.style.dialog);
         this.context = context;
         this.productId = productId;
+        this.item = item;
         init();
-        getDetailSpec(productId);
+        exchangeList(productId);
         getCartNum();
     }
+
 
     @Override
     public void show() {
@@ -118,86 +126,20 @@ public class ShouyeDialog extends Dialog implements View.OnClickListener{
         iv_close.setOnClickListener(this);
         tv_confirm.setOnClickListener(this);
         iv_cart.setOnClickListener(this);
-    }
-
-    /***
-     * 获取多规格详情
-     */
-    private void getDetailSpec(int productId) {
-        GetProductDetailAPI.requestData(context, productId,"")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GetProductDetailModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(GetProductDetailModel model) {
-                        if (model.isSuccess()) {
-                            productName = model.getData().getProductName();
-                            tv_name.setText(productName);
-
-                            tv_price.setText(model.getData().getMinMaxPrice());
-                            salesVolume = model.getData().getSalesVolume();
-                            tv_sale.setText(salesVolume);
-                            Glide.with(context).load(model.getData().getDefaultPic()).into(iv_head);
-                            tv_desc.setText(model.getData().getSpecialOffer());
-                            prodSpecs = model.getData().getProdSpecs();
-                            int productId1 = prodSpecs.get(0).getProductId();
-                            exchangeList(productId1);
 
 
-                            fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    chooseSpecAdapter.selectPosition(position);
-                                    int productId2 = prodSpecs.get(position).getProductId();
-                                    GetProductDetailAPI.getExchangeList(context,productId2,1)
-                                            .subscribeOn(Schedulers.io())
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribe(new Subscriber<ExchangeProductModel>() {
+        fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                pos = position;
+                chooseSpecAdapter.selectPosition(position);
+                int productId = exchangeProductModel1s.getData().getProdSpecs().get(position).getProductId();
+                exchangeList(productId);
+            }
+        });
+        chooseSpecAdapter = new ChooseSpecAdapters(context,item.getProdSpecs());
+        fl_container.setAdapter(chooseSpecAdapter);
 
-                                                @Override
-                                                public void onCompleted() {
-
-                                                }
-
-                                                @Override
-                                                public void onError(Throwable e) {
-
-                                                }
-
-                                                @Override
-                                                public void onNext(ExchangeProductModel exchangeProductModel) {
-                                                    ItemChooseAdapter itemChooseAdapter = new ItemChooseAdapter(1, exchangeProductModel.getData().getProdSpecs().get(position).getProductId(),
-                                                            R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
-                                                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                                                    recyclerView.setAdapter(itemChooseAdapter);
-                                                    tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
-                                                    tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
-                                                    tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
-                                                    tv_stock.setText(exchangeProductModel.getData().getInventory());
-                                                    Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
-                                                }
-                                            });
-
-                                }
-                            });
-
-                            chooseSpecAdapter = new ChooseSpecAdapters(context,prodSpecs);
-                            fl_container.setAdapter(chooseSpecAdapter);
-
-                        } else {
-                        }
-                    }
-                });
     }
 
     /**
@@ -222,14 +164,16 @@ public class ShouyeDialog extends Dialog implements View.OnClickListener{
 
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
-                        ItemChooseAdapter itemChooseAdapter = new ItemChooseAdapter(1, productId, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(itemChooseAdapter);
+                        exchangeProductModel1s = exchangeProductModel;
+                        tv_name.setText(exchangeProductModel.getData().getProductName());
                         tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
                         tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
                         tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
                         tv_stock.setText(exchangeProductModel.getData().getInventory());
                         Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
+                        ItemChooseAdapter itemChooseAdapter = new ItemChooseAdapter(1, productId, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
+                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                        recyclerView.setAdapter(itemChooseAdapter);
                     }
                 });
     }

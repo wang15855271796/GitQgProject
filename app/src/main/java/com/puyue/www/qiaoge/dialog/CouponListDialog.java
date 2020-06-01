@@ -63,6 +63,7 @@ public class CouponListDialog extends Dialog {
             public void onClick(View v) {
                 mContext.startActivity(new Intent(mContext, HomeActivity.class));
                 EventBus.getDefault().post(new GoToMarketEvent());
+                getClose();
             }
         });
     }

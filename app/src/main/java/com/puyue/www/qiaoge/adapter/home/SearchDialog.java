@@ -126,18 +126,6 @@ public class SearchDialog extends Dialog implements View.OnClickListener {
         }
         iv_close.setOnClickListener(this);
         iv_cart.setOnClickListener(this);
-        tv_name.setText(listBean.getProductName());
-        tv_sale.setText(listBean.getSalesVolume());
-        tv_price.setText(listBean.getMinMaxPrice());
-        tv_desc.setText(listBean.getSpecialOffer());
-        tv_stock.setText(listBean.getInventory());
-
-        //初始展示
-        int productId = listBean.getProdSpecs().get(0).getProductId();
-        searchInnerAdapter = new SearchInnerResultAdapter(1,productId,R.layout.item_choose_content,listBean.getProdPrices());
-        Glide.with(context).load(listBean.getDefaultPic()).into(iv_head);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(searchInnerAdapter);
 
         List<SearchResultsModel.DataBean.SearchProdBean.ListBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
 
@@ -185,7 +173,7 @@ public class SearchDialog extends Dialog implements View.OnClickListener {
 
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
                         recyclerView.setAdapter(itemChooseAdapter);
-
+                        tv_name.setText(exchangeProductModel.getData().getProductName());
                         tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
                         tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
                         tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());

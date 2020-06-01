@@ -210,7 +210,6 @@ public class SearchReasultActivity extends BaseSwipeActivity {
                             attributes.width = LinearLayout.LayoutParams.MATCH_PARENT;
                             attributes.height = LinearLayout.LayoutParams.MATCH_PARENT;
                             window.setAttributes(attributes);
-                            Log.i("cccao.......",attributes+"");
                             RecyclerView rl_type = window.findViewById(R.id.rl_type);
                             TextView tv_ok = window.findViewById(R.id.tv_ok);
                             rl_type.setLayoutManager(new GridLayoutManager(mActivity, 3));

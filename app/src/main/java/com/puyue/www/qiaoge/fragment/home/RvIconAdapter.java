@@ -129,7 +129,7 @@ public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.Icon
     }
 
     private void setIntentConsult(String URL) {
-        Intent intent = new Intent(mContext, TestActivity.class);
+        Intent intent = new Intent(mContext, NewWebViewActivity.class);
         intent.putExtra("URL", URL);
         intent.putExtra("TYPE", 2);
         intent.putExtra("name","consult");

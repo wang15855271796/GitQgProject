@@ -42,6 +42,7 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.AddressEvent;
+import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
@@ -388,6 +389,7 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 //            backEvent();
+            EventBus.getDefault().post(new BackEvent());
             finish();
             return true;
         }
@@ -1386,4 +1388,6 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
+
 }

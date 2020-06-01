@@ -190,6 +190,8 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     private ImageViewAdapter imageViewAdapter;
     String num = null;
     String city;
+    private GetProductDetailModel models;
+
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
         if (getIntent() != null && getIntent().getExtras() != null) {
@@ -381,8 +383,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
             } else if (view == mTvAddCar) {
                 if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
                     if(chooseDialog==null) {
-                        chooseDialog = new ChooseDialog(mContext,productId1);
-                        Log.d("swwswwwwwww....",productId1+"");
+                        chooseDialog = new ChooseDialog(mContext,productId1,models);
                     }
                 }else {
                     AppHelper.showMsg(mContext, "请先登录");
@@ -461,6 +462,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                         if (model.isSuccess()) {
                             detailList.clear();
                             detailList.addAll(model.getData().getDetailPic());
+                            models = model;
                             imageViewAdapter.notifyDataSetChanged();
                             productId1 = model.getData().getProductId();
                             productName = model.getData().getProductName();
@@ -500,7 +502,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                                             chooseSpecAdapter.selectPosition(position);
                                             if(chooseDialog==null){
                                                 productMainId = model.getData().getProductMainId();
-                                                chooseDialog = new ChooseDialog(mContext, productId1);
+                                                chooseDialog = new ChooseDialog(mContext, productId1,models);
 
                                             }
                                             chooseDialog.show();

@@ -24,6 +24,7 @@ import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
+
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
@@ -169,7 +170,7 @@ public class ClassifyDialog extends Dialog implements View.OnClickListener {
 
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
                         recyclerView.setAdapter(itemChooseAdapter);
-
+                        tv_name.setText(exchangeProductModel.getData().getProductName());
                         tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
                         tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
                         tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());

@@ -15,15 +15,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.adapter.home.CommonAdapter;
-import com.puyue.www.qiaoge.adapter.home.NewPriceAdapter;
-import com.puyue.www.qiaoge.adapter.home.NewSpecAdapter;
 import com.puyue.www.qiaoge.adapter.home.SearchInnersAdapter;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
-import com.puyue.www.qiaoge.view.ExpandLayout;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
 import java.util.List;

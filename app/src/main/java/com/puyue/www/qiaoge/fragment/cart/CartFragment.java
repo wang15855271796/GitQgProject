@@ -841,7 +841,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     public void messageEventBusss(BackEvent event) {
         //刷新UI
         requestCartList();
-
+        getCartNum();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

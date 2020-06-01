@@ -37,6 +37,7 @@ import com.puyue.www.qiaoge.activity.mine.account.AccountCenterActivity;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListActivity;
 import com.puyue.www.qiaoge.activity.mine.coupons.MyCouponsActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
+import com.puyue.www.qiaoge.activity.mine.login.LogoutsEvent;
 import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletDetailActivity;
@@ -581,7 +582,7 @@ public class MineFragment extends BaseFragment {
                     Intent intent = new Intent(getActivity(), NewWebViewActivity.class);
                     intent.putExtra("URL", MyBannerUrl);
                     intent.putExtra("TYPE", 2);
-                    intent.putExtra("name", "");
+                    intent.putExtra("name","consult");
                     startActivity(intent);
                 }
             } else if (view == ll_account)
@@ -1157,5 +1158,14 @@ public class MineFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void message(MessageEvent messageEvent) {
         tv_number.setVisibility(View.GONE);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginEvent(LogoutsEvent event) {
+        requestOrderNum();
+        requestUserInfo();
+        useAccount();
+        requestUpdate();
+
     }
 }

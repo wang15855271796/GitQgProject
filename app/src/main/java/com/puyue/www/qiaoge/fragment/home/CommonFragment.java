@@ -295,7 +295,6 @@ public class CommonFragment extends BaseFragment {
                     public void onNext(ProductNormalModel getCommonProductModel) {
                         productNormalModel = getCommonProductModel;
                         if (getCommonProductModel.isSuccess()) {
-                            Log.d("wssddddddd....","000000");
                             if(getCommonProductModel.getData().getList().size()>0) {
                                 list.addAll(getCommonProductModel.getData().getList());
                                 adapterNewArrival.notifyDataSetChanged();

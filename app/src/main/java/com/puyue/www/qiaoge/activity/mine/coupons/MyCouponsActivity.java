@@ -92,7 +92,7 @@ public class MyCouponsActivity extends BaseSwipeActivity {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                startActivity(UseOrNotUseActivity.getIntent(mContext, UseOrNotUseActivity.class));
+//                startActivity(UseOrNotUseActivity.getIntent(mContext, UseOrNotUseActivity.class));
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));

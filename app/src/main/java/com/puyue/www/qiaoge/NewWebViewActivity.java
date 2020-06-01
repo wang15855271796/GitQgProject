@@ -150,7 +150,6 @@ public class NewWebViewActivity extends BaseSwipeActivity {
         mTvTitle = (TextView) findViewById(R.id.tv_h5_title);
         toolbar_h5 = (CompatToolbar) findViewById(R.id.toolbar_h5);
 
-
     }
 
     @Override
@@ -158,6 +157,7 @@ public class NewWebViewActivity extends BaseSwipeActivity {
         mUrl = getIntent().getStringExtra("URL");
         type = getIntent().getIntExtra("TYPE", 0);
         name = getIntent().getStringExtra("name");
+        Log.d("wdwdwwdddddd...",name);
         if (name.equals("consult") || name.equals("协议")) {
             toolbar_h5.setVisibility(View.GONE);
             //调整距离
@@ -167,7 +167,6 @@ public class NewWebViewActivity extends BaseSwipeActivity {
             lp.height = LinearLayout.LayoutParams.MATCH_PARENT;
             mWv.setLayoutParams(lp);
         } else {
-
             toolbar_h5.setVisibility(View.VISIBLE);
             mTvTitle.setText("登录");
         }
@@ -214,7 +213,7 @@ public class NewWebViewActivity extends BaseSwipeActivity {
             @Nullable
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                Log.d("---request->", request.getUrl() + "");
+
                 requestURl = request.getUrl();
                 if (request.getUrl().toString().contains("callback")) {
                     String[] strings1 = request.getUrl().toString().split("[?]");
@@ -321,13 +320,13 @@ public class NewWebViewActivity extends BaseSwipeActivity {
         Request request = new Request.Builder()
                 .url(urlRequest)
                 .post(body).build();
-        Log.d("------>urlRequest", urlRequest + "request" + request);
+
         //创建一个能处理请求数据的操作类
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("--response-请求失败-->", e.getMessage());
+
 
             }
 
@@ -346,22 +345,6 @@ public class NewWebViewActivity extends BaseSwipeActivity {
             }
         });
     }
-/*private int position;
-
-    private void addImageClickListener(WebView webView) {
-        //"cc_detail_blog_img"这个ClassName和前端对应的，前端那边不能修改，对应的是img的ClassName
-        for (int i = 0; i < list.size(); i++) {
-            webView.loadUrl(list.get(i));
-            position=i;
-            webView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AppHelper.showPhotoDetailDialog(mContext, list, position);
-                }
-            });
-        }
-
-    }*/
 
 
     @Override
@@ -371,14 +354,6 @@ public class NewWebViewActivity extends BaseSwipeActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);//退出H5所在的Activity
-    /*
-
-        if (mWv.canGoBack()) {
-            mWv.goBack();
-        } else {
-            finish();
-        }
-        return super.onKeyDown(keyCode, event);*/
 
     }
 
@@ -524,45 +499,6 @@ public class NewWebViewActivity extends BaseSwipeActivity {
         }
     }
 
-    private File file;
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d("wdddddddddd.....",resultCode+"");
-//
-//        if (requestCode == FILECHOOSER_RESULTCODE) {
-//            if (null == mUploadMessage && null == uploadMessageAboveL)
-//
-//                return;
-//
-//            Uri result = data == null || resultCode != RESULT_OK ? null : data.getData();
-//            if (uploadMessageAboveL != null) {
-//                onActivityResultAboveL(requestCode, resultCode, data);
-//            } else if (mUploadMessage != null) {
-//
-//                if (result != null) {
-//                    String path = getPath(getApplicationContext(),
-//                            result);
-//
-//                    Uri uri = Uri.fromFile(new File(path));
-//
-//                    mUploadMessage.onReceiveValue(uri);
-//                } else {
-//                    mUploadMessage.onReceiveValue(imageUri);
-//                }
-//                mUploadMessage = null;
-//
-//
-//            }
-//        } else {
-//            UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-//        }
-//
-//
-//    }
-
-
     Handler myHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -572,9 +508,6 @@ public class NewWebViewActivity extends BaseSwipeActivity {
                     AppHelper.showPhotoDetailDialog(mContext, list, index);
                     break;
             }
-         /*   ImageDialogPopuwindow imageDialogPopuwindow = new ImageDialogPopuwindow(mContext, index, list.get(index));
-            imageDialogPopuwindow.showAtLocation(mWv,Gravity.NO_GRAVITY,0,0);*/
-            //  Glide.with(mContext).load(list.get(index)).into(imageView);
 
             super.handleMessage(msg);
         }
@@ -700,62 +633,12 @@ public class NewWebViewActivity extends BaseSwipeActivity {
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-//            Toast.makeText(MyInviteActivity.this, " 分享失败啦", Toast.LENGTH_SHORT).show();
-//            if (t != null) {
-//            }
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-//            Toast.makeText(MyInviteActivity.this, platform + " 分享取消了", Toast.LENGTH_SHORT).show();
         }
     };
-
-
-//    @SuppressWarnings("null")
-//    @TargetApi(Build.VERSION_CODES.BASE)
-//    private void onActivityResultAboveL(int requestCode, int resultCode, Intent data) {
-//        if (requestCode != FILECHOOSER_RESULTCODE
-//                || uploadMessageAboveL == null) {
-//            return;
-//        }
-//
-//
-//        Uri[] results = null;
-//
-//        if (resultCode == Activity.RESULT_OK) {
-//
-//            if (data == null) {
-//
-//                results = new Uri[]{imageUri};
-//            } else {
-//                String dataString = data.getDataString();
-//                ClipData clipData = data.getClipData();
-//
-//                if (clipData != null) {
-//                    results = new Uri[clipData.getItemCount()];
-//                    for (int i = 0; i < clipData.getItemCount(); i++) {
-//                        ClipData.Item item = clipData.getItemAt(i);
-//                        results[i] = item.getUri();
-//                    }
-//                }
-//
-//                if (dataString != null)
-//                    results = new Uri[]{Uri.parse(dataString)};
-//            }
-//        }
-//        if (results != null) {
-//            uploadMessageAboveL.onReceiveValue(results);
-//            uploadMessageAboveL = null;
-//        } else {
-//            //注释之后取消不会默认
-//            //results = new Uri[]{imageUri};
-//            uploadMessageAboveL.onReceiveValue(results);
-//            uploadMessageAboveL = null;
-//        }
-//
-//        return;
-//    }
 
     private String mCameraPhotoPath = "";  // 拍照的图片路径
 

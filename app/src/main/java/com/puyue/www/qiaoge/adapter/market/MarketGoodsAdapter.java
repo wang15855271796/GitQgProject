@@ -18,6 +18,8 @@ import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.helper.StringHelper;
+import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
 import java.util.List;
@@ -89,10 +91,11 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
                     onclick.addDialog();
                 }
 
-                chooseDialog = new ChoosesDialog(mContext,item);
-                chooseDialog.show();
+                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
+                    chooseDialog = new ChoosesDialog(mContext, item);
+                    chooseDialog.show();
 
-
+                }
             }
         });
         tv_choose_spec.setText("选规格");

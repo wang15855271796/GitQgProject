@@ -100,6 +100,7 @@ public class CommonsAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean
             }
         });
 
+
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +109,7 @@ public class CommonsAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean
                 }
 
                 if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    commonDialog = new ShouyeDialog(mContext,item.getProductMainId());
+                    commonDialog = new ShouyeDialog(mContext,item.getProductId(),item);
                     commonDialog.show();
                 }
             }

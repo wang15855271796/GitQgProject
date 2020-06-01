@@ -80,15 +80,23 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
     TextView tv_price_total;
     MustModel.DataBean listBean;
     int pos = 0;
-    NewPriceAdapter searchInnerAdapter;
     private NewSpecAdapter searchSpecAdapter;
+    ExchangeProductModel exchangeProductModels;
+    private List<ExchangeProductModel.DataBean.ProdPricesBean> prodPrices;
+    private SearchInnersAdapter itemChooseAdapter;
+    private List<ExchangeProductModel.DataBean.ProdSpecsBean> prodSpecs;
+    private ExchangeProductModel.DataBean data;
 
     public CommonDialog(Context mContext, MustModel.DataBean item) {
         super(mContext, R.style.dialog);
         this.context = mContext;
         this.listBean = item;
         init();
+        exchangeList(listBean.getProductId());
+        getCartNum();
     }
+
+
 
     @Override
     public void show() {
@@ -109,7 +117,6 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
             view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             binder = ButterKnife.bind(this, view);
             setContentView(view);
-
             getWindow().setGravity(Gravity.BOTTOM);
             WindowManager.LayoutParams attributes = getWindow().getAttributes();
             attributes.width = Utils.getScreenWidth(context);
@@ -118,21 +125,7 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
 
         iv_close.setOnClickListener(this);
         iv_cart.setOnClickListener(this);
-        tv_name.setText(listBean.getProductName());
-        tv_sale.setText(listBean.getSalesVolume());
-        tv_price.setText(listBean.getMinMaxPrice());
-        tv_desc.setText(listBean.getSpecialOffer());
-        tv_stock.setText(listBean.getInventory());
 
-        //初始展示
-        int productId = listBean.getProdSpecs().get(0).getProductId();
-        searchInnerAdapter = new NewPriceAdapter(productId,R.layout.item_choose_content,listBean.getProdPrices());
-        Glide.with(context).load(listBean.getDefaultPic()).into(iv_head);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(searchInnerAdapter);
-
-
-//        List<MustModel.DataBean> prodSpecs = listBean.getProdSpecs();
         List<MustModel.DataBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
         //切换规格
         fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -144,6 +137,7 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
                 exchangeList(productId);
             }
         });
+
         searchSpecAdapter = new NewSpecAdapter(context,listBean.getProdSpecs());
         fl_container.setAdapter(searchSpecAdapter);
     }
@@ -170,19 +164,27 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
 
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
+                        if(exchangeProductModel.isSuccess()) {
+                            if(exchangeProductModel.getData()!=null) {
+                                exchangeProductModels = exchangeProductModel;
+                                prodPrices = exchangeProductModels.getData().getProdPrices();
+                                prodSpecs = exchangeProductModels.getData().getProdSpecs();
+                                data = exchangeProductModel.getData();
+                                tv_sale.setText(data.getSalesVolume());
+                                tv_name.setText(data.getProductName());
+                                tv_price.setText(data.getMinMaxPrice()+"");
+                                tv_desc.setText(data.getSpecialOffer());
+                                tv_stock.setText(data.getInventory());
+                                Glide.with(context).load(data.getDefaultPic()).into(iv_head);
 
-                        SearchInnersAdapter itemChooseAdapter = new SearchInnersAdapter(1,exchangeProductModel.getData().getProdSpecs().get(pos).getProductId(),
-                                R.layout.item_choose_content,
-                                exchangeProductModel.getData().getProdPrices());
+                                itemChooseAdapter = new SearchInnersAdapter(1,prodSpecs.get(pos).getProductId(),R.layout.item_choose_content, prodPrices);
+                                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                                recyclerView.setAdapter(itemChooseAdapter);
+                                itemChooseAdapter.notifyDataSetChanged();
+                            }
+                        }
 
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(itemChooseAdapter);
 
-                        tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
-                        tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
-                        tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
-                        tv_stock.setText(exchangeProductModel.getData().getInventory());
-                        Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
                     }
                 });
     }

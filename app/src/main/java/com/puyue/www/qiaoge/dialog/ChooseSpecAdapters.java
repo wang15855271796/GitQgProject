@@ -13,17 +13,24 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
+import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 
 import java.util.List;
 
 public class ChooseSpecAdapters extends BaseAdapter {
     Context context;
-    List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs;
+    List<ProductNormalModel.DataBean.ListBean.ProdSpecsBean> prodSpecs;
     int selectPosition;
-    public ChooseSpecAdapters(Context context, List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs) {
+//    public ChooseSpecAdapters(Context context, List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs) {
+//        this.context = context;
+//        this.prodSpecs = prodSpecs;
+//    }
+
+    public ChooseSpecAdapters(Context context, List<ProductNormalModel.DataBean.ListBean.ProdSpecsBean> prodSpecs) {
         this.context = context;
         this.prodSpecs = prodSpecs;
     }
+
 
     @Override
     public int getCount() {

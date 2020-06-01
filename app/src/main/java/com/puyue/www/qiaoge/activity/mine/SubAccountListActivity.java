@@ -91,16 +91,7 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
         subAccountAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                String deliverType = UserInfoHelper.getDeliverType(mContext);
-//                Intent intent = new Intent(mContext,NewOrderDetailActivity.class);
-//                intent.putExtra(AppConstant.ORDERID,lists.get(position).getOrderId());
-//                intent.putExtra(AppConstant.ORDERSTATE, "");
-//                intent.putExtra(AppConstant.RETURNPRODUCTMAINID, "");
-//                mContext.startActivity(intent);
-//                int orderState = Integer.parseInt(lists.get(position).getState());
-                //0配送 1自提
-
-
+                getReadStat();
             }
         });
 

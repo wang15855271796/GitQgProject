@@ -596,9 +596,10 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     public void onDestroy() {
         super.onDestroy();
         verticalBanner.stop();
-        typeAdapter.cancle();
         EventBus.getDefault().unregister(this);
     }
+
+
     private int mMaxScrollSize;
     @Override
     public void initViews(View view) {
@@ -1018,9 +1019,9 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         if (infoFragment == null) {
             infoFragment = new InfoFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("url",questUrl);
+            bundle.putString("URL",questUrl);
             bundle.putInt("TYPE",2);
-            bundle.putString("name","");
+            bundle.putString("name","consult");
             infoFragment.setArguments(bundle);
             fragmentTransaction.add(R.id.content, infoFragment, InfoFragment.class.getCanonicalName());
         }
@@ -1228,11 +1229,11 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                         if(turnModel.isSuccess()) {
                             int isShow = turnModel.getData();
                             //1显示 0不显示
-                            if(isShow==1) {
+//                            if(isShow==1) {
                                 getTurn();
-                            }else {
+//                            }else {
 
-                            }
+//                            }
                         }else {
                             AppHelper.showMsg(mActivity,turnModel.getMessage());
                         }
@@ -1299,8 +1300,11 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                         if(turnModel.isSuccess()) {
                             data2 = turnModel.getData();
                             List<String> list = new ArrayList<>();
-                            for (int i = 0; i <data2.size() ; i++) {
-                                list.add(data2.get(i).getPoolNo());
+//                            for (int i = 0; i <data2.size() ; i++) {
+//                                list.add(data2.get(i).getPoolNo());
+//                            }
+                            for (int i = 0; i <6 ; i++) {
+                                list.add("0.01元");
                             }
                             turnTableDialog = new TurnTableDialog(mActivity,list);
                             turnTableDialog.show();
@@ -1751,6 +1755,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         super.onStart();
         //开始轮播
         banner.startAutoPlay();
+        typeAdapter.start();
     }
 
     @Override
@@ -1862,7 +1867,9 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     public void onStop() {
         super.onStop();
         banner.stopAutoPlay();
+        typeAdapter.cancle();
     }
+
 
     @Override
     public void onSliderClick(BaseSliderView slider) {

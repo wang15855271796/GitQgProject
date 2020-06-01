@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,9 +13,12 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+
+import com.puyue.www.qiaoge.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +39,7 @@ import java.util.List;
 public class LuckPan extends View {
     private Paint mPaintArc;//转盘扇形画笔
     private Paint mPaintItemStr;//转盘文字画笔
-    private float mRadius;//圆盘的半径
+    private int mRadius;//圆盘的半径
     private RectF rectFPan;//构建转盘的矩形
     private RectF rectFStr;//构建文字圆盘的矩形
     private List<String> mItemStrs;
@@ -79,6 +84,10 @@ public class LuckPan extends View {
         mPaintItemStr.setTextAlign(Paint.Align.CENTER);
 
         mArcPaths = new ArrayList<>();
+
+//        for ( int i = 0; i < 5; i++ ) {
+//            mListBitmap.add(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_add));
+//        }
     }
 
     /**
@@ -101,7 +110,7 @@ public class LuckPan extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mRadius = Math.min(w,h)/2*0.9f;
+        mRadius = (int) (Math.min(w,h)/2*0.9);
         //这里是将（0，0）点作为圆心
         rectFPan = new RectF(-mRadius,-mRadius,mRadius,mRadius);
         rectFStr = new RectF(-mRadius/7*5,-mRadius/7*5,mRadius/7*5,mRadius/7*5);
@@ -141,7 +150,37 @@ public class LuckPan extends View {
         canvas.rotate(-90-mOffsetAngle);
         drawPanItem(canvas);
         drawText(canvas);
+//        drawBg(canvas);
     }
+
+    private List<Bitmap> mListBitmap = new ArrayList<>();
+
+    private void drawBg(Canvas canvas) {
+        final int paddingLeft = getPaddingLeft();
+        final int paddingRight = getPaddingRight();
+        final int paddingTop = getPaddingTop();
+        final int paddingBottom = getPaddingBottom();
+        float startAngle = -mItemAnge / 2 - 90;
+        int width = getWidth() - paddingLeft - paddingRight;
+        int height = getHeight() - paddingTop - paddingBottom;
+
+        for (int i = 0; i <5 ; i++) {
+            float angle = ( float ) Math.toRadians(startAngle + mItemAnge / 2);
+            //确定图片在圆弧中 中心点的位置
+            float x = ( float ) (width / 2 + (mRadius / 2 + mRadius / 12) * Math.cos(angle));
+            float y = ( float ) (height / 2 + (mRadius / 2 + mRadius / 12) * Math.sin(angle));
+            int imgWidth = mRadius / 3;
+            int w = ( int ) (Math.abs(Math.cos(Math.toRadians(Math.abs(180 - mItemAnge * i)))) *
+                    imgWidth + imgWidth * Math.abs(Math.sin(Math.toRadians(Math.abs(180 - mItemAnge * i)))));
+            int h = ( int ) (Math.abs(Math.sin(Math.toRadians(Math.abs(180 - mItemAnge * i)))) *
+                    imgWidth + imgWidth * Math.abs(Math.cos(Math.toRadians(Math.abs(180 - mItemAnge * i)))));
+
+            RectF rect1 = new RectF(x - w *2, y - h *2, x + w *2, y + h *2);
+            Log.d("sdsdssds...",x-w/1+"");
+            canvas.drawBitmap(mListBitmap.get(i), null, rect1, null);
+        }
+    }
+
     //画文字
     private void drawText(Canvas canvas) {
         for(int x = 0;x<mItemStrs.size();x++){

@@ -98,7 +98,7 @@ public class CommonListAdapter extends BaseQuickAdapter<ProductNormalModel.DataB
                     onclick.addDialog();
                 }
                 if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    commonDialog = new ShouyeDialog(mContext,item.getProductMainId());
+                    commonDialog = new ShouyeDialog(mContext,item.getProductId(),item);
                     commonDialog.show();
                 }
             }

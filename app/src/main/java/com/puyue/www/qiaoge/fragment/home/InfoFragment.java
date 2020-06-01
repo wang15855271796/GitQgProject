@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -27,6 +28,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -40,6 +42,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -47,6 +50,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.activity.mine.IntegralPayActivity;
@@ -79,6 +83,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -89,6 +94,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.app.Activity.RESULT_OK;
 import static io.dcloud.common.util.ReflectUtils.getApplicationContext;
 
 /**
@@ -98,7 +104,7 @@ public class InfoFragment extends BaseFragment {
     private TextView mTvTitle;
     private ProgressBar mProgress;
     private ImageView mIvBack;
-    RecyclerView recyclerView;
+
     private MyWebView mWv;
     // private WebView mWv;
     private String mUrl;
@@ -117,7 +123,7 @@ public class InfoFragment extends BaseFragment {
     private ValueCallback<Uri> mUploadMessage;// 表单的数据信息
     private Uri imageUri;
     private final static int PHOTO_REQUEST = 100;
-    CommonsAdapter adapterNewArrival;
+    private int REQUEST_CODE_LOLIPOP = 1;  // 5.0以上版本
 
     private final static int FILECHOOSER_RESULTCODE = 1;// 表单的结果回调</span>
 
@@ -125,11 +131,9 @@ public class InfoFragment extends BaseFragment {
 
 
     private int index;
-    private List<ProductNormalModel.DataBean.ListBean> lists = new ArrayList<>();
+
     private List<String> list;
     private int iphone;
-    private String url;
-
 
     @Override
     public int setLayoutId() {
@@ -138,22 +142,34 @@ public class InfoFragment extends BaseFragment {
 
     @Override
     public void initViews(View view) {
-        initStatusBarWhiteColor();
-        url = getArguments().getString("url");
-        type = getArguments().getInt("TYPE");
-        name = getArguments().getString("name");
+        mIvBack = (ImageView) view.findViewById(R.id.iv_h5_back);
+        mWv = view.findViewById(R.id.frm_h5);
+        mProgress = (ProgressBar) view.findViewById(R.id.progress_h5);
+        mTvTitle = (TextView) view.findViewById(R.id.tv_h5_title);
+        toolbar_h5 = (CompatToolbar) view.findViewById(R.id.toolbar_h5);
+    }
 
+    @Override
+    public void findViewById(View view) {
+
+    }
+
+    @Override
+    public void setViewData() {
+        mUrl = getArguments().getString("URL");
+        type = getArguments().getInt("TYPE", 0);
+        name = getArguments().getString("name");
         if (name.equals("consult") || name.equals("协议")) {
             toolbar_h5.setVisibility(View.GONE);
             //调整距离
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(0, 60, 0, 0);
             lp.width = LinearLayout.LayoutParams.MATCH_PARENT;
             lp.height = LinearLayout.LayoutParams.MATCH_PARENT;
             mWv.setLayoutParams(lp);
         } else {
 
-            toolbar_h5.setVisibility(View.GONE);
+            toolbar_h5.setVisibility(View.VISIBLE);
             mTvTitle.setText("登录");
         }
 
@@ -193,61 +209,13 @@ public class InfoFragment extends BaseFragment {
         mWv.addJavascriptInterface(new JsPhone(), "goPhone");
         mWv.addJavascriptInterface(new JsImageDetail(), "showImg");
 
-
-        mWv.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-
-                mTvTitle.setText(title);
-            }
-
-
-            @Override
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-
-
-                uploadMessageAboveL = filePathCallback;
-
-              /*  Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                i.addCategory(Intent.CATEGORY_OPENABLE);
-                i.setType("image/*");
-                startActivityForResult(Intent.createChooser(i, "Image Chooser"), 15);*/
-
-
-                //调起摄像头
-                take();
-
-                return true;
-            }
-
-
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onPermissionRequest(PermissionRequest request) {
-                //                super.onPermissionRequest(request);//必须要注视掉
-                request.grant(request.getResources());
-            }
-
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress != 100) {
-                    mProgress.setProgress(newProgress);
-                    mProgress.setVisibility(View.VISIBLE);
-                } else {
-                    mProgress.setVisibility(View.GONE);
-                }
-                super.onProgressChanged(view, newProgress);
-            }
-
-
-        });
+        showCustomWebChromeClient();
         mWv.setWebViewClient(new WebViewClient() {
 
             @Nullable
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                Log.d("---request->", request.getUrl() + "");
+
                 requestURl = request.getUrl();
                 if (request.getUrl().toString().contains("callback")) {
                     String[] strings1 = request.getUrl().toString().split("[?]");
@@ -275,42 +243,127 @@ public class InfoFragment extends BaseFragment {
             }
         });
 
-        mWv.loadUrl(url);
-
+        mWv.loadUrl(mUrl);
 
     }
 
-    protected void initStatusBarWhiteColor() {
-        //设置状态栏颜色为白色，状态栏图标为黑色
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getActivity().getWindow().setStatusBarColor(Color.WHITE);
-            Log.d("sssssssOOOOO..","ssss");
-            StatusBarUtil.setStatusBarLightMode(getActivity());
+    private void showCustomWebChromeClient() {
+        mWv.setWebChromeClient(new WebChromeClient() {
+
+            // 5.0+
+            @Override
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+                if (uploadMessageAboveL != null) {
+                    uploadMessageAboveL.onReceiveValue(null);
+                }
+                uploadMessageAboveL = filePathCallback;
+
+                Intent intent = take();  // 选择文件及拍照
+                startActivityForResult(intent, REQUEST_CODE_LOLIPOP);
+                return true;
+            }
+
+            // 4.1+
+            public void openFileChooser(ValueCallback<Uri> uploadFile, String acceptType, String capture) {
+
+            }
+        });
+    }
+
+    private Intent gotoChooseFile() {
+        return null;
+    }
+
+
+    @Override
+    public void setClickEvent() {
+        mIvBack.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            public void onNoDoubleClick(View view) {
+                if (mWv.canGoBack()) {
+                    mWv.goBack();
+                } else {
+                    mActivity.finish();
+                }
+            }
+        });
+    }
+
+
+    /**
+     * post请求方式，请求网络数据
+     */
+    public void requestUrl() {
+        String stime = AppSafeHelper.getSTime();
+        //创建网络处理的对象
+        OkHttpClient client = new OkHttpClient.Builder()
+                .readTimeout(5, TimeUnit.SECONDS)
+                .build();
+        //post请求来获得数据
+        FormBody.Builder builder = new FormBody.Builder();
+        for (int i = 0; i < arg.length; i++) {
+            if (arg[i].split("=")[0].equals("callback")) {
+                callback = arg[i].split("=")[1];
+            }
+
+            builder.add(arg[i].split("=")[0], arg[i].split("=")[1]);
+
         }
+
+
+        RequestBody body = builder
+                // 以下是公共参数
+                .add(AppConstant.APP_TYPE, "1")
+                .add(AppConstant.VERSION, AppHelper.getVersion(mActivity))
+                .add(AppConstant.STIME, stime)
+                .add(AppConstant.SIGN, AppSafeHelper.sign(stime))
+                .add(AppConstant.TOKEN, UserInfoHelper.getUserId(mActivity))
+                .build();
+        Request request = new Request.Builder()
+                .url(urlRequest)
+                .post(body).build();
+
+        //创建一个能处理请求数据的操作类
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String url = "javascript:" + callback + "('" + response.body().string() + "')";
+                mWv.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWv.loadUrl(url);
+                        Log.i("wwburl", "run: " + url);
+
+                    }
+                });
+
+            }
+        });
     }
+
+
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK && mWv.canGoBack()) {
+//            mWv.goBack();//返回上个页面
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);//退出H5所在的Activity
+//
+//    }
+
     @Override
     public void onDestroy() {
         mWv.destroy();
         super.onDestroy();
     }
-
-    Handler myHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-
-                case 1:
-                    AppHelper.showPhotoDetailDialog(mActivity, list, index);
-                    break;
-            }
-         /*   ImageDialogPopuwindow imageDialogPopuwindow = new ImageDialogPopuwindow(mContext, index, list.get(index));
-            imageDialogPopuwindow.showAtLocation(mWv,Gravity.NO_GRAVITY,0,0);*/
-            //  Glide.with(mContext).load(list.get(index)).into(imageView);
-
-            super.handleMessage(msg);
-        }
-    };
 
     public class JsImageDetail extends Object {
         @JavascriptInterface
@@ -334,8 +387,6 @@ public class InfoFragment extends BaseFragment {
 
         }
     }
-
-
 
     public class JsPhone extends Object {
         @JavascriptInterface
@@ -370,9 +421,100 @@ public class InfoFragment extends BaseFragment {
             mShareDesc = model.getDescribe();
             mShareIcon = model.getPic();
             mShareUrl = model.getLink();
+
             showInviteDialog();
+
+
         }
     }
+
+    public class JsLoging extends Object {
+        @JavascriptInterface
+        public void OnClick() {
+            startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+
+        }
+    }
+
+    public class JsQuestToHomeActivity extends Object {
+        @JavascriptInterface
+        public void OnClick() {
+            startActivity(HomeActivity.getIntent(mActivity, HomeActivity.class));
+
+        }
+    }
+
+    public class JsVIPJumpToPay extends Object {
+        @JavascriptInterface
+        public void OnClick(String msg) {
+            //我的积分
+            Intent intent = new Intent(mActivity, IntegralPayActivity.class);
+            intent.putExtra("vipPackageId", msg);
+            startActivity(intent);
+        }
+    }
+
+
+    public class JsIntegralUser extends Object {
+
+        // 定义JS需要调用的方法
+        // 被JS调用的方法必须加入@JavascriptInterface注解
+        @JavascriptInterface
+        public void OnClick() {
+
+            startActivity(new Intent(mActivity, HomeActivity.class));
+            EventBus.getDefault().post(new GoToMarketEvent());
+        }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //  requestUrl();
+
+    }
+
+    /**
+     * 分享
+     */
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_LOLIPOP) {  // 选择文件返回 5.0+
+            Uri[] results = null;
+            if (resultCode == RESULT_OK) {
+                if (data == null) {
+                    if (mCameraPhotoPath != null) {
+                        results = new Uri[]{Uri.parse(mCameraPhotoPath)};
+                    }
+                } else {
+                    String dataString = data.getDataString();
+                    if (dataString != null) {
+                        results = new Uri[]{Uri.parse(dataString)};
+                    }
+                }
+            }
+            uploadMessageAboveL.onReceiveValue(results);  // 当获取要传图片的Uri，通过该方法回调通知
+            uploadMessageAboveL = null;
+        }
+    }
+
+    Handler myHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+
+                case 1:
+                    AppHelper.showPhotoDetailDialog(mActivity, list, index);
+                    break;
+            }
+
+            super.handleMessage(msg);
+        }
+    };
+
 
     // 分享
     private void showInviteDialog() {
@@ -386,7 +528,7 @@ public class InfoFragment extends BaseFragment {
         window.setWindowAnimations(R.style.dialogStyle);
         window.getDecorView().setPadding(0, 0, 0, 0);
         //获得window窗口的属性
-        WindowManager.LayoutParams lp = window.getAttributes();
+        android.view.WindowManager.LayoutParams lp = window.getAttributes();
         //设置窗口宽度为充满全屏
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         //设置窗口高度为包裹内容
@@ -493,92 +635,99 @@ public class InfoFragment extends BaseFragment {
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-//            Toast.makeText(MyInviteActivity.this, " 分享失败啦", Toast.LENGTH_SHORT).show();
-//            if (t != null) {
-//            }
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-//            Toast.makeText(MyInviteActivity.this, platform + " 分享取消了", Toast.LENGTH_SHORT).show();
         }
     };
 
+    private String mCameraPhotoPath = "";  // 拍照的图片路径
 
-    @SuppressWarnings("null")
-    @TargetApi(Build.VERSION_CODES.BASE)
-    private void onActivityResultAboveL(int requestCode, int resultCode, Intent data) {
-        if (requestCode != FILECHOOSER_RESULTCODE
-                || uploadMessageAboveL == null) {
-            return;
-        }
+    /**
+     * 随机产生文件名
+     */
+    private String randomFileName() {
+        return UUID.randomUUID().toString();
+    }
+    private Intent take() {
 
+        String saveName = Environment.getExternalStorageDirectory().getPath() + "/" + Environment.DIRECTORY_DCIM + "/Camera/";
 
-        Uri[] results = null;
-
-        if (resultCode == Activity.RESULT_OK) {
-
-            if (data == null) {
-
-                results = new Uri[]{imageUri};
+        /**
+         * 打开相机intent
+         */
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(mActivity.getPackageManager()) != null) {
+            File photoFile = null;
+            photoFile = new File(saveName + randomFileName() + ".jpg");
+            if (!photoFile.exists()) {
+                mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));  // 把Uri赋值给takePictureIntent
             } else {
-                String dataString = data.getDataString();
-                ClipData clipData = data.getClipData();
-
-                if (clipData != null) {
-                    results = new Uri[clipData.getItemCount()];
-                    for (int i = 0; i < clipData.getItemCount(); i++) {
-                        ClipData.Item item = clipData.getItemAt(i);
-                        results[i] = item.getUri();
-                    }
-                }
-
-                if (dataString != null)
-                    results = new Uri[]{Uri.parse(dataString)};
+                takePictureIntent = null;
             }
         }
-        if (results != null) {
-            uploadMessageAboveL.onReceiveValue(results);
-            uploadMessageAboveL = null;
+
+        Intent[] takeoutArray = null;
+        if (takePictureIntent != null) {
+            takeoutArray = new Intent[]{takePictureIntent};
         } else {
-            //注释之后取消不会默认
-            //results = new Uri[]{imageUri};
-            uploadMessageAboveL.onReceiveValue(results);
-            uploadMessageAboveL = null;
+            takeoutArray = new Intent[0];
         }
 
-        return;
-    }
+//        File imageStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "MyApp");
+//        // Create the storage directory if it does not exist
+//        //创建目录
+//        if (!imageStorageDir.exists()) {
+//            imageStorageDir.mkdirs();
+//        }
+//        File file = new File(imageStorageDir + File.separator + "IMG_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
+//        imageUri = Uri.fromFile(file);
+//
+//        final List<Intent> cameraIntents = new ArrayList<Intent>();
+//        final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        final PackageManager packageManager = getPackageManager();
+//        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+//        for (ResolveInfo res : listCam) {
+//            final String packageName = res.activityInfo.packageName;
+//            final Intent i = new Intent(captureIntent);
+//            i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+//            i.setPackage(packageName);
+//            i.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+//            cameraIntents.add(i);
+//
+//        }
+//         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+//                i.addCategory(Intent.CATEGORY_OPENABLE);
+//                i.setType("image/*");
+//                startActivityForResult(Intent.createChooser(i, "Image Chooser"), 15);
 
-    private void take() {
-        File imageStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "MyApp");
-        // Create the storage directory if it does not exist
-        //创建目录
-        if (!imageStorageDir.exists()) {
-            imageStorageDir.mkdirs();
-        }
-        File file = new File(imageStorageDir + File.separator + "IMG_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
-        imageUri = Uri.fromFile(file);
+//        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+//        i.addCategory(Intent.CATEGORY_OPENABLE);
+//        i.setType("image/*");
+//        Intent chooserIntent = Intent.createChooser(i, "Image Chooser");
+//        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[]{}));
+//        NewWebViewActivity.this.startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
 
-        final List<Intent> cameraIntents = new ArrayList<Intent>();
-        final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        final PackageManager packageManager = mActivity.getPackageManager();
-        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
-        for (ResolveInfo res : listCam) {
-            final String packageName = res.activityInfo.packageName;
-            final Intent i = new Intent(captureIntent);
-            i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            i.setPackage(packageName);
-            i.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            cameraIntents.add(i);
+        /**
+         * 获取图片intent
+         */
+        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        contentSelectionIntent.setType("image/*");
 
-        }
-        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-        i.addCategory(Intent.CATEGORY_OPENABLE);
-        i.setType("image/*");
-        Intent chooserIntent = Intent.createChooser(i, "Image Chooser");
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[]{}));
-        mActivity.startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
+
+        /**
+         * 使用系统选择器
+         */
+        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, takeoutArray);  // 额外的intent
+
+        return chooserIntent;
+
+
     }
 
     @SuppressLint("NewApi")
@@ -711,147 +860,5 @@ public class InfoFragment extends BaseFragment {
         } else {
             context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
         }
-    }
-
-    public class JsLoging extends Object {
-        @JavascriptInterface
-        public void OnClick() {
-            startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
-
-        }
-    }
-
-    public class JsQuestToHomeActivity extends Object {
-        @JavascriptInterface
-        public void OnClick() {
-            startActivity(HomeActivity.getIntent(mActivity, HomeActivity.class));
-
-        }
-    }
-
-    public class JsVIPJumpToPay extends Object {
-        @JavascriptInterface
-        public void OnClick(String msg) {
-            //我的积分
-            Intent intent = new Intent(mActivity, IntegralPayActivity.class);
-            intent.putExtra("vipPackageId", msg);
-            startActivity(intent);
-        }
-    }
-
-
-    public class JsIntegralUser extends Object {
-
-        // 定义JS需要调用的方法
-        // 被JS调用的方法必须加入@JavascriptInterface注解
-        @JavascriptInterface
-        public void OnClick() {
-
-            startActivity(new Intent(mActivity, HomeActivity.class));
-            EventBus.getDefault().post(new GoToMarketEvent());
-        }
-    }
-    /**
-     * post请求方式，请求网络数据
-     */
-    public void requestUrl() {
-        String stime = AppSafeHelper.getSTime();
-        //创建网络处理的对象
-        OkHttpClient client = new OkHttpClient.Builder()
-                .readTimeout(5, TimeUnit.SECONDS)
-                .build();
-        //post请求来获得数据
-        FormBody.Builder builder = new FormBody.Builder();
-        for (int i = 0; i < arg.length; i++) {
-            if (arg[i].split("=")[0].equals("callback")) {
-                callback = arg[i].split("=")[1];
-            }
-
-            builder.add(arg[i].split("=")[0], arg[i].split("=")[1]);
-
-        }
-
-
-        RequestBody body = builder
-                // 以下是公共参数
-                .add(AppConstant.APP_TYPE, "1")
-                .add(AppConstant.VERSION, AppHelper.getVersion(mActivity))
-                .add(AppConstant.STIME, stime)
-                .add(AppConstant.SIGN, AppSafeHelper.sign(stime))
-                .add(AppConstant.TOKEN, UserInfoHelper.getUserId(mActivity))
-                .build();
-        Request request = new Request.Builder()
-                .url(urlRequest)
-                .post(body).build();
-        Log.d("------>urlRequest", urlRequest + "request" + request);
-        //创建一个能处理请求数据的操作类
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("--response-请求失败-->", e.getMessage());
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String url = "javascript:" + callback + "('" + response.body().string() + "')";
-                mWv.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mWv.loadUrl(url);
-                        Log.i("wwburl", "run: " + url);
-
-                    }
-                });
-
-            }
-        });
-    }
-
-    @Override
-    public void findViewById(View view) {
-        mIvBack = (ImageView) view.findViewById(R.id.iv_h5_back);
-        mWv = view.findViewById(R.id.frm_h5);
-        recyclerView = view.findViewById(R.id.recyclerView);
-        mProgress = (ProgressBar) view.findViewById(R.id.progress_h5);
-        mTvTitle = (TextView) view.findViewById(R.id.tv_h5_title);
-        toolbar_h5 = (CompatToolbar) view.findViewById(R.id.toolbar_h5);
-    }
-
-    @Override
-    public void setViewData() {
-        adapterNewArrival = new CommonsAdapter("common",R.layout.item_team_list, lists, new CommonsAdapter.Onclick() {
-            @Override
-            public void addDialog() {
-                if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
-                    if(UserInfoHelper.getUserType(mActivity).equals(AppConstant.USER_TYPE_RETAIL)) {
-                        if (StringHelper.notEmptyAndNull("16667655")) {
-                            AppHelper.showAuthorizationDialog(mActivity, "16667655", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode()) && AppHelper.getAuthorizationCode().length() == 6) {
-                                        AppHelper.hideAuthorizationDialog();
-//                                        if (UserInfoHelper.getIsregister(mActivity) != null && StringHelper.notEmptyAndNull(UserInfoHelper.getIsregister(mActivity))) {
-//                                        }
-
-                                    } else {
-                                        AppHelper.showMsg(mActivity, "请输入完整授权码");
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-
-            }
-        });
-        recyclerView.setLayoutManager(new MyGrideLayoutManager(mActivity,2));
-        recyclerView.setAdapter(adapterNewArrival);
-    }
-
-    @Override
-    public void setClickEvent() {
-
     }
 }

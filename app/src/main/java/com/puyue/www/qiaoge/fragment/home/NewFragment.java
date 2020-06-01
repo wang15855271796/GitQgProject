@@ -139,7 +139,7 @@ public class NewFragment extends BaseFragment {
 
         recyclerView.setLayoutManager(new MyGrideLayoutManager(mActivity,2));
         recyclerView.setAdapter(adapterNewArrival);
-        adapterNewArrival.setEmptyView(emptyView);
+//        adapterNewArrival.setEmptyView(emptyView);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
@@ -165,7 +165,6 @@ public class NewFragment extends BaseFragment {
                             refreshLayout.finishLoadMoreWithNoMoreData();
                         }
                     }
-//                getProductsList(pageNum, 10,"new");
                 refreshLayout.finishLoadMore();
                 iv_back.setVisibility(View.VISIBLE);
                 }
@@ -337,7 +336,6 @@ public class NewFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void messageEventBusss(BackEvent event) {
         refreshLayout.autoRefresh();
-        Log.d("woshidewffssdf......","0");
     }
 
     @Override

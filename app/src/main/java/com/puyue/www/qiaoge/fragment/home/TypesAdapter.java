@@ -280,10 +280,41 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
     }
 
     public void cancle() {
-        countDownTimer1.cancel();
-        countDownTimer2.cancel();
-        countDownTimer3.cancel();
-        countDownTimer4.cancel();
-        countDownTimer5.cancel();
+        if(countDownTimer1!=null) {
+            countDownTimer1.cancel();
+        }
+
+        if(countDownTimer2!=null) {
+            countDownTimer2.cancel();
+        }
+        if(countDownTimer3!=null) {
+            countDownTimer3.cancel();
+        }
+        if(countDownTimer4!=null) {
+            countDownTimer4.cancel();
+        }
+        if(countDownTimer5!=null) {
+            countDownTimer5.cancel();
+        }
+    }
+
+
+    public void start() {
+        if(countDownTimer1!=null) {
+            countDownTimer1.start();
+        }
+
+        if(countDownTimer2!=null) {
+            countDownTimer2.start();
+        }
+        if(countDownTimer3!=null) {
+            countDownTimer3.start();
+        }
+        if(countDownTimer4!=null) {
+            countDownTimer4.start();
+        }
+        if(countDownTimer5!=null) {
+            countDownTimer5.start();
+        }
     }
 }

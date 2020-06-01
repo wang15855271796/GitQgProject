@@ -130,9 +130,7 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
                                 public void onClick(View view) {
                                     if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode()) && AppHelper.getAuthorizationCode().length() == 6) {
                                         AppHelper.hideAuthorizationDialog();
-//                                        if (UserInfoHelper.getIsregister(mActivity) != null && StringHelper.notEmptyAndNull(UserInfoHelper.getIsregister(mActivity))) {
-                                            showSelectType(AppHelper.getAuthorizationCode());
-//                                        }
+                                        showSelectType(AppHelper.getAuthorizationCode());
                                     } else {
                                         AppHelper.showMsg(mContext, "请输入完整授权码");
                                     }
