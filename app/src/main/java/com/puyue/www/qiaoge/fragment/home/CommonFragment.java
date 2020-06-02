@@ -126,8 +126,6 @@ public class CommonFragment extends BaseFragment {
                     }
                 }else {
                     initDialog();
-//                    AppHelper.showMsg(mActivity, "请先登录");
-//                    mActivity.startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
                 }
 
             }
