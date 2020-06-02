@@ -163,6 +163,12 @@ public class AppInterfaceAddress {
     public static final String Sub_Account_list = "user/querySubMessagePage";
 
     /**
+     * 设子账号消息 - 消息设为已读
+     */
+
+    public static final String Message_Read = "user/subMessageRead";
+
+    /**
      * 子账户消息全部已读
      *
      */

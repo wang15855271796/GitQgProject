@@ -28,6 +28,7 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
+import com.puyue.www.qiaoge.event.UpDateNumEvent4;
 import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.fragment.home.MyGrideLayoutManager;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -66,7 +67,7 @@ import rx.schedulers.Schedulers;
 public class CommonProductActivity extends BaseSwipeActivity implements View.OnClickListener {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    CommonsAdapter commonAdapter;
+    CommonProductAdapter commonProductAdapter;
     int pageNum = 1;
     int pageSize = 10;
     @BindView(R.id.iv_back)
@@ -107,27 +108,11 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initStatusBarWhiteColor();
-        commonAdapter = new CommonsAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
+        commonProductAdapter = new CommonProductAdapter(flag,R.layout.item_team_list, list, new CommonProductAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    if(UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_RETAIL)) {
-                        if (StringHelper.notEmptyAndNull(cell)) {
-                            AppHelper.showAuthorizationDialog(mContext, cell, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode()) && AppHelper.getAuthorizationCode().length() == 6) {
-                                        AppHelper.hideAuthorizationDialog();
-//                                    if (UserInfoHelper.getIsregister(mActivity) != null && StringHelper.notEmptyAndNull(UserInfoHelper.getIsregister(mActivity))) {
-                                        showSelectType(AppHelper.getAuthorizationCode());
-//                                    }
-                                    } else {
-                                        AppHelper.showMsg(mContext, "请输入完整授权码");
-                                    }
-                                }
-                            });
-                        }
-                    }
+
                 }else {
                     AppHelper.showMsg(mContext, "请先登录");
                     startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
@@ -137,7 +122,7 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
         });
         refreshLayout.setEnableLoadMore(false);
         recyclerView.setLayoutManager(new MyGrideLayoutManager(mContext,2));
-        recyclerView.setAdapter(commonAdapter);
+        recyclerView.setAdapter(commonProductAdapter);
         iv_back.setOnClickListener(this);
         tv_title.setText("常用清单");
         iv_carts.setOnClickListener(new View.OnClickListener() {
@@ -310,12 +295,12 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
                             productNormalModel = getCommonProductModel;
                             if (getCommonProductModel.getData().getList().size() > 0) {
                                 list.addAll(getCommonProductModel.getData().getList());
-                                commonAdapter.notifyDataSetChanged();
+                                commonProductAdapter.notifyDataSetChanged();
                                 List<ProductNormalModel.DataBean.ListBean> list = getCommonProductModel.getData().getList();
                                 if (pageNum == 1) {
-                                    commonAdapter.setNewData(list);
+                                    commonProductAdapter.setNewData(list);
                                 } else {
-                                    commonAdapter.addData(list);
+                                    commonProductAdapter.addData(list);
                                 }
                             }
                             refreshLayout.setEnableLoadMore(true);
@@ -376,7 +361,7 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getCartNum(UpDateNumEvent event) {
+    public void getCartNum(UpDateNumEvent4 event) {
         getCartNum();
     }
 

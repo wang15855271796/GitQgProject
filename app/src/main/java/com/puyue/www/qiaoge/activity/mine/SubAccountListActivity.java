@@ -24,11 +24,13 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.MessageDialog;
 import com.puyue.www.qiaoge.event.BackEvent;
+import com.puyue.www.qiaoge.event.LogoutEvent;
 import com.puyue.www.qiaoge.event.MessageEvent;
 import com.puyue.www.qiaoge.event.SubAccountListModel;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.AccountDetailModel;
+import com.puyue.www.qiaoge.model.mine.MessageModel;
 import com.puyue.www.qiaoge.model.mine.SubAccountModel;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -36,6 +38,8 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,16 +86,23 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void setViewData() {
         ButterKnife.bind(this);
         getSubAccountList(pageNum,pageSize);
+        EventBus.getDefault().register(this);
         emptyView = View.inflate(mActivity, R.layout.layout_empty, null);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         subAccountAdapter = new SubAccountListAdapter(R.layout.item_sub_account_order,lists);
         subAccountAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                getReadStat();
+                getReaded(lists.get(position).getId());
             }
         });
 
@@ -127,6 +138,35 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
 
         tv_read.setOnClickListener(this);
         iv_back.setOnClickListener(this);
+    }
+
+    /**
+     * 子账号消息 - 消息设为已读
+     */
+    private void getReaded(int id) {
+        SubAccountAddAPI.readed(mContext,id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<MessageModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(MessageModel messageModel) {
+                        if (messageModel.isSuccess()) {
+
+                        } else {
+                            AppHelper.showMsg(mContext, messageModel.getMessage());
+                        }
+                    }
+                });
     }
 
 
@@ -225,5 +265,11 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
                         }
                     }
                 });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updates(BackEvent backEvent) {
+        refreshLayout.autoRefresh();
+        Log.d("dddddd....","ssssss");
     }
 }

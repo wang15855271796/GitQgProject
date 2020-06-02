@@ -1,4 +1,4 @@
-package com.puyue.www.qiaoge.fragment.home;
+package com.puyue.www.qiaoge.adapter;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -14,7 +14,7 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.adapter.home.CommonsAdapter;
 import com.puyue.www.qiaoge.constant.AppConstant;
-import com.puyue.www.qiaoge.dialog.CommonListDialog;
+import com.puyue.www.qiaoge.dialog.HotDialog;
 import com.puyue.www.qiaoge.dialog.ShouyeDialog;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
@@ -23,19 +23,20 @@ import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import java.util.List;
 
 /**
- * Created by ${王涛} on 2020/3/13
+ * Created by ${王涛} on 2020/6/2
  */
-public class CommonListAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean.ListBean,BaseViewHolder> {
+public class HotAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean.ListBean,BaseViewHolder> {
+
     private ImageView iv_pic;
     List<ProductNormalModel.DataBean.ListBean> activesBean;
     private ImageView iv_add;
     Onclick onclick;
-    private CommonListDialog commonListDialog;
+    private HotDialog hotDialog;
     private RelativeLayout rl_group;
     String flag;
     private TextView tv_sale;
     ImageView iv_flag;
-    public CommonListAdapter(String flag, int layoutResId, @Nullable List<ProductNormalModel.DataBean.ListBean> activeList, Onclick onclick) {
+    public HotAdapter(String flag, int layoutResId, @Nullable List<ProductNormalModel.DataBean.ListBean> activeList, Onclick onclick) {
         super(layoutResId, activeList);
         this.activesBean = activeList;
         this.onclick = onclick;
@@ -92,15 +93,17 @@ public class CommonListAdapter extends BaseQuickAdapter<ProductNormalModel.DataB
             }
         });
 
+
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(onclick!=null) {
                     onclick.addDialog();
                 }
+
                 if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    commonListDialog = new CommonListDialog(mContext,item.getProductId(),item);
-                    commonListDialog.show();
+                    hotDialog = new HotDialog(mContext,item.getProductId(),item);
+                    hotDialog.show();
                 }
             }
         });

@@ -203,7 +203,7 @@ public class ShouyeDialog extends Dialog implements View.OnClickListener{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getTotal(UpDateNumEvent upDateNumEvent) {
-        getCartNum();
+//        getCartNum();
     }
     /**
      * 获取角标数据

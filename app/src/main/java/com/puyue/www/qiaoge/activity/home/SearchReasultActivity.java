@@ -69,12 +69,6 @@ public class SearchReasultActivity extends BaseSwipeActivity {
     public View view;
     private SearchResultAdapter searchResultAdapter;
     SearchResultsModel searchResultsModel;
-    private AlertDialog mTypedialog;
-    private String cell; // 客服电话
-    private boolean isFirst = true;
-    int isSelected;
-    int shopTypeId;
-    boolean isChecked = false;
     //搜索集合
     private List<SearchResultsModel.DataBean.SearchProdBean.ListBean> searchList = new ArrayList<>();
     @Override
@@ -150,22 +144,7 @@ public class SearchReasultActivity extends BaseSwipeActivity {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(SearchReasultActivity.this))) {
-                    if(UserInfoHelper.getUserType(SearchReasultActivity.this).equals(AppConstant.USER_TYPE_RETAIL)) {
-                        if (StringHelper.notEmptyAndNull(cell)) {
-                            AppHelper.showAuthorizationDialog(SearchReasultActivity.this, cell, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode()) && AppHelper.getAuthorizationCode().length() == 6) {
-                                        AppHelper.hideAuthorizationDialog();
-                                        showSelectType(AppHelper.getAuthorizationCode());
 
-                                    } else {
-                                        AppHelper.showMsg(SearchReasultActivity.this, "请输入完整授权码");
-                                    }
-                                }
-                            });
-                        }
-                    }
                 }else {
                     AppHelper.showMsg(SearchReasultActivity.this, "请先登录");
                     startActivity(LoginActivity.getIntent(SearchReasultActivity.this, LoginActivity.class));
@@ -177,109 +156,6 @@ public class SearchReasultActivity extends BaseSwipeActivity {
 
     }
 
-    /**
-     * 选择店铺类型
-     * @param authorizationCode
-     */
-    private void showSelectType(String authorizationCode) {
-        GetRegisterShopAPI.requestData(mActivity, authorizationCode)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GetRegisterShopModel>() {
-                    @Override
-                    public void onCompleted() {
-//                        ptr.refreshComplete();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-//                        ptr.refreshComplete();
-                    }
-
-                    @Override
-                    public void onNext(GetRegisterShopModel getRegisterShopModel) {
-                        UserInfoHelper.saveIsRegister(mActivity, "is_register_type");
-                        if (getRegisterShopModel.isSuccess()) {
-                            isFirst = true;
-                            List<GetRegisterShopModel.DataBean> mList = new ArrayList<>();
-                            mList.addAll(getRegisterShopModel.getData());
-                            mTypedialog.show();
-                            Window window = mTypedialog.getWindow();
-                            window.setContentView(R.layout.select_type);
-                            WindowManager.LayoutParams attributes = window.getAttributes();
-                            attributes.width = LinearLayout.LayoutParams.MATCH_PARENT;
-                            attributes.height = LinearLayout.LayoutParams.MATCH_PARENT;
-                            window.setAttributes(attributes);
-                            RecyclerView rl_type = window.findViewById(R.id.rl_type);
-                            TextView tv_ok = window.findViewById(R.id.tv_ok);
-                            rl_type.setLayoutManager(new GridLayoutManager(mActivity, 3));
-                            RegisterShopAdapterTwo mRegisterAdapterType = new RegisterShopAdapterTwo(mActivity, mList);
-                            rl_type.setAdapter(mRegisterAdapterType);
-                            mRegisterAdapterType.setOnItemClickListener(new OnItemClickListener() {
-                                @Override
-                                public void onItemClick(View view, int position) {
-                                    isSelected = position;
-                                    mRegisterAdapterType.selectPosition(position);
-
-                                    shopTypeId = mList.get(isSelected).getId();
-                                    isChecked = true;
-                                }
-
-                                @Override
-                                public void onItemLongClick(View view, int position) {
-
-                                }
-                            });
-
-                            tv_ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (isChecked) {
-                                        mTypedialog.dismiss();
-                                        updateUserInvitation(authorizationCode, shopTypeId);
-                                    } else {
-                                        AppHelper.showMsg(mActivity, "请选择店铺类型");
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
-    }
-
-    /**
-     * 填写授权码
-     * @param authorizationCode
-     * @param shopTypeId
-     */
-    private void updateUserInvitation(String authorizationCode, int shopTypeId) {
-        UpdateUserInvitationAPI.requestData(mActivity, authorizationCode,shopTypeId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<UpdateUserInvitationModel>() {
-                    @Override
-                    public void onCompleted() {
-//                        ptr.refreshComplete();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-//                        ptr.refreshComplete();
-                    }
-
-                    @Override
-                    public void onNext(UpdateUserInvitationModel updateUserInvitationModel) {
-                        if (updateUserInvitationModel.isSuccess()) {
-                            UserInfoHelper.saveUserType(mActivity, AppConstant.USER_TYPE_WHOLESALE);
-                            UserInfoHelper.saveUserId(mActivity, updateUserInvitationModel.getData());
-                            pageNum = 1;
-                            getRecommendList(1,10);
-                        } else {
-                            AppHelper.showMsg(mActivity, updateUserInvitationModel.getMessage());
-                        }
-                    }
-                });
-    }
 
     @Override
     public void setViewData() {
@@ -324,22 +200,7 @@ public class SearchReasultActivity extends BaseSwipeActivity {
                                     @Override
                                     public void addDialog() {
                                         if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(SearchReasultActivity.this))) {
-                                            if(UserInfoHelper.getUserType(SearchReasultActivity.this).equals(AppConstant.USER_TYPE_RETAIL)) {
-                                                if (StringHelper.notEmptyAndNull(cell)) {
-                                                    AppHelper.showAuthorizationDialog(SearchReasultActivity.this, cell, new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode()) && AppHelper.getAuthorizationCode().length() == 6) {
-                                                                AppHelper.hideAuthorizationDialog();
-                                                                showSelectType(AppHelper.getAuthorizationCode());
 
-                                                            } else {
-                                                                AppHelper.showMsg(SearchReasultActivity.this, "请输入完整授权码");
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                            }
                                         }else {
                                             AppHelper.showMsg(SearchReasultActivity.this, "请先登录");
                                             startActivity(LoginActivity.getIntent(SearchReasultActivity.this, LoginActivity.class));

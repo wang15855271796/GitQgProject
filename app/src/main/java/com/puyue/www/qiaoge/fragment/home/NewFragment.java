@@ -82,6 +82,7 @@ public class NewFragment extends BaseFragment {
     CouponDialog couponDialog;
     //新品集合
     private List<ProductNormalModel.DataBean.ListBean> list = new ArrayList<>();
+    private NewAdapter newAdapter;
 
     public static NewFragment getInstance() {
         NewFragment fragment = new NewFragment();
@@ -105,22 +106,27 @@ public class NewFragment extends BaseFragment {
         refreshLayout.setEnableLoadMore(false);
         emptyView = View.inflate(mActivity, R.layout.layout_empty, null);
         getProductsList(pageNum,11,"new");
-        adapterNewArrival = new CommonsAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
+        newAdapter = new NewAdapter(flag,R.layout.item_team_list, list, new NewAdapter.Onclick() {
             @Override
             public void addDialog() {
-                initDialog();
+                if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
+
+                }else {
+                    initDialog();
+                }
+
             }
         });
 
         recyclerView.setLayoutManager(new MyGrideLayoutManager(mActivity,2));
-        recyclerView.setAdapter(adapterNewArrival);
+        recyclerView.setAdapter(newAdapter);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 pageNum = 1;
                 list.clear();
                 getProductsList(1,10,"new");
-                adapterNewArrival.notifyDataSetChanged();
+                newAdapter.notifyDataSetChanged();
                 refreshLayout.finishRefresh();
                 iv_back.setVisibility(View.GONE);
             }
@@ -182,10 +188,10 @@ public class NewFragment extends BaseFragment {
 
                         productNormalModel = getCommonProductModel;
                         if (getCommonProductModel.isSuccess()) {
-                            adapterNewArrival.notifyDataSetChanged();
+                            newAdapter.notifyDataSetChanged();
                             if(getCommonProductModel.getData().getList().size()>0) {
                                 list.addAll(getCommonProductModel.getData().getList());
-                                adapterNewArrival.notifyDataSetChanged();
+                                newAdapter.notifyDataSetChanged();
                             }
 
                             refreshLayout.setEnableLoadMore(true);

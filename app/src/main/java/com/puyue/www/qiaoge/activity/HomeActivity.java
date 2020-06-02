@@ -443,16 +443,16 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                 if (mTabHome == null || isGet) {
                     mTabHome = new HomeFragmentsss();
                     mFragmentTransaction.add(R.id.layout_home_container, mTabHome);
-                    Log.d("wwwwwwwwwww","11");
+
                     isGet = false;
                 } else {
                     mFragmentTransaction.show(mTabHome);
-                    Log.d("wwwwwwwwwww","22");
+
                 }
 
                 mIvHome.setImageResource(R.mipmap.ic_tab_home_enable);
                 mTvHome.setTextColor(getResources().getColor(R.color.app_tab_selected));
-//                getCartPoductNum();
+                getCartPoductNum();
                 break;
             case TAB_MARKET:
                 if (mTabMarket == null) {
@@ -465,7 +465,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                 mIvMarket.setImageResource(R.mipmap.ic_tab_goods_enable);
                 mTvMarket.setTextColor(getResources().getColor(R.color.app_tab_selected));
 
-//                getCartPoductNum();
+                getCartPoductNum();
                 break;
             case TAB_CART:
 
@@ -479,7 +479,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                 }
                 mIvCart.setImageResource(R.mipmap.ic_tab_cart_enable);
                 mTvCart.setTextColor(getResources().getColor(R.color.app_tab_selected));
-//                getCartPoductNum();
+                getCartPoductNum();
                 break;
             case TAB_MINE:
                 if (mTabMine == null) {
@@ -491,7 +491,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
 
                 mIvMine.setImageResource(R.mipmap.ic_tab_mine_enable);
                 mTvMine.setTextColor(getResources().getColor(R.color.app_tab_selected));
-//                getCartPoductNum();
+                getCartPoductNum();
                 break;
         }
         //提交事务

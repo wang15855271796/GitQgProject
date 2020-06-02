@@ -1,4 +1,4 @@
-package com.puyue.www.qiaoge.adapter.home;
+package com.puyue.www.qiaoge.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -17,21 +17,18 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
-import com.puyue.www.qiaoge.adapter.SearchItem1Adapter;
+import com.puyue.www.qiaoge.adapter.MarketItemAdapter;
 import com.puyue.www.qiaoge.adapter.cart.ItemChooseAdapter;
-import com.puyue.www.qiaoge.adapter.cart.SearchInnerAdapter;
-import com.puyue.www.qiaoge.adapter.market.MarketInnerAdapter;
 import com.puyue.www.qiaoge.adapter.market.SpecAdapter;
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
-import com.puyue.www.qiaoge.event.UpDateNumEvent8;
+import com.puyue.www.qiaoge.event.UpDateNumEvent3;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
-import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
@@ -49,11 +46,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by ${王涛} on 2019/12/11
- * 推荐列表弹窗
+ * Created by ${王涛} on 2020/6/2
  */
-public class RecommendDialog extends Dialog implements View.OnClickListener {
-
+public class MarketGialog extends Dialog implements View.OnClickListener{
     Context context;
     public View view;
     public Unbinder binder;
@@ -83,76 +78,31 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
     TextView tv_price_total;
     @BindView(R.id.tv_free_desc)
     TextView tv_free_desc;
-    SearchResultsModel.DataBean.RecommendProdBean listBean;
+    private SpecAdapter specAdapter;
+    MarketRightModel.DataBean.ProdClassifyBean.ListBean listBean;
     int pos = 0;
+    private MarketItemAdapter marketItemAdapter;
+    ExchangeProductModel exchangeProductModels;
 
-    private SearchSpecxAdapter searchSpecAdapter;
-
-    public RecommendDialog(Context context, SearchResultsModel.DataBean.RecommendProdBean listBean) {
+    public MarketGialog(Context context, MarketRightModel.DataBean.ProdClassifyBean.ListBean listBean) {
         super(context, R.style.dialog);
         this.context = context;
         this.listBean = listBean;
+
+        if(listBean.getBusinessType()==11) {
+            exchangeLists(listBean.getActiveId(),listBean.getBusinessType());
+        }else {
+            exchangeLists(listBean.getProductId(),listBean.getBusinessType());
+        }
+
         init();
-        getCartNum();
-        exchangeList(listBean.getProdSpecs().get(0).getProductId());
-    }
 
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getTotal(UpDateNumEvent8 upDateNumEvent) {
         getCartNum();
     }
-    @Override
-    public void show() {
-        super.show();
-        if(!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
-    }
 
-    @Override
-    public void cancel() {
-        super.cancel();
-        EventBus.getDefault().unregister(this);
-    }
-    //初始化布局
-    private void init() {
-        if(view == null) {
-            view = View.inflate(context, R.layout.dialog_choice, null);
-            view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            binder = ButterKnife.bind(this, view);
-            setContentView(view);
 
-            getWindow().setGravity(Gravity.BOTTOM);
-            WindowManager.LayoutParams attributes = getWindow().getAttributes();
-            attributes.width = Utils.getScreenWidth(context);
-            getWindow().setAttributes(attributes);
-        }
-        iv_close.setOnClickListener(this);
-
-        List<SearchResultsModel.DataBean.RecommendProdBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
-
-        //切换规格
-        fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                pos = position;
-                searchSpecAdapter.selectPosition(position);
-                int productId = prodSpecs.get(position).getProductId();
-                exchangeList(productId);
-            }
-        });
-
-        searchSpecAdapter = new SearchSpecxAdapter(context,listBean.getProdSpecs());
-        fl_container.setAdapter(searchSpecAdapter);
-    }
-
-    /**
-     * 切换规格
-     * @param productId
-     */
-    private void exchangeList(int productId) {
-        GetProductDetailAPI.getExchangeList(context,productId,1)
+    private void exchangeLists(int activeId,int businessType) {
+        GetProductDetailAPI.getExchangeList(context,activeId,businessType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ExchangeProductModel>() {
@@ -169,21 +119,66 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
 
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
+                        if(exchangeProductModel.isSuccess()) {
 
-                        SearchItem1Adapter itemChooseAdapter = new SearchItem1Adapter(1,exchangeProductModel.getData().getProdSpecs().get(pos).getProductId(),
-                                R.layout.item_choose_content,
-                                exchangeProductModel.getData().getProdPrices());
+                            exchangeProductModels = exchangeProductModel;
+                            tv_name.setText(exchangeProductModel.getData().getProductName());
+                            tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
+                            tv_price.setText(exchangeProductModel.getData().getMinMaxPrice());
+                            tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
+                            tv_stock.setText(exchangeProductModel.getData().getInventory());
+                            Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
+                            if(businessType==11) {
+                                marketItemAdapter = new MarketItemAdapter(businessType, exchangeProductModel.getData().getActiveId(), R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
+                            }else {
+                                marketItemAdapter = new MarketItemAdapter(businessType, exchangeProductModel.getData().getProdSpecs().get(pos).getProductId(), R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
 
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(itemChooseAdapter);
-                        tv_name.setText(exchangeProductModel.getData().getProductName());
-                        tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
-                        tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
-                        tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
-                        tv_stock.setText(exchangeProductModel.getData().getInventory());
-                        Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
+                            }
+
+                            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                            recyclerView.setAdapter(marketItemAdapter);
+                            marketItemAdapter.notifyDataSetChanged();
+
+
+                        }else {
+                            AppHelper.showMsg(context,exchangeProductModel.getMessage());
+                        }
+
+
                     }
                 });
+    }
+
+    //初始化布局
+    private void init() {
+        view = View.inflate(context, R.layout.dialog_choice, null);
+        view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        binder = ButterKnife.bind(this, view);
+        setContentView(view);
+        getWindow().setGravity(Gravity.BOTTOM);
+        WindowManager.LayoutParams attributes = getWindow().getAttributes();
+        attributes.width = Utils.getScreenWidth(context);
+        getWindow().setAttributes(attributes);
+        iv_close.setOnClickListener(this);
+        iv_cart.setOnClickListener(this);
+        List<MarketRightModel.DataBean.ProdClassifyBean.ListBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
+
+        //切换规格
+        fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                pos = position;
+                specAdapter.selectPosition(position);
+                if(listBean.getBusinessType()==11) {
+                    exchangeLists(listBean.getActiveId(),11);
+                }else {
+                    exchangeLists(exchangeProductModels.getData().getProdSpecs().get(position).getProductId(),1);
+
+                }
+            }
+        });
+        specAdapter = new SpecAdapter(context,prodSpecs);
+        fl_container.setAdapter(specAdapter);
     }
 
     @Override
@@ -201,8 +196,13 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getTotal(UpDateNumEvent3 upDateNumEvent) {
+        getCartNum();
+    }
+
     /**
-     * 获取角标数据
+     *
      */
     private void getCartNum() {
         GetCartNumAPI.requestData(context)
@@ -238,5 +238,17 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void cancel() {
+        super.cancel();
+        EventBus.getDefault().unregister(this);
     }
 }

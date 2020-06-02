@@ -58,7 +58,6 @@ public class SearchResultAdapter extends BaseQuickAdapter<SearchResultsModel.Dat
 
     @Override
     protected void convert(BaseViewHolder helper, SearchResultsModel.DataBean.RecommendProdBean item) {
-        RecyclerView recyclerView = helper.getView(R.id.recyclerView);
         ImageView iv_no_data = helper.getView(R.id.iv_no_data);
         iv_type = helper.getView(R.id.iv_type);
         if(item.getFlag()==0) {
@@ -82,45 +81,6 @@ public class SearchResultAdapter extends BaseQuickAdapter<SearchResultsModel.Dat
             }
         });
 
-        fl_container = helper.getView(R.id.fl_container);
-        SearchSpecxAdapter searchSpecAdapter = new SearchSpecxAdapter(mContext,item.getProdSpecs());
-        fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                searchSpecAdapter.selectPosition(position);
-                int productIds = item.getProdSpecs().get(position).getProductId();
-
-                GetProductDetailAPI.getExchangeList(mContext,productIds,1)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<ExchangeProductModel>() {
-
-                            @Override
-                            public void onCompleted() {
-
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-
-                            }
-
-                            @Override
-                            public void onNext(ExchangeProductModel exchangeProductModel) {
-                                helper.setText(R.id.tv_stock,exchangeProductModel.getData().getInventory());
-                                helper.setText(R.id.tv_desc,exchangeProductModel.getData().getSpecialOffer());
-                                SearchInnersAdapter itemChooseAdapter = new SearchInnersAdapter(1,exchangeProductModel.getData().getProdSpecs().get(position).getProductId(),
-                                        R.layout.item_choose_content,
-                                        exchangeProductModel.getData().getProdPrices());
-                                recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-                                recyclerView.setAdapter(itemChooseAdapter);
-
-                            }
-                        });
-            }
-        });
-
-        fl_container.setAdapter(searchSpecAdapter);
         helper.setText(R.id.tv_name,item.getProductName());
         helper.setText(R.id.tv_stock_total,item.getInventory());
         helper.setText(R.id.tv_sale,item.getSalesVolume());
@@ -128,11 +88,6 @@ public class SearchResultAdapter extends BaseQuickAdapter<SearchResultsModel.Dat
         helper.setText(R.id.tv_desc,item.getSpecialOffer());
         tv_stock = helper.getView(R.id.tv_stock);
         tv_stock.setText(item.getInventory());
-        int productId = item.getProdSpecs().get(0).getProductId();
-        searchInnerAdapter = new SearchInnerAdapter(1,productId,R.layout.item_choose_content,item.getProdPrices());
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.setAdapter(searchInnerAdapter);
 
         rl_spec.setOnClickListener(new View.OnClickListener() {
             @Override

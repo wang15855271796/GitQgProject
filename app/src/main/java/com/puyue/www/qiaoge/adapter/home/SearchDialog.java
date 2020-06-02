@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
+import com.puyue.www.qiaoge.adapter.SearchItemAdapter;
 import com.puyue.www.qiaoge.adapter.cart.ItemChooseAdapter;
 import com.puyue.www.qiaoge.adapter.cart.SearchInnerAdapter;
 import com.puyue.www.qiaoge.adapter.market.SpecAdapter;
@@ -26,6 +27,7 @@ import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
+import com.puyue.www.qiaoge.event.UpDateNumEvent7;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
@@ -83,7 +85,6 @@ public class SearchDialog extends Dialog implements View.OnClickListener {
     ImageView iv_cart;
     SearchResultsModel.DataBean.SearchProdBean.ListBean listBean;
     int pos = 0;
-    SearchInnerResultAdapter searchInnerAdapter;
     private SearchSpecsAdapter searchSpecAdapter;
 
 
@@ -167,12 +168,11 @@ public class SearchDialog extends Dialog implements View.OnClickListener {
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
 
-                        SearchInnersAdapter itemChooseAdapter = new SearchInnersAdapter(1,exchangeProductModel.getData().getProdSpecs().get(pos).getProductId(),
+                        SearchItemAdapter searchItemAdapter = new SearchItemAdapter(1,exchangeProductModel.getData().getProdSpecs().get(pos).getProductId(),
                                 R.layout.item_choose_content,
                                 exchangeProductModel.getData().getProdPrices());
-
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(itemChooseAdapter);
+                        recyclerView.setAdapter(searchItemAdapter);
                         tv_name.setText(exchangeProductModel.getData().getProductName());
                         tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
                         tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
@@ -199,7 +199,7 @@ public class SearchDialog extends Dialog implements View.OnClickListener {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getTotal(UpDateNumEvent upDateNumEvent) {
+    public void getTotal(UpDateNumEvent7 upDateNumEvent) {
         getCartNum();
     }
 

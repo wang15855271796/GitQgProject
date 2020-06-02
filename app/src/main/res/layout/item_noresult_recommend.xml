@@ -179,12 +179,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
-                        <com.puyue.www.qiaoge.view.FlowLayout
-                            android:layout_below="@+id/tv_desc"
-                            android:id="@+id/fl_container"
-                            android:layout_height="wrap_content"
-                            android:layout_width="match_parent"/>
-
                     </RelativeLayout>
 
 
@@ -217,11 +211,6 @@
 
                     </RelativeLayout>
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recyclerView"
-                        android:layout_below="@+id/tv_stock"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
             <View

@@ -16,6 +16,7 @@ import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.adapter.home.CommonDialog;
 import com.puyue.www.qiaoge.adapter.home.CommonsAdapter;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.MustDialog;
 import com.puyue.www.qiaoge.dialog.ShouyeDialog;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
@@ -33,7 +34,7 @@ public class MustAdapter extends BaseQuickAdapter<MustModel.DataBean, BaseViewHo
     List<MustModel.DataBean> activesBean;
     private ImageView iv_add;
     CommonsAdapter.Onclick onclick;
-    private CommonDialog commonDialog;
+    private MustDialog mustDialog;
     private RelativeLayout rl_group;
     String flag;
     private TextView tv_sale;
@@ -78,8 +79,8 @@ public class MustAdapter extends BaseQuickAdapter<MustModel.DataBean, BaseViewHo
                 }
 
                 if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    commonDialog = new CommonDialog(mContext,item);
-                    commonDialog.show();
+                    mustDialog = new MustDialog(mContext,item);
+                    mustDialog.show();
                 }
             }
         });

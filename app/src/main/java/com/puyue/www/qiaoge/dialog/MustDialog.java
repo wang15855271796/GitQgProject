@@ -1,4 +1,4 @@
-package com.puyue.www.qiaoge.adapter.home;
+package com.puyue.www.qiaoge.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -17,21 +17,18 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
-import com.puyue.www.qiaoge.adapter.SearchItem1Adapter;
-import com.puyue.www.qiaoge.adapter.cart.ItemChooseAdapter;
-import com.puyue.www.qiaoge.adapter.cart.SearchInnerAdapter;
-import com.puyue.www.qiaoge.adapter.market.MarketInnerAdapter;
-import com.puyue.www.qiaoge.adapter.market.SpecAdapter;
+import com.puyue.www.qiaoge.adapter.MustItemAdapter;
+import com.puyue.www.qiaoge.adapter.home.NewSpecAdapter;
+import com.puyue.www.qiaoge.adapter.home.SearchInnersAdapter;
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
-import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
-import com.puyue.www.qiaoge.event.UpDateNumEvent8;
+import com.puyue.www.qiaoge.event.UpDateNumEvent1;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
-import com.puyue.www.qiaoge.model.home.SearchResultsModel;
+import com.puyue.www.qiaoge.model.home.MustModel;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
@@ -49,11 +46,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by ${王涛} on 2019/12/11
- * 推荐列表弹窗
+ * Created by ${王涛} on 2020/6/2
  */
-public class RecommendDialog extends Dialog implements View.OnClickListener {
-
+public class MustDialog extends Dialog implements View.OnClickListener {
     Context context;
     public View view;
     public Unbinder binder;
@@ -75,39 +70,38 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
     ImageView iv_head;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.tv_num)
-    TextView tv_num;
     @BindView(R.id.iv_cart)
     ImageView iv_cart;
-    @BindView(R.id.tv_price_total)
-    TextView tv_price_total;
+    @BindView(R.id.tv_num)
+    TextView tv_num;
     @BindView(R.id.tv_free_desc)
     TextView tv_free_desc;
-    SearchResultsModel.DataBean.RecommendProdBean listBean;
+    @BindView(R.id.tv_price_total)
+    TextView tv_price_total;
+    MustModel.DataBean listBean;
     int pos = 0;
+    private NewSpecAdapter searchSpecAdapter;
+    ExchangeProductModel exchangeProductModels;
+    private List<ExchangeProductModel.DataBean.ProdPricesBean> prodPrices;
+    private MustItemAdapter mustItemAdapter;
+    private List<ExchangeProductModel.DataBean.ProdSpecsBean> prodSpecs;
+    private ExchangeProductModel.DataBean data;
 
-    private SearchSpecxAdapter searchSpecAdapter;
-
-    public RecommendDialog(Context context, SearchResultsModel.DataBean.RecommendProdBean listBean) {
-        super(context, R.style.dialog);
-        this.context = context;
-        this.listBean = listBean;
+    public MustDialog(Context mContext, MustModel.DataBean item) {
+        super(mContext, R.style.dialog);
+        this.context = mContext;
+        this.listBean = item;
         init();
+        exchangeList(listBean.getProductId());
         getCartNum();
-        exchangeList(listBean.getProdSpecs().get(0).getProductId());
     }
 
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getTotal(UpDateNumEvent8 upDateNumEvent) {
-        getCartNum();
-    }
+
     @Override
     public void show() {
         super.show();
-        if(!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -115,6 +109,7 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
         super.cancel();
         EventBus.getDefault().unregister(this);
     }
+
     //初始化布局
     private void init() {
         if(view == null) {
@@ -122,16 +117,16 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
             view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             binder = ButterKnife.bind(this, view);
             setContentView(view);
-
             getWindow().setGravity(Gravity.BOTTOM);
             WindowManager.LayoutParams attributes = getWindow().getAttributes();
             attributes.width = Utils.getScreenWidth(context);
             getWindow().setAttributes(attributes);
         }
+
         iv_close.setOnClickListener(this);
+        iv_cart.setOnClickListener(this);
 
-        List<SearchResultsModel.DataBean.RecommendProdBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
-
+        List<MustModel.DataBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
         //切换规格
         fl_container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -143,7 +138,7 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
             }
         });
 
-        searchSpecAdapter = new SearchSpecxAdapter(context,listBean.getProdSpecs());
+        searchSpecAdapter = new NewSpecAdapter(context,listBean.getProdSpecs());
         fl_container.setAdapter(searchSpecAdapter);
     }
 
@@ -169,19 +164,27 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
 
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
+                        if(exchangeProductModel.isSuccess()) {
+                            if(exchangeProductModel.getData()!=null) {
+                                exchangeProductModels = exchangeProductModel;
+                                prodPrices = exchangeProductModels.getData().getProdPrices();
+                                prodSpecs = exchangeProductModels.getData().getProdSpecs();
+                                data = exchangeProductModel.getData();
+                                tv_sale.setText(data.getSalesVolume());
+                                tv_name.setText(data.getProductName());
+                                tv_price.setText(data.getMinMaxPrice()+"");
+                                tv_desc.setText(data.getSpecialOffer());
+                                tv_stock.setText(data.getInventory());
+                                Glide.with(context).load(data.getDefaultPic()).into(iv_head);
 
-                        SearchItem1Adapter itemChooseAdapter = new SearchItem1Adapter(1,exchangeProductModel.getData().getProdSpecs().get(pos).getProductId(),
-                                R.layout.item_choose_content,
-                                exchangeProductModel.getData().getProdPrices());
+                                mustItemAdapter = new MustItemAdapter(1,prodSpecs.get(pos).getProductId(),R.layout.item_choose_content, prodPrices);
+                                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                                recyclerView.setAdapter(mustItemAdapter);
+                                mustItemAdapter.notifyDataSetChanged();
+                            }
+                        }
 
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(itemChooseAdapter);
-                        tv_name.setText(exchangeProductModel.getData().getProductName());
-                        tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
-                        tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
-                        tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
-                        tv_stock.setText(exchangeProductModel.getData().getInventory());
-                        Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
+
                     }
                 });
     }
@@ -198,9 +201,14 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
                 EventBus.getDefault().post(new GoToCartFragmentEvent());
                 dismiss();
                 break;
+
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getTotal(UpDateNumEvent1 upDateNumEvent) {
+        getCartNum();
+    }
     /**
      * 获取角标数据
      */
@@ -231,7 +239,6 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
                                 tv_free_desc.setText("未选购商品");
                                 tv_num.setVisibility(View.GONE);
                                 tv_price_total.setText(getCartNumModel.getData().getTotalPrice());
-//                                tv_price_total.setVisibility(View.GONE);
                             }
                         } else {
                             AppHelper.showMsg(context, getCartNumModel.getMessage());

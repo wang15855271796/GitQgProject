@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CartActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
+import com.puyue.www.qiaoge.adapter.HotAdapter;
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
 import com.puyue.www.qiaoge.api.home.ProductListAPI;
@@ -26,6 +27,7 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
+import com.puyue.www.qiaoge.event.UpDateNumEvent6;
 import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.fragment.home.MyGrideLayoutManager;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -65,7 +67,7 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
     RecyclerView recyclerView;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
-    CommonsAdapter adapterNewArrival;
+    HotAdapter hotAdapter;
     int pageNum = 1;
     int pageSize = 10;
     @BindView(R.id.iv_back)
@@ -103,27 +105,10 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
     public void findViewById() {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        adapterNewArrival = new CommonsAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
+        hotAdapter = new HotAdapter(flag,R.layout.item_team_list, list, new HotAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    if(UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_RETAIL)) {
-                        if (StringHelper.notEmptyAndNull(cell)) {
-                            AppHelper.showAuthorizationDialog(mContext, cell, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode()) && AppHelper.getAuthorizationCode().length() == 6) {
-                                        AppHelper.hideAuthorizationDialog();
-//                                        if (UserInfoHelper.getIsregister(mActivity) != null && StringHelper.notEmptyAndNull(UserInfoHelper.getIsregister(mActivity))) {
-                                            showSelectType(AppHelper.getAuthorizationCode());
-//                                        }
-                                    } else {
-                                        AppHelper.showMsg(mContext, "请输入完整授权码");
-                                    }
-                                }
-                            });
-                        }
-                    }
                 }else {
                     AppHelper.showMsg(mContext, "请先登录");
                     mContext.startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
@@ -133,7 +118,7 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
         refreshLayout.setEnableLoadMore(false);
 
         recyclerView.setLayoutManager(new MyGrideLayoutManager(mContext,2));
-        recyclerView.setAdapter(adapterNewArrival);
+        recyclerView.setAdapter(hotAdapter);
         iv_back.setOnClickListener(this);
         tv_title.setText("热销");
 
@@ -186,131 +171,6 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
         });
     }
 
-    /**
-     * 选择店铺类型
-     * @param authorizationCode
-     */
-    private void showSelectType(String authorizationCode) {
-        GetRegisterShopAPI.requestData(mActivity, authorizationCode)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GetRegisterShopModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i("ccca", e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(GetRegisterShopModel getRegisterShopModel) {
-                        UserInfoHelper.saveIsRegister(mActivity, "is_register_type");
-                        if (getRegisterShopModel.isSuccess()) {
-                            isFirst = true;
-                            List<GetRegisterShopModel.DataBean> mList = new ArrayList<>();
-                            mList.addAll(getRegisterShopModel.getData());
-                            mTypedialog.show();
-                            Window window = mTypedialog.getWindow();
-                            window.setContentView(R.layout.select_type);
-                            WindowManager.LayoutParams attributes = window.getAttributes();
-                            attributes.width = LinearLayout.LayoutParams.MATCH_PARENT;
-                            attributes.height = LinearLayout.LayoutParams.MATCH_PARENT;
-                            window.setAttributes(attributes);
-                            RecyclerView rl_type = window.findViewById(R.id.rl_type);
-                            TextView tv_ok = window.findViewById(R.id.tv_ok);
-                            rl_type.setLayoutManager(new GridLayoutManager(mActivity, 3));
-                            RegisterShopAdapterTwo mRegisterAdapterType = new RegisterShopAdapterTwo(mActivity, mList);
-                            rl_type.setAdapter(mRegisterAdapterType);
-                            mRegisterAdapterType.setOnItemClickListener(new OnItemClickListener() {
-                                @Override
-                                public void onItemClick(View view, int position) {
-                                    isSelected = position;
-                                    mRegisterAdapterType.selectPosition(position);
-
-                                    shopTypeId = mList.get(isSelected).getId();
-                                    isChecked = true;
-                                }
-
-                                @Override
-                                public void onItemLongClick(View view, int position) {
-
-                                }
-                            });
-
-                            tv_ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (isChecked) {
-                                        mTypedialog.dismiss();
-                                        updateUserInvitation(authorizationCode, shopTypeId);
-                                    } else {
-                                        AppHelper.showMsg(mActivity, "请选择店铺类型");
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
-    }
-
-    /**
-     * 填写邀请码
-     * @param authorizationCode
-     * @param shopTypeId
-     */
-    private void updateUserInvitation(String authorizationCode, int shopTypeId) {
-        UpdateUserInvitationAPI.requestData(mActivity, authorizationCode,shopTypeId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<UpdateUserInvitationModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(UpdateUserInvitationModel updateUserInvitationModel) {
-                        if (updateUserInvitationModel.isSuccess()) {
-                            UserInfoHelper.saveUserType(mActivity, AppConstant.USER_TYPE_WHOLESALE);
-                            UserInfoHelper.saveUserId(mActivity, updateUserInvitationModel.getData());
-                            pageNum = 1;
-                            getProductsList(pageNum,10,"hot");
-                            UserInfoHelper.saveUserHomeRefresh(mContext, "home_has_refresh");
-                        } else {
-                            AppHelper.showMsg(mActivity, updateUserInvitationModel.getMessage());
-                        }
-                    }
-                });
-    }
-
-
-    /**
-     * 获取客服电话
-     */
-    private void getCustomerPhone() {
-        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
-            @Override
-            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
-                if (getCustomerPhoneModel.isSuccess()) {
-                    cell = getCustomerPhoneModel.getData();
-                } else {
-                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
-                }
-            }
-
-            @Override
-            public void onFaild(String errorMsg) {
-            }
-        });
-    }
 
     /**
      * 热销集合(王涛)
@@ -340,19 +200,19 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
                             productNormalModel = getCommonProductModel;
                             if (getCommonProductModel.getData().getList().size() > 0) {
                                 list.addAll(getCommonProductModel.getData().getList());
-                                adapterNewArrival.notifyDataSetChanged();
+                                hotAdapter.notifyDataSetChanged();
                                 List<ProductNormalModel.DataBean.ListBean> list = getCommonProductModel.getData().getList();
                                 if (pageNum == 1) {
-                                    adapterNewArrival.setNewData(list);
+                                    hotAdapter.setNewData(list);
                                 } else {
-                                    adapterNewArrival.addData(list);
+                                    hotAdapter.addData(list);
                                 }
                             }
                             //判断是否有下一页
                             if (!getCommonProductModel.getData().isHasNextPage()) {
-                                adapterNewArrival.loadMoreEnd(false);
+                                hotAdapter.loadMoreEnd(false);
                             } else {
-                                adapterNewArrival.loadMoreComplete();
+                                hotAdapter.loadMoreComplete();
                             }
                             refreshLayout.setEnableLoadMore(true);
 
@@ -370,7 +230,7 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getCartNum(UpDateNumEvent event) {
+    public void getCartNum(UpDateNumEvent6 event) {
         getCartNum();
     }
 
@@ -381,8 +241,6 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
 
     @Override
     public void setViewData() {
-
-        getCustomerPhone();
         refreshLayout.autoRefresh();
         getCartNum();
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();

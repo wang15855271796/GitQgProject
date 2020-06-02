@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
+import com.puyue.www.qiaoge.adapter.ClassItemAdpater;
 import com.puyue.www.qiaoge.adapter.cart.ItemChooseAdapter;
 import com.puyue.www.qiaoge.adapter.home.SearchInnersAdapter;
 import com.puyue.www.qiaoge.adapter.market.SpecAdapter;
@@ -26,6 +27,7 @@ import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
 
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
+import com.puyue.www.qiaoge.event.UpDateNumEvent9;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
@@ -80,11 +82,8 @@ public class ClassifyDialog extends Dialog implements View.OnClickListener {
     TextView tv_free_desc;
     @BindView(R.id.tv_price_total)
     TextView tv_price_total;
-    private SpecAdapter specAdapter;
     MarketRightModel.DataBean.ProdClassifyBean.ListBean listBean;
     int pos = 0;
-    private ItemChooseAdapter itemChooseAdapter;
-    private SelectionInnerAdapter selectionInnerAdapter;
     private SelectionSpecAdapter searchSpecAdapter;
 
     public ClassifyDialog(Context mContext, MarketRightModel.DataBean.ProdClassifyBean.ListBean item) {
@@ -93,6 +92,7 @@ public class ClassifyDialog extends Dialog implements View.OnClickListener {
         this.listBean = item;
         exchangeList(listBean.getProductId());
         init();
+        getCartNum();
     }
 
     @Override
@@ -164,12 +164,12 @@ public class ClassifyDialog extends Dialog implements View.OnClickListener {
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
 
-                        SearchInnersAdapter itemChooseAdapter = new SearchInnersAdapter(1,exchangeProductModel.getData().getProdSpecs().get(pos).getProductId(),
+                        ClassItemAdpater classItemAdpater = new ClassItemAdpater(1,exchangeProductModel.getData().getProdSpecs().get(pos).getProductId(),
                                 R.layout.item_choose_content,
                                 exchangeProductModel.getData().getProdPrices());
 
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(itemChooseAdapter);
+                        recyclerView.setAdapter(classItemAdpater);
                         tv_name.setText(exchangeProductModel.getData().getProductName());
                         tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
                         tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
@@ -197,7 +197,7 @@ public class ClassifyDialog extends Dialog implements View.OnClickListener {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getTotal(UpDateNumEvent upDateNumEvent) {
+    public void getTotal(UpDateNumEvent9 upDateNumEvent) {
         getCartNum();
     }
     /**

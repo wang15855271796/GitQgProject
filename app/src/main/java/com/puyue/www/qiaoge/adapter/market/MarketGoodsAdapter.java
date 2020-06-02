@@ -18,6 +18,7 @@ import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.MarketGialog;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.view.FlowLayout;
@@ -36,7 +37,7 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
     private LinearLayout ll_group;
     private ImageView iv_type;
     Onclick onclick;
-    ChoosesDialog chooseDialog;
+    MarketGialog marketGialog;
 
     public MarketGoodsAdapter(int layoutResId, @Nullable List<MarketRightModel.DataBean.ProdClassifyBean.ListBean> data, Onclick onclick) {
         super(layoutResId, data);
@@ -92,8 +93,8 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
                 }
 
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    chooseDialog = new ChoosesDialog(mContext, item);
-                    chooseDialog.show();
+                    marketGialog = new MarketGialog(mContext, item);
+                    marketGialog.show();
 
                 }
             }

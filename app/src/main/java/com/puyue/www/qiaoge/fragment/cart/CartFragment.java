@@ -32,6 +32,16 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
+import com.puyue.www.qiaoge.event.UpDateNumEvent;
+import com.puyue.www.qiaoge.event.UpDateNumEvent1;
+import com.puyue.www.qiaoge.event.UpDateNumEvent2;
+import com.puyue.www.qiaoge.event.UpDateNumEvent3;
+import com.puyue.www.qiaoge.event.UpDateNumEvent4;
+import com.puyue.www.qiaoge.event.UpDateNumEvent5;
+import com.puyue.www.qiaoge.event.UpDateNumEvent6;
+import com.puyue.www.qiaoge.event.UpDateNumEvent7;
+import com.puyue.www.qiaoge.event.UpDateNumEvent8;
+import com.puyue.www.qiaoge.event.UpDateNumEvent9;
 import com.puyue.www.qiaoge.fragment.home.CityEvent;
 import com.puyue.www.qiaoge.fragment.market.MarketsFragment;
 import com.puyue.www.qiaoge.fragment.market.TestAdapter;
@@ -680,7 +690,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
             ll_service.setVisibility(View.GONE);
         }
     }
-
 
     @Override
     public void setViewData() {

@@ -8,6 +8,7 @@ import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
 import com.puyue.www.qiaoge.event.SubAccountListModel;
 import com.puyue.www.qiaoge.helper.RestHelper;
 import com.puyue.www.qiaoge.model.AccountDetailModel;
+import com.puyue.www.qiaoge.model.mine.MessageModel;
 
 
 import retrofit2.http.Field;
@@ -122,6 +123,21 @@ public class SubAccountAddAPI {
     public static Observable<BaseModel> read(Context context) {
         MessageReadService service = RestHelper.getBaseRetrofit(context).create(MessageReadService.class);
         return service.setParams();
+    }
+
+    /**
+     * 子账号消息 - 消息设为已读
+     */
+    private interface MessageReadedService {
+
+        @FormUrlEncoded
+        @POST(AppInterfaceAddress.Message_Read)
+        Observable<MessageModel> setParams(@Field("id") int id);
+    }
+
+    public static Observable<MessageModel> readed(Context context, int id) {
+        Observable<MessageModel> addSubAccountObservable = RestHelper.getBaseRetrofit(context).create(MessageReadedService.class).setParams(id);
+        return addSubAccountObservable;
     }
 
 }
