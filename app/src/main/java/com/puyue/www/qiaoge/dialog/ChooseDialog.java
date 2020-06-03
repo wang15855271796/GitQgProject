@@ -28,11 +28,13 @@ import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
 import com.puyue.www.qiaoge.event.LogoutEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
+import com.puyue.www.qiaoge.event.UpDateNumEvent10;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
@@ -105,7 +107,10 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
     @Override
     public void show() {
         super.show();
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+
     }
     @Override
     public void cancel() {
@@ -148,6 +153,8 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
                                 tv_name.setText(exchangeProductModel.getData().getProductName());
                                 Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
                             }
+                        }else {
+                            ToastUtil.showErroMsg(context,exchangeProductModel.getMessage());
                         }
                     }
                 });
@@ -205,8 +212,9 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getTotal(UpDateNumEvent upDateNumEvent) {
+    public void getTotal(UpDateNumEvent10 upDateNumEvent) {
         getCartNum();
+
     }
 
     public interface Onclick {

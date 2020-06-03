@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/app_color_white"
     android:orientation="vertical">
 
@@ -52,7 +53,7 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/shape_car_num"
                 android:gravity="center"
-                android:text="99"
+                tools:text="99"
                 android:textColor="@color/white"
                 android:textSize="7dp"
                 android:visibility="gone" />

@@ -20,6 +20,7 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.api.cart.AddMountChangeTwoAPI;
 
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
+import com.puyue.www.qiaoge.event.UpDateNumEvent10;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartGoodModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
@@ -156,7 +157,7 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                                                 int num = Integer.parseInt(et_num.getText().toString());
                                                 alertDialog.dismiss();
                                                 addCart(num,item.getPriceId(),productId,businessType,tv_num,item.getCartNum());
-                                                EventBus.getDefault().post(new UpDateNumEvent());
+                                                EventBus.getDefault().post(new UpDateNumEvent10());
 
                                             } else {
                                                 ToastUtil.showSuccessMsg(mContext, addMountReduceModel.getMessage());
@@ -205,7 +206,7 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num+"");
                             ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
-                            EventBus.getDefault().post(new UpDateNumEvent());
+                            EventBus.getDefault().post(new UpDateNumEvent10());
 
                         } else {
                             ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
@@ -233,7 +234,7 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
                     public void onNext(AddCartGoodModel addMountReduceModel) {
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num+"");
-                            EventBus.getDefault().post(new UpDateNumEvent());
+                            EventBus.getDefault().post(new UpDateNumEvent10());
                         } else {
                             ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
                         }

@@ -49,6 +49,7 @@ import com.puyue.www.qiaoge.api.mine.subaccount.MineAccountAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
+import com.puyue.www.qiaoge.event.GoToMineEvent;
 import com.puyue.www.qiaoge.event.MessageEvent;
 import com.puyue.www.qiaoge.fragment.cart.CartFragment;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -289,7 +290,7 @@ public class MineFragment extends BaseFragment {
     public void setViewData() {
         mViewVersionPoint.setVisibility(View.GONE);
         mTvVersion.setText(getString(R.string.textVersion) + AppHelper.getVersion(getContext()));
-
+        Log.d("swdswdwddddd....",UserInfoHelper.getUserId(getContext()));
         if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(getContext()))) {
             //有userId,显示userId,
             requestUserInfo();
@@ -572,7 +573,6 @@ public class MineFragment extends BaseFragment {
 
                 //子账户
                 Intent intent = new Intent(getContext(),SubAccountActivity.class);
-                intent.putExtra("message",mModelMyOrderNum.getData().getSubMessage()+"");
                 startActivity(intent);
 
             } else if (view == imageViewBanner) {
@@ -599,7 +599,7 @@ public class MineFragment extends BaseFragment {
                 Intent intent = new Intent(getContext(), NewWebViewActivity.class);
                 intent.putExtra("URL", urlVIP);
                 intent.putExtra("TYPE", 1);
-                intent.putExtra("name", "");
+                intent.putExtra("name", "consult");
                 startActivity(intent);
             } /*else if (view == vipDay) {
                 Intent intent = new Intent(getContext(), NewWebViewActivity.class);
@@ -966,10 +966,14 @@ public class MineFragment extends BaseFragment {
                             mModelAccountCenter = accountCenterModel;
                             mStateCode = mModelAccountCenter.code;
                             AppHelper.UserLogout(getContext(), mStateCode, 1);
+                            Log.d("wsssssssss.....",mStateCode+"");
+
                             if (mModelAccountCenter.success) {
                                 updateAccountCenter();
+                                Log.d("wsssssssss.....","ssssssd");
                             } else {
                                 mTvPhone.setText("请登录");
+                                Log.d("wsssssssss.....","ssssssd000");
                                 AppHelper.showMsg(getContext(), mModelAccountCenter.message);
                             }
                         }
@@ -979,8 +983,6 @@ public class MineFragment extends BaseFragment {
 
     private void updateAccountCenter() {
         mUserCell = mModelAccountCenter.data.phone;
-
-
         mCustomerPhone = mModelAccountCenter.data.customerPhone;
     }
 
@@ -1168,4 +1170,13 @@ public class MineFragment extends BaseFragment {
         requestUpdate();
 
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getMessageEvent(GoToMineEvent goToMineEvent) {
+        requestOrderNum();
+        requestUserInfo();
+        useAccount();
+        requestUpdate();
+    }
+
 }

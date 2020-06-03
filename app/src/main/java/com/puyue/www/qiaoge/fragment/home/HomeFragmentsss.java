@@ -599,8 +599,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         EventBus.getDefault().unregister(this);
     }
 
-
-    private int mMaxScrollSize;
     @Override
     public void initViews(View view) {
         binder = ButterKnife.bind(this, view);
@@ -608,6 +606,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         context = getActivity();
 
         token = UserInfoHelper.getUserId(mActivity);
+
         getProductsList(1,10,"commonBuy");
         requestOrderNumTwo();
         appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -1229,11 +1228,11 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                         if(turnModel.isSuccess()) {
                             int isShow = turnModel.getData();
                             //1显示 0不显示
-//                            if(isShow==1) {
+                            if(isShow==1) {
                                 getTurn();
-//                            }else {
+                            }else {
 
-//                            }
+                            }
                         }else {
                             AppHelper.showMsg(mActivity,turnModel.getMessage());
                         }
@@ -1300,12 +1299,12 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                         if(turnModel.isSuccess()) {
                             data2 = turnModel.getData();
                             List<String> list = new ArrayList<>();
-//                            for (int i = 0; i <data2.size() ; i++) {
-//                                list.add(data2.get(i).getPoolNo());
-//                            }
-                            for (int i = 0; i <6 ; i++) {
-                                list.add("0.01元");
+                            for (int i = 0; i <data2.size() ; i++) {
+                                list.add(data2.get(i).getPoolNo());
                             }
+//                            for (int i = 0; i <6 ; i++) {
+//                                list.add("0.01元");
+//                            }
                             turnTableDialog = new TurnTableDialog(mActivity,list);
                             turnTableDialog.show();
                         }else {
@@ -1549,6 +1548,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                             } else {
                                 banner.setVisibility(View.GONE);
                                 iv_empty.setVisibility(View.VISIBLE);
+
                             }
                             lav_activity_loading.hide();
                         }else {

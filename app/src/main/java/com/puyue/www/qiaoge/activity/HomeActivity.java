@@ -48,6 +48,7 @@ import com.puyue.www.qiaoge.event.LogoutEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.fragment.cart.CartFragment;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
+import com.puyue.www.qiaoge.fragment.home.HomeFragment;
 import com.puyue.www.qiaoge.fragment.home.HomeFragments;
 import com.puyue.www.qiaoge.fragment.home.HomeFragmentss;
 import com.puyue.www.qiaoge.fragment.home.HomeFragmentsss;
@@ -120,43 +121,34 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     public static final String KEY_Mine = "mine_fragment";
 
     @Override
+    public void onAttachFragment(Fragment fragment) {
+        //重新让新的Fragment指向了原本未被销毁的fragment，它就是onAttach方法对应的Fragment对象
+        if (mTabHome == null && fragment instanceof HomeFragmentsss)
+            mTabHome = fragment;
+        if (mTabMarket == null && fragment instanceof MarketsFragment)
+            mTabMarket = fragment;
+        if (mTabCart == null && fragment instanceof CartFragment)
+            mTabCart = fragment;
+        if (mTabMine == null && fragment instanceof MineFragment)
+            mTabMine = fragment;
+        super.onAttachFragment(fragment);
+    }
+
+
+
+
+
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+        //不保存之前的fragment的状态
+//        super.onSaveInstanceState(outState);
+//    }
+
+    @Override
     public boolean handleExtra(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            try {
-                mTabHome = (HomeFragmentsss)getSupportFragmentManager().getFragment(savedInstanceState,KEY_MSG_FRAGMENT);
-                mTabMarket = (MarketsFragment)getSupportFragmentManager().getFragment(savedInstanceState,KEY_CONTACTS_FRAGMENT);
-                mTabCart = (CartFragment)getSupportFragmentManager().getFragment(savedInstanceState,KEY_NEWS_FRAGMENT);
-                mTabMine = (MineFragment)getSupportFragmentManager().getFragment(savedInstanceState,KEY_Mine);
-            }catch (Exception e) {
-
-            }
-
-        }else {
-
-        }
-
         return false;
     }
 
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        if(mTabHome != null){
-            getSupportFragmentManager().putFragment(outState,KEY_MSG_FRAGMENT,mTabHome);
-        }
-        if(mTabMarket != null){
-            getSupportFragmentManager().putFragment(outState,KEY_CONTACTS_FRAGMENT,mTabMarket);
-        }
-        if(mTabCart != null){
-            getSupportFragmentManager().putFragment(outState,KEY_NEWS_FRAGMENT,mTabCart);
-        }
-        if(mTabMine != null){
-            getSupportFragmentManager().putFragment(outState,KEY_Mine,mTabMine);
-        }
-
-
-        super.onSaveInstanceState(outState);
-    }
 
 
     @Override

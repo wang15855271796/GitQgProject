@@ -1757,7 +1757,7 @@ public class HomeFragmentss extends BaseFragment implements View.OnClickListener
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void cartNum(UpDateNumEvent event) {
-        getCartNum();
+//        getCartNum();
     }
 
 

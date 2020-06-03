@@ -169,6 +169,13 @@ public class AppInterfaceAddress {
     public static final String Message_Read = "user/subMessageRead";
 
     /**
+     * 获取未读消息数量
+     */
+
+    public static final String Message_Unread = "user/getUnReadMessageNum";
+
+
+    /**
      * 子账户消息全部已读
      *
      */

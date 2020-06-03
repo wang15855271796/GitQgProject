@@ -24,7 +24,6 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.MessageDialog;
 import com.puyue.www.qiaoge.event.BackEvent;
-import com.puyue.www.qiaoge.event.LogoutEvent;
 import com.puyue.www.qiaoge.event.MessageEvent;
 import com.puyue.www.qiaoge.event.SubAccountListModel;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -86,8 +85,8 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
@@ -99,13 +98,6 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
         emptyView = View.inflate(mActivity, R.layout.layout_empty, null);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         subAccountAdapter = new SubAccountListAdapter(R.layout.item_sub_account_order,lists);
-        subAccountAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                getReaded(lists.get(position).getId());
-            }
-        });
-
         recyclerView.setAdapter(subAccountAdapter);
         subAccountAdapter.setEmptyView(emptyView);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -140,34 +132,6 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
         iv_back.setOnClickListener(this);
     }
 
-    /**
-     * 子账号消息 - 消息设为已读
-     */
-    private void getReaded(int id) {
-        SubAccountAddAPI.readed(mContext,id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<MessageModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(MessageModel messageModel) {
-                        if (messageModel.isSuccess()) {
-
-                        } else {
-                            AppHelper.showMsg(mContext, messageModel.getMessage());
-                        }
-                    }
-                });
-    }
 
 
     /**
@@ -192,7 +156,6 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
                     public void onNext(SubAccountListModel subAccountListModel) {
                         if (subAccountListModel.isSuccess()) {
                             if(subAccountListModel.getData()!=null&&subAccountListModel.getData().getList().size()>0) {
-                                lists.clear();
                                 subAccountListModels = subAccountListModel;
                                 List<SubAccountListModel.DataBean.ListBean> list = subAccountListModel.getData().getList();
                                 lists.addAll(list);
@@ -270,6 +233,6 @@ public class SubAccountListActivity extends BaseSwipeActivity implements View.On
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updates(BackEvent backEvent) {
         refreshLayout.autoRefresh();
-        Log.d("dddddd....","ssssss");
     }
+
 }

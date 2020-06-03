@@ -20,6 +20,7 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
 import com.puyue.www.qiaoge.activity.home.SpikeGoodsDetailsActivity;
+import com.puyue.www.qiaoge.adapter.home.SeckillGoodActivity;
 import com.puyue.www.qiaoge.adapter.market.MarketGoodBrandAdapter;
 import com.puyue.www.qiaoge.api.home.GetAllCommentListByPageAPI;
 import com.puyue.www.qiaoge.constant.AppConstant;
@@ -85,7 +86,12 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
                 if (item.businessType == 1) {
                     jumpDetail(orderId, item.productMainId, item.businessType,item);
                 }else {
-                    jumpDetails(orderId, item.productId, item.businessType,item);
+                    if(item.businessType==2) {
+                        jumpDetails(orderId, item.productId, item.businessType,item);
+                    }else {
+                        jumpDetailss(orderId, item.productId, item.businessType,item);
+                    }
+
                 }
             }
         });
@@ -155,6 +161,44 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
                         if(jumpModel.isSuccess()) {
                             if(jumpModel.getData()!=null) {
                                 if(jumpModel.getData().equals("-1")) {
+                                    Intent intent = new Intent(mContext, SeckillGoodActivity.class);
+                                    intent.putExtra(AppConstant.ACTIVEID,productId);
+                                    intent.putExtra("num",jumpModel.getData());
+                                    mContext.startActivity(intent);
+                                }else {
+                                    Intent intent = new Intent(mContext, SeckillGoodActivity.class);
+                                    intent.putExtra(AppConstant.ACTIVEID,productId);
+                                    intent.putExtra("num",jumpModel.getData());
+                                    intent.putExtra("city",jumpModel.getMessage());
+                                    mContext.startActivity(intent);
+                                }
+                            }else {
+                                AppHelper.showMsg(mContext,jumpModel.getMessage());
+                            }
+                        }
+                    }
+                });
+    }
+    private void jumpDetailss(String orderId, int productId, int businessType, GetOrderDetailModel.DataBean.ProductVOListBean item) {
+        GetAllCommentListByPageAPI.jumpDetail(mContext, orderId, productId, businessType)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<JumpModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(JumpModel jumpModel) {
+                        if(jumpModel.isSuccess()) {
+                            if(jumpModel.getData()!=null) {
+                                if(jumpModel.getData().equals("-1")) {
                                     Intent intent = new Intent(mContext, SpecialGoodDetailActivity.class);
                                     intent.putExtra(AppConstant.ACTIVEID,productId);
                                     intent.putExtra("num",jumpModel.getData());
@@ -173,7 +217,6 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
                     }
                 });
     }
-
     /**
      * 跳转详情
      */

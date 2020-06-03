@@ -31,10 +31,12 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.GoToMineEvent;
 import com.puyue.www.qiaoge.event.MessageEvent;
+import com.puyue.www.qiaoge.event.SubAccountListModel;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
+import com.puyue.www.qiaoge.model.mine.MessageModel;
 import com.puyue.www.qiaoge.model.mine.SubAccountModel;
 
 import org.greenrobot.eventbus.EventBus;
@@ -72,7 +74,6 @@ public class SubAccountActivity extends BaseSwipeActivity implements View.OnClic
     private CountDownTimer countDownTimer;
     ImageView iv_message;
     TextView tv_number;
-    String message;
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
 
@@ -110,6 +111,7 @@ public class SubAccountActivity extends BaseSwipeActivity implements View.OnClic
     @Override
     public void setViewData() {
         EventBus.getDefault().register(this);
+        getMessage();
         mPtr.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
@@ -140,14 +142,41 @@ public class SubAccountActivity extends BaseSwipeActivity implements View.OnClic
         mRvSubAccount.setAdapter(mAdapterSubAccount);
         requestSubAccountList();
 
-        message = getIntent().getStringExtra("message");
+    }
 
-        if(message.equals("0")) {
-            tv_number.setVisibility(View.GONE);
-        }else {
-            tv_number.setVisibility(View.VISIBLE);
-            tv_number.setText(message+"");
-        }
+    /**
+     * 获取未读消息数量
+     */
+    private void getMessage() {
+        SubAccountAddAPI.unRead(mContext)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<MessageModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(MessageModel messageModel) {
+                        if (messageModel.isSuccess()) {
+                            if(messageModel.getData()==null||messageModel.getData().equals("0")) {
+                                tv_number.setVisibility(View.GONE);
+                            }else {
+                                tv_number.setText(messageModel.getData());
+                                tv_number.setVisibility(View.VISIBLE);
+                            }
+
+                        } else {
+                            AppHelper.showMsg(mContext, messageModel.getMessage());
+                        }
+                    }
+                });
     }
 
     private void showEditSubAccountDialog(final int position, final String flag) {

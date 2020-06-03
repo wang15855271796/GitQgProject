@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -20,9 +21,12 @@ import com.puyue.www.qiaoge.api.mine.order.NewReturnOderAPI;
 import com.puyue.www.qiaoge.base.BaseActivity;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.model.mine.order.NewReturnOrderModel;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +102,17 @@ public class ReturnGoodDetailActivity extends BaseActivity {
         tv_amount_content = findViewById(R.id.tv_amount_content);
         tv_amount_spec = findViewById(R.id.tv_amount_spec);
 
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+            EventBus.getDefault().post(new BackEvent());
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
 
     }
 

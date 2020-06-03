@@ -97,14 +97,16 @@ public class ShouyeDialog extends Dialog implements View.OnClickListener{
         this.item = item;
         init();
         exchangeList(productId);
-        getCartNum();
+//        getCartNum();
     }
 
 
     @Override
     public void show() {
         super.show();
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
 

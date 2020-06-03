@@ -100,7 +100,7 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
 
         init();
 
-        getCartNum();
+//        getCartNum();
     }
 
 
@@ -201,7 +201,7 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getTotal(UpDateNumEvent upDateNumEvent) {
-        getCartNum();
+//        getCartNum();
     }
 
     /**
@@ -246,7 +246,10 @@ public class ChoosesDialog extends Dialog implements View.OnClickListener{
     @Override
     public void show() {
         super.show();
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+
     }
 
     @Override

@@ -44,6 +44,7 @@ public class SubAccountListAdapter extends BaseQuickAdapter<SubAccountListModel.
         helper.setText(R.id.tv_name,item.getName());
         helper.setText(R.id.tv_phone,item.getPhone());
         helper.setText(R.id.tv_read,item.getState());
+        Log.d("wdwdwdwdwdwd....",item.getState());
         LinearLayout ll_root = helper.getView(R.id.ll_root);
         deliverType = UserInfoHelper.getDeliverType(mContext);
         ll_root.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +56,7 @@ public class SubAccountListAdapter extends BaseQuickAdapter<SubAccountListModel.
         });
     }
 
-    private void getReaded(int id,SubAccountListModel.DataBean.ListBean item) {
+    private void getReaded(int id, SubAccountListModel.DataBean.ListBean item) {
         SubAccountAddAPI.readed(mContext,id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -77,7 +78,7 @@ public class SubAccountListAdapter extends BaseQuickAdapter<SubAccountListModel.
                                 if (item.getOrderState() == 11){
                                     Intent intent1 =new Intent(mContext,ReturnGoodDetailActivity.class);
                                     intent1.putExtra("orderType" ,0);
-                                    intent1.putExtra(AppConstant.RETURNPRODUCTMAINID, item.getId());
+                                    intent1.putExtra(AppConstant.RETURNPRODUCTMAINID, id);
                                     mContext.startActivity(intent1);
 
                                 }else {
@@ -92,7 +93,7 @@ public class SubAccountListAdapter extends BaseQuickAdapter<SubAccountListModel.
                                 if (item.getOrderState() == 11){
                                     Intent intent3 =new Intent(mContext,ReturnGoodDetailActivity.class);
                                     intent3.putExtra("orderType" ,1);
-                                    intent3.putExtra(AppConstant.RETURNPRODUCTMAINID, item.getId());
+                                    intent3.putExtra(AppConstant.RETURNPRODUCTMAINID, id);
                                     mContext.startActivity(intent3);
 
                                 }else {
@@ -108,7 +109,7 @@ public class SubAccountListAdapter extends BaseQuickAdapter<SubAccountListModel.
                         }
                     }
                 });
+
+
     }
-
-
 }

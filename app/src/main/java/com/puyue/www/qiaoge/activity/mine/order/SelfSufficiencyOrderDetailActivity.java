@@ -67,6 +67,7 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.AddressEvent;
+import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.MapHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -867,6 +868,7 @@ public class SelfSufficiencyOrderDetailActivity extends BaseSwipeActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             backEvent();
+            EventBus.getDefault().post(new BackEvent());
             return true;
         }
         return super.onKeyDown(keyCode, event);

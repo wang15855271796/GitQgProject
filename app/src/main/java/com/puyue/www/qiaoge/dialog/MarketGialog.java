@@ -243,7 +243,10 @@ public class MarketGialog extends Dialog implements View.OnClickListener{
     @Override
     public void show() {
         super.show();
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+
     }
 
     @Override

@@ -126,6 +126,21 @@ public class SubAccountAddAPI {
     }
 
     /**
+     *获取未读消息数量
+     */
+
+    private interface MessageUnReadService {
+
+        @POST(AppInterfaceAddress.Message_Unread)
+        Observable<MessageModel> setParams();
+    }
+
+    public static Observable<MessageModel> unRead(Context context) {
+        MessageUnReadService service = RestHelper.getBaseRetrofit(context).create(MessageUnReadService.class);
+        return service.setParams();
+    }
+
+    /**
      * 子账号消息 - 消息设为已读
      */
     private interface MessageReadedService {

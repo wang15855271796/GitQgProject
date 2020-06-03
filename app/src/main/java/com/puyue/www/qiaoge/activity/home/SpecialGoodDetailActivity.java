@@ -714,8 +714,6 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                                 }
                             });
 
-
-
                         } else {
                             AppHelper.showMsg(mContext, model.getMessage());
                         }

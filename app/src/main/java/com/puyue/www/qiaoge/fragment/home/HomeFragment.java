@@ -1238,7 +1238,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void cartNum(UpDateNumEvent event) {
-        getCartNum();
+//        getCartNum();
     }
     protected void initStatusBarWhiteColor() {
         //设置状态栏颜色为白色，状态栏图标为黑色

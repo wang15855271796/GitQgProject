@@ -361,12 +361,12 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getCartNum(UpDateNumEvent4 event) {
+    public void getCartNums(UpDateNumEvent4 event) {
         getCartNum();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getCartNum(NumEvent event) {
+    public void getCartNumss(NumEvent event) {
         getCartNum();
     }
     /**

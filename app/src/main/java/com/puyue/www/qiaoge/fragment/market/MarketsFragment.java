@@ -1546,6 +1546,7 @@ public class MarketsFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void UpDateNumEvent(UpDateNumEvent event) {
         getCartNum();
+        Log.d("sdsdssdwdwddddd.....","ssdsdsds");
     }
 
     /**
