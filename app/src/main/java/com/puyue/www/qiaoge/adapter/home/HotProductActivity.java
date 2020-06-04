@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,6 +29,7 @@ import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent6;
+import com.puyue.www.qiaoge.event.UpNumEvent;
 import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.fragment.home.MyGrideLayoutManager;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -155,7 +157,6 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
                 if (productNormalModel.getData()!=null) {
                     if(productNormalModel.getData().isHasNextPage()) {
                         pageNum++;
-//                        dialog.show();
                         getProductsList(pageNum, 10,"hot");
                         refreshLayout.finishLoadMore();      //加载完成
                     }else {
@@ -181,12 +182,11 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
                 .subscribe(new Subscriber<ProductNormalModel>() {
                     @Override
                     public void onCompleted() {
-//                        ptrClassicFrameLayout.refreshComplete();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-//                        ptrClassicFrameLayout.refreshComplete();
                     }
 
                     @Override
@@ -287,7 +287,15 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
         switch (v.getId()) {
             case R.id.iv_back:
                 finish();
+                EventBus.getDefault().post(new UpNumEvent());
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        EventBus.getDefault().post(new UpNumEvent());
+        finish();
+        return super.onKeyDown(keyCode, event);
     }
 }

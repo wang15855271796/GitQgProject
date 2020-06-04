@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,6 +29,7 @@ import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent5;
+import com.puyue.www.qiaoge.event.UpNumEvent;
 import com.puyue.www.qiaoge.fragment.home.MyGrideLayoutManager;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
@@ -282,8 +284,16 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
+                EventBus.getDefault().post(new UpNumEvent());
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        EventBus.getDefault().post(new UpNumEvent());
+        finish();
+        return super.onKeyDown(keyCode, event);
     }
 }

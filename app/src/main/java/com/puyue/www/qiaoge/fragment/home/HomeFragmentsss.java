@@ -105,6 +105,7 @@ import com.puyue.www.qiaoge.event.UpDateNumEvent6;
 import com.puyue.www.qiaoge.event.UpDateNumEvent7;
 import com.puyue.www.qiaoge.event.UpDateNumEvent8;
 import com.puyue.www.qiaoge.event.UpDateNumEvent9;
+import com.puyue.www.qiaoge.event.UpNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -1146,22 +1147,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         refreshLayout.autoRefresh();
         lav_activity_loading.show();
         couponListAdapter = new CouponListAdapter(R.layout.item_home_coupon_list,lists);
-//        NewFragment newFragment = new NewFragment();
-//        MustFragment mustFragment = new MustFragment();
-//        InfoFragment infoFragment = new InfoFragment();
-//        CommonFragment commonFragment = new CommonFragment();
-//        fragmentList=new ArrayList<>();
-//        fragmentList.add(newFragment);
-//        fragmentList.add(mustFragment);
-//        fragmentList.add(infoFragment);
-//        fragmentList.add(commonFragment);
-//
-//        //ViewPager设置适配器
-//        viewPager.setAdapter(new myViewPagerAdapter(getChildFragmentManager(),fragmentList));
-//        //ViewPager显示第一个Fragment
-//        viewPager.setCurrentItem(0);
-//        //ViewPager页面切换监听
-//        viewPager.setOnPageChangeListener(new myOnPageChangeListener());
 
         isTurn();
         getCouponList();
@@ -1910,7 +1895,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void cartNum(UpDateNumEvent event) {
+    public void cartNum(UpNumEvent event) {
         getCartNum();
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1927,18 +1912,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void cartNum3(UpDateNumEvent3 event) {
-        getCartNum();
-    }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void cartNum4(UpDateNumEvent4 event) {
-        getCartNum();
-    }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void cartNum5(UpDateNumEvent5 event) {
-        getCartNum();
-    }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void cartNum6(UpDateNumEvent6 event) {
         getCartNum();
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
