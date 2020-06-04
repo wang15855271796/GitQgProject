@@ -2,7 +2,6 @@ package com.puyue.www.qiaoge.fragment.home;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -13,15 +12,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
-import com.puyue.www.qiaoge.adapter.home.CommonDialog;
-import com.puyue.www.qiaoge.adapter.home.CommonsAdapter;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.MustDialog;
-import com.puyue.www.qiaoge.dialog.ShouyeDialog;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.home.MustModel;
-import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 
 import java.util.List;
 
@@ -33,13 +28,13 @@ public class MustAdapter extends BaseQuickAdapter<MustModel.DataBean, BaseViewHo
     private ImageView iv_pic;
     List<MustModel.DataBean> activesBean;
     private ImageView iv_add;
-    CommonsAdapter.Onclick onclick;
+    Onclick onclick;
     private MustDialog mustDialog;
     private RelativeLayout rl_group;
     String flag;
     private TextView tv_sale;
     ImageView iv_flag;
-    public MustAdapter(String flag, int layoutResId, @Nullable List<MustModel.DataBean> activeList, CommonsAdapter.Onclick onclick) {
+    public MustAdapter(String flag, int layoutResId, @Nullable List<MustModel.DataBean> activeList, Onclick onclick) {
         super(layoutResId, activeList);
         this.activesBean = activeList;
         this.onclick = onclick;

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,6 @@ import rx.schedulers.Schedulers;
 public class NewDialog extends Dialog implements View.OnClickListener{
     Context context;
     public View view;
-    String productName;
     public Unbinder binder;
     @BindView(R.id.iv_cart)
     ImageView iv_cart;

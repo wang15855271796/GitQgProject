@@ -1,20 +1,15 @@
 package com.puyue.www.qiaoge.activity.mine;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.activity.home.HomeGoodsListActivity;
 import com.puyue.www.qiaoge.adapter.mine.MessageCenterAdapter;
 import com.puyue.www.qiaoge.api.mine.message.MessageDetailAPI;
@@ -22,7 +17,6 @@ import com.puyue.www.qiaoge.api.mine.message.MessageListAPI;
 import com.puyue.www.qiaoge.api.mine.message.UpdateMessageStateAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
-import com.puyue.www.qiaoge.fragment.home.HomeFragment;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.mine.MessageDetailModel;

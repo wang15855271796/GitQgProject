@@ -154,9 +154,7 @@ public class ItemChooseAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
 
                                             if (addMountReduceModel.isSuccess()) {
                                                 tv_num.setText(et_num.getText().toString());
-                                                int num = Integer.parseInt(et_num.getText().toString());
                                                 alertDialog.dismiss();
-                                                addCart(num,item.getPriceId(),productId,businessType,tv_num,item.getCartNum());
                                                 EventBus.getDefault().post(new UpDateNumEvent10());
 
                                             } else {

@@ -14,12 +14,9 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.CommonProductDialog;
-import com.puyue.www.qiaoge.dialog.ShouyeDialog;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
-import com.puyue.www.qiaoge.model.home.GetCommonProductModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
-import com.puyue.www.qiaoge.view.GlideModel;
 
 import java.util.List;
 

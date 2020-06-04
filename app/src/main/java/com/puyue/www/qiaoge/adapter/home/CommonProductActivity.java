@@ -164,110 +164,6 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
     }
 
     /**
-     * 选择店铺类型
-     * @param authorizationCode
-     */
-    private void showSelectType(String authorizationCode) {
-        GetRegisterShopAPI.requestData(mActivity, authorizationCode)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GetRegisterShopModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i("ccca", e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(GetRegisterShopModel getRegisterShopModel) {
-                        UserInfoHelper.saveIsRegister(mActivity, "is_register_type");
-                        if (getRegisterShopModel.isSuccess()) {
-                            isFirst = true;
-                            List<GetRegisterShopModel.DataBean> mList = new ArrayList<>();
-                            mList.addAll(getRegisterShopModel.getData());
-                            mTypedialog.show();
-                            Window window = mTypedialog.getWindow();
-                            window.setContentView(R.layout.select_type);
-                            WindowManager.LayoutParams attributes = window.getAttributes();
-                            attributes.width = LinearLayout.LayoutParams.MATCH_PARENT;
-                            attributes.height = LinearLayout.LayoutParams.MATCH_PARENT;
-                            window.setAttributes(attributes);
-                            RecyclerView rl_type = window.findViewById(R.id.rl_type);
-                            TextView tv_ok = window.findViewById(R.id.tv_ok);
-                            rl_type.setLayoutManager(new GridLayoutManager(mActivity, 3));
-                            RegisterShopAdapterTwo mRegisterAdapterType = new RegisterShopAdapterTwo(mActivity, mList);
-                            rl_type.setAdapter(mRegisterAdapterType);
-                            mRegisterAdapterType.setOnItemClickListener(new OnItemClickListener() {
-                                @Override
-                                public void onItemClick(View view, int position) {
-                                    isSelected = position;
-                                    mRegisterAdapterType.selectPosition(position);
-                                    shopTypeId = mList.get(isSelected).getId();
-                                    isChecked = true;
-                                }
-
-                                @Override
-                                public void onItemLongClick(View view, int position) {
-
-                                }
-                            });
-
-                            tv_ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (isChecked) {
-                                        mTypedialog.dismiss();
-                                        updateUserInvitation(authorizationCode, shopTypeId);
-                                    } else {
-                                        AppHelper.showMsg(mActivity, "请选择店铺类型");
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
-    }
-
-    /**
-     * 填写邀请码
-     * @param authorizationCode
-     * @param shopTypeId
-     */
-    private void updateUserInvitation(String authorizationCode, int shopTypeId) {
-        UpdateUserInvitationAPI.requestData(mActivity, authorizationCode,shopTypeId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<UpdateUserInvitationModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(UpdateUserInvitationModel updateUserInvitationModel) {
-                        if (updateUserInvitationModel.isSuccess()) {
-                            UserInfoHelper.saveUserType(mActivity, AppConstant.USER_TYPE_WHOLESALE);
-                            UserInfoHelper.saveUserId(mActivity, updateUserInvitationModel.getData());
-                            pageNum = 1;
-                            getProductsList(pageNum,10,"commonBuy");
-                            UserInfoHelper.saveUserHomeRefresh(mContext, "home_has_refresh");
-                        } else {
-                            AppHelper.showMsg(mActivity, updateUserInvitationModel.getMessage());
-                        }
-                    }
-                });
-    }
-
-    /**
      * 常用清单(王涛)
      * @param pageNum
      * @param pageSize
@@ -314,7 +210,6 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
     @Override
     public void setViewData() {
         refreshLayout.autoRefresh();
-        getCustomerPhone();
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
         mTypedialog.setCancelable(false);
         getCartNum();
@@ -368,25 +263,6 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getCartNumss(NumEvent event) {
         getCartNum();
-    }
-    /**
-     * 获取客服电话
-     */
-    private void getCustomerPhone() {
-        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
-            @Override
-            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
-                if (getCustomerPhoneModel.isSuccess()) {
-                    cell = getCustomerPhoneModel.getData();
-                } else {
-                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
-                }
-            }
-
-            @Override
-            public void onFaild(String errorMsg) {
-            }
-        });
     }
 
     @Override

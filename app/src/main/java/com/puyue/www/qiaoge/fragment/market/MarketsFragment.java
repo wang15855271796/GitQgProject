@@ -1544,39 +1544,6 @@ public class MarketsFragment extends BaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void UpDateNumEvent(UpDateNumEvent event) {
-        getCartNum();
-        Log.d("sdsdssdwdwddddd.....","ssdsdsds");
-    }
-
-    /**
-     * 获取购物车角标数据
-     */
-    private void getCartNum() {
-        PublicRequestHelper.getCartNum(mActivity, new OnHttpCallBack<GetCartNumModel>() {
-            @Override
-            public void onSuccessful(GetCartNumModel getCartNumModel) {
-                if (getCartNumModel.isSuccess()) {
-                    if (Integer.valueOf(getCartNumModel.getData().getNum()) > 0) {
-                        ((TextView) getActivity().findViewById(R.id.tv_home_car_number)).setText(getCartNumModel.getData().getNum());
-                        getActivity().findViewById(R.id.tv_home_car_number).setVisibility(View.VISIBLE);
-
-                    } else {
-                        getActivity().findViewById(R.id.tv_home_car_number).setVisibility(View.GONE);
-                    }
-                } else {
-                    AppHelper.showMsg(mActivity, getCartNumModel.getMessage());
-                }
-            }
-
-            @Override
-            public void onFaild(String errorMsg) {
-
-            }
-        });
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginEvent(LoginEvent event) {
         //刷新UI
         requestGoodsList();

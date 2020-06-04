@@ -181,9 +181,11 @@ public class ChooseDialog extends Dialog implements View.OnClickListener {
                 exchangeList(productId);
             }
         });
+        if(model!=null) {
+            searchSpecAdapter = new SearchSpecAdapter(context,model.getData().getProdSpecs());
+            fl_container.setAdapter(searchSpecAdapter);
+        }
 
-        searchSpecAdapter = new SearchSpecAdapter(context,model.getData().getProdSpecs());
-        fl_container.setAdapter(searchSpecAdapter);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.puyue.www.qiaoge.fragment.home;
 
 import android.content.Intent;
-import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,13 +12,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
-import com.puyue.www.qiaoge.adapter.home.CommonsAdapter;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.NewDialog;
-import com.puyue.www.qiaoge.dialog.ShouyeDialog;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
-import com.puyue.www.qiaoge.model.home.HomeNewRecommendModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 
 import java.util.List;

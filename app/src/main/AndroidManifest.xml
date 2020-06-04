@@ -171,9 +171,6 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.home.TeamDetailActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.home.NewProductActivity"
-            android:screenOrientation="portrait"
-            />
         <activity android:name=".activity.home.SelectionGoodActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".adapter.home.HotProductActivity"

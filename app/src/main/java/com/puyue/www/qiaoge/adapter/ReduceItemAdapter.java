@@ -150,11 +150,8 @@ public class ReduceItemAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
 
                                             if (addMountReduceModel.isSuccess()) {
                                                 tv_num.setText(et_num.getText().toString());
-                                                int num = Integer.parseInt(et_num.getText().toString());
                                                 alertDialog.dismiss();
-                                                addCart(num,item.getPriceId(),productId,businessType,tv_num,item.getCartNum());
                                                 EventBus.getDefault().post(new UpDateNumEvent5());
-
                                             } else {
                                                 ToastUtil.showSuccessMsg(mContext, addMountReduceModel.getMessage());
                                                 tv_num.setText(addMountReduceModel.data.toString());

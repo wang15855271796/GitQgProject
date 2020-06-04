@@ -12,10 +12,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
-import com.puyue.www.qiaoge.adapter.home.CommonsAdapter;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.CommonListDialog;
-import com.puyue.www.qiaoge.dialog.ShouyeDialog;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
@@ -98,6 +96,7 @@ public class CommonListAdapter extends BaseQuickAdapter<ProductNormalModel.DataB
                 if(onclick!=null) {
                     onclick.addDialog();
                 }
+
                 if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
                     commonListDialog = new CommonListDialog(mContext,item.getProductId(),item);
                     commonListDialog.show();

@@ -2,7 +2,6 @@ package com.puyue.www.qiaoge.activity;
 
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -30,7 +28,6 @@ import com.puyue.www.qiaoge.CustomViewPager;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.TabEntity;
 import com.puyue.www.qiaoge.activity.mine.login.LogoutsEvent;
-import com.puyue.www.qiaoge.adapter.mine.ViewPagerAdapter;
 import com.puyue.www.qiaoge.adapter.mine.ViewPagerAdapters;
 import com.puyue.www.qiaoge.api.PostLoadAmountAPI;
 import com.puyue.www.qiaoge.api.SendJsPushAPI;
@@ -45,7 +42,6 @@ import com.puyue.www.qiaoge.event.LogoutEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.fragment.cart.CartFragment;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
-import com.puyue.www.qiaoge.fragment.home.HomeFragment;
 import com.puyue.www.qiaoge.fragment.home.HomeFragmentsss;
 import com.puyue.www.qiaoge.fragment.market.MarketsFragment;
 import com.puyue.www.qiaoge.fragment.mine.MineFragment;
@@ -62,13 +58,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.jpush.android.api.JPushInterface;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;

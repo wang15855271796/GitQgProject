@@ -1,40 +1,22 @@
 package com.puyue.www.qiaoge.fragment.home;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.activity.mine.login.RegisterActivity;
 import com.puyue.www.qiaoge.activity.mine.login.RegisterMessageActivity;
-import com.puyue.www.qiaoge.adapter.home.CommonsAdapter;
-import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
-import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
 import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
-import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
-import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.CouponDialog;
 import com.puyue.www.qiaoge.event.BackEvent;
-import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.helper.AppHelper;
-import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
-import com.puyue.www.qiaoge.listener.OnItemClickListener;
-import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
-import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.MustModel;
-import com.puyue.www.qiaoge.model.home.ProductNormalModel;
-import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
 import com.puyue.www.qiaoge.utils.LoginUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -93,7 +75,7 @@ public class MustFragment extends BaseFragment {
     public void findViewById(View view) {
         bind = ButterKnife.bind(this, view);
         emptyView = View.inflate(mActivity, R.layout.layout_empty, null);
-        mustAdapter = new MustAdapter(flag,R.layout.item_team_list, list, new CommonsAdapter.Onclick() {
+        mustAdapter = new MustAdapter(flag,R.layout.item_team_list, list, new MustAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {

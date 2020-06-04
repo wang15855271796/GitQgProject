@@ -19,24 +19,11 @@ import com.puyue.www.qiaoge.activity.home.CouponDetailActivity;
 import com.puyue.www.qiaoge.activity.home.HomeGoodsListActivity;
 import com.puyue.www.qiaoge.activity.home.TeamDetailActivity;
 import com.puyue.www.qiaoge.activity.mine.coupons.MyCouponsActivity;
-import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
-import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
-import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletPointActivity;
-import com.puyue.www.qiaoge.adapter.home.CommonProductActivity;
-import com.puyue.www.qiaoge.adapter.home.HotProductActivity;
 import com.puyue.www.qiaoge.adapter.home.ReductionProductActivity;
 import com.puyue.www.qiaoge.api.home.PopupViewHomeAPI;
-import com.puyue.www.qiaoge.api.home.QueryHomePropupAPI;
-import com.puyue.www.qiaoge.constant.AppConstant;
-import com.puyue.www.qiaoge.fragment.home.HomeFragment;
 import com.puyue.www.qiaoge.helper.AppHelper;
-import com.puyue.www.qiaoge.helper.GlideRoundTransform;
-import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.home.PopupViewHomeModel;
-import com.puyue.www.qiaoge.model.home.QueryHomePropupModel;
-
-import java.util.Calendar;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;

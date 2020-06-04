@@ -94,6 +94,17 @@ import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.PrivacyModel;
 import com.puyue.www.qiaoge.event.TurnModel;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
+import com.puyue.www.qiaoge.event.UpDateNumEvent0;
+import com.puyue.www.qiaoge.event.UpDateNumEvent1;
+import com.puyue.www.qiaoge.event.UpDateNumEvent10;
+import com.puyue.www.qiaoge.event.UpDateNumEvent2;
+import com.puyue.www.qiaoge.event.UpDateNumEvent3;
+import com.puyue.www.qiaoge.event.UpDateNumEvent4;
+import com.puyue.www.qiaoge.event.UpDateNumEvent5;
+import com.puyue.www.qiaoge.event.UpDateNumEvent6;
+import com.puyue.www.qiaoge.event.UpDateNumEvent7;
+import com.puyue.www.qiaoge.event.UpDateNumEvent8;
+import com.puyue.www.qiaoge.event.UpDateNumEvent9;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
@@ -369,7 +380,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
     private void updateOrderNum() {
         //消息中心
-        Log.d("wwwwwwwwww.....","swdwdssss");
         if (mModelMyOrderNum.getData().getNotice() > 0) {
             tv_num.setVisibility(View.VISIBLE);
             tv_num.setText("  " + mModelMyOrderNum.getData().getNotice() + "  ");
@@ -1901,6 +1911,50 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void cartNum(UpDateNumEvent event) {
+        getCartNum();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cartNum0(UpDateNumEvent0 event) {
+        getCartNum();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cartNum1(UpDateNumEvent1 event) {
+        getCartNum();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cartNum2(UpDateNumEvent2 event) {
+        getCartNum();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cartNum3(UpDateNumEvent3 event) {
+        getCartNum();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cartNum4(UpDateNumEvent4 event) {
+        getCartNum();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cartNum5(UpDateNumEvent5 event) {
+        getCartNum();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cartNum6(UpDateNumEvent6 event) {
+        getCartNum();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cartNum7(UpDateNumEvent7 event) {
+        getCartNum();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cartNum8(UpDateNumEvent8 event) {
+        getCartNum();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cartNum9(UpDateNumEvent9 event) {
+        getCartNum();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void cartNum10(UpDateNumEvent10 event) {
         getCartNum();
     }
 

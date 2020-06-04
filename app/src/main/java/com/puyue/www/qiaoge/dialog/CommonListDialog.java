@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,6 +137,7 @@ public class CommonListDialog extends Dialog implements View.OnClickListener{
                 pos = position;
                 chooseSpecAdapter.selectPosition(position);
                 int productId = exchangeProductModel1s.getData().getProdSpecs().get(position).getProductId();
+                Log.d("wwssssssssss.....",productId+"");
                 exchangeList(productId);
             }
         });

@@ -3,11 +3,7 @@ package com.puyue.www.qiaoge.adapter.home;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -19,20 +15,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
-import com.puyue.www.qiaoge.adapter.cart.SearchInnerAdapter;
-import com.puyue.www.qiaoge.adapter.market.ChoosesDialog;
-import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.constant.AppConstant;
-import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
-import com.puyue.www.qiaoge.view.ExpandLayout;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
 import java.util.List;
-
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * If I become novel would you like ?
@@ -43,9 +30,7 @@ import rx.schedulers.Schedulers;
 public class SearchResultAdapter extends BaseQuickAdapter<SearchResultsModel.DataBean.RecommendProdBean,BaseViewHolder>{
 
     private ImageView iv_head;
-    private FlowLayout fl_container;
     private TextView tv_stock;
-    private SearchInnerAdapter searchInnerAdapter;
     private LinearLayout ll_group;
     private ImageView iv_type;
     Onclick onclick;

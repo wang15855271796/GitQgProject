@@ -18,20 +18,15 @@ import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.adapter.ClassItemAdpater;
-import com.puyue.www.qiaoge.adapter.cart.ItemChooseAdapter;
-import com.puyue.www.qiaoge.adapter.home.SearchInnersAdapter;
-import com.puyue.www.qiaoge.adapter.market.SpecAdapter;
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
 
-import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent9;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
-import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
 

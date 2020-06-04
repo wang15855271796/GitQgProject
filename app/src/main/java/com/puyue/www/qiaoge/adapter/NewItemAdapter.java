@@ -3,6 +3,7 @@ package com.puyue.www.qiaoge.adapter;
 import android.app.AlertDialog;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -147,14 +148,10 @@ public class NewItemAdapter extends BaseQuickAdapter<ExchangeProductModel.DataBe
 
                                         @Override
                                         public void onNext(AddCartGoodModel addMountReduceModel) {
-
                                             if (addMountReduceModel.isSuccess()) {
                                                 tv_num.setText(et_num.getText().toString());
-                                                int num = Integer.parseInt(et_num.getText().toString());
                                                 alertDialog.dismiss();
-                                                addCart(num,item.getPriceId(),productId,businessType,tv_num,item.getCartNum());
                                                 EventBus.getDefault().post(new UpDateNumEvent0());
-
                                             } else {
                                                 ToastUtil.showSuccessMsg(mContext, addMountReduceModel.getMessage());
                                                 tv_num.setText(addMountReduceModel.data.toString());
@@ -203,7 +200,6 @@ public class NewItemAdapter extends BaseQuickAdapter<ExchangeProductModel.DataBe
                             tv_num.setText(num+"");
                             ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
                             EventBus.getDefault().post(new UpDateNumEvent0());
-
                         } else {
                             ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
                         }

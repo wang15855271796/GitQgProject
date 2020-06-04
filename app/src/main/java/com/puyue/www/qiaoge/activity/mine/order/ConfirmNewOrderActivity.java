@@ -1,13 +1,11 @@
 package com.puyue.www.qiaoge.activity.mine.order;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,13 +13,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
-import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
-import com.puyue.www.qiaoge.fragment.home.HomeFragment;
 import com.puyue.www.qiaoge.fragment.order.ConfirmOrderDeliverFragment;
 import com.puyue.www.qiaoge.fragment.order.ConfirmOrderSufficiencyFragment;
-import com.puyue.www.qiaoge.helper.StringHelper;
-import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 
 /**

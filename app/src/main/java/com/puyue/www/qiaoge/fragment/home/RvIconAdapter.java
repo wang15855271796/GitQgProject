@@ -15,7 +15,6 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.Test1Activity;
 import com.puyue.www.qiaoge.activity.TestActivity;
 import com.puyue.www.qiaoge.activity.home.HomeGoodsListActivity;
-import com.puyue.www.qiaoge.activity.home.NewProductActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.adapter.home.CommonProductActivity;
 import com.puyue.www.qiaoge.adapter.home.HotProductActivity;
@@ -68,12 +67,7 @@ public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.Icon
         helper.getView(R.id.ll_icon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //跳新品
-                if(AppConstant.NEWTYPE.equals(item.getRemark())) {
-                    Intent newIntent = new Intent(mContext,NewProductActivity.class);
-                    mContext.startActivity(newIntent);
-
-                }else if(AppConstant.HOTTYPE.equals(item.getConfigCode())) {
+                if(AppConstant.HOTTYPE.equals(item.getConfigCode())) {
                     //热销
                     Intent newIntent = new Intent(mContext,HotProductActivity.class);
                     mContext.startActivity(newIntent);

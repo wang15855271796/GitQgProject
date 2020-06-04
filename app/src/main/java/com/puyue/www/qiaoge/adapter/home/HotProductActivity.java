@@ -81,12 +81,7 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
     @BindView(R.id.iv_carts)
     ImageView iv_carts;
     ProductNormalModel productNormalModel;
-    private String cell; // 客服电话
     private AlertDialog mTypedialog;
-    private boolean isFirst = true;
-    int isSelected;
-    boolean isChecked = false;
-    int shopTypeId;
     String flag = "hot";
     //热销集合
     private List<ProductNormalModel.DataBean.ListBean> list = new ArrayList<>();
