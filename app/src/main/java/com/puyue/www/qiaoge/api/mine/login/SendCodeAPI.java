@@ -41,4 +41,18 @@ public class SendCodeAPI {
         return sendCodeObservable;
     }
 
+    /**
+     * 最终注销
+     */
+    public interface SendCancleServices {
+        @FormUrlEncoded
+        @POST(AppInterfaceAddress.User_cancle)
+        Observable<BaseModel> setParams(@Field("phone") String phone, @Field("verifyCode") String verifyCode,@Field("cancelReason") String cancelReason,@Field("pwd") String pwd);
+    }
+
+    public static Observable<BaseModel> requestsCode(Context context, String phone, String verifyCode,String cancelReason,String pwd) {
+        Observable<BaseModel> sendCodeObservable = RestHelper.getBaseRetrofit(context).create(SendCancleServices.class).setParams(phone, verifyCode,cancelReason,pwd);
+        return sendCodeObservable;
+    }
+
 }

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="#F4F4F4"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/white">
+
+    </LinearLayout>
+
+    <com.puyue.www.qiaoge.view.CompatToolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/app_border_bottom_bg">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:src="@mipmap/ic_back_arrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="13dp"
+            android:layout_marginTop="13dp"
+            android:text="账户注销"
+            android:textColor="#232131"
+            android:textSize="18dp" />
+    </com.puyue.www.qiaoge.view.CompatToolbar>
+
+    <ImageView
+        android:src="@mipmap/icon_tanhao"
+        android:layout_marginTop="@dimen/size_42dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/size_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="已绑定手机号"
+            android:textColor="#000000"
+            android:id="@+id/tv"
+            android:textStyle="bold"
+            android:textSize="@dimen/size_21dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textStyle="bold"
+            android:layout_toRightOf="@+id/tv"
+            android:id="@+id/tv_phone"
+            tools:text="18751104845"
+            android:textColor="#000000"
+            android:textSize="@dimen/size_21dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:text="您可使用绑定手机号进行账户注销"
+        android:textColor="#666666"
+        android:layout_marginTop="@dimen/size_17dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/size_13dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/sp_16"
+        android:layout_marginRight="@dimen/size_13dp"
+        android:layout_marginLeft="@dimen/size_13dp"
+        android:background="@drawable/shape_white1"
+        android:layout_width="match_parent"
+        android:paddingBottom="@dimen/size_13dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="·注销后你将永远无法使用此账号登录翘歌！"
+            android:textColor="#666666"
+            android:layout_marginTop="@dimen/size_17dp"
+            android:layout_marginLeft="@dimen/size_13dp"
+            android:textSize="@dimen/size_13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="·注销后该手机号将不可在平台二次注册，请谨慎处理！"
+            android:textColor="#666666"
+            android:layout_marginTop="@dimen/size_17dp"
+            android:layout_marginLeft="@dimen/size_13dp"
+            android:textSize="@dimen/size_13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="·注销后你的身份、账户、会员及权益信息将被清空!"
+            android:textColor="#666666"
+            android:layout_marginTop="@dimen/size_17dp"
+            android:layout_marginLeft="@dimen/size_13dp"
+            android:textSize="@dimen/size_13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_below="@+id/ll"
+        android:background="@drawable/shape_white_home"
+        android:id="@+id/tv_limit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_45dp"
+        android:layout_marginTop="@dimen/size_25dp"
+        android:text="注销"
+        android:layout_marginRight="@dimen/size_13dp"
+        android:layout_marginLeft="@dimen/size_13dp"
+        android:gravity="center"
+        android:textColor="#FF5800"
+        android:textSize="16sp"
+        />
+
+</LinearLayout>

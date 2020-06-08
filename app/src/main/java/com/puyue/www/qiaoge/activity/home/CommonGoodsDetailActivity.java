@@ -32,6 +32,8 @@ import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CartActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
+import com.puyue.www.qiaoge.activity.mine.login.RegisterActivity;
+import com.puyue.www.qiaoge.activity.mine.login.RegisterMessageActivity;
 import com.puyue.www.qiaoge.adapter.cart.ChooseSpecAdapter;
 import com.puyue.www.qiaoge.adapter.cart.ImageViewAdapter;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
@@ -51,6 +53,7 @@ import com.puyue.www.qiaoge.banner.listener.OnBannerListener;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.ChooseDialog;
+import com.puyue.www.qiaoge.dialog.CouponDialog;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
@@ -75,6 +78,7 @@ import com.puyue.www.qiaoge.model.home.HasCollectModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
 import com.puyue.www.qiaoge.model.market.GoodsDetailModel;
 import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
+import com.puyue.www.qiaoge.utils.LoginUtil;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.FlowLayout;
 import com.puyue.www.qiaoge.view.StarBarView;
@@ -154,11 +158,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     private String mShareUrl;
     private int typeIntent;
     private LinearLayout linearLayoutOnclick;
-    private List<GetRegisterShopModel.DataBean> list = new ArrayList<>();
-    int isSelected;
-    int shopTypeId;
-    boolean isChecked = false;
-    RegisterShopAdapterTwo mRegisterAdapter;
     ChooseDialog chooseDialog;
     @BindView(R.id.tv_sale)
     TextView tv_sale;
@@ -170,7 +169,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     RecyclerView recyclerViewImage;
     @BindView(R.id.iv_flag)
     ImageView iv_flag;
-
+    CouponDialog couponDialog;
     TextView tv_city;
     @BindView(R.id.tv_change)
     TextView tv_change;
@@ -220,7 +219,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
 
     @Override
     public void setContentView() {
-        settranslucentStatus();
         setContentView(R.layout.activity_common_details);
     }
 
@@ -357,8 +355,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                                     @Override
                                     public void onClick(View view) {
                                         if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode())) {
-                                            AppHelper.hideAuthorizationDialog();
-                                            showDialog();
                                         } else {
                                             AppHelper.showMsg(mContext, "请输入完整授权码");
                                         }
@@ -377,8 +373,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                         }
                     }
                 } else {
-                    AppHelper.showMsg(mContext, "请先登录");
-                    startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
+                    initDialog();
                 }
             } else if (view == mTvAddCar) {
                 if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
@@ -386,12 +381,8 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                         chooseDialog = new ChooseDialog(mContext,productId1,models);
                     }
                 }else {
-                    AppHelper.showMsg(mContext, "请先登录");
-                    startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
+                    initDialog();
                 }
-
-
-                chooseDialog.show();
 
             } else if (view == mLlCar) {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
@@ -401,7 +392,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                                 @Override
                                 public void onClick(View view) {
                                     if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode()) && AppHelper.getAuthorizationCode().length() == 6) {
-                                        AppHelper.hideAuthorizationDialog();
                                     } else {
                                         AppHelper.showMsg(mContext, "请输入完整授权码");
                                     }
@@ -415,8 +405,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                         startActivityForResult(new Intent(mContext, CartActivity.class), 21);
                     }
                 } else {
-                    AppHelper.showMsg(mContext, "请先登录");
-                    startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
+                    initDialog();
                 }
             } else if (view == mLlCustomer) {
                 if (StringHelper.notEmptyAndNull(cell)) {
@@ -481,17 +470,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                                     if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
                                         if(UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_RETAIL)) {
                                             if (StringHelper.notEmptyAndNull(cell)) {
-                                                AppHelper.showAuthorizationDialog(mContext, cell, new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        if (StringHelper.notEmptyAndNull(AppHelper.getAuthorizationCode()) && AppHelper.getAuthorizationCode().length() == 6) {
-                                                            AppHelper.hideAuthorizationDialog();
-//
-                                                        } else {
-                                                            AppHelper.showMsg(mContext, "请输入完整授权码");
-                                                        }
-                                                    }
-                                                });
+
                                             }
                                         }else {
                                             chooseSpecAdapter.selectPosition(position);
@@ -503,8 +482,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                                             chooseDialog.show();
                                         }
                                     }else {
-                                        AppHelper.showMsg(mContext, "请先登录");
-                                        startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
+                                        initDialog();
                                     }
 
                                 }
@@ -541,6 +519,24 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                         }
                     }
                 });
+    }
+
+    private void initDialog() {
+        couponDialog = new CouponDialog(mActivity) {
+            @Override
+            public void Login() {
+                startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                dismiss();
+            }
+
+            @Override
+            public void Register() {
+                startActivity(RegisterActivity.getIntent(mActivity, RegisterMessageActivity.class));
+                LoginUtil.initRegister(mActivity);
+                dismiss();
+            }
+        };
+        couponDialog.show();
     }
 
 
@@ -698,7 +694,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                             if(recommendModel.getData()!=null) {
                                 searchList.addAll(recommendModel.getData());
                                 adapterRecommend.notifyDataSetChanged();
-                                Log.d("weorishssss....",searchList.size()+"");
                             }
 
                         } else {
@@ -756,7 +751,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
 
                     @Override
                     public void onNext(ClickCollectionModel clickCollectionModel) {
-                        Log.d("swwwwwweeewwww...",clickCollectionModel.data+"");
                         if (clickCollectionModel.success) {
                             if (!isCollection) {
                                 isCollection = true;
@@ -769,7 +763,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                             }
                         } else {
                             AppHelper.showMsg(mContext, clickCollectionModel.message);
-                            Log.d("afddfdfdfefffff....",clickCollectionModel.message);
                         }
                     }
                 });
@@ -956,50 +949,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         });
     }
 
-    /**
-     * 提交验证码
-     */
-    private void updateUserInvitation(String code, int typeId) {
-        UpdateUserInvitationAPI.requestData(mContext, code, typeId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<UpdateUserInvitationModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(UpdateUserInvitationModel updateUserInvitationModel) {
-                        if (updateUserInvitationModel.isSuccess()) {
-                            UserInfoHelper.saveUserType(mContext, AppConstant.USER_TYPE_WHOLESALE);
-                            getProductDetail(productId,num);
-                        } else {
-                            ToastUtil.showSuccessMsg(mContext, updateUserInvitationModel.getMessage());
-                        }
-                    }
-                });
-    }
-
-    protected void settranslucentStatus() {
-        // 5.0以上系统状态栏透明
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-    }
-
 
     // 分享
     private void showInviteDialog() {
@@ -1118,7 +1067,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
 
                     @Override
                     public void onNext(GetShareInfoModle getShareInfoModle) {
-                        Log.d("swwddsdvvvvvv...",getShareInfoModle.getMessage());
                         if (getShareInfoModle.isSuccess()) {
                             mShareTitle = getShareInfoModle.getData().getTitle();
                             mShareDesc = getShareInfoModle.getData().getDesc();
@@ -1160,91 +1108,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
 
         }
     };
-
-    private void showDialog() {
-
-        GetRegisterShopAPI.requestData(mActivity, AppHelper.getAuthorizationCode())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GetRegisterShopModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i("ccca", "onError: " + "网络错误");
-                    }
-
-                    @Override
-                    public void onNext(GetRegisterShopModel getRegisterShopModel) {
-
-                        if (getRegisterShopModel.isSuccess()) {
-                            list.clear();
-                            list.addAll(getRegisterShopModel.getData());
-                            //    mRegisterAdapter.notifyDataSetChanged();
-                            AlertDialog alertDialog = new AlertDialog.Builder(mActivity).create();
-                            alertDialog.show();
-                            Window window = alertDialog.getWindow();
-                            window.setContentView(R.layout.dialog_auth_shop_type);
-                            window.setGravity(Gravity.CENTER);
-                            RecyclerView rl_shop_type = window.findViewById(R.id.rl_shop_type);
-                            TextView tv_dialog_cancel = window.findViewById(R.id.tv_dialog_cancel);
-                            TextView tv_dialog_sure = window.findViewById(R.id.tv_dialog_sure);
-                            LinearLayoutManager linearLayoutManager = new GridLayoutManager(mActivity, 3);
-
-
-                            rl_shop_type.setLayoutManager(linearLayoutManager);
-
-
-                            mRegisterAdapter = new RegisterShopAdapterTwo(mActivity, list);
-                            rl_shop_type.setAdapter(mRegisterAdapter);
-
-
-                            mRegisterAdapter.setOnItemClickListener(new OnItemClickListener() {
-                                @Override
-                                public void onItemClick(View view, int position) {
-                                    isSelected = position;
-                                    Log.i("ddda", "onItemClick: " + isSelected);
-                                    mRegisterAdapter.selectPosition(position);
-
-                                    shopTypeId = list.get(isSelected).getId();
-                                    isChecked = true;
-                                }
-
-                                @Override
-                                public void onItemLongClick(View view, int position) {
-
-                                }
-                            });
-
-                            tv_dialog_sure.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (isChecked) {
-                                        alertDialog.dismiss();
-                                        updateUserInvitation(AppHelper.getAuthorizationCode(), shopTypeId);
-                                    } else {
-                                        ToastUtil.showSuccessMsg(mActivity, "请选择店铺类型");
-                                    }
-                                }
-                            });
-                            tv_dialog_cancel.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    alertDialog.dismiss();
-                                    AppHelper.setAuthorizationCode("");
-                                }
-                            });
-                        } else {
-                            AppHelper.setAuthorizationCode("");
-                            ToastUtil.showSuccessMsg(mActivity, getRegisterShopModel.getMessage());
-                        }
-                    }
-                });
-
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void messageEventBuss(ReduceNumEvent event) {

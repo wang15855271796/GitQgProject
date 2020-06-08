@@ -3,7 +3,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
     <!-- 填充颜色 -->
     <solid
-        android:color="@color/color_F9F9F9">
+        android:color="#F9F9FB">
     </solid>
     <!-- 边框的颜色和宽度 -->
     <stroke

@@ -20,6 +20,7 @@ import com.puyue.www.qiaoge.api.home.IndexInfoModel;
 import com.puyue.www.qiaoge.helper.StringHelper;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -72,7 +73,7 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                         if (data.get(0).getProdPics().size()>0) {
                             Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
                             if(countDownTimer1==null) {
-                                countDownTimer1 = new CountDownTimer(5000,1000) {
+                                countDownTimer1 = new CountDownTimer(8000,1000) {
                                     int i = 0;
                                     @Override
                                     public void onTick(long millisUntilFinished) {
@@ -101,7 +102,7 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                         if (data.get(1).getProdPics().size()>0) {
                             Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
                             if(countDownTimer2==null) {
-                                countDownTimer2 = new CountDownTimer(5000,1000) {
+                                countDownTimer2 = new CountDownTimer(8000,1000) {
                                     int i = 0;
                                     @Override
                                     public void onTick(long millisUntilFinished) {
@@ -131,7 +132,7 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                         if (data.get(2).getProdPics().size()>0) {
                             Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
                             if(countDownTimer3==null) {
-                                countDownTimer3 = new CountDownTimer(5000,1000) {
+                                countDownTimer3 = new CountDownTimer(8000,1000) {
                                     int i = 0;
                                     @Override
                                     public void onTick(long millisUntilFinished) {
@@ -162,7 +163,7 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                         if (data.get(3).getProdPics().size()>0) {
                             Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
                             if(countDownTimer4==null) {
-                                countDownTimer4 = new CountDownTimer(5000,1000) {
+                                countDownTimer4 = new CountDownTimer(8000,1000) {
                                     int i = 0;
                                     @Override
                                     public void onTick(long millisUntilFinished) {
@@ -190,7 +191,7 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                         if (data.get(4).getProdPics().size()>0) {
                             Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
                             if(countDownTimer5==null) {
-                                countDownTimer5 = new CountDownTimer(5000,1000) {
+                                countDownTimer5 = new CountDownTimer(8000,1000) {
                                     int i = 0;
                                     @Override
                                     public void onTick(long millisUntilFinished) {
@@ -219,7 +220,7 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                         if (data.get(5).getProdPics().size()>0) {
                             Glide.with(mContext).load(item.getProdPics().get(0)).into(iv_pic);
                             if(countDownTimer6==null) {
-                                countDownTimer6 = new CountDownTimer(5000,1000) {
+                                countDownTimer6 = new CountDownTimer(8000,1000) {
                                     int i = 0;
                                     @Override
                                     public void onTick(long millisUntilFinished) {
@@ -248,6 +249,7 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
              }
                 break;
             case IndexInfoModel.DataBean.ClassifyListBean.LONG:
+                Random random=new Random();
                 RoundImageView iv_type1 = helper.getView(R.id.iv_type1);
                 RoundImageView iv_type2 = helper.getView(R.id.iv_type2);
                 RoundImageView iv_type3 = helper.getView(R.id.iv_type3);
@@ -263,11 +265,14 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                     }else if(data.get(data.size()-1).getProdPics().size()==3) {
                         Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(0)).into(iv_type1);
                         Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(1)).into(iv_type2);
-                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(2)).into(iv_type3);
+                        Glide.with(mContext).load(  data.get(data.size()-1).getProdPics().get(2)).into(iv_type3);
                     }else if(data.get(data.size()-1).getProdPics().size()>3) {
-                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(0)).into(iv_type1);
-                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(1)).into(iv_type2);
-                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(2)).into(iv_type3);
+                        int randoms = random.nextInt(data.get(data.size()-1).getProdPics().size());
+                        int randomss = random.nextInt(data.get(data.size()-1).getProdPics().size());
+                        int randomsss = random.nextInt(data.get(data.size()-1).getProdPics().size());
+                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(randoms)).into(iv_type1);
+                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(randomss)).into(iv_type2);
+                        Glide.with(mContext).load(data.get(data.size()-1).getProdPics().get(randomsss)).into(iv_type3);
                     }
                 }
 

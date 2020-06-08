@@ -16,6 +16,17 @@ public class AppInterfaceAddress {
     //http://192.168.101.41:8088/
 
     /**
+     * 获取注销原因
+     */
+
+    public static final String Cancle_Reason = "app/selectConfigByKey";
+    /**
+     *用户注销--校验用户是否可以注销
+     *
+     */
+    public static final String Is_Cancle = "user/isCancel";
+
+    /**
      * 是否能跳转产品详情
      */
     public static final String JumpDetail = "commonOrder/orderProdJump";
@@ -80,6 +91,10 @@ public class AppInterfaceAddress {
 
     public static final String SEARCHEQUIPMENT = " equipment/searchEquipment?";
     public static final String CHECKMESSAGE = "auth/checkRegisterCode";
+    /**
+     *用户注销
+     */
+    public static final String User_cancle = "user/cancelUser";
     /**
      * 首页基础信息
      */

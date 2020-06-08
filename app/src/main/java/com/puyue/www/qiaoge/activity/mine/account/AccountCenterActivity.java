@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.cart.CompetActivity;
 import com.puyue.www.qiaoge.api.mine.AccountCenterAPI;
 import com.puyue.www.qiaoge.api.mine.LogoutAPI;
 import com.puyue.www.qiaoge.base.BaseModel;
@@ -31,7 +32,7 @@ import rx.schedulers.Schedulers;
  */
 
 public class AccountCenterActivity extends BaseSwipeActivity {
-
+    RelativeLayout rl_limit;
     private ImageView mIvBack;
     private RelativeLayout mRlPhone;
     private TextView mTvPhone;
@@ -73,6 +74,7 @@ public class AccountCenterActivity extends BaseSwipeActivity {
         mTvAuthorizationDate = (TextView) findViewById(R.id.tv_account_authorization_code_date);
         mRlLogout = (RelativeLayout) findViewById(R.id.rl_account_logout);//退出登录
         rl_account_secret = (RelativeLayout) findViewById(R.id.rl_account_secret);//隐私政策
+        rl_limit =  (RelativeLayout) findViewById(R.id.rl_limit);
     }
 
     @Override
@@ -84,7 +86,7 @@ public class AccountCenterActivity extends BaseSwipeActivity {
     public void setClickEvent() {
         String url= "https://shaokao.qoger.com/apph5/html/yszc.html";
         mIvBack.setOnClickListener(noDoubleClickListener);
-        // mRlPhone.setOnClickListener(noDoubleClickListener);
+        rl_limit.setOnClickListener(noDoubleClickListener);
         mRlLoginPassword.setOnClickListener(noDoubleClickListener);
         mRlPayPassword.setOnClickListener(noDoubleClickListener);
         mRlAuthorization.setOnClickListener(noDoubleClickListener);
@@ -104,11 +106,11 @@ public class AccountCenterActivity extends BaseSwipeActivity {
     private NoDoubleClickListener noDoubleClickListener = new NoDoubleClickListener() {
         @Override
         public void onNoDoubleClick(View view) {
+
             if (view == mIvBack) {
                 finish();
             } else if (view == mRlPhone) {
                 startActivity(EditAccountInputPhoneActivity.getIntent(mContext, EditAccountInputPhoneActivity.class, "0", "account"));
-                Log.d("pingfneqiuse...........","sswswsws");
             } else if (view == mRlLoginPassword) {
                 startActivity(EditPasswordInputCodeActivity.getIntent(mContext, EditPasswordInputCodeActivity.class, "0", mUserCell, "login","",0,0));
             } else if (view == mRlPayPassword) {
@@ -130,6 +132,11 @@ public class AccountCenterActivity extends BaseSwipeActivity {
                         requestLogout();
                     }
                 });
+            }else if(view == rl_limit) {
+                Intent intent = new Intent(mActivity,CompetActivity.class);
+                intent.putExtra("phone",mModelAccountCenter.data.phone);
+
+                startActivity(intent);
             }
         }
     };

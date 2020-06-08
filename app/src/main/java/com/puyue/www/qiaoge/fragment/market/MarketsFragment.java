@@ -72,6 +72,7 @@ import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.banner.Banner;
 import com.puyue.www.qiaoge.banner.BannerConfig;
 import com.puyue.www.qiaoge.banner.GlideImageLoader;
+import com.puyue.www.qiaoge.banner.GlideImageLoades;
 import com.puyue.www.qiaoge.banner.Transformer;
 import com.puyue.www.qiaoge.banner.listener.OnBannerListener;
 import com.puyue.www.qiaoge.base.BaseFragment;
@@ -265,11 +266,9 @@ public class MarketsFragment extends BaseFragment {
                 pageNum = 1;
                 if(mModelMarketGoods.getData().getBrandProd().isHasNextPage()) {
                     hasPage = true;
-                    Log.d("woshihdiffdsnfl,,,,",hasPage+"");
                     getDataThree();
                 }else {
                     hasPage = false;
-                    Log.d("woshihdiffdsnfl,,,,,,,,",hasPage+"");
                     getDataThree();
                 }
             }
@@ -1405,7 +1404,6 @@ public class MarketsFragment extends BaseFragment {
      * 请求banner接口 common/product/getTopBanner
      */
     private void requestBanner() {
-
         IndexHomeAPI.getBanner(mActivity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -1422,7 +1420,6 @@ public class MarketsFragment extends BaseFragment {
 
                     @Override
                     public void onNext(BannerModel marketBannerModel) {
-                        Log.d("feeeeeeeeeee....",marketBannerModel.getData()+"");
                         if (marketBannerModel.isSuccess()) {
                             mListBanner.clear();
                             mListBanner.addAll(marketBannerModel.getData());
@@ -1434,7 +1431,7 @@ public class MarketsFragment extends BaseFragment {
                             if (marketBannerModel.getData().size() > 0) {
                                 banner.setVisibility(View.VISIBLE);
                                 banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
-                                banner.setImageLoader(new GlideImageLoader());
+                                banner.setImageLoader(new GlideImageLoades());
                                 bannerList.clear();
                                 bannerList.addAll(list);
                                 banner.setImages(bannerList);
@@ -1442,10 +1439,7 @@ public class MarketsFragment extends BaseFragment {
                                 banner.isAutoPlay(true);
                                 banner.setDelayTime(3000);
                                 banner.setIndicatorGravity(BannerConfig.RIGHT);
-
                                 ClickBanner(marketBannerModel.getData());
-
-
                                 banner.start();
                             } else {
                                 banner.setVisibility(View.GONE);

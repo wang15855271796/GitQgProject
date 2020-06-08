@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="#F4F4F4"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/white">
+
+    </LinearLayout>
+
+    <com.puyue.www.qiaoge.view.CompatToolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/app_border_bottom_bg">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:src="@mipmap/ic_back_arrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="13dp"
+            android:layout_marginTop="13dp"
+            android:text="账户注销"
+            android:textColor="#232131"
+            android:textSize="18dp" />
+    </com.puyue.www.qiaoge.view.CompatToolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <LinearLayout
+
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:src="@mipmap/icon_dunpai"
+            android:layout_marginTop="@dimen/size_42dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv0"
+            android:text="您的账户暂时无法注销账号！，请谨慎处理！"
+            android:textColor="#FF5800"
+            android:layout_marginTop="@dimen/size_17dp"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/size_13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/size_25dp"
+            android:layout_marginRight="@dimen/size_13dp"
+            android:layout_marginLeft="@dimen/size_13dp"
+            android:background="@drawable/shape_white1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="待处理"
+                android:layout_marginTop="@dimen/size_17dp"
+                android:textColor="#333333"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/sp_16"
+                android:textSize="@dimen/sp_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_50dp">
+
+                <TextView
+                    android:text="7天内无订单"
+                    android:textColor="#333333"
+                    android:textSize="@dimen/size_13dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/sp_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/iv1"
+                    android:layout_marginRight="@dimen/sp_16"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+            <View
+                android:background="#C8C7CC"
+                android:layout_marginLeft="@dimen/sp_16"
+                android:layout_marginRight="@dimen/sp_16"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_50dp">
+
+                <TextView
+                    android:text="无未完成订单"
+                    android:textColor="#333333"
+                    android:textSize="@dimen/size_13dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/sp_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/iv2"
+                    android:layout_marginRight="@dimen/sp_16"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+            <View
+                android:background="#C8C7CC"
+                android:layout_marginLeft="@dimen/sp_16"
+                android:layout_marginRight="@dimen/sp_16"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_50dp">
+
+                <TextView
+                    android:text="无子账号存在"
+                    android:textColor="#333333"
+                    android:textSize="@dimen/size_13dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/sp_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/iv3"
+                    android:layout_marginRight="@dimen/sp_16"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+            <View
+                android:background="#C8C7CC"
+                android:layout_marginLeft="@dimen/sp_16"
+                android:layout_marginRight="@dimen/sp_16"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_50dp">
+
+                <TextView
+                    android:text="账户无余额"
+                    android:textColor="#333333"
+                    android:textSize="@dimen/size_13dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/sp_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/iv4"
+                    android:layout_marginRight="@dimen/sp_16"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/sp_16"
+            android:layout_marginTop="@dimen/size_25dp"
+            android:layout_marginRight="@dimen/size_13dp"
+            android:layout_marginLeft="@dimen/size_13dp"
+            android:background="@drawable/shape_white1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="其他福利："
+                android:layout_marginTop="@dimen/size_17dp"
+                android:textColor="#333333"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/sp_16"
+                android:textSize="@dimen/sp_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_50dp">
+
+                <TextView
+                    android:text="未使用优惠券："
+                    android:textColor="#333333"
+                    android:textSize="@dimen/size_13dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/sp_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tv1"
+                    tools:text="3"
+                    android:layout_marginRight="@dimen/sp_16"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+            <View
+                android:background="#C8C7CC"
+                android:layout_marginLeft="@dimen/sp_16"
+                android:layout_marginRight="@dimen/sp_16"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_50dp">
+
+                <TextView
+                    android:text="未使用积分："
+                    android:textColor="#333333"
+                    android:textSize="@dimen/size_13dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/sp_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tv2"
+                    android:text="3"
+                    android:layout_marginRight="@dimen/sp_16"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_below="@+id/edit"
+            android:background="@drawable/shape_white_home"
+            android:id="@+id/tv_commit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_45dp"
+            android:text="返回处理"
+            android:layout_marginBottom="@dimen/size_25dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="@dimen/size_15dp"
+            android:layout_marginLeft="@dimen/size_15dp"
+            android:gravity="center"
+            android:textColor="#FF5800"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:visibility="gone"
+            android:layout_below="@+id/edit"
+            android:background="@drawable/shape_greens"
+            android:id="@+id/tv_cancle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_45dp"
+            android:text="去注销"
+            android:layout_marginBottom="@dimen/size_25dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="@dimen/size_15dp"
+            android:layout_marginLeft="@dimen/size_15dp"
+            android:gravity="center"
+            android:textColor="#1AFA29"
+            android:textSize="16sp"
+            />
+
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

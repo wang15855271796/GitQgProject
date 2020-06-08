@@ -22,7 +22,6 @@ import pub.devrel.easypermissions.EasyPermissions;
  * Created by GuoGai on 2016/6/29.
  */
 public abstract class BaseActivity extends AppCompatActivity  {
-    //implements EasyPermissions.PermissionCallbacks
     private long mExitTime = 0;
     private boolean mIsExit = false;
     protected Context mContext;

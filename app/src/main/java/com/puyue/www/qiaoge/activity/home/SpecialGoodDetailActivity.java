@@ -236,7 +236,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
 
     @Override
     public void setContentView() {
-        settranslucentStatus();
+//        settranslucentStatus();
         setContentView(R.layout.activity_special_details);
     }
 

@@ -86,9 +86,10 @@ public class TurnTableDialog extends Dialog {
             @Override
             public void rotateEnd(int position, String des) {
                 isRunning = false;
+                dismiss();
                 TurnResultDialog turnResultDialog = new TurnResultDialog(mContext);
                 turnResultDialog.show();
-                dismiss();
+
             }
 
             @Override

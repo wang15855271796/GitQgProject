@@ -55,6 +55,7 @@ import com.puyue.www.qiaoge.model.home.GetAddressModel;
 import com.puyue.www.qiaoge.model.home.QueryHomePropupModel;
 import com.puyue.www.qiaoge.popupwindow.HomePopuWindow;
 import com.puyue.www.qiaoge.utils.LoginUtil;
+import com.puyue.www.qiaoge.view.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -106,10 +107,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
     private String type;
     private String district;
     CouponDialog couponDialog;
-    public static final String KEY_MSG_FRAGMENT = "msg_fragment";
-    public static final String KEY_CONTACTS_FRAGMENT = "contacts_fragment";
-    public static final String KEY_NEWS_FRAGMENT = "news_fragment";
-    public static final String KEY_Mine = "mine_fragment";
 
     @Override
     public void onAttachFragment(Fragment fragment) {
@@ -124,16 +121,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
             mTabMine = fragment;
         super.onAttachFragment(fragment);
     }
-
-
-
-
-
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-        //不保存之前的fragment的状态
-//        super.onSaveInstanceState(outState);
-//    }
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
@@ -201,7 +188,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
 
     @Override
     public void setViewData() {
-
+        StatusBarUtil.setStatusBarLightMode(mActivity);
         EventBus.getDefault().register(this);
         if (getIntent() != null) {
             type = getIntent().getStringExtra("go_home");
@@ -384,7 +371,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
 
             @Override
             public void Register() {
-//                startActivity(RegisterActivity.getIntent(mActivity, LoginActivity.class));
                 LoginUtil.initRegister(getContext());
                 dismiss();
             }
@@ -426,7 +412,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                 if (mTabHome == null || isGet) {
                     mTabHome = new HomeFragmentsss();
                     mFragmentTransaction.add(R.id.layout_home_container, mTabHome);
-
                     isGet = false;
                 } else {
                     mFragmentTransaction.show(mTabHome);
@@ -437,6 +422,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                 mTvHome.setTextColor(getResources().getColor(R.color.app_tab_selected));
                 getCartPoductNum();
                 break;
+
             case TAB_MARKET:
                 if (mTabMarket == null) {
                     mTabMarket = new MarketsFragment();
@@ -447,14 +433,12 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
 
                 mIvMarket.setImageResource(R.mipmap.ic_tab_goods_enable);
                 mTvMarket.setTextColor(getResources().getColor(R.color.app_tab_selected));
-
                 getCartPoductNum();
                 break;
             case TAB_CART:
 
                 if (mTabCart == null) {
                     mTabCart = new CartFragment();
-
                     mFragmentTransaction.add(R.id.layout_home_container, mTabCart);
                 } else {
                     mFragmentTransaction.show(mTabCart);
@@ -725,12 +709,6 @@ public class MyLocationListener extends BDAbstractLocationListener {
         //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
         //以下只列举部分获取地址相关的结果信息
         //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
-
-        String country = location.getCountry();    //获取国家
-        String province = location.getProvince();    //获取省份
-//         String city = location.getCity();    //获取城市
-        String street = location.getStreet();    //获取街道信息
-        String streetNumber = location.getStreetNumber();
         //获取区县
         district = location.getDistrict();
         city = location.getCity();

@@ -198,6 +198,31 @@
 
 
             </RelativeLayout>
+
+            <!--账户权限-->
+            <RelativeLayout
+                android:id="@+id/rl_limit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/app_color_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:text="账户权限"
+                    android:textColor="@color/app_top_bar_text"
+                    android:textSize="15dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@mipmap/ic_mine_arrow" />
+            </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/rl_account_logout"
                 android:layout_width="match_parent"

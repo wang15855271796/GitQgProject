@@ -75,7 +75,6 @@ public class EditAccountInputPhoneActivity extends BaseSwipeActivity {
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_edit_pay_password_input_phone);
-
     }
 
     @Override

@@ -176,7 +176,12 @@ public class VerticalBannerView extends LinearLayout implements BaseBannerAdapte
                 mSecondView.setTranslationY(0);
                 View removedView = getChildAt(0);
                 mPosition++;
-                mAdapter.setItem(removedView,mAdapter.getItem(mPosition%mAdapter.getCount()));
+                try {
+                    mAdapter.setItem(removedView,mAdapter.getItem(mPosition%mAdapter.getCount()));
+                }catch (Exception e) {
+
+                }
+
                 removeView(removedView);
                 addView(removedView,1);
             }

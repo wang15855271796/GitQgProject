@@ -270,6 +270,34 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.cart.ConfirmOrderActivity"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".activity.cart.CompetActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.cart.AnnulActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.cart.ReasonActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity android:name=".activity.cart.DealActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity android:name=".activity.cart.DealsActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity android:name=".activity.cart.SuccessActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.cart.ErrorActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.cart.CancleResultActivity"
+            android:screenOrientation="portrait"
+            />
         <activity android:name=".activity.mine.MessageDetailActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.cart.PayResultActivity"

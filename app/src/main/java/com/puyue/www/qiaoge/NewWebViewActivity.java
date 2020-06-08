@@ -157,7 +157,6 @@ public class NewWebViewActivity extends BaseSwipeActivity {
         mUrl = getIntent().getStringExtra("URL");
         type = getIntent().getIntExtra("TYPE", 0);
         name = getIntent().getStringExtra("name");
-        Log.d("wdwdwwdddddd...",name);
         if (name.equals("consult") || name.equals("协议")) {
             toolbar_h5.setVisibility(View.GONE);
             //调整距离
