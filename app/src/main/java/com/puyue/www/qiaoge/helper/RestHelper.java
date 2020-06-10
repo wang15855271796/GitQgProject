@@ -130,7 +130,6 @@ public class RestHelper {
 
                 Request commonRequest = originalRequest.newBuilder().url(commonUrl).build();
                 Log.d("----->", commonRequest + AppConstant.TOKEN);
-
                 return chain.proceed(commonRequest);
             }
         };

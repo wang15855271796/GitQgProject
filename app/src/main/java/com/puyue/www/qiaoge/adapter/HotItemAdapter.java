@@ -3,6 +3,7 @@ package com.puyue.www.qiaoge.adapter;
 import android.app.AlertDialog;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -160,7 +161,6 @@ public class HotItemAdapter extends BaseQuickAdapter<ExchangeProductModel.DataBe
                                         }
                                     });
 
-
                         } else {
                             ToastUtil.showSuccessMsg(mContext, "请输入数量");
                         }
@@ -200,7 +200,7 @@ public class HotItemAdapter extends BaseQuickAdapter<ExchangeProductModel.DataBe
                             tv_num.setText(num+"");
                             ToastUtil.showSuccessMsg(mContext,"添加购物车成功");
                             EventBus.getDefault().post(new UpDateNumEvent6());
-
+                            Log.d("wdddd.........","fffddddddd");
                         } else {
                             ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
                         }
@@ -228,6 +228,7 @@ public class HotItemAdapter extends BaseQuickAdapter<ExchangeProductModel.DataBe
                         if (addMountReduceModel.isSuccess()) {
                             tv_num.setText(num+"");
                             EventBus.getDefault().post(new UpDateNumEvent6());
+                            Log.d("wdddd.........","fffddddddd");
                         } else {
                             ToastUtil.showSuccessMsg(mContext,addMountReduceModel.getMessage());
                         }

@@ -31,6 +31,7 @@ import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
@@ -168,16 +169,23 @@ public class HotDialog extends Dialog implements View.OnClickListener{
 
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
-                        exchangeProductModel1s = exchangeProductModel;
-                        tv_name.setText(exchangeProductModel.getData().getProductName());
-                        tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
-                        tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
-                        tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
-                        tv_stock.setText(exchangeProductModel.getData().getInventory());
-                        Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
-                        HotItemAdapter hotItemAdapter = new HotItemAdapter(1, productId, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(hotItemAdapter);
+                        if(exchangeProductModel.isSuccess()) {
+                            if(exchangeProductModel.getData()!=null) {
+                                exchangeProductModel1s = exchangeProductModel;
+                                tv_name.setText(exchangeProductModel.getData().getProductName());
+                                tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
+                                tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
+                                tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
+                                tv_stock.setText(exchangeProductModel.getData().getInventory());
+                                Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
+                                HotItemAdapter hotItemAdapter = new HotItemAdapter(1, productId, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
+                                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                                recyclerView.setAdapter(hotItemAdapter);
+                            }
+                        }else {
+                            ToastUtil.showErroMsg(context,exchangeProductModel.getMessage());
+                        }
+
                     }
                 });
     }
@@ -207,6 +215,7 @@ public class HotDialog extends Dialog implements View.OnClickListener{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getTotal(UpDateNumEvent6 upDateNumEvent) {
+        Log.d("sdwddddd.....","sdddddddddd");
         getCartNum();
     }
     /**

@@ -260,6 +260,13 @@ public class NewWebViewActivity extends BaseSwipeActivity {
                 return true;
             }
 
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+                mTvTitle.setText(title);
+            }
+
+
             // 4.1+
             public void openFileChooser(ValueCallback<Uri> uploadFile, String acceptType, String capture) {
 

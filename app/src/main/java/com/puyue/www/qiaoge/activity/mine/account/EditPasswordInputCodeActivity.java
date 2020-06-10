@@ -30,6 +30,7 @@ import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.mine.login.ChangeLoginPhoneModel;
 import com.puyue.www.qiaoge.model.mine.login.CheckPasswordCodeModel;
+import com.puyue.www.qiaoge.utils.EnCodeUtil;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -192,10 +193,17 @@ public class EditPasswordInputCodeActivity extends BaseSwipeActivity {
     }
 
     private void requestSendCode() {
+        String publicKeyStr = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDTykrDv1TEKVjDeE29kVLo5M7mctlE65WlHSMN8RVL1iA9jXsF9SMNH1AErs2lqxpv18fd3TOAw0pBaG+cXOxApKdvRDKgxyuHnONOBzxr6EyWOQlRZt94auL1ESVbLdvYa7+cISkVe+MphfQh7uI/64tGQ34aRNmvFKv9PEeBTQIDAQAB";
         if (!NetWorkHelper.isNetworkAvailable(mContext)) {
             AppHelper.showMsg(mContext, "网络不给力!");
         } else {
-            SendCodeAPI.requestSendCode(mContext, mTel, mCode)
+            String encrypt = null;
+            try {
+                encrypt = EnCodeUtil.encryptByPublicKey(mTel,publicKeyStr);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            SendCodeAPI.requestSendCode(mContext, encrypt, mCode)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<BaseModel>() {

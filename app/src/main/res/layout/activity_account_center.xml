@@ -132,7 +132,7 @@
                 android:id="@+id/rl_account_authorization"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/app_color_white">
+                android:background="@drawable/app_border_bottom_bg">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -175,7 +175,7 @@
                 android:id="@+id/rl_account_secret"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/app_color_white">
+                android:background="@drawable/app_border_bottom_bg">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -194,9 +194,6 @@
                     android:layout_marginRight="20dp"
                     android:src="@mipmap/ic_mine_arrow" />
 
-
-
-
             </RelativeLayout>
 
             <!--账户权限-->
@@ -204,7 +201,7 @@
                 android:id="@+id/rl_limit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/app_color_white">
+                android:background="@drawable/app_border_bottom_bg">
 
                 <TextView
                     android:layout_width="wrap_content"

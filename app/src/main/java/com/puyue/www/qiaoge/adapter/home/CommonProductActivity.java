@@ -115,7 +115,6 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
                 }else {
                    initDialog();
                 }
-
             }
         });
         refreshLayout.setEnableLoadMore(false);

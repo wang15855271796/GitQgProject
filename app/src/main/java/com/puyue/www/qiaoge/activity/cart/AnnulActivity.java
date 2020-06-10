@@ -52,6 +52,7 @@ public class AnnulActivity extends BaseSwipeActivity {
             @Override
             public void onClick(View v) {
                 Intent intent =new Intent(mActivity,ReasonActivity.class);
+                intent.putExtra("phone",phone);
                 startActivity(intent);
             }
         });

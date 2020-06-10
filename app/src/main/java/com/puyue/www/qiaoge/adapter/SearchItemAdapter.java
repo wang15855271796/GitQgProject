@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -40,6 +41,8 @@ public class SearchItemAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
     private TextView tv_price;
     int businessType;
     List<ExchangeProductModel.DataBean.ProdPricesBean> data;
+    TextView tv_coupon_desc;
+    LinearLayout rl_desc;
     public SearchItemAdapter(int businessType, int productId,int layoutResId, @Nullable List<ExchangeProductModel.DataBean.ProdPricesBean> data) {
         super(layoutResId, data);
         this.productId = productId;
@@ -50,6 +53,15 @@ public class SearchItemAdapter extends BaseQuickAdapter<ExchangeProductModel.Dat
 
     @Override
     protected void convert(BaseViewHolder helper, ExchangeProductModel.DataBean.ProdPricesBean item) {
+        rl_desc = helper.getView(R.id.rl_desc);
+        tv_coupon_desc = helper.getView(R.id.tv_coupon_desc);
+        if(item.getSpecialOffer().equals("")) {
+            rl_desc.setVisibility(View.GONE);
+        }else {
+            tv_coupon_desc.setText(item.getSpecialOffer());
+            rl_desc.setVisibility(View.VISIBLE);
+        }
+
         tv_price = helper.getView(R.id.tv_price);
         tv_price.setText(item.getPrice());
         helper.setText(R.id.tv_unit, item.getUnitDesc());

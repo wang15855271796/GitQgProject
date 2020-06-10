@@ -39,7 +39,7 @@
     </com.puyue.www.qiaoge.view.CompatToolbar>
 
     <ImageView
-        android:src="@mipmap/icon_baidu"
+        android:src="@mipmap/icon_dunpai"
         android:layout_marginTop="@dimen/size_42dp"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"

@@ -27,6 +27,7 @@ import com.puyue.www.qiaoge.event.UpDateNumEvent9;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
@@ -161,19 +162,25 @@ public class ClassifyDialog extends Dialog implements View.OnClickListener {
 
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
+                        if(exchangeProductModel.isSuccess()) {
+                            if(exchangeProductModel.getData()!=null) {
+                                ClassItemAdpater classItemAdpater = new ClassItemAdpater(1,exchangeProductModel.getData().getProdSpecs().get(pos).getProductId(),
+                                        R.layout.item_choose_content,
+                                        exchangeProductModel.getData().getProdPrices());
 
-                        ClassItemAdpater classItemAdpater = new ClassItemAdpater(1,exchangeProductModel.getData().getProdSpecs().get(pos).getProductId(),
-                                R.layout.item_choose_content,
-                                exchangeProductModel.getData().getProdPrices());
+                                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                                recyclerView.setAdapter(classItemAdpater);
+                                tv_name.setText(exchangeProductModel.getData().getProductName());
+                                tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
+                                tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
+                                tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
+                                tv_stock.setText(exchangeProductModel.getData().getInventory());
+                                Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
+                            }
+                        }else {
+                            ToastUtil.showSuccessMsg(context,exchangeProductModel.getMessage());
+                        }
 
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(classItemAdpater);
-                        tv_name.setText(exchangeProductModel.getData().getProductName());
-                        tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
-                        tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
-                        tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
-                        tv_stock.setText(exchangeProductModel.getData().getInventory());
-                        Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
                     }
                 });
     }

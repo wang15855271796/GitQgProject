@@ -144,7 +144,7 @@ public class MySubOrderActivity extends BaseActivity {
         mListFragment.add(AllOrdersFragment.getInstance(subId));
         mListFragment.add(PaymentOrdersFragment.getInstance(subId));
         mListFragment.add(DeliveryOrdersFragment.getInstance(subId));
-        mListFragment.add(ReceivedOrderFragment.getInstance(subId));
+        mListFragment.add(ReceivedOrdersFragment.getInstance(subId));
         mListFragment.add(EvaluatedOrdersFragment.getInstance(subId));
         mListFragment.add(ReturnOrdersFragment.getInstance(subId));
 

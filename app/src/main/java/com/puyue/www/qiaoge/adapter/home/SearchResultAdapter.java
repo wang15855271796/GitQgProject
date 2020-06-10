@@ -16,6 +16,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.helper.StringHelper;
+import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
@@ -81,8 +83,10 @@ public class SearchResultAdapter extends BaseQuickAdapter<SearchResultsModel.Dat
                     onclick.addDialog();
                 }
 
-                recommendDialog = new RecommendDialog(mContext,item);
-                recommendDialog.show();
+                if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
+                    recommendDialog = new RecommendDialog(mContext,item);
+                    recommendDialog.show();
+                }
             }
         });
 

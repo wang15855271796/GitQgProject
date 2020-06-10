@@ -156,7 +156,6 @@ public class MyOrdersActivity extends BaseActivity {
         mAdapterViewPager.clear(mViewPager);
         mViewPager.setAdapter(mAdapterViewPager);
         mTab.setupWithViewPager(mViewPager);
-        Log.i("wwrarqrq", "initView: " + mType);
         if (StringHelper.notEmptyAndNull(mType)) {
             if (mType.equals(AppConstant.ALL)) {
                 //全部订单
@@ -213,7 +212,6 @@ public class MyOrdersActivity extends BaseActivity {
 
         mViewPager.setAdapter(mAdapterViewPager);
         mTab.setupWithViewPager(mViewPager);
-        Log.i("wwrarqrq", "initView: " + mType);
         if (StringHelper.notEmptyAndNull(mType)) {
             if (mType.equals(AppConstant.ALL)) {
                 //全部订单

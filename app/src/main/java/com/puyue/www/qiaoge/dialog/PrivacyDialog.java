@@ -28,6 +28,8 @@ import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -50,6 +52,8 @@ public class PrivacyDialog extends Dialog {
     CountDownTimer countDownTimer;
     CheckBox checkbox;
     LinearLayout ll_sure;
+    private List<CouponListModel.DataBean.GiftsBean> lists;
+
     public PrivacyDialog(@NonNull Context context, String content) {
         super(context, R.style.promptDialog);
         setContentView(R.layout.dialog_privacy);
@@ -151,7 +155,7 @@ public class PrivacyDialog extends Dialog {
     }
 
     /**
-     * 优惠券列表弹窗
+     * 隐私弹窗
      */
     private void readPrivacy() {
         IndexHomeAPI.readPrivacy(mContext)
@@ -172,10 +176,46 @@ public class PrivacyDialog extends Dialog {
                     public void onNext(BaseModel baseModel) {
                         if(baseModel.success) {
                             dismiss();
+                            getCouponList();
                         }else {
                             AppHelper.showMsg(mContext,baseModel.message);
                         }
                     }
                 });
     }
+
+    CouponListDialog couponListDialog;
+    private void getCouponList() {
+        IndexHomeAPI.getCouponLists(mContext)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<CouponListModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(CouponListModel couponListModel) {
+                        if(couponListModel.isSuccess()) {
+                            lists = couponListModel.getData().getGifts();
+                            if(lists.size()>0) {
+                                couponListDialog = new CouponListDialog(mContext,couponListModel, lists);
+                                couponListDialog.show();
+                            }else {
+
+                            }
+
+                        }else {
+                            AppHelper.showMsg(mContext,couponListModel.getMessage());
+                        }
+                    }
+                });
+    }
+
 }

@@ -30,6 +30,7 @@ import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.GetProductDetailModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
@@ -166,16 +167,23 @@ public class ReduceDialog extends Dialog implements View.OnClickListener{
 
                     @Override
                     public void onNext(ExchangeProductModel exchangeProductModel) {
-                        exchangeProductModel1s = exchangeProductModel;
-                        tv_name.setText(exchangeProductModel.getData().getProductName());
-                        tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
-                        tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
-                        tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
-                        tv_stock.setText(exchangeProductModel.getData().getInventory());
-                        Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
-                        ReduceItemAdapter reduceItemAdapter = new ReduceItemAdapter(1, productId, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(reduceItemAdapter);
+                        if(exchangeProductModel.isSuccess()) {
+                            if(exchangeProductModel.getData()!=null) {
+                                exchangeProductModel1s = exchangeProductModel;
+                                tv_name.setText(exchangeProductModel.getData().getProductName());
+                                tv_sale.setText(exchangeProductModel.getData().getSalesVolume());
+                                tv_price.setText(exchangeProductModel.getData().getMinMaxPrice()+"");
+                                tv_desc.setText(exchangeProductModel.getData().getSpecialOffer());
+                                tv_stock.setText(exchangeProductModel.getData().getInventory());
+                                Glide.with(context).load(exchangeProductModel.getData().getDefaultPic()).into(iv_head);
+                                ReduceItemAdapter reduceItemAdapter = new ReduceItemAdapter(1, productId, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
+                                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                                recyclerView.setAdapter(reduceItemAdapter);
+                            }
+                        }else {
+                            ToastUtil.showErroMsg(context,exchangeProductModel.getMessage());
+                        }
+
                     }
                 });
     }

@@ -25,8 +25,16 @@ public class DealsActivity extends BaseSwipeActivity {
     String reason;
     @BindView(R.id.iv_back)
     ImageView iv_back;
+    String phone;
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
+        if(getIntent().getStringExtra("reason")!=null) {
+            reason = getIntent().getStringExtra("reason");
+            Log.d("hsdasdadadad......",reason);
+        }
+
+
+
         return false;
     }
 
@@ -39,12 +47,9 @@ public class DealsActivity extends BaseSwipeActivity {
     public void findViewById() {
         ButterKnife.bind(this);
         data = (CancleModel.DataBean)getIntent().getSerializableExtra("data");
-        if(getIntent().getStringExtra("reason")!=null) {
-            reason = getIntent().getStringExtra("reason");
-
+        if(getIntent().getStringExtra("phone")!=null) {
+            phone = getIntent().getStringExtra("phone");
         }
-
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -53,6 +58,7 @@ public class DealsActivity extends BaseSwipeActivity {
                 bundle.putSerializable("data",data);
                 intent.putExtras(bundle);
                 intent.putExtra("reason",reason);
+                intent.putExtra("phone",phone);
                 startActivity(intent);
             }
         },3000);

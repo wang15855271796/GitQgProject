@@ -21,9 +21,11 @@ import com.puyue.www.qiaoge.adapter.home.HotProductActivity;
 import com.puyue.www.qiaoge.adapter.home.ReductionProductActivity;
 import com.puyue.www.qiaoge.api.home.IndexInfoModel;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.CouponDialog;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
+import com.puyue.www.qiaoge.utils.LoginUtil;
 
 import java.util.List;
 
@@ -69,8 +71,13 @@ public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.Icon
             public void onClick(View v) {
                 if(AppConstant.HOTTYPE.equals(item.getConfigCode())) {
                     //热销
-                    Intent newIntent = new Intent(mContext,HotProductActivity.class);
-                    mContext.startActivity(newIntent);
+                    if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
+                        Intent newIntent = new Intent(mContext,HotProductActivity.class);
+                        mContext.startActivity(newIntent);
+                    }else {
+                        initDialog();
+                    }
+
 
                 }else if(AppConstant.COMMONTYPE.equals(item.getConfigCode())) {
                     //常用清单
@@ -79,14 +86,17 @@ public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.Icon
                         mContext.startActivity(newIntent);
 
                     } else {
-                        AppHelper.showMsg(mContext, "请先登录");
-                        mContext.startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
+                        initDialog();
                     }
 
                 }else if(AppConstant.REDUCTIONTYPE.equals(item.getConfigCode())) {
                     //降价
-                    Intent newIntent = new Intent(mContext, ReductionProductActivity.class);
-                    mContext.startActivity(newIntent);
+                    if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
+                        Intent newIntent = new Intent(mContext, ReductionProductActivity.class);
+                        mContext.startActivity(newIntent);
+                    }else {
+                        initDialog();
+                    }
 
                 }else if(AppConstant.SECONDTYPE.equals(item.getRemark())) {
                     //秒杀活动
@@ -96,8 +106,7 @@ public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.Icon
                         mContext.startActivity(intent);
 
                     } else {
-                        AppHelper.showMsg(mContext, "请先登录");
-                        mContext.startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
+                        initDialog();
                     }
 
 
@@ -114,6 +123,24 @@ public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.Icon
             }
         });
     }
+    CouponDialog couponDialog;
+    private void initDialog() {
+        couponDialog = new CouponDialog(mContext) {
+            @Override
+            public void Login() {
+                mContext.startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
+                dismiss();
+            }
+
+            @Override
+            public void Register() {
+                LoginUtil.initRegister(getContext());
+                dismiss();
+            }
+        };
+        couponDialog.show();
+    }
+
     private void setIntent(String URL) {
         Intent intent = new Intent(mContext, NewWebViewActivity.class);
         intent.putExtra("URL", URL);

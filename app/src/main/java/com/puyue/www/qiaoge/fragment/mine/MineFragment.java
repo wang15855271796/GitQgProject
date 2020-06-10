@@ -599,7 +599,7 @@ public class MineFragment extends BaseFragment {
                 Intent intent = new Intent(getContext(), NewWebViewActivity.class);
                 intent.putExtra("URL", urlVIP);
                 intent.putExtra("TYPE", 1);
-                intent.putExtra("name", "consult");
+                intent.putExtra("name", "");
                 startActivity(intent);
             } /*else if (view == vipDay) {
                 Intent intent = new Intent(getContext(), NewWebViewActivity.class);

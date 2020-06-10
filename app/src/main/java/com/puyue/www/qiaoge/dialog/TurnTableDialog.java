@@ -53,20 +53,17 @@ public class TurnTableDialog extends Dialog {
 
     private void initView() {
 
-
         for ( int i = 0; i < list.size(); i++ ) {
             if(i%2==0) {
                 mListBitmap.add(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_quan_blue));
             }else {
                 mListBitmap.add(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_quan_red));
             }
-
         }
-
 
         //主动旋转一下图片
         mListBitmap = WheelSurfView.rotateBitmaps(mListBitmap);
-
+        Log.d("wwddddddddd.....",mListBitmap+"");
         String[] array =new String[list.size()];
         list.toArray(array);
         //获取第三个视图
@@ -106,31 +103,6 @@ public class TurnTableDialog extends Dialog {
                 }
             }
         });
-
-//        pan.setLuckPanAnimEndCallBack(new LuckPanAnimEndCallBack() {
-//            @Override
-//            public void onAnimEnd(String str) {
-//                isRunning = false;
-//                TurnResultDialog turnResultDialog = new TurnResultDialog(mContext);
-//                turnResultDialog.show();
-//                dismiss();
-//            }
-//        });
-
-//        iv_start.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(!isRunning) {
-//                    if(!isRunning) {
-//                        int position = 3;
-//                        wheelSurfView.startRotate(position);
-//                        isRunning = true;
-//                    }
-//                }
-//
-//            }
-//        });
-
     }
 
 

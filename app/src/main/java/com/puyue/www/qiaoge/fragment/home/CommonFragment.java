@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.puyue.www.qiaoge.R;
@@ -127,6 +128,7 @@ public class CommonFragment extends BaseFragment {
      */
 
     private void getProductsList(int pageNums, int pageSize, String type) {
+        Log.d("dsdfddsss.........",type);
         ProductListAPI.requestData(mActivity, pageNums, pageSize,type,null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -172,7 +174,6 @@ public class CommonFragment extends BaseFragment {
 
     @Override
     public void setViewData() {
-        getProductsList(pageNum,10,"commonBuy");
 
     }
 

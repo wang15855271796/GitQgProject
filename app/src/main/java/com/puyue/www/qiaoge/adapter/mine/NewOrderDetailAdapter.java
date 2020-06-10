@@ -32,6 +32,7 @@ import com.puyue.www.qiaoge.model.cart.GetOrderDetailModel;
 import com.puyue.www.qiaoge.model.home.GetAllCommentListByPageModel;
 import com.puyue.www.qiaoge.model.home.JumpModel;
 import com.puyue.www.qiaoge.model.mine.order.NewOrderDetailModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.GlideModel;
 import com.puyue.www.qiaoge.view.LineBreakLayout;
 
@@ -172,9 +173,9 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
                                     intent.putExtra("city",jumpModel.getMessage());
                                     mContext.startActivity(intent);
                                 }
-                            }else {
-                                AppHelper.showMsg(mContext,jumpModel.getMessage());
                             }
+                        }else {
+                            ToastUtil.showSuccessMsg(mContext,jumpModel.getMessage());
                         }
                     }
                 });
@@ -210,9 +211,9 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
                                     intent.putExtra("city",jumpModel.getMessage());
                                     mContext.startActivity(intent);
                                 }
-                            }else {
-                                AppHelper.showMsg(mContext,jumpModel.getMessage());
                             }
+                        }else {
+                            ToastUtil.showSuccessMsg(mContext,jumpModel.getMessage());
                         }
                     }
                 });
@@ -251,9 +252,9 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
                                     intent.putExtra("city",jumpModel.getMessage());
                                     mContext.startActivity(intent);
                                 }
-                            }else {
-                                AppHelper.showMsg(mContext,jumpModel.getMessage());
                             }
+                        }else {
+                            ToastUtil.showSuccessMsg(mContext,jumpModel.getMessage());
                         }
                     }
                 });

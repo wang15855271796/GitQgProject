@@ -1,8 +1,10 @@
 package com.puyue.www.qiaoge.activity.cart;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -11,12 +13,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.HomeActivity;
+import com.puyue.www.qiaoge.activity.mine.login.LogoutsEvent;
 import com.puyue.www.qiaoge.api.mine.login.SendCodeAPI;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
+import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
+import com.puyue.www.qiaoge.utils.EnCodeUtil;
 import com.puyue.www.qiaoge.utils.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,8 +38,8 @@ import rx.schedulers.Schedulers;
 public class CancleResultActivity extends BaseSwipeActivity {
     @BindView(R.id.iv_back)
     ImageView iv_back;
-    @BindView(R.id.et_phone)
-    EditText et_phone;
+    @BindView(R.id.tv_phone)
+    TextView tv_phone;
     @BindView(R.id.tv_yzm)
     TextView tv_yzm;
     @BindView(R.id.ll_yzm)
@@ -47,8 +55,12 @@ public class CancleResultActivity extends BaseSwipeActivity {
     CountDownTimer countDownTimer;
     boolean isSendingCode;
     String reason;
+    String publicKeyStr = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDTykrDv1TEKVjDeE29kVLo5M7mctlE65WlHSMN8RVL1iA9jXsF9SMNH1AErs2lqxpv18fd3TOAw0pBaG+cXOxApKdvRDKgxyuHnONOBzxr6EyWOQlRZt94auL1ESVbLdvYa7+cISkVe+MphfQh7uI/64tGQ34aRNmvFKv9PEeBTQIDAQAB";
+    private String phones;
+
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
+
         return false;
     }
 
@@ -60,9 +72,12 @@ public class CancleResultActivity extends BaseSwipeActivity {
     @Override
     public void findViewById() {
         ButterKnife.bind(this);
+        if(getIntent().getStringExtra("phone")!=null) {
+            phone = getIntent().getStringExtra("phone");
+        }
+
         if(getIntent().getStringExtra("reason")!=null) {
             reason = getIntent().getStringExtra("reason");
-
         }
 
         iv_back.setOnClickListener(new View.OnClickListener() {
@@ -75,23 +90,29 @@ public class CancleResultActivity extends BaseSwipeActivity {
         tv_yzm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(StringHelper.notEmptyAndNull(et_phone.getText().toString())){
-                    phone = et_phone.getText().toString();
+                if(!TextUtils.isEmpty(phone)){
+                    try {
+                        phones = EnCodeUtil.encryptByPublicKey(phone, publicKeyStr);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    sendCode(phones);
+
+                }else {
+                    AppHelper.showMsg(mContext,"请填写正确手机号码");
                 }
 
-                sendCode(phone);
             }
         });
 
         tv_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (StringHelper.notEmptyAndNull(et_pwd.getText().toString())
-                        && StringHelper.notEmptyAndNull(et_phone.getText().toString())
-                        && StringHelper.notEmptyAndNull(et_yzm.getText().toString())&&
-                        StringHelper.notEmptyAndNull(reason)) {
-                        getData(et_phone.getText().toString(),et_yzm.getText().toString(),et_pwd.getText().toString(),reason);
+                if (StringHelper.notEmptyAndNull(et_pwd.getText().toString()) && !TextUtils.isEmpty(phone) && StringHelper.notEmptyAndNull(et_yzm.getText().toString())&& StringHelper.notEmptyAndNull(reason)) {
+                        getData(phones,et_yzm.getText().toString(),et_pwd.getText().toString(),reason);
 
+                }else {
+                    AppHelper.showMsg(mContext,"请填写正确信息");
                 }
             }
         });
@@ -115,10 +136,13 @@ public class CancleResultActivity extends BaseSwipeActivity {
                     @Override
                     public void onNext(BaseModel baseModel) {
                         if (baseModel.success) {
-                            ToastUtil.showSuccessMsg(mContext, "成功!");
+                            ToastUtil.showSuccessMsg(mContext, baseModel.message);
+                            Intent intent = new Intent(mContext,HomeActivity.class);
+                            startActivity(intent);
+                            EventBus.getDefault().post(new LogoutsEvent());
                             finish();
                         } else {
-                            ToastUtil.showSuccessMsg(mContext, mModelSendCode.message);
+                            ToastUtil.showSuccessMsg(mContext, baseModel.message);
                         }
                     }
                 });

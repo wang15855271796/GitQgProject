@@ -27,6 +27,7 @@ import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.MustModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.utils.Utils;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
@@ -182,6 +183,8 @@ public class MustDialog extends Dialog implements View.OnClickListener {
                                 recyclerView.setAdapter(mustItemAdapter);
                                 mustItemAdapter.notifyDataSetChanged();
                             }
+                        }else {
+                            ToastUtil.showSuccessMsg(context,exchangeProductModel.getMessage());
                         }
 
 

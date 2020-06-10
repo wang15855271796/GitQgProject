@@ -242,8 +242,7 @@ dependencies {
     implementation project(':pickerview')
     implementation project(':wheelview')
 
-
     //网易七鱼
     implementation 'com.qiyukf.unicorn:unicorn:5.7.7'
-
+    implementation files('libs/commons-codec-1.10.jar')
 }

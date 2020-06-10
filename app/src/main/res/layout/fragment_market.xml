@@ -29,19 +29,19 @@
             android:textSize="@dimen/size_14dp" />
     </RelativeLayout>
 
-    <com.daimajia.slider.library.SliderLayout
-        android:visibility="gone"
-        android:id="@+id/view_market_banner"
-        android:layout_width="match_parent"
-        android:layout_height="60dp">
+    <!--<com.daimajia.slider.library.SliderLayout-->
+        <!--android:visibility="gone"-->
+        <!--android:id="@+id/view_market_banner"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="60dp">-->
 
-    </com.daimajia.slider.library.SliderLayout>
+    <!--</com.daimajia.slider.library.SliderLayout>-->
 
     <com.puyue.www.qiaoge.banner.Banner
         android:id="@+id/banner"
         android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_60dp"
+        android:layout_height="@dimen/size_50dp"
         />
 
 

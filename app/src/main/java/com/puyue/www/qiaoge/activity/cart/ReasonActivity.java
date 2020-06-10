@@ -8,8 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -44,11 +46,17 @@ public class ReasonActivity extends BaseSwipeActivity {
     EditText edit;
     @BindView(R.id.iv_back)
     ImageView iv_back;
+    @BindView(R.id.rl_other)
+    RelativeLayout rl_other;
+//    @BindView(R.id.iv_icon)
+//    ImageView iv_icon;
+    int selectionPosition = 0;
     private List<CancleReasonModel.DataBean> data;
     private ReasonAdapter reasonAdapter;
     List<CancleReasonModel.DataBean> list = new ArrayList<>();
     private String datas;
-
+    private String datacancle;
+    String phone;
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
         return false;
@@ -62,6 +70,16 @@ public class ReasonActivity extends BaseSwipeActivity {
     @Override
     public void findViewById() {
         ButterKnife.bind(this);
+        if(getIntent().getStringExtra("phone")!=null) {
+            phone = getIntent().getStringExtra("phone");
+        }
+        rl_other.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                iv_icon.setVisibility(View.VISIBLE);
+
+            }
+        });
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,18 +90,20 @@ public class ReasonActivity extends BaseSwipeActivity {
         tv_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                datas = edit.getText().toString().trim();
-                String data = SharedPreferencesUtil.getString(mActivity,"data");
-
-                if(datas!=null) {
-                    getIsCancle(datas);
-
+                String edData = edit.getText().toString().trim();
+                if(selectionPosition == list.size()-1) {
+                    if(edData!=null&&!edData.equals("")) {
+                        getIsCancle(edData);
+                    }else {
+                        ToastUtil.showSuccessMsg(mActivity,"请填写注销理由");
+                    }
+                }else {
+                    if(datacancle!=null) {
+                        getIsCancle(datacancle);
+                    }else {
+                        ToastUtil.showSuccessMsg(mActivity,"请填写注销理由");
+                    }
                 }
-
-                if(data!=null) {
-                    getIsCancle(data);
-                }
-
             }
         });
 
@@ -91,13 +111,22 @@ public class ReasonActivity extends BaseSwipeActivity {
         reasonAdapter = new ReasonAdapter(R.layout.item_reason,list);
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerView.setAdapter(reasonAdapter);
-
         reasonAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                SharedPreferencesUtil.saveString(mActivity,"data",list.get(position).getCode());
-                reasonAdapter.selectionPosition(position);
-                reasonAdapter.notifyDataSetChanged();
+
+                if(position==list.size()-1) {
+                    selectionPosition = position;
+                    edit.setVisibility(View.VISIBLE);
+                    reasonAdapter.selectionPosition(position);
+                    reasonAdapter.notifyDataSetChanged();
+                }else {
+                    selectionPosition = position;
+                    edit.setVisibility(View.GONE);
+                    datacancle = list.get(position).getType();
+                    reasonAdapter.selectionPosition(position);
+                    reasonAdapter.notifyDataSetChanged();
+                }
             }
         });
     }
@@ -128,6 +157,7 @@ public class ReasonActivity extends BaseSwipeActivity {
                                     bundle.putSerializable("data",data);
                                     intent.putExtras(bundle);
                                     intent.putExtra("reason",cancleReason);
+                                    intent.putExtra("phone",phone);
                                     startActivity(intent);
                                 }else {
                                     Intent intent = new Intent(mActivity,DealsActivity.class);
@@ -135,6 +165,7 @@ public class ReasonActivity extends BaseSwipeActivity {
                                     bundle.putSerializable("data",data);
                                     intent.putExtras(bundle);
                                     intent.putExtra("reason",cancleReason);
+                                    intent.putExtra("phone",phone);
                                     startActivity(intent);
                                 }
                             }
@@ -147,6 +178,7 @@ public class ReasonActivity extends BaseSwipeActivity {
 
     @Override
     public void setViewData() {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         getReasonList();
     }
 

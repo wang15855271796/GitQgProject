@@ -20,6 +20,8 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.api.home.GetProductDetailAPI;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.helper.StringHelper;
+import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.view.ExpandLayout;
@@ -91,8 +93,10 @@ public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.Da
                     onclick.addDialog();
                 }
 
-                searchDialog = new SearchDialog(mContext,item);
-                searchDialog.show();
+                if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
+                    searchDialog = new SearchDialog(mContext,item);
+                    searchDialog.show();
+                }
             }
         });
 

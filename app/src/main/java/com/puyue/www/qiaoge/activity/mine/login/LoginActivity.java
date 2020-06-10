@@ -100,7 +100,7 @@ public class LoginActivity extends BaseSwipeActivity {
 //    public LocationClient mLocationClient = null;
 //    private MyLocationListener myListener = new MyLocationListener();
 
-    private String city;
+    private String city = "";
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
@@ -484,7 +484,7 @@ public class LoginActivity extends BaseSwipeActivity {
 
     private void updateLogin() {
         AppHelper.showMsg(mContext, "登录成功");
-        Log.i("loginxscscfdfd", "updateLogin: wufanhui");
+
         UserInfoHelper.saveUserId(mContext, mModelLogin.data.token);
         UserInfoHelper.saveUserCell(mContext, mModelLogin.data.userBaseInfoVO.phone);
         UserInfoHelper.saveUserType(mContext, String.valueOf(mModelLogin.data.userBaseInfoVO.type));

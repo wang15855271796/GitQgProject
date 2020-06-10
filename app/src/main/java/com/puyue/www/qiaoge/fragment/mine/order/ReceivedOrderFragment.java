@@ -309,7 +309,7 @@ public class ReceivedOrderFragment extends BaseFragment {
     }
 
     private void requestOrdersList(int orderStatus) {
-        MyOrderListAPI.getList(getContext(), orderStatus, pageNum, 20, orderDeliveryType,subId)
+        MyOrderListAPI.requestOrderList(getContext(), orderStatus, pageNum, 20, orderDeliveryType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<MyOrdersModel>() {

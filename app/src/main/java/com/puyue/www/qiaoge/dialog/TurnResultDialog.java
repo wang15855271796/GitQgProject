@@ -13,6 +13,7 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
+import com.puyue.www.qiaoge.event.PrivacyModel;
 import com.puyue.www.qiaoge.event.TurnModel;
 import com.puyue.www.qiaoge.event.TurnReceiveModel;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -28,6 +29,8 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static cn.com.chinatelecom.account.api.CtAuth.mContext;
+
 /**
  * Created by ${王涛} on 2020/4/21
  */
@@ -37,12 +40,15 @@ public class TurnResultDialog extends Dialog {
     TextView tv_num;
     ImageView iv_result;
     ImageView iv_close;
+    private String content;
+
     public TurnResultDialog(@NonNull Context context) {
         super(context, R.style.promptDialog);
         setContentView(R.layout.dialog_turn_result);
         mContext = context;
         initView();
         initAction();
+        getPrivacy();
     }
 
     private void initView() {
@@ -53,6 +59,8 @@ public class TurnResultDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 dismiss();
+                PrivacyDialog privacyDialog = new PrivacyDialog(mContext,content);
+                privacyDialog.show();
             }
         });
         iv_result.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +69,9 @@ public class TurnResultDialog extends Dialog {
                 mContext.startActivity(new Intent(mContext, HomeActivity.class));
                 EventBus.getDefault().post(new GoToMarketEvent());
                 dismiss();
+                PrivacyDialog privacyDialog = new PrivacyDialog(mContext,content);
+                privacyDialog.show();
+
             }
         });
         getData();
@@ -96,6 +107,37 @@ public class TurnResultDialog extends Dialog {
 
     private void initAction() {
 
+    }
+
+
+    /**
+     * 获取权限
+     */
+    private void getPrivacy() {
+        IndexHomeAPI.getPrivacy(mContext)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<PrivacyModel>() {
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(PrivacyModel privacyModel) {
+                        if(privacyModel.isSuccess()) {
+                            content = privacyModel.getData().getContent();
+                        }else {
+                            AppHelper.showMsg(mContext,privacyModel.getMessage());
+                        }
+                    }
+                });
     }
 
 }

@@ -31,6 +31,7 @@ import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
+import com.puyue.www.qiaoge.utils.EnCodeUtil;
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 
@@ -86,6 +87,9 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
     private AmountSetDialog amountSetDialog;
     private AmountMaxDialog amountMaxDialog;
     String amountRemind;
+    String publicKeyStr = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDTykrDv1TEKVjDeE29kVLo5M7mctlE65WlHSMN8RVL1iA9jXsF9SMNH1AErs2lqxpv18fd3TOAw0pBaG+cXOxApKdvRDKgxyuHnONOBzxr6EyWOQlRZt94auL1ESVbLdvYa7+cISkVe+MphfQh7uI/64tGQ34aRNmvFKv9PEeBTQIDAQAB";
+    private String phones;
+
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
         return false;
@@ -269,6 +273,11 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
         switch (v.getId()) {
             case R.id.ll_yzm:
                 phone = et_phone.getText().toString();
+                try {
+                    phones = EnCodeUtil.encryptByPublicKey(phone,publicKeyStr);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 int result = checkPhoneNum(phone);
                 if (result == 2) {
                     Toast.makeText(getApplicationContext(), "请输入手机号", Toast.LENGTH_SHORT).show();
@@ -277,7 +286,7 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
                     Toast.makeText(getApplicationContext(), "请输入正确的手机号", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    requestSendCode(phone);
+                    requestSendCode(phones);
                 }
                 break;
 
@@ -318,6 +327,8 @@ public class AddSubAccountActivity extends BaseSwipeActivity implements View.OnC
      * 发送验证码
      * @param phone
      */
+
+
     private void requestSendCode(String phone) {
         if (!NetWorkHelper.isNetworkAvailable(mContext)) {
             ToastUtil.showSuccessMsg(mContext, "网络不给力!");

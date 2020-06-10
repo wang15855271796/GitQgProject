@@ -1456,7 +1456,6 @@ public class MarketsFragment extends BaseFragment {
             @Override
             public void OnBannerClick(int position) {
                 showType = banners.get(position).getShowType();
-                Log.d("wswswsswsss",banners.get(position).getProdPage()+"");
                 if(showType==1|| banners.get(position).getLinkSrc()!=null) {
                     //链接 banners.get(position).getLinkSrc()
                     Intent intent = new Intent(getActivity(), NewWebViewActivity.class);

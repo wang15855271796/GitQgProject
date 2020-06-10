@@ -20,6 +20,7 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
+import com.puyue.www.qiaoge.utils.EnCodeUtil;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 
 import butterknife.BindView;
@@ -48,6 +49,8 @@ public class RegisterMessageActivity extends BaseSwipeActivity implements View.O
     private CountDownTimer countDownTimer;
     private boolean isSendingCode = true;
     private String phone;
+    String publicKeyStr = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDTykrDv1TEKVjDeE29kVLo5M7mctlE65WlHSMN8RVL1iA9jXsF9SMNH1AErs2lqxpv18fd3TOAw0pBaG+cXOxApKdvRDKgxyuHnONOBzxr6EyWOQlRZt94auL1ESVbLdvYa7+cISkVe+MphfQh7uI/64tGQ34aRNmvFKv9PEeBTQIDAQAB";
+    private String phones;
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
@@ -97,6 +100,11 @@ public class RegisterMessageActivity extends BaseSwipeActivity implements View.O
         switch (v.getId()) {
             case R.id.ll_yzm:
                 phone = et_phone.getText().toString();
+                try {
+                    phones = EnCodeUtil.encryptByPublicKey(phone, publicKeyStr);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 int result = checkPhoneNum(phone);
                 if (result == 2) {
                     Toast.makeText(getApplicationContext(), "请输入手机号", Toast.LENGTH_SHORT).show();
@@ -106,7 +114,7 @@ public class RegisterMessageActivity extends BaseSwipeActivity implements View.O
                     return;
                 } else {
 
-                    requestSendCode(phone);
+                    requestSendCode(phones);
                 }
 
                 break;

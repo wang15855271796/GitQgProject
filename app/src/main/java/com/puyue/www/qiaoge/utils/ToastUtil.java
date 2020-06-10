@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import com.puyue.www.qiaoge.safe.Base64;
+
 /**
  * Created by ${王涛} on 2019/12/4
  */

@@ -220,7 +220,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
 
         option.setLocationMode(LocationClientOption.LocationMode.Battery_Saving);
         //传当前地址信息
-        QueryHomePropup();
+//        QueryHomePropup();
 
 //mLocationClient为第二步初始化过的LocationClient对象
 //需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
@@ -545,7 +545,7 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
             UserInfoHelper.saveCity(mContext, city);
             UserInfoHelper.saveAreaName(mContext,district);
         } else {
-            UserInfoHelper.saveCity(mContext, "杭州市");
+            UserInfoHelper.saveCity(mContext, "");
         }
 
     }
@@ -719,9 +719,8 @@ public class MyLocationListener extends BDAbstractLocationListener {
         if (type.equals("goHome")) {
             if (city != null) {
                 UserInfoHelper.saveCity(mContext, city);
-
             } else {
-                UserInfoHelper.saveCity(mContext, "杭州市");
+                UserInfoHelper.saveCity(mContext, "");
             }
         }
         type = "";

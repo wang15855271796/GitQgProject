@@ -121,7 +121,7 @@ public class InfoFragment extends BaseFragment {
 
     @Override
     public int setLayoutId() {
-        return R.layout.activity_h5;
+        return R.layout.activity_h6;
     }
 
     @Override

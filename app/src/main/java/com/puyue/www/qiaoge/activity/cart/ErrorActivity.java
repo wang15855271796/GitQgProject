@@ -42,10 +42,12 @@ public class ErrorActivity extends BaseSwipeActivity {
     ImageView iv_back;
     private CancleModel.DataBean data;
     String reason;
+    String phone;
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
-
-
+        if(getIntent().getStringExtra("phone")!=null) {
+            phone = getIntent().getStringExtra("phone");
+        }
         return false;
     }
 
@@ -125,7 +127,7 @@ public class ErrorActivity extends BaseSwipeActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity,CancleResultActivity.class);
                 intent.putExtra("reason",reason);
-
+                intent.putExtra("phone",phone);
                 startActivity(intent);
             }
         });

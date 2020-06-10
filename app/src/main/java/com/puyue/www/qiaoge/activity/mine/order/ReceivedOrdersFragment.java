@@ -1,5 +1,6 @@
 package com.puyue.www.qiaoge.activity.mine.order;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -49,6 +50,13 @@ public class ReceivedOrdersFragment extends BaseFragment {
 
     private int orderDeliveryType;
 
+    public static ReceivedOrdersFragment getInstance(String subId) {
+        ReceivedOrdersFragment fragment = new ReceivedOrdersFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("subId", subId);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
     @Override
     public int setLayoutId() {
         return R.layout.fragment_my_orders;

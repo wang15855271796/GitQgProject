@@ -99,10 +99,8 @@ public class HotAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean.Lis
                     onclick.addDialog();
                 }
 
-                if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
                     hotDialog = new HotDialog(mContext,item.getProductId(),item);
                     hotDialog.show();
-                }
             }
         });
     }

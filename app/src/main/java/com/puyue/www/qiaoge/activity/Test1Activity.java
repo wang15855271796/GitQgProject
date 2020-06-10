@@ -371,7 +371,7 @@ public class Test1Activity extends BaseSwipeActivity implements CartFragment.Fra
             UserInfoHelper.saveCity(mContext, city);
             UserInfoHelper.saveAreaName(mContext,district);
         } else {
-            UserInfoHelper.saveCity(mContext, "杭州市");
+            UserInfoHelper.saveCity(mContext, "");
         }
 
     }
@@ -556,7 +556,7 @@ public class Test1Activity extends BaseSwipeActivity implements CartFragment.Fra
                     UserInfoHelper.saveCity(mContext, city);
 
                 } else {
-                    UserInfoHelper.saveCity(mContext, "杭州市");
+                    UserInfoHelper.saveCity(mContext, "");
                 }
             }
             type = "";

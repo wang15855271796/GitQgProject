@@ -14,6 +14,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.helper.StringHelper;
+import com.puyue.www.qiaoge.helper.UserInfoHelper;
 
 import java.util.List;
 
@@ -74,8 +76,12 @@ public class SelectionAdapter extends BaseQuickAdapter<MarketRightModel.DataBean
                 if(onclick!=null) {
                     onclick.addDialog();
                 }
-                classifyDialog = new ClassifyDialog(mContext,item);
-                classifyDialog.show();
+                if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
+                    classifyDialog = new ClassifyDialog(mContext,item);
+                    classifyDialog.show();
+                }
+
+
             }
         });
 

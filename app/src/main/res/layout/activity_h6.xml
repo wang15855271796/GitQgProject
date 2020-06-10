@@ -7,8 +7,6 @@
 
     <com.puyue.www.qiaoge.view.CompatToolbar
         android:id="@+id/toolbar_h5"
-        android:background="#ffffff"
-        android:layout_marginTop="@dimen/size_30dp"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
@@ -43,9 +41,9 @@
         android:max="100"
         android:progressDrawable="@drawable/app_h5_progressbar" />
 
-    <!--<android.support.v4.widget.NestedScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
+    <android.support.v4.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -59,5 +57,5 @@
         </com.puyue.www.qiaoge.wxapi.MyWebView>
 
     </FrameLayout>
-    <!--</android.support.v4.widget.NestedScrollView>-->
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>
