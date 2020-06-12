@@ -275,7 +275,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                 mTvAddCar.setText("加入购物车");
                 mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
 
-            }else if(num.equals("0")){
+            }else {
                 getProductDetail(productId,num);
                 ll_service.setVisibility(View.VISIBLE);
                 mTvAddCar.setEnabled(false);
@@ -892,6 +892,13 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         super.onStop();
         //结束轮播
         mBanner.stopAutoPlay();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -1114,12 +1121,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         //刷新UI
         getCartNum();
 
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
 }

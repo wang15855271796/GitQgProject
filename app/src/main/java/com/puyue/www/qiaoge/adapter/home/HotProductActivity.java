@@ -267,7 +267,6 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
                                 tv_num.setVisibility(View.GONE);
                             }else {
                                 tv_num.setVisibility(View.VISIBLE);
-
                                 tv_num.setText(getCartNumModel.getData().getNum());
                             }
                         } else {

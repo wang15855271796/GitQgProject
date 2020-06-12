@@ -321,7 +321,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                 mTvAddCar.setText("加入购物车");
                 mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
 
-            }else if(num.equals("0")){
+            }else {
                 getProductDetail(productId,num);
                 ll_service.setVisibility(View.VISIBLE);
                 mTvAddCar.setEnabled(false);

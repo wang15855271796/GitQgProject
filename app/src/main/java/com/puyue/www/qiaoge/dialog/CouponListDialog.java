@@ -63,7 +63,6 @@ public class CouponListDialog extends Dialog {
         couponListAdapter = new CouponListAdapter(R.layout.item_home_coupon_list,lists);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(couponListAdapter);
-        Log.d("ssssddddddddds......",lists.size()+"");
         tv_use.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,20 +132,18 @@ public class CouponListDialog extends Dialog {
                     @Override
                     public void onNext(QueryHomePropupModel queryHomePropupModel) {
                         if (queryHomePropupModel.isSuccess()) {
+                            QueryHomePropupModel.DataBean.HomePropupBean homePropup = queryHomePropupModel.getData().getHomePropup();
+                            HomeActivityDialog homeActivityDialog = new HomeActivityDialog(mContext,homePropup);
 
                             if (queryHomePropupModel.getData().isPropup()) {
-                                QueryHomePropupModel.DataBean.HomePropupBean homePropup = queryHomePropupModel.getData().getHomePropup();
-                                setPopuWindow(homePropup);
+                                homeActivityDialog.show();
+                            }else {
+//                                QueryHomePropup();
                             }
                         } else {
                             AppHelper.showMsg(mContext, queryHomePropupModel.getMessage());
                         }
                     }
                 });
-    }
-
-    private void setPopuWindow(QueryHomePropupModel.DataBean.HomePropupBean homePropup) {
-        HomeActivityDialog homeActivityDialog = new HomeActivityDialog(mContext,homePropup);
-        homeActivityDialog.show();
     }
 }

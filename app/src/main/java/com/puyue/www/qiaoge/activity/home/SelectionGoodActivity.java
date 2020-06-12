@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,6 +32,7 @@ import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent9;
+import com.puyue.www.qiaoge.event.UpNumEvent;
 import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
@@ -96,10 +98,10 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
         setContentView(R.layout.new_product);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getCartNum(UpDateNumEvent9 event) {
-        getCartNum();
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void getCartNum(UpDateNumEvent9 event) {
+//        getCartNum();
+//    }
 
     @Override
     protected void onDestroy() {
@@ -212,10 +214,6 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getCartNums(UpDateNumEvent9 event) {
-        getCartNum();
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getCartNums(NumEvent event) {
@@ -274,7 +272,15 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
         switch (v.getId()) {
             case R.id.iv_back:
                 finish();
+                EventBus.getDefault().post(new UpNumEvent());
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        EventBus.getDefault().post(new UpNumEvent());
+        finish();
+        return super.onKeyDown(keyCode, event);
     }
 }

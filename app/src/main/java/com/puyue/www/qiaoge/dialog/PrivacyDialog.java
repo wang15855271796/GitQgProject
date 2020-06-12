@@ -19,10 +19,12 @@ import android.widget.TextView;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CommonH5Activity;
 import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
+import com.puyue.www.qiaoge.api.home.QueryHomePropupAPI;
 import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.event.CouponListModel;
 import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.model.home.QueryHomePropupModel;
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 
@@ -176,6 +178,7 @@ public class PrivacyDialog extends Dialog {
                     public void onNext(BaseModel baseModel) {
                         if(baseModel.success) {
                             dismiss();
+                            SharedPreferencesUtil.saveString(mContext,"once","0");
                             getCouponList();
                         }else {
                             AppHelper.showMsg(mContext,baseModel.message);
@@ -208,11 +211,51 @@ public class PrivacyDialog extends Dialog {
                                 couponListDialog = new CouponListDialog(mContext,couponListModel, lists);
                                 couponListDialog.show();
                             }else {
-
+                                QueryHomePropup();
                             }
 
                         }else {
                             AppHelper.showMsg(mContext,couponListModel.getMessage());
+                        }
+                    }
+                });
+    }
+
+    /**
+     *
+     * 首页活动弹窗
+     */
+    HomeActivityDialog homeActivityDialog;
+    private void QueryHomePropup() {
+        QueryHomePropupAPI.requestQueryHomePropup(mContext)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<QueryHomePropupModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(QueryHomePropupModel queryHomePropupModel) {
+                        if (queryHomePropupModel.isSuccess()) {
+                            if(queryHomePropupModel.getData().getHomePropup()!=null) {
+                                QueryHomePropupModel.DataBean.HomePropupBean homePropup = queryHomePropupModel.getData().getHomePropup();
+                                homeActivityDialog = new HomeActivityDialog(mContext,homePropup);
+                                if (queryHomePropupModel.getData().isPropup()) {
+                                    homeActivityDialog.show();
+                                }else {
+                                    homeActivityDialog.dismiss();
+                                }
+                            }
+
+                        } else {
+                            AppHelper.showMsg(mContext, queryHomePropupModel.getMessage());
                         }
                     }
                 });

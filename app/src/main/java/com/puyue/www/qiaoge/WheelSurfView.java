@@ -105,8 +105,8 @@ public class WheelSurfView extends RelativeLayout {
     }
 
     public void setConfig(Builder builder) {
-        if(builder.size!=0)
-            mWheelSurfPanView.setSize(builder.size);
+//        if(builder.size!=0)
+//            mWheelSurfPanView.setSize(builder.size);
         if ( builder.mDeses != null )
             mWheelSurfPanView.setmDeses(builder.mDeses);
         if ( builder.mHuanImgRes != 0 )

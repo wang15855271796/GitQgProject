@@ -107,6 +107,7 @@ import com.puyue.www.qiaoge.model.market.GoodsDetailModel;
 import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
 import com.puyue.www.qiaoge.model.mine.NewWebModel;
 import com.puyue.www.qiaoge.model.mine.wallet.NewWebPhoneModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -142,12 +143,7 @@ import static io.dcloud.common.adapter.ui.WebJsEvent.FILECHOOSER_RESULTCODE;
  */
 public class TestActivity extends BaseSwipeActivity{
 
-    private WebView mWebView;
-    private String TMP_URL = "http://120.55.55.99:8082/apph5/html/information.html";
-    private ValueCallback<Uri> mUploadMessage;// 表单的数据信息
-    private ValueCallback<Uri[]> mUploadCallbackAboveL;
-    private final static int FILECHOOSER_RESULTCODE = 1;// 表单的结果回调</span>
-    private Uri imageUri;
+
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
         return false;
@@ -155,304 +151,25 @@ public class TestActivity extends BaseSwipeActivity{
 
     @Override
     public void setContentView() {
-        setContentView(R.layout.activity_h5);
+        setContentView(R.layout.test);
     }
 
     @Override
     public void findViewById() {
-
-    }
-
-//    public class JsImageDetail extends Object {
-//        @JavascriptInterface
-//        public void OnClick(String msg) {
-//            NewWebPhoneModel model = new Gson().fromJson(msg, NewWebPhoneModel.class);
-//
-//            if (msg != null) {
-//                //showImageDialog(model.getIndex(), model.getList());
-//                list = model.list;
-//                index = model.index;
-////点击图片详情
-//                Message message = new Message();
-//
-//                message.what = 1;
-//                myHandler.sendMessage(message);
-//                //    showImageDialog(list, index);
-//
-//                //
-//            }
-//
-//
-//        }
-//    }
-
-    public class JsPhone extends Object {
-        @JavascriptInterface
-        public void OnClick(String msg) {
-            if (msg != null) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                Uri data = Uri.parse("tel:" + msg);
-                intent.setData(data);
-                mContext.startActivity(intent);
-            }
-        }
-    }
-
-    public class JsIntegral extends Object {
-
-
-        @JavascriptInterface
-        public void OnClick() {
-            startActivity(MyCouponsActivity.getIntent(mContext, MyCouponsActivity.class));
-        }
-    }
-
-//    public class JsShare extends Object {
-//
-//
-//        @JavascriptInterface
-//        public void OnClick(String msg) {
-//
-//            NewWebModel model = new Gson().fromJson(msg, NewWebModel.class);
-//            mShareTitle = model.getTitle();
-//
-//            mShareDesc = model.getDescribe();
-//            mShareIcon = model.getPic();
-//            mShareUrl = model.getLink();
-//
-//            showInviteDialog();
-//
-//
-//        }
-//    }
-
-    public class JsLoging extends Object {
-        @JavascriptInterface
-        public void OnClick() {
-            startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
-
-        }
-    }
-
-    public class JsQuestToHomeActivity extends Object {
-        @JavascriptInterface
-        public void OnClick() {
-            startActivity(HomeActivity.getIntent(mActivity, HomeActivity.class));
-
-        }
-    }
-
-//    public class JsVIPJumpToPay extends Object {
-//        @JavascriptInterface
-//        public void OnClick(String msg) {
-//            //我的积分
-//            Intent intent = new Intent(NewWebViewActivity.this, IntegralPayActivity.class);
-//            intent.putExtra("vipPackageId", msg);
-//            startActivity(intent);
-//        }
-//    }
-
-
-    public class JsIntegralUser extends Object {
-
-        // 定义JS需要调用的方法
-        // 被JS调用的方法必须加入@JavascriptInterface注解
-        @JavascriptInterface
-        public void OnClick() {
-
-            startActivity(new Intent(mContext, HomeActivity.class));
-            EventBus.getDefault().post(new GoToMarketEvent());
-        }
+        Intent intent = new Intent(mContext, HomeActivity.class);
+        SharedPreferencesUtil.saveString(mContext,"once","-1");
+        intent.putExtra("go_home", "goHome");
+        startActivity(intent);
+        finish();
     }
 
     @Override
     public void setViewData() {
-        mWebView=(WebView) findViewById(R.id.frm_h5);
-        mWebView.loadUrl(TMP_URL);
-        WebSettings settings = mWebView.getSettings();
-        settings.setSavePassword(false);
-        settings.setJavaScriptEnabled(true);
-        settings.setAllowFileAccessFromFileURLs(true);
-        settings.setAllowUniversalAccessFromFileURLs(true);
-        settings.setJavaScriptCanOpenWindowsAutomatically(true);
-        settings.setAllowContentAccess(true); // 是否可访问Content Provider的资源，默认值 true
-        settings.setSupportMultipleWindows(false);//这里一定得是false,不然打开的网页中，不能在点击打开了
-        settings.setDomStorageEnabled(true);
-        settings.setAppCacheMaxSize(1024 * 1024 * 8);
-        String appCachePath = getApplicationContext().getCacheDir().getAbsolutePath();
-        settings.setAppCachePath(appCachePath);
-        settings.setAllowFileAccess(true);
-        settings.setAppCacheEnabled(true);
 
-        settings.setUseWideViewPort(true);
-        settings.setLoadWithOverviewMode(true);
-        settings.setBuiltInZoomControls(true);
-        settings.setDisplayZoomControls(false);
-        settings.setSupportZoom(true);
-
-
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-
-        mWebView.addJavascriptInterface(new JsIntegral(), "discountJumpToPay");
-        mWebView.addJavascriptInterface(new JsIntegralUser(), "shopListJumpToPay");
-//        mWebView.addJavascriptInterface(new JsShare(), "sharePlatformJumpToPay");
-        mWebView.addJavascriptInterface(new JsLoging(), "goLoginJumpToPay");
-//        mWebView.addJavascriptInterface(new JsVIPJumpToPay(), "vipJumpToPay");
-        mWebView.addJavascriptInterface(new JsQuestToHomeActivity(), "goBack");
-
-        mWebView.addJavascriptInterface(new JsPhone(), "goPhone");
-//        mWebView.addJavascriptInterface(new JsImageDetail(), "showImg");
-
-        mWebView.setWebViewClient(new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                // TODO Auto-generated method stub
-                return super.shouldOverrideUrlLoading(view, url);
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                // TODO Auto-generated method stub
-                super.onPageStarted(view, url, favicon);
-            }
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                // TODO Auto-generated method stub
-                super.onPageFinished(view, url);
-            }
-        });
-        mWebView.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public boolean onShowFileChooser(WebView webView,
-                                             ValueCallback<Uri[]> filePathCallback,
-                                             FileChooserParams fileChooserParams) {
-                mUploadCallbackAboveL=filePathCallback;
-                take();
-                return true;
-            }
-            public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-                mUploadMessage=uploadMsg;
-                take();
-            }
-            public void openFileChooser(ValueCallback<Uri> uploadMsg,String acceptType) {
-                mUploadMessage=uploadMsg;
-                take();
-            }
-            public void openFileChooser(ValueCallback<Uri> uploadMsg,String acceptType, String capture) {
-                mUploadMessage=uploadMsg;
-                take();
-            }
-        });
     }
 
     @Override
     public void setClickEvent() {
 
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode==FILECHOOSER_RESULTCODE)
-        {
-            if (null == mUploadMessage && null == mUploadCallbackAboveL) return;
-            Uri result = data == null || resultCode != RESULT_OK ? null : data.getData();
-            if (mUploadCallbackAboveL != null) {
-                onActivityResultAboveL(requestCode, -1, data);
-            }
-            else  if (mUploadMessage != null) {
-                Log.e("result",result+"");
-                if(result==null){
-//	            		mUploadMessage.onReceiveValue(imageUri);
-                    mUploadMessage.onReceiveValue(imageUri);
-                    mUploadMessage = null;
-
-                    Log.e("imageUri",imageUri+"");
-                }else {
-                    mUploadMessage.onReceiveValue(result);
-                    mUploadMessage = null;
-                }
-
-
-            }
-        }
-    }
-
-
-
-    @SuppressWarnings("null")
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void onActivityResultAboveL(int requestCode, int resultCode, Intent data) {
-        if (requestCode != FILECHOOSER_RESULTCODE || mUploadCallbackAboveL == null) {
-            return;
-        }
-        Uri[] results = null;
-
-        if (resultCode == Activity.RESULT_OK) {
-
-            if (data == null) {
-                results = new Uri[]{imageUri};
-
-            } else {
-                String dataString = data.getDataString();
-                ClipData clipData = data.getClipData();
-
-                if (clipData != null) {
-                    results = new Uri[clipData.getItemCount()];
-                    for (int i = 0; i < clipData.getItemCount(); i++) {
-                        ClipData.Item item = clipData.getItemAt(i);
-                        results[i] = item.getUri();
-                    }
-                }
-
-                if (dataString != null)
-                    results = new Uri[]{Uri.parse(dataString)};
-            }
-        }
-
-        if (results != null) {
-            mUploadCallbackAboveL.onReceiveValue(results);
-            mUploadCallbackAboveL = null;
-
-        } else {
-            results = new Uri[]{imageUri};
-            mUploadCallbackAboveL.onReceiveValue(results);
-            mUploadCallbackAboveL = null;
-        }
-
-        return;
-    }
-
-    private void take(){
-        File imageStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "MyApp");
-        // Create the storage directory if it does not exist
-        //创建目录
-        if (!imageStorageDir.exists()) {
-            imageStorageDir.mkdirs();
-        }
-        File file = new File(imageStorageDir + File.separator + "IMG_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
-        imageUri = Uri.fromFile(file);
-
-        final List<Intent> cameraIntents = new ArrayList<Intent>();
-        final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        final PackageManager packageManager = getPackageManager();
-        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
-        for (ResolveInfo res : listCam) {
-            final String packageName = res.activityInfo.packageName;
-            final Intent i = new Intent(captureIntent);
-            i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            i.setPackage(packageName);
-            i.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            cameraIntents.add(i);
-
-        }
-        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-        i.addCategory(Intent.CATEGORY_OPENABLE);
-        i.setType("image/*");
-        Intent chooserIntent = Intent.createChooser(i, "Image Chooser");
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[]{}));
-        TestActivity.this.startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
-    }
-
 }

@@ -88,6 +88,7 @@ import com.puyue.www.qiaoge.dialog.CouponDialog;
 import com.puyue.www.qiaoge.dialog.CouponListDialog;
 import com.puyue.www.qiaoge.dialog.HomeActivityDialog;
 import com.puyue.www.qiaoge.dialog.PrivacyDialog;
+import com.puyue.www.qiaoge.dialog.TestDialog;
 import com.puyue.www.qiaoge.dialog.TurnTableDialog;
 import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.event.BackEvent;
@@ -333,6 +334,9 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     private SkillAdapter skillAdapter;
     private String deductAmountStr;
     private String offerStr;
+    private String currentVersion;
+    private boolean isUpdate;
+    private HomeActivityDialog homeActivityDialog;
 
     public static HomeFragmentsss getInstance() {
         HomeFragmentsss fragment = new HomeFragmentsss();
@@ -611,12 +615,12 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         EventBus.getDefault().unregister(this);
     }
 
+
     @Override
     public void initViews(View view) {
         binder = ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
         context = getActivity();
-
         token = UserInfoHelper.getUserId(mActivity);
 
         getProductsList(1,10,"commonBuy");
@@ -744,6 +748,53 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
             }
         });
+
+        rb_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rb_1.setTextColor(Color.parseColor("#ffffff"));
+                rb_1.setBackgroundResource(R.drawable.shape_oranges_home);
+
+                rb_2.setTextColor(Color.parseColor("#FF680A"));
+                rb_2.setBackgroundResource(R.drawable.shape_white_home);
+
+                rb_3.setTextColor(Color.parseColor("#FF680A"));
+                rb_3.setBackgroundResource(R.drawable.shape_white_home);
+                getSpikeList(2);
+            }
+        });
+
+        rb_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rb_2.setTextColor(Color.parseColor("#ffffff"));
+                rb_2.setBackgroundResource(R.drawable.shape_oranges_home);
+
+                rb_1.setTextColor(Color.parseColor("#FF680A"));
+                rb_1.setBackgroundResource(R.drawable.shape_white_home);
+
+                rb_3.setTextColor(Color.parseColor("#FF680A"));
+                rb_3.setBackgroundResource(R.drawable.shape_white_home);
+                getSpikeList(11);
+            }
+        });
+
+        rb_3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rb_1.setTextColor(Color.parseColor("#FF680A"));
+                rb_1.setBackgroundResource(R.drawable.shape_white_home);
+
+                rb_2.setTextColor(Color.parseColor("#FF680A"));
+                rb_2.setBackgroundResource(R.drawable.shape_white_home);
+
+                rb_3.setTextColor(Color.parseColor("#ffffff"));
+                rb_3.setBackgroundResource(R.drawable.shape_oranges_home);
+                getSpikeList(3);
+
+            }
+        });
+
 
         rg_new.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -888,7 +939,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                             privacyDialog = new PrivacyDialog(mActivity,content);
                             if(privacyModel.getData().getOpen().equals("1")) {
                                 privacyDialog.show();
-                            } else {
+                            }else {
                                 privacyDialog.dismiss();
                                 getCouponList();
                             }
@@ -917,7 +968,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
                     @Override
                     public void onNext(ProductNormalModel getCommonProductModel) {
-
+                        Log.d("dsdfddsss.........",type);
                         if (getCommonProductModel.isSuccess()) {
                             if(getCommonProductModel.getData().getList().size()>0) {
                                 switchRb7();
@@ -1106,11 +1157,9 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         refreshLayout.autoRefresh();
         lav_activity_loading.show();
         couponListAdapter = new CouponListAdapter(R.layout.item_home_coupon_list,lists);
+        getPrivacys();
 
-        isTurn();
-//        getCouponList();
         getCustomerPhone();
-//        getPrivacy();
         isSend();
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
         mTypedialog.setCancelable(false);
@@ -1123,12 +1172,50 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                 skillList.clear();
                 skillAdvList.clear();
                 driverList.clear();
+                isSend();
+//                getCouponList();
                 getBaseLists();
+                isTurn();
                 getDriveInfo();
                 EventBus.getDefault().post(new BackEvent());
                 refreshLayout.finishRefresh();
             }
         });
+    }
+
+    private void getPrivacys() {
+        IndexHomeAPI.getPrivacy(mActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<PrivacyModel>() {
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(PrivacyModel privacyModel) {
+
+                        if(privacyModel.isSuccess()) {
+                            String content = privacyModel.getData().getContent();
+                            privacyDialog = new PrivacyDialog(mActivity,content);
+                            if(!SharedPreferencesUtil.getString(mActivity,"once").equals("0")) {
+                                privacyDialog.show();
+                            }else {
+                                privacyDialog.dismiss();
+                            }
+
+                        }else {
+                            AppHelper.showMsg(mContext,privacyModel.getMessage());
+                        }
+                    }
+                });
     }
 
     private void isSend() {
@@ -1182,11 +1269,11 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                         if(turnModel.isSuccess()) {
                             int isShow = turnModel.getData();
                             //1显示 0不显示
-//                            if(isShow==1) {
+                            if(isShow==1) {
                                 getTurn();
-//                            }else {
-//                                getPrivacy();
-//                            }
+                            }else {
+                                getPrivacy();
+                            }
                         }else {
                             AppHelper.showMsg(mActivity,turnModel.getMessage());
                         }
@@ -1220,10 +1307,12 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                                 lists = couponListModel.getData().getGifts();
                                 couponListAdapter.notifyDataSetChanged();
                                 couponListDialog = new CouponListDialog(mActivity,couponListModel,lists);
+
                                 if(lists.size()>0) {
                                     couponListDialog.show();
                                 }else {
                                     couponListDialog.dismiss();
+                                    Log.d("dwsddddsssssss.......","fssdwwdd");
                                     QueryHomePropup();
                                 }
 
@@ -1257,14 +1346,20 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                     @Override
                     public void onNext(QueryHomePropupModel queryHomePropupModel) {
                         if (queryHomePropupModel.isSuccess()) {
-
-                            QueryHomePropupModel.DataBean.HomePropupBean homePropup = queryHomePropupModel.getData().getHomePropup();
-                            HomeActivityDialog homeActivityDialog = new HomeActivityDialog(mContext,homePropup);
-                            if (queryHomePropupModel.getData().isPropup()) {
-                                homeActivityDialog.show();
-                            }else {
-                                homeActivityDialog.dismiss();
+                            Log.d("dwsddddsssssss.......","000");
+                            if(queryHomePropupModel.getData().getHomePropup()!=null) {
+                                Log.d("dwsddddsssssss.......","333");
+                                QueryHomePropupModel.DataBean.HomePropupBean homePropup = queryHomePropupModel.getData().getHomePropup();
+                                homeActivityDialog = new HomeActivityDialog(mActivity,homePropup);
+                                Log.d("dwsddddsssssss.......","11111");
+                                if (queryHomePropupModel.getData().isPropup()) {
+                                    homeActivityDialog.show();
+                                    Log.d("dwsddddsssssss.......","22222");
+                                }else {
+                                    homeActivityDialog.dismiss();
+                                }
                             }
+
                         } else {
                             AppHelper.showMsg(mContext, queryHomePropupModel.getMessage());
                         }
@@ -1295,14 +1390,14 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                             data2 = turnModel.getData();
                             List<String> list = new ArrayList<>();
                             List<String> list1 = new ArrayList<>();
-//                            for (int i = 0; i <data2.size() ; i++) {
-//                                list.add(data2.get(i).getPoolNo());
-//                            }
-
-                            for (int i = 0; i <6 ; i++) {
-                                list1.add("ssss"+i);
+                            for (int i = 0; i <data2.size() ; i++) {
+                                list.add(data2.get(i).getPoolNo());
                             }
-                            turnTableDialog = new TurnTableDialog(mActivity,list1);
+
+//                            for (int i = 0; i <6 ; i++) {
+//                                list1.add("ssss"+i);
+//                            }
+                            turnTableDialog = new TurnTableDialog(mActivity,list);
                             turnTableDialog.show();
                         }else {
                             AppHelper.showMsg(mActivity,turnModel.getMessage());
@@ -1519,7 +1614,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 //                            showPopWindow();
                             //----------------------------
                             tv_city.setText(data.getAddress());
-                            Log.d("swdwdwdwdwdw.......",data.getAddress());
                             Glide.with(mActivity).load(data.getOtherInfo()).into(iv_pic);
                             list.clear();
                             list1.clear();
@@ -1633,6 +1727,37 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         });
     }
 
+
+    /**
+     * 获取更新
+     */
+    private void requestUpdates() {
+        UpdateAPI.requestUpdate(getContext(), AppHelper.getVersion(getContext()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<UpdateModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(UpdateModel updateModel) {
+                        mModelUpdate = updateModel;
+                        if (mModelUpdate.success) {
+                            isUpdate = updateModel.data.forceUpdate;
+                        } else {
+                            AppHelper.showMsg(mActivity, mModelUpdate.message);
+                        }
+                    }
+                });
+
+    }
 
     /**
      * 获取更新
@@ -1866,6 +1991,8 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         super.onStop();
         banner.stopAutoPlay();
         typeAdapter.cancle();
+
+
     }
 
 
@@ -1885,8 +2012,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     public void loginEvent(LogoutsEvent event) {
         //刷新UI
         refreshLayout.autoRefresh();
-        getCouponList();
-        isTurn();
 
     }
 
@@ -1894,7 +2019,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     public void loginsEvent(AddressEvent event) {
         //刷新UI
         refreshLayout.autoRefresh();
-        isTurn();
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1938,8 +2063,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void cityEvent(CityEvent event) {
         refreshLayout.autoRefresh();
-        getCouponList();
-        isTurn();
         chooseAddressDialog.dismiss();
 
     }

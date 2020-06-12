@@ -76,7 +76,6 @@ public class ReasonActivity extends BaseSwipeActivity {
         rl_other.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                iv_icon.setVisibility(View.VISIBLE);
 
             }
         });
@@ -123,7 +122,7 @@ public class ReasonActivity extends BaseSwipeActivity {
                 }else {
                     selectionPosition = position;
                     edit.setVisibility(View.GONE);
-                    datacancle = list.get(position).getType();
+                    datacancle = list.get(position).getCode();
                     reasonAdapter.selectionPosition(position);
                     reasonAdapter.notifyDataSetChanged();
                 }

@@ -682,10 +682,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
                 switchTab(TAB_MARKET);
             }
         }
-
-
-
-
     }
 
     @Override
@@ -714,6 +710,7 @@ public class MyLocationListener extends BDAbstractLocationListener {
         city = location.getCity();
         UserInfoHelper.saveAreaName(mContext, district);
         UserInfoHelper.saveLocation(mContext,location.getAddrStr());
+
         isGet = true;
 
         if (type.equals("goHome")) {

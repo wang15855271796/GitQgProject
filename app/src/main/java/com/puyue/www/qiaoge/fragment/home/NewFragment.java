@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.fragment.home;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -160,7 +161,7 @@ public class NewFragment extends BaseFragment {
 
                     @Override
                     public void onNext(ProductNormalModel getCommonProductModel) {
-
+                        Log.d("dsdfddsss.........",type);
                         productNormalModel = getCommonProductModel;
                         if (getCommonProductModel.isSuccess()) {
                             newAdapter.notifyDataSetChanged();

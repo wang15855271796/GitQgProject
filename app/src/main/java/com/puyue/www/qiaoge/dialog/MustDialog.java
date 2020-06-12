@@ -197,12 +197,14 @@ public class MustDialog extends Dialog implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.iv_close:
                 dismiss();
+                EventBus.getDefault().unregister(this);
                 break;
 
             case R.id.iv_cart:
                 context.startActivity(new Intent(context, HomeActivity.class));
                 EventBus.getDefault().post(new GoToCartFragmentEvent());
                 dismiss();
+                EventBus.getDefault().unregister(this);
                 break;
 
         }

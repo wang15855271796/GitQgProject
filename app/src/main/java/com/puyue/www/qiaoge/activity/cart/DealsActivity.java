@@ -28,13 +28,6 @@ public class DealsActivity extends BaseSwipeActivity {
     String phone;
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
-        if(getIntent().getStringExtra("reason")!=null) {
-            reason = getIntent().getStringExtra("reason");
-            Log.d("hsdasdadadad......",reason);
-        }
-
-
-
         return false;
     }
 
@@ -50,6 +43,11 @@ public class DealsActivity extends BaseSwipeActivity {
         if(getIntent().getStringExtra("phone")!=null) {
             phone = getIntent().getStringExtra("phone");
         }
+
+        if(getIntent().getStringExtra("reason")!=null) {
+            reason = getIntent().getStringExtra("reason");
+            Log.d("hsdasdadadad......",reason);
+        }
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -59,6 +57,7 @@ public class DealsActivity extends BaseSwipeActivity {
                 intent.putExtras(bundle);
                 intent.putExtra("reason",reason);
                 intent.putExtra("phone",phone);
+
                 startActivity(intent);
             }
         },3000);
@@ -84,6 +83,6 @@ public class DealsActivity extends BaseSwipeActivity {
     @Override
     protected void onStop() {
         super.onStop();
-
+        handler.removeCallbacksAndMessages(null);
     }
 }

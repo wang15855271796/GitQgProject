@@ -39,6 +39,7 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
 
     @Override
     public void setViewData() {
+//        SharedPreferencesUtil.saveString(mContext,"once","0");
         //进行Android 6.0的动态权限申请
         requestAndroidSixPermissions();
 
@@ -86,15 +87,25 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
      * 闪屏处理
      */
     private void handleSplash() {
+
         // 闪屏的核心代码
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(mContext, HomeActivity.class);
-                intent.putExtra("go_home", "goHome");
-                startActivity(intent);
-                finish();
-            }
-        });
+        SharedPreferencesUtil.getString(mContext,"once").equals("-1");
+//        if(SharedPreferencesUtil.getString(mContext,"once").equals("0")) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(mContext, HomeActivity.class);
+                    intent.putExtra("go_home", "goHome");
+                    startActivity(intent);
+                    finish();
+                }
+            });
+//        }else {
+//            Intent intent = new Intent(mContext, TestActivity.class);
+//            intent.putExtra("two", "goHome");
+//            startActivity(intent);
+//            finish();
+//        }
+
     }
 }

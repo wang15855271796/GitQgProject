@@ -45,9 +45,7 @@ public class ErrorActivity extends BaseSwipeActivity {
     String phone;
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
-        if(getIntent().getStringExtra("phone")!=null) {
-            phone = getIntent().getStringExtra("phone");
-        }
+
         return false;
     }
 
@@ -63,6 +61,12 @@ public class ErrorActivity extends BaseSwipeActivity {
             reason = getIntent().getStringExtra("reason");
 
         }
+
+        if(getIntent().getStringExtra("phone")!=null) {
+            phone = getIntent().getStringExtra("phone");
+
+        }
+
         data = (CancleModel.DataBean)getIntent().getSerializableExtra("data");
         if(data!=null) {
             if(data.getWeekOrderNum()==0) {
@@ -128,6 +132,7 @@ public class ErrorActivity extends BaseSwipeActivity {
                 Intent intent = new Intent(mActivity,CancleResultActivity.class);
                 intent.putExtra("reason",reason);
                 intent.putExtra("phone",phone);
+
                 startActivity(intent);
             }
         });

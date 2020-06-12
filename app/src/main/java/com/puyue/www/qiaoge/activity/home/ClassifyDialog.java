@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
 
 import com.puyue.www.qiaoge.event.UpDateNumEvent9;
+import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
@@ -190,13 +192,16 @@ public class ClassifyDialog extends Dialog implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.iv_close:
                 dismiss();
+                EventBus.getDefault().unregister(this);
+                Log.d("swdddddddd......","wdddddd");
                 break;
 
             case R.id.iv_cart:
-
+                EventBus.getDefault().post(new ReduceNumEvent());
                 context.startActivity(new Intent(context, HomeActivity.class));
                 EventBus.getDefault().post(new GoToCartFragmentEvent());
                 dismiss();
+                EventBus.getDefault().unregister(this);
                 break;
         }
     }
@@ -204,6 +209,7 @@ public class ClassifyDialog extends Dialog implements View.OnClickListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getTotal(UpDateNumEvent9 upDateNumEvent) {
         getCartNum();
+
     }
     /**
      * 获取角标数据

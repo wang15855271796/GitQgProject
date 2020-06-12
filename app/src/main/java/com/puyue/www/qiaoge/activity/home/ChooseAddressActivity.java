@@ -126,7 +126,7 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
 
         tv_address.setOnClickListener(this);
         rl_empty.setOnClickListener(this);
-        if(!TextUtils.isEmpty(getIntent().getStringExtra("cityName"))&&!TextUtils.isEmpty(getIntent().getStringExtra("areaName"))) {
+        if(!TextUtils.isEmpty(getIntent().getStringExtra("cityName"))||!TextUtils.isEmpty(getIntent().getStringExtra("areaName"))) {
             cityName = getIntent().getStringExtra("cityName");
             areaName = getIntent().getStringExtra("areaName");
             tv_area.setText(cityName+areaName);

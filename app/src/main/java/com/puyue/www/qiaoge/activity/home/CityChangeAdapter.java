@@ -27,15 +27,13 @@ public class CityChangeAdapter extends BaseQuickAdapter<CityChangeModel.DataBean
     private FlowLayout fl_container;
     private TextView tv_city;
     private String cityName;
-    Onclick onclick;
     CityDialog cityDialog;
     public List<CityChangeModel.DataBean.CityNamesBean.AreaNamesBean> areaNames;
     Activity mActivity;
     String flag;
-    public CityChangeAdapter(String flag,Activity mActivity, int layoutResId, @Nullable List<CityChangeModel.DataBean> data, Onclick onclick) {
+    public CityChangeAdapter(String flag,Activity mActivity, int layoutResId, @Nullable List<CityChangeModel.DataBean> data) {
         super(layoutResId, data);
         this.data = data;
-        this.onclick = onclick;
         this.mActivity = mActivity;
         this.flag = flag;
     }

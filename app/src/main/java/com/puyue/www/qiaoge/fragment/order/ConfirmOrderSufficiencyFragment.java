@@ -647,81 +647,10 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
                         } else {
                             AppHelper.showMsg(mActivity, "请输入提货人姓名");
                         }
-                      /*  GetDeliverTimeAPI.requestDeliverTime(mActivity, areaContent)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Subscriber<GetDeliverTimeModel>() {
-                                    @Override
-                                    public void onCompleted() {
-
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable e) {
-
-                                    }
-
-                                    @Override
-                                    public void onNext(GetDeliverTimeModel getDeliverTimeModel) {
-                                        if (getDeliverTimeModel.success) {
-                                            if (getDeliverTimeModel.data != null) {
-
-                                               *//* mlist.clear();
-                                                try {
-                                                    JSONArray jsonArray = new JSONArray(getDeliverTimeModel.data);
-                                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                                        mlist.add(jsonObject.getString("name") + " " + jsonObject.getString("start") + "-" + jsonObject.getString("end"));
-
-                                                    }
-
-                                                    PickCityUtil.showSinglePickView(mActivity, mlist, "请选择配送时间段", new PickCityUtil.ChoosePositionListener() {
-                                                        @Override
-                                                        public void choosePosition(int position, String s) {
-                                                            try {
-                                                                JSONObject jsonObjects = jsonArray.getJSONObject(position);
-                                                                deliverTimeStart = jsonObjects.getString("start");
-                                                                deliverTimeName = jsonObjects.getString("name");
-                                                                deliverTimeEnd = jsonObjects.getString("end");
-                                                            } catch (JSONException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            requestOrderNum();
-                                                        }
-                                                    });
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            } else {
-                                                requestOrderNum();
-                                            }
-                                        } else {
-                                            AppHelper.showMsg(mActivity, getDeliverTimeModel.message);
-                                        }*//*
-
-
-                                            }
-                                        }
-                                    }
-                                });*/
-
 
                     }
                     break;
                 case R.id.linearLayoutCoupons: // 优惠券
-                  /*  Intent intent = new Intent(ConfirmOrderNewActivity.this, ChooseCouponsActivity.class);
-                    intent.putExtra("proActAmount", proActAmount);
-                    intent.putExtra("teamAmount", teamAmount);
-                    intent.putExtra("killAmount", killAmount);
-                    intent.putExtra("prodAmount", prodAmount);
-                    intent.putExtra("giftDetailNo", couponId);
-                    startActivityForResult(intent, ActivityResultHelper.ChOOSE_COUPONS_REQUESR_CODE);*/
-                    //点击图片控件，根据当前的判断，设置点击之后的背景图片。
-//                    if(linearLayoutCoupons.isSelected()){
-//                        linearLayoutCoupons.setSelected(false);
-//                    }else {
-//                        linearLayoutCoupons.setSelected(true);
-//                    }
 
                     break;
                 case R.id.ll_go_market:
@@ -741,8 +670,6 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
      * 获取数据的网络请求
      */
     private void requestCartBalance(String giftDetailNo, int type) {
-
-
         CartBalanceAPI.requestCartBalance(mActivity, normalProductBalanceVOStr, activityBalanceVOStr, cartListStr, giftDetailNo, type, 1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -788,6 +715,194 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
                         }
                     }
                 });
+    }
+
+    /**
+     * 获取数据的网络请求(解决点击优惠券会重置更改的信息)
+     */
+    private void requestCartBalances(String giftDetailNo, int type) {
+        CartBalanceAPI.requestCartBalance(mActivity, normalProductBalanceVOStr, activityBalanceVOStr, cartListStr, giftDetailNo, type, 1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<CartBalanceModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(CartBalanceModel cartBalanceModel) {
+                        if (cartBalanceModel.success) {
+                            cModel = cartBalanceModel;
+                            toRechargeAmount = cModel.getData().getToRechargeAmount();
+                            toRecharge = cModel.getData().isToRecharge();
+                            totalAmount = Double.valueOf(cartBalanceModel.getData().getTotalAmount());
+                            title = cartBalanceModel.getData().wareAddress;
+                            content = cartBalanceModel.getData().wareAddress;
+//                            tv_phone.setText( cartBalanceModel.getData().customerPhone);
+                            if (cartBalanceModel != null) {
+                                setTexts(cartBalanceModel);
+                                if (requestCount == 0) {
+                                    userChooseDeduct();
+                                    requestCount++;
+                                }
+
+                                if (cartBalanceModel.getData().getProductVOList().size() > 0) {
+                                    list.clear();
+                                    list.addAll(cartBalanceModel.getData().getProductVOList());
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                            mCoder.geocode(new GeoCodeOption()
+                                    .city("杭州")
+                                    .address(cartBalanceModel.getData().wareAddress));
+                        } else {
+                            AppHelper.showMsg(mActivity, cartBalanceModel.message);
+                        }
+                    }
+                });
+    }
+
+    private void setTexts(CartBalanceModel cartBalanceModel) {
+        CartBalanceModel.DataBean info = cartBalanceModel.getData();
+        proActAmount = info.getProActAmount();
+        teamAmount = info.getTeamAmount();
+        killAmount = info.getKillAmount();
+        prodAmount = info.getNormalAmount();
+
+        areaContent =
+                info.getAddressVO().getAreaCode();
+
+        if (info.getDeductDetail() != null) {
+            deductDetail = info.getDeductDetail().getGiftDetailNo();
+        } else {
+            deductDetail = "";
+        }
+
+        if (info.pickPhone != null) {
+//            et_phone.setText(info.pickPhone);
+        }
+        if (info.pickUserName != null) {
+//            et_name.setText(info.pickUserName);
+        }
+
+        tv_address.setText(info.wareAddress);
+        textViewNum.setText("共" + info.getTotalNum() + "" + "件商品");
+        distributionFeePrice.setText("¥" + info.getDeliveryFee());
+        payMoney.setText("¥" + info.getTotalAmount());
+        commodity.setText("共" + info.getTotalNum() + "件商品");
+        totalPrice.setText("¥" + info.getTotalAmount());
+        payAmount = info.getTotalAmount();
+        commodityAmount.setText("¥" + info.getProdAmount() + "");
+
+        distributionFee.setText("满" + info.getSendAmount() + "元免配送费");
+
+        if (info.wareName!=null&&StringHelper.notEmptyAndNull(info.wareName)){
+            address.setText(info.wareName);
+        }
+        if (info.getAddressVO().getContactPhone() != null && info.getAddressVO().getUserName() != null &&
+
+                info.getAddressVO().getAreaName() != null ) {
+            //  LinearLayoutAddress.setVisibility(View.GONE);
+            // linearLayoutAddressHead.setVisibility(View.VISIBLE);
+            userName.setText(info.getAddressVO().getUserName());
+            userPhone.setText(info.getAddressVO().getContactPhone());
+
+
+            if (!TextUtils.isEmpty(info.getAddressVO().getShopName())) {
+                firmName.setText(info.getAddressVO().getShopName());
+                // LinearLayoutStoreName.setVisibility(View.VISIBLE);
+            } else {
+                // LinearLayoutStoreName.setVisibility(View.GONE);
+            }
+        } else {
+            //  linearLayoutAddressHead.setVisibility(View.GONE);
+            //  LinearLayoutAddress.setVisibility(View.VISIBLE);
+        }
+        if (cartBalanceModel.getData().getOfferAmount() != null) {
+            textViewDiscount.setText("已优惠¥" + cartBalanceModel.getData().getOfferAmount());
+            textViewDiscount.setVisibility(View.VISIBLE);
+        } else {
+            textViewDiscount.setVisibility(View.GONE);
+
+        }
+        if (cartBalanceModel.getData().getDeductDetail() != null) {
+            if (!TextUtils.isEmpty(cartBalanceModel.getData().getDeductDetail().getAmountStr())) {
+                couponId = cartBalanceModel.getData().getDeductDetail().getGiftDetailNo();
+                NewgiftDetailNo = cartBalanceModel.getData().getDeductDetail().getGiftDetailNo();////NewgiftDetailNo
+
+            }
+        }
+        textCoupons.setText(cartBalanceModel.getData().getDeductDesc());
+
+        VipURl = cartBalanceModel.getData().getVipCenterUrl();
+        vipSubtractionPrice.setText("¥" + cartBalanceModel.getData().getVipReduct());
+
+        if (!TextUtils.isEmpty(cartBalanceModel.getData().getVipReductDesc())) {
+
+            vipSubtraction.setText(cartBalanceModel.getData().getVipReductDesc());
+            vipSubtraction.setVisibility(View.VISIBLE);
+        } else {
+            vipSubtraction.setVisibility(View.GONE);
+        }
+        if (cartBalanceModel.getData().isVip()) { // 是否开通vip
+            ll_collect_bills.setVisibility(View.GONE);
+
+            vipSubtractionLinearLayout.setVisibility(View.VISIBLE);
+            relativeLayoutVIP.setVisibility(View.GONE);
+            //  vipSubtractionLinearLayout.setVisibility(View.GONE);
+            textViewVipTitle.setText(cartBalanceModel.getData().getNotVipDesc());
+        } else {
+            vipSubtractionLinearLayout.setVisibility(View.GONE);
+            //ll_collect_bills.setVisibility(View.VISIBLE);
+            if (!cartBalanceModel.getData().isOpenVip()) {
+                if (cartBalanceModel.getData().getVipDesc() > 0) {
+                    ll_collect_bills.setVisibility(View.VISIBLE);
+                    tv_vip_content_one.setText("续费会员本单立减");
+                    tv_vip_content_two.setText("，随后享受单单满减优惠");
+                    tv_go.setText("去续费");
+
+                    tv_amount_spec.setText(cartBalanceModel.getData().getVipDesc().toString() + "" + "元");
+                } else {
+                    ll_collect_bills.setVisibility(View.GONE);
+                }
+
+
+            } else {
+
+
+                ll_collect_bills.setVisibility(View.VISIBLE);
+
+                tv_amount_spec.setText(cartBalanceModel.getData().getVipDesc().toString() + "" + "元");
+                tv_vip_content_one.setText("开通会员本单立减");
+                tv_vip_content_two.setText("，随后享受单单满减优惠");
+                tv_go.setText("去开通");
+            }
+            relativeLayoutVIP.setVisibility(View.GONE);
+
+        }
+        if (cartBalanceModel.getData().isOfferIsOpen()) { // 活动满减
+            subtractionActivitiesLinearLayout.setVisibility(View.VISIBLE);
+
+            subtractionActivitiesPrice.setText("¥" + cartBalanceModel.getData().getNormalReduct());
+            if (!TextUtils.isEmpty(cartBalanceModel.getData().getNormalReductDesc())) {
+                subtractionActivities.setVisibility(View.VISIBLE);
+                subtractionActivities.setText(cartBalanceModel.getData().getNormalReductDesc());
+            } else {
+                subtractionActivities.setVisibility(View.GONE);
+            }
+
+        } else {
+            subtractionActivitiesLinearLayout.setVisibility(View.GONE);
+            subtractionActivities.setVisibility(View.GONE);
+        }
+
+
     }
 
     /**
@@ -1099,13 +1214,13 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
 //                            couponsList.get(i).setFlag(!flag);
                             //1
                             list.clear();
-                            requestCartBalance(info.getGiftDetailNo(), 1);
+                            requestCartBalances(info.getGiftDetailNo(), 1);
                             NewgiftDetailNo = info.getGiftDetailNo();
                         } else {
 //                            couponsList.get(i).setFlag(flag);
                             //0
                             list.clear();
-                            requestCartBalance("", 0);
+                            requestCartBalances("", 0);
                             NewgiftDetailNo = "";
                         }
 //                        j++;

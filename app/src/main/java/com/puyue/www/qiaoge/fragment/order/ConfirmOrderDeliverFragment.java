@@ -293,6 +293,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
 
                                                     }
 
+
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
@@ -548,6 +549,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
 
                         if (generateOrderModel.success) {
 //                            LoadingDialog.getInstance(getActivity()).dismiss();
+
                             lav_activity_loading.hide();
                             if (Integer.parseInt(UserInfoHelper.getDate(mActivity)) != currentDay) {
                                 if(toRecharge&&totalAmount>toRechargeAmount) {

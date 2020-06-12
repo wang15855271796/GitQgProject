@@ -1859,9 +1859,7 @@ public class SelfSufficiencyOrderDetailActivity extends BaseSwipeActivity {
 
         super.onDestroy();
         mMapView.onDestroy();
-
         EventBus.getDefault().unregister(this);
-
     }
 
 

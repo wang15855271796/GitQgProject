@@ -72,11 +72,9 @@ public class CancleResultActivity extends BaseSwipeActivity {
     @Override
     public void findViewById() {
         ButterKnife.bind(this);
-        if(getIntent().getStringExtra("phone")!=null) {
+        if(getIntent()!=null) {
             phone = getIntent().getStringExtra("phone");
-        }
-
-        if(getIntent().getStringExtra("reason")!=null) {
+            tv_phone.setText(phone);
             reason = getIntent().getStringExtra("reason");
         }
 
@@ -108,9 +106,10 @@ public class CancleResultActivity extends BaseSwipeActivity {
         tv_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (StringHelper.notEmptyAndNull(et_pwd.getText().toString()) && !TextUtils.isEmpty(phone) && StringHelper.notEmptyAndNull(et_yzm.getText().toString())&& StringHelper.notEmptyAndNull(reason)) {
-                        getData(phones,et_yzm.getText().toString(),et_pwd.getText().toString(),reason);
 
+                if (StringHelper.notEmptyAndNull(et_pwd.getText().toString()) && !TextUtils.isEmpty(phone) && StringHelper.notEmptyAndNull(et_yzm.getText().toString())&& StringHelper.notEmptyAndNull(reason)) {
+                        getData(phone,et_yzm.getText().toString(),et_pwd.getText().toString(),reason);
+                        Log.d("dfffffff....",reason);
                 }else {
                     AppHelper.showMsg(mContext,"请填写正确信息");
                 }

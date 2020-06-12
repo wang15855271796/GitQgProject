@@ -44,9 +44,9 @@
                 android:textSize="18dp" />
 
         </com.puyue.www.qiaoge.view.CompatToolbar>
-
+        <!--android:fitsSystemWindows="true"-->
         <ScrollView
-            android:fitsSystemWindows="true"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <LinearLayout
@@ -55,9 +55,9 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:layout_marginTop="@dimen/size_15dp"
                 android:text="请选择或反馈注销原因"
                 android:layout_marginLeft="@dimen/size_16dp"
-                android:layout_marginTop="@dimen/size_15dp"
                 android:layout_width="wrap_content"
                 android:layout_marginBottom="@dimen/size_15dp"
                 android:layout_height="wrap_content" />

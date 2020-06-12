@@ -37,17 +37,20 @@ public class HomeActivityDialog extends Dialog {
     ImageView buttonDelete;
     QueryHomePropupModel.DataBean.HomePropupBean homePropup;
 
-    public HomeActivityDialog(Context mContext, QueryHomePropupModel.DataBean.HomePropupBean homePropup) {
+    public HomeActivityDialog(@NonNull Context mContext, QueryHomePropupModel.DataBean.HomePropupBean homePropup) {
         super(mContext, R.style.promptDialog);
+        setContentView(R.layout.popwindow_home_dialog);
         this.context = mContext;
         this.homePropup = homePropup;
+
         initView();
     }
 
     private void initView() {
+
         popImageView = findViewById(R.id.popImageView);
         buttonDelete = findViewById(R.id.buttonDelete);
-        Glide.with(context).load(popImageView).into(popImageView);
+        Glide.with(context).load(homePropup.getShowUrl()).into(popImageView);
 
         if (homePropup.getToPage().equals("disable")) {
             popImageView.setEnabled(false);
@@ -68,6 +71,7 @@ public class HomeActivityDialog extends Dialog {
 
             }
         });
+
     }
 
     private void QueryHomePropupDismiss() {

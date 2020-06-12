@@ -76,8 +76,6 @@ public class HotDialog extends Dialog implements View.OnClickListener{
     TextView tv_stock;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.tv_confirm)
-    TextView tv_confirm;
     @BindView(R.id.tv_num)
     TextView tv_num;
     @BindView(R.id.tv_free_desc)
@@ -117,6 +115,7 @@ public class HotDialog extends Dialog implements View.OnClickListener{
     public void cancel() {
         super.cancel();
         EventBus.getDefault().unregister(this);
+        Log.d("sdwdddddrrrrrr.....","000000");
     }
 
     public void init() {
@@ -129,7 +128,6 @@ public class HotDialog extends Dialog implements View.OnClickListener{
         attributes.width = Utils.getScreenWidth(context);
         getWindow().setAttributes(attributes);
         iv_close.setOnClickListener(this);
-        tv_confirm.setOnClickListener(this);
         iv_cart.setOnClickListener(this);
 
 
@@ -196,16 +194,14 @@ public class HotDialog extends Dialog implements View.OnClickListener{
             case R.id.iv_close:
                 dismiss();
                 EventBus.getDefault().post(new ReduceNumEvent());
+                EventBus.getDefault().unregister(this);
                 break;
 
-            case R.id.tv_confirm:
-                EventBus.getDefault().post(new ReduceNumEvent());
-                dismiss();
-                break;
             case R.id.iv_cart:
                 context.startActivity(new Intent(context, HomeActivity.class));
                 EventBus.getDefault().post(new GoToCartFragmentEvent());
                 dismiss();
+                EventBus.getDefault().unregister(this);
                 break;
             default:
                 break;
@@ -215,8 +211,8 @@ public class HotDialog extends Dialog implements View.OnClickListener{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getTotal(UpDateNumEvent6 upDateNumEvent) {
-        Log.d("sdwddddd.....","sdddddddddd");
         getCartNum();
+        Log.d("sdwdddddrrrrrr.....","111111");
     }
     /**
      * 获取角标数据

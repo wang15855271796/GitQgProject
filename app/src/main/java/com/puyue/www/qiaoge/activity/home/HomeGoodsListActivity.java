@@ -475,6 +475,7 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
         super.onDestroy();
         SelectBean.cleanDate();
         EventBus.getDefault().unregister(this);
+
     }
 
     @Override

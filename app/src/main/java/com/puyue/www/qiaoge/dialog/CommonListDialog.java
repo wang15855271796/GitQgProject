@@ -196,6 +196,7 @@ public class CommonListDialog extends Dialog implements View.OnClickListener{
             case R.id.iv_close:
                 dismiss();
                 EventBus.getDefault().post(new ReduceNumEvent());
+                EventBus.getDefault().unregister(this);
                 break;
 
             case R.id.tv_confirm:
@@ -206,6 +207,7 @@ public class CommonListDialog extends Dialog implements View.OnClickListener{
                 context.startActivity(new Intent(context, HomeActivity.class));
                 EventBus.getDefault().post(new GoToCartFragmentEvent());
                 dismiss();
+                EventBus.getDefault().unregister(this);
                 break;
             default:
                 break;

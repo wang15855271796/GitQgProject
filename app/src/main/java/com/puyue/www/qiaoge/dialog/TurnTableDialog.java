@@ -55,15 +55,14 @@ public class TurnTableDialog extends Dialog {
 
         for ( int i = 0; i < list.size(); i++ ) {
             if(i%2==0) {
-                mListBitmap.add(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_quan_blue));
+                mListBitmap.add(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_quan_blues));
             }else {
-                mListBitmap.add(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_quan_red));
+                mListBitmap.add(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_quan_reds));
             }
         }
 
         //主动旋转一下图片
         mListBitmap = WheelSurfView.rotateBitmaps(mListBitmap);
-        Log.d("wwddddddddd.....",mListBitmap+"");
         String[] array =new String[list.size()];
         list.toArray(array);
         //获取第三个视图
@@ -73,7 +72,7 @@ public class TurnTableDialog extends Dialog {
                 .setmIcons(mListBitmap)
                 .setmType(1)
                 .setmTypeNum(list.size())
-                .setSize(list.size())
+//                .setSize(list.size())
                 .build();
 
         wheelSurfView.setConfig(build);

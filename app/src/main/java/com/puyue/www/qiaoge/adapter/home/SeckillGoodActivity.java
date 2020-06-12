@@ -121,6 +121,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
     private ImageView buyImg;
     private TextView tv_desc;
     TextView tv_title;
+    LinearLayout ll_service;
     private LinearLayout mLlCustomer;
     private TextView mTvCollection;
     private ImageView mIvCollection;
@@ -176,7 +177,8 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
     private long startTime;
     private long endTime;
     private int warnMe;
-
+    String num = null;
+    String city;
     //图片详情集合
     private List<String> detailList = new ArrayList<>();
     private ImageView mTvSub;
@@ -197,7 +199,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
     int shopTypeId;
     boolean isChecked = false;
     RegisterShopAdapterTwo mRegisterAdapter;
-
+    TextView tv_city;
 
     class MyHandler extends Handler {
         @Override
@@ -214,6 +216,13 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
             Bundle bundle = getIntent().getExtras();
             productId = bundle.getInt(AppConstant.ACTIVEID);
 
+            if(bundle.getString("num")!=null) {
+                num = bundle.getString("num");
+            }
+
+            if(bundle.getString("city")!=null) {
+                city = bundle.getString("city");
+            }
         }
         return false;
     }
@@ -234,6 +243,8 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+        tv_city = FVHelper.fv(this, R.id.tv_city);
+        ll_service = FVHelper.fv(this, R.id.ll_service);
         tv_change = FVHelper.fv(this, R.id.tv_change);
         pb = FVHelper.fv(this, R.id.pb);
         tv_cut_down = FVHelper.fv(this, R.id.tv_cut_down);
@@ -289,6 +300,9 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
                 finish();
             }
         });
+        if(city!=null) {
+            tv_city.setText("该商品为"+city+"地区商品，请切换到该地区购买");
+        }
     }
 
     @Override
@@ -301,9 +315,29 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
         typeIntent = getIntent().getIntExtra("type", 1);
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        if(num!=null) {
 
-        //获取数据
-        getProductDetail(productId);
+            if(num.equals("-1")) {
+                getProductDetail(productId,null);
+                ll_service.setVisibility(View.GONE);
+                mTvAddCar.setEnabled(true);
+                mTvAddCar.setText("加入购物车");
+                mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
+            }else {
+                getProductDetail(productId,num);
+                ll_service.setVisibility(View.VISIBLE);
+                mTvAddCar.setEnabled(false);
+                mTvAddCar.setBackgroundResource(R.drawable.app_car);
+                Log.d("dwdwdwdsds.......","-1-1-1-1");
+            }
+        }else {
+            getProductDetail(productId,num);
+            mTvAddCar.setEnabled(true);
+            mTvAddCar.setText("加入购物车");
+            mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
+            Log.d("dwdwdwdsds.......","00000");
+
+        }
         getCustomerPhone();
         getAllCommentList(pageNum, pageSize, productId, businessType);
 
@@ -504,7 +538,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
     /**
      * 获取详情
      */
-    private void getProductDetail(final int productId) {
+    private void getProductDetail(final int productId,String jumpFlag) {
         GetSpecialDetailAPI.requestData(mContext, productId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -550,62 +584,72 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
                             endTime = model.getData().getEndTime();
                             warnMe = model.getData().getWarnMe();
 
-                            if(currentTime>startTime) {
-                                //秒杀开始
-                                if (model.getData().getSaleDone() == 0) {
-                                    mTvAddCar.setEnabled(false);
-                                    mTvAddCar.setText("     已售罄     ");
-                                    mTvAddCar.setBackgroundResource(R.drawable.app_car);
-                                } else {
-                                    mTvAddCar.setEnabled(true);
-                                    mTvAddCar.setText("加入购物车");
-                                    mTvAddCar.setBackgroundColor(Color.parseColor("#F6551A"));
-                                }
-                            }else {
-                                //未开始
-
-                                if(warnMe==0) {
-                                    mTvAddCar.setText("     添加提醒     ");
-                                    mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
-                                    SharedPreferencesUtil.saveInt(mActivity,"warnMe",0);
-
+                            if(num.equals("-1")) {
+                                if(currentTime>startTime) {
+                                    //秒杀开始
+                                    if (model.getData().getSaleDone() == 0) {
+                                        mTvAddCar.setEnabled(false);
+                                        mTvAddCar.setText("     已售罄     ");
+                                        mTvAddCar.setBackgroundResource(R.drawable.app_car);
+                                    } else {
+                                        mTvAddCar.setEnabled(true);
+                                        mTvAddCar.setText("加入购物车");
+                                        mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
+                                        Log.d("dwdwdwdsds.......","1111");
+                                    }
                                 }else {
-                                    mTvAddCar.setText("     取消提醒     ");
-                                    mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
-                                    SharedPreferencesUtil.saveInt(mActivity,"warnMe",1);
+                                    //未开始
 
+                                    if(warnMe==0) {
+                                        mTvAddCar.setText("     添加提醒     ");
+                                        mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
+                                        Log.d("dwdwdwdsds.......","2222");
+                                        SharedPreferencesUtil.saveInt(mActivity,"warnMe",0);
+
+                                    }else {
+                                        mTvAddCar.setText("     取消提醒     ");
+                                        mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
+                                        Log.d("dwdwdwdsds.......","333");
+                                        SharedPreferencesUtil.saveInt(mActivity,"warnMe",1);
+
+                                    }
                                 }
-                            }
 
-                            String current = DateUtils.formatDate(currentTime, "MM月dd日HH时mm分ss秒");
-                            String start = DateUtils.formatDate(startTime, "MM月dd日HH时mm分ss秒");
-                            try {
-                                currents = Utils.stringToDate(current, "MM月dd日HH时mm分ss秒");
-                                starts = Utils.stringToDate(start, "MM月dd日HH时mm分ss秒");
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
+                                String current = DateUtils.formatDate(currentTime, "MM月dd日HH时mm分ss秒");
+                                String start = DateUtils.formatDate(startTime, "MM月dd日HH时mm分ss秒");
+                                try {
+                                    currents = Utils.stringToDate(current, "MM月dd日HH时mm分ss秒");
+                                    starts = Utils.stringToDate(start, "MM月dd日HH时mm分ss秒");
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
 
-                            boolean exceed24 = DateUtils.isExceed24(currents, starts);
-                            if(exceed24) {
-                                //大于24
-                                tv_time.setText(start+"开抢");
-                            }else {
-                                //小于24
-                                if(startTime !=0&& endTime !=0) {
-                                    tv_cut_down.setTime(true, currentTime, startTime, endTime);
-                                    tv_cut_down.changeBackGrounds(ContextCompat.getColor(mContext, R.color.color333333));
-                                    tv_cut_down.changeTypeColor(Color.WHITE);
-                                    tv_time.setVisibility(View.INVISIBLE);
-                                    tv_cut_down.start();
-                                    tv_cut_down.setVisibility(View.VISIBLE);
-
-
+                                boolean exceed24 = DateUtils.isExceed24(currents, starts);
+                                if(exceed24) {
+                                    //大于24
+                                    tv_time.setText(start+"开抢");
                                 }else {
-                                    tv_time.setVisibility(View.INVISIBLE);
-                                    tv_cut_down.setVisibility(View.INVISIBLE);
+                                    //小于24
+                                    if(startTime !=0&& endTime !=0) {
+                                        tv_cut_down.setTime(true, currentTime, startTime, endTime);
+                                        tv_cut_down.changeBackGrounds(ContextCompat.getColor(mContext, R.color.color333333));
+                                        tv_cut_down.changeTypeColor(Color.WHITE);
+                                        tv_time.setVisibility(View.INVISIBLE);
+                                        tv_cut_down.start();
+                                        tv_cut_down.setVisibility(View.VISIBLE);
+
+
+                                    }else {
+                                        tv_time.setVisibility(View.INVISIBLE);
+                                        tv_cut_down.setVisibility(View.INVISIBLE);
+                                    }
                                 }
+
+                                mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
+                            }else {
+                                mTvAddCar.setBackgroundResource(R.drawable.app_car);
                             }
+
 
 
 
@@ -715,12 +759,13 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
                             if(SharedPreferencesUtil.getInt(mActivity,"warnMe")==0) {
                                 mTvAddCar.setText("     取消提醒     ");
                                 mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
+                                Log.d("dwdwdwdsds.......","44444");
                                 SharedPreferencesUtil.saveInt(mActivity,"warnMe",1);
                                 EventBus.getDefault().post(new ChangeStatEvent());
                             }else {
                                 mTvAddCar.setText("     添加提醒     ");
                                 mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
-
+                                Log.d("dwdwdwdsds.......","5555");
 //                                ToastUtil.showSuccessMsg(mContext,"成功333");
                                 SharedPreferencesUtil.saveInt(mActivity,"warnMe",0);
                                 EventBus.getDefault().post(new ChangeStatEvent());
@@ -1319,7 +1364,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
                     public void onNext(UpdateUserInvitationModel updateUserInvitationModel) {
                         if (updateUserInvitationModel.isSuccess()) {
                             UserInfoHelper.saveUserType(mContext, AppConstant.USER_TYPE_WHOLESALE);
-                            getProductDetail(productId);
+                            getProductDetail(productId,num);
                         } else {
                             AppHelper.showMsg(mContext, updateUserInvitationModel.getMessage());
                         }

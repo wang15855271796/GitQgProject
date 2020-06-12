@@ -185,6 +185,7 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
      */
 
     private void getProductsList(int pageNum, int pageSize, String type) {
+
         ProductListAPI.requestData(mContext, pageNum, pageSize,type,null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

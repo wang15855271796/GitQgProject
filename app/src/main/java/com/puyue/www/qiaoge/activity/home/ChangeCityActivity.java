@@ -70,19 +70,7 @@ public class ChangeCityActivity extends BaseActivity {
     public void setViewData() {
         String flag = getIntent().getStringExtra("flag");
         rl_city_change.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new CityChangeAdapter(flag,mActivity,R.layout.city_item, listCity, new CityChangeAdapter.Onclick() {
-            @Override
-            public void addDialog(int position, List<CityChangeModel.DataBean.CityNamesBean.AreaNamesBean> areaNames, View view) {
-
-            }
-        });
-
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
-            }
-        });
+        mAdapter = new CityChangeAdapter(flag,mActivity,R.layout.city_item, listCity);
         rl_city_change.setAdapter(mAdapter);
     }
 

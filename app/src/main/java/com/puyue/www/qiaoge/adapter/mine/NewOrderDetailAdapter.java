@@ -161,6 +161,7 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
                     public void onNext(JumpModel jumpModel) {
                         if(jumpModel.isSuccess()) {
                             if(jumpModel.getData()!=null) {
+
                                 if(jumpModel.getData().equals("-1")) {
                                     Intent intent = new Intent(mContext, SeckillGoodActivity.class);
                                     intent.putExtra(AppConstant.ACTIVEID,productId);
@@ -239,6 +240,7 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
                     @Override
                     public void onNext(JumpModel jumpModel) {
                         if(jumpModel.isSuccess()) {
+                            Log.d("swdwdwddddrr.......",jumpModel.getData());
                             if(jumpModel.getData()!=null) {
                                 if(jumpModel.getData().equals("-1")) {
                                     Intent intent = new Intent(mContext, CommonGoodsDetailActivity.class);

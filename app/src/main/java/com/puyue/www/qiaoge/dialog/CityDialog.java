@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
+import com.puyue.www.qiaoge.activity.mine.login.LogoutsEvent;
 import com.puyue.www.qiaoge.adapter.mine.AreaAdapter;
 import com.puyue.www.qiaoge.fragment.home.CityEvent;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
@@ -63,18 +64,23 @@ public abstract class CityDialog extends Dialog implements View.OnClickListener 
                     UserInfoHelper.saveAreaName(mContext, areaNames.get(position).getAreaName());
                     SharedPreferencesUtil.saveInt(mContext,"isClick",1);
                     UserInfoHelper.saveChangeFlag(mContext,1+"");
-                    Intent intent = new Intent();//跳回首页
+                    Intent intent = new Intent(mContext,HomeActivity.class);//跳回首页
                     mContext.setResult(104,intent);
                     EventBus.getDefault().post(new CityEvent());
+//                    EventBus.getDefault().post(new LogoutsEvent());
+                    mContext.startActivity(intent);
                     mContext.finish();
                 }else {
                     UserInfoHelper.saveAreaName(mContext, areaNames.get(position).getAreaName());
                     SharedPreferencesUtil.saveInt(mContext,"isClick",1);
                     UserInfoHelper.saveChangeFlag(mContext,1+"");
-                    Intent intent = new Intent();//跳回首页
+                    Intent intent = new Intent(mContext,HomeActivity.class);//跳回首页
                     mContext.setResult(104,intent);
                     EventBus.getDefault().post(new CityEvent());
+//                    EventBus.getDefault().post(new LogoutsEvent());
+                    mContext.startActivity(intent);
                     mContext.finish();
+                    Log.d("wdwdwdwdwdwd.......","11111");
                 }
 
 
