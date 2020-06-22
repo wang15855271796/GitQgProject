@@ -269,21 +269,21 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         //获取数据
         if(num!=null) {
             if(num.equals("-1")) {
-                getProductDetail(productId,null);
+                getProductDetail(productId);
                 ll_service.setVisibility(View.GONE);
                 mTvAddCar.setEnabled(true);
                 mTvAddCar.setText("加入购物车");
                 mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
 
             }else {
-                getProductDetail(productId,num);
+                getProductDetail(productId);
                 ll_service.setVisibility(View.VISIBLE);
                 mTvAddCar.setEnabled(false);
                 mTvAddCar.setBackgroundResource(R.drawable.app_car);
 
             }
         }else {
-            getProductDetail(productId,num);
+            getProductDetail(productId);
             mTvAddCar.setEnabled(true);
             mTvAddCar.setText("加入购物车");
             mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
@@ -293,14 +293,17 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         getCustomerPhone();
         getAllCommentList(pageNum, pageSize, productId, businessType);
 
+
+
         adapterRecommend = new GoodsRecommendAdapter(R.layout.item_goods_recommend, searchList);
         LinearLayoutManager linearLayoutManagerCoupons = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerViewRecommend.setLayoutManager(linearLayoutManagerCoupons);
         recyclerViewRecommend.setAdapter(adapterRecommend);
         mTypedialog = new AlertDialog.Builder(mActivity, R.style.DialogStyle).create();
         mTypedialog.setCancelable(false);
-        imageViewAdapter = new ImageViewAdapter(mContext,R.layout.item_imageview,detailList);
-        recyclerViewImage.setLayoutManager(new LinearLayoutManager(mContext));
+
+        imageViewAdapter = new ImageViewAdapter(R.layout.item_imageview,detailList);
+        recyclerViewImage.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerViewImage.setAdapter(imageViewAdapter);
 
     }
@@ -428,8 +431,8 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     /**
      * 获取详情
      */
-    private void getProductDetail(final int productId,String jumpFlag) {
-        GetProductDetailAPI.requestData(mContext,productId,jumpFlag)
+    private void getProductDetail(final int productId) {
+        GetProductDetailAPI.requestData(mContext,productId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<GetProductDetailModel>() {
@@ -448,8 +451,8 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                         if (model.isSuccess()) {
                             detailList.clear();
                             detailList.addAll(model.getData().getDetailPic());
-                            models = model;
                             imageViewAdapter.notifyDataSetChanged();
+                            models = model;
                             productId1 = model.getData().getProductId();
                             productName = model.getData().getProductName();
                             mTvTitle.setText(productName);

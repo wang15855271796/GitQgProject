@@ -29,6 +29,7 @@ import com.puyue.www.qiaoge.api.market.MarketGoodSelcetAPI;
 import com.puyue.www.qiaoge.api.market.MarketRightModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.CouponDialog;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent9;
@@ -43,6 +44,7 @@ import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
+import com.puyue.www.qiaoge.utils.LoginUtil;
 import com.puyue.www.qiaoge.view.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -98,10 +100,11 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
         setContentView(R.layout.new_product);
     }
 
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void getCartNum(UpDateNumEvent9 event) {
-//        getCartNum();
-//    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getNum(UpDateNumEvent9 event) {
+        Log.d("cdwdwddsssvvv...","000");
+        getCartNum();
+    }
 
     @Override
     protected void onDestroy() {
@@ -122,8 +125,7 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
 
                 }else {
-                    AppHelper.showMsg(mContext, "请先登录");
-                    startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
+                    initDialog();
                 }
             }
         });
@@ -171,6 +173,24 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
                 }
             }
         });
+    }
+
+    CouponDialog couponDialog;
+    private void initDialog() {
+        couponDialog = new CouponDialog(mActivity) {
+            @Override
+            public void Login() {
+                startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                dismiss();
+            }
+
+            @Override
+            public void Register() {
+                LoginUtil.initRegister(getContext());
+                dismiss();
+            }
+        };
+        couponDialog.show();
     }
 
 

@@ -96,7 +96,6 @@ public class CouponFragment1 extends BaseFragment {
                             couponList.clear();
                             if (teamActiveQueryModel.getData() != null) {
                                 couponList.addAll(teamActiveQueryModel.getData());
-                                Log.d("sdfdfdfgdgdfgd.....",couponList.size()+"");
                                 coupon1Adapter.notifyDataSetChanged();
 
                             }

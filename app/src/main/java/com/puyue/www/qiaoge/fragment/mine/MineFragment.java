@@ -48,6 +48,7 @@ import com.puyue.www.qiaoge.api.mine.order.MyOrderNumAPI;
 import com.puyue.www.qiaoge.api.mine.subaccount.MineAccountAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.event.CouponEvent;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.GoToMineEvent;
 import com.puyue.www.qiaoge.event.MessageEvent;
@@ -290,7 +291,7 @@ public class MineFragment extends BaseFragment {
     public void setViewData() {
         mViewVersionPoint.setVisibility(View.GONE);
         mTvVersion.setText(getString(R.string.textVersion) + AppHelper.getVersion(getContext()));
-        Log.d("swdswdwddddd....",UserInfoHelper.getUserId(getContext()));
+
         if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(getContext()))) {
             //有userId,显示userId,
             requestUserInfo();
@@ -426,8 +427,10 @@ public class MineFragment extends BaseFragment {
                 //头像
             } else if (view == iv_setting || view == ll_setting) {
                 //我的账户
+
                 if (mStateCode == -10000) {
                     //异地登录了,需要清除应用内部的userId,让用户重新登录
+
                     startActivity(LoginActivity.getIntent(getContext(), LoginActivity.class));
                 } else if (mStateCode == -10001) {
                     //用户userId过期,也是需要清除userId,让用户重新登录
@@ -440,6 +443,7 @@ public class MineFragment extends BaseFragment {
                         //没有userId
                         //这个项目登录和输入密码在一个界面,不用在这里判断用户是否登录过,在登录界面判断有没有存过userCell即可
                         //所以跳转登录界面
+
                         startActivity(LoginActivity.getIntent(getContext(), LoginActivity.class));
                     }
                 }
@@ -966,14 +970,12 @@ public class MineFragment extends BaseFragment {
                             mModelAccountCenter = accountCenterModel;
                             mStateCode = mModelAccountCenter.code;
                             AppHelper.UserLogout(getContext(), mStateCode, 1);
-                            Log.d("wsssssssss.....",mStateCode+"");
-
+                            Log.d("swdswdwddddd....","sdwdwqddddd");
                             if (mModelAccountCenter.success) {
                                 updateAccountCenter();
-                                Log.d("wsssssssss.....","ssssssd");
+
                             } else {
                                 mTvPhone.setText("请登录");
-                                Log.d("wsssssssss.....","ssssssd000");
                                 AppHelper.showMsg(getContext(), mModelAccountCenter.message);
                             }
                         }
@@ -1168,7 +1170,6 @@ public class MineFragment extends BaseFragment {
         requestUserInfo();
         useAccount();
         requestUpdate();
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1177,6 +1178,18 @@ public class MineFragment extends BaseFragment {
         requestUserInfo();
         useAccount();
         requestUpdate();
+
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getCoupon(CouponEvent couponEvent) {
+        requestOrderNum();
+        requestUserInfo();
+        useAccount();
+        requestUpdate();
+
+    }
+
+
 
 }

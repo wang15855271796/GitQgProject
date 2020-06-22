@@ -103,7 +103,7 @@
 
 
                         <RelativeLayout
-                            android:background="#F6551A"
+                            android:background="@mipmap/ic_black"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size_60dp">
 
@@ -392,16 +392,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="10dp"
                             android:background="@color/app_bg_gray" />
-
-
-                        <LinearLayout
-                            android:id="@+id/ll_activity_team_single_buy"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                        </LinearLayout>
 
                         <View
                             android:layout_width="match_parent"

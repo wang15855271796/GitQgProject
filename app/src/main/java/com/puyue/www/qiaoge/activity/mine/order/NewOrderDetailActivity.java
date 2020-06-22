@@ -388,9 +388,9 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            backEvent();
+            backEvent();
             EventBus.getDefault().post(new BackEvent());
-            finish();
+//            finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -968,8 +968,8 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
         public void onNoDoubleClick(View view) {
             switch (view.getId()) {
                 case R.id.imageViewBreak: //返回按钮
-//                    backEvent();
-                    finish();
+                    backEvent();
+//                    finish();
                     break;
                 case R.id.buttonCancelOrder:// 取消订单
                     showCancleOrder();

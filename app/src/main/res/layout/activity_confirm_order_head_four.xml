@@ -501,7 +501,7 @@ android:id="@+id/ll_self_sufficiency"
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:visibility="gone"
 
                 android:src="@mipmap/ic_order_arrow_deliver" />
         </LinearLayout>

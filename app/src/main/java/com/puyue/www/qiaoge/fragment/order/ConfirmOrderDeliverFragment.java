@@ -2,20 +2,25 @@ package com.puyue.www.qiaoge.fragment.order;
 
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
-import android.view.animation.Animation;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
@@ -32,8 +37,9 @@ import com.puyue.www.qiaoge.api.mine.order.GenerateOrderAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.ChooseAddressDialog;
-import com.puyue.www.qiaoge.dialog.LoadingDialog;
+import com.puyue.www.qiaoge.dialog.ListViewDialog;
 import com.puyue.www.qiaoge.event.AddressEvent;
+import com.puyue.www.qiaoge.helper.AlwaysMarqueeTextViewHelper;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
@@ -41,6 +47,7 @@ import com.puyue.www.qiaoge.model.cart.CartBalanceModel;
 import com.puyue.www.qiaoge.model.home.GetDeliverTimeModel;
 import com.puyue.www.qiaoge.model.mine.coupons.UserChooseDeductModel;
 import com.puyue.www.qiaoge.model.mine.order.GenerateOrderModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -144,6 +151,12 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
     private boolean toRecharge;
     private Double totalAmount;
 
+    private PopupWindow popWin; // 弹出窗口
+    private View popView; // 保存弹出窗口布局
+    private WheelView wheelView;
+    private TextView textView1;//取消
+    private TextView textView2;//确定
+    AlwaysMarqueeTextViewHelper sc;
     @Override
     public int setLayoutId() {
         return R.layout.fragment_confirm_deliver_order;
@@ -156,6 +169,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
     @Override
     public void findViewById(View view) {
         //  toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+
         ll_info = (LinearLayout) view.findViewById(R.id.ll_info);
         lav_activity_loading = (AVLoadingIndicatorView) view.findViewById(R.id.lav_activity_loading);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
@@ -173,6 +187,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
         messageEditText = (EditText) view.findViewById(R.id.messageEditText);
         totalPrice = (TextView) view.findViewById(R.id.totalPrice);
         textViewDiscount = (TextView) view.findViewById(R.id.textViewDiscount);
+
         buttonPay = (TextView) view.findViewById(R.id.buttonPay);
         commodity = (TextView) view.findViewById(R.id.commodity);
         payMoney = (TextView) view.findViewById(R.id.payMoney);
@@ -199,7 +214,9 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
 
 //        progressBar.startAnimation(Animation );
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getActivity().getWindow().setNavigationBarColor(ContextCompat.getColor(getContext(),R.color.white));
+        }
     }
 
     @Override
@@ -293,6 +310,89 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
 
                                                     }
 
+
+                                                    popView = View.inflate( getActivity(), R.layout.cztest_popwin, null);
+                                                    popWin = new PopupWindow(popView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true); //实例化PopupWindow
+                                                    //设置背景灰掉
+                                                    backgroundAlpha(0.4f);
+                                                    // 设置PopupWindow的弹出和消失效果
+//                                                    popWin.setAnimationStyle(R.style.popupAnimation);
+                                                    //显示弹出窗口
+                                                    popWin.showAtLocation(buttonPay, Gravity.BOTTOM, 0, 0);
+                                                    //pop关闭时变回原来
+                                                    popWin.setOnDismissListener(new poponDismissListener());
+                                                    //取消
+                                                    textView1 = (TextView) popView.findViewById(R.id.textView1);
+//                                                    sc = (AlwaysMarqueeTextViewHelper) popView.findViewById(R.id.sc);
+//                                                    sc.setText("温馨提示：仓库不提供储货服务，超过自提时间需要您退货重新下单。请您及时提货哦！");
+//                                                    sc.setTextColor(getResources().getColor(R.color.color_F6551A));
+                                                    textView1.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            popWin.dismiss();//关闭
+                                                        }
+                                                    });
+                                                    //确定
+                                                    textView2 = (TextView) popView.findViewById(R.id.textView2);
+                                                    wheelView = (WheelView) popView.findViewById(R.id.wheelView);
+                                                    wheelView.setItems(mlist);
+                                                    textView2.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            JSONObject jsonObjects = null;
+                                                            try {
+                                                                jsonObjects = jsonArray.getJSONObject(wheelView.pos-1);
+                                                                deliverTimeStart = jsonObjects.getString("start");
+                                                                deliverTimeName = jsonObjects.getString("name");
+                                                                deliverTimeEnd = jsonObjects.getString("end");
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                            popWin.dismiss();//关闭
+                                                            requestOrderNum();
+                                                        }
+                                                    });
+
+//                                                    CustomDatePicker customDatePicker1 = new CustomDatePicker(mlist,getActivity(), new CustomDatePicker.ResultHandler() {
+//                                                        @Override
+//                                                        public void handle(String time) {
+////                                                            Log.d("wfwwwdwddwd.....","sdwdwdwd");
+//                                                        }
+//                                                    });
+//                                                    customDatePicker1.show("dwdwdw");
+
+//                                                    ListViewDialog listViewDialog = new ListViewDialog(mActivity, mlist, new ListViewDialog.Onclick() {
+//                                                        @Override
+//                                                        public void click(int num) {
+//                                                            ToastUtil.showSuccessMsg(mActivity,num+"");
+//                                                        }
+//                                                    });
+//                                                    listViewDialog.show();
+                                                    // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
+//                                                    if(mlist.size()>0) {
+//                                                        wheelView.lists(mlist).fontSize(16).select(0).listener(new WheelView.OnWheelViewItemSelectListener() {
+//                                                            @Override
+//                                                            public void onItemSelect(int index) {
+//                                                                ToastUtil.showSuccessMsg(mActivity,"dwdwdw");
+//                                                            }
+//                                                        }).build();
+//                                                    }
+
+
+//                                                    PickCityUtil.showSinglePickView(mActivity, mlist, "请选择配送时间段", new PickCityUtil.ChoosePositionListener() {
+//                                                        @Override
+//                                                        public void choosePosition(int position, String s) {
+//                                                            try {
+//                                                                JSONObject jsonObjects = jsonArray.getJSONObject(position);
+//                                                                deliverTimeStart = jsonObjects.getString("start");
+//                                                                deliverTimeName = jsonObjects.getString("name");
+//                                                                deliverTimeEnd = jsonObjects.getString("end");
+//                                                            } catch (JSONException e) {
+//                                                                e.printStackTrace();
+//                                                            }
+//                                                            requestOrderNum();
+//                                                        }
+//                                                    });
 
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
@@ -714,6 +814,19 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
         list.clear();
         requestCartBalance(NewgiftDetailNo, 1);//NewgiftDetailNo
     }
+    //设置添加屏幕的背景透明度
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = mActivity.getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        mActivity.getWindow().setAttributes(lp);
+    }
 
+    //设置弹框关闭时背景颜色改回来
+    class poponDismissListener implements PopupWindow.OnDismissListener {
+        @Override
+        public void onDismiss() {
+            backgroundAlpha(1f);
+        }
+    }
 
 }

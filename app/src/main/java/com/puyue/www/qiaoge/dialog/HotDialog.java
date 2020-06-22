@@ -179,6 +179,7 @@ public class HotDialog extends Dialog implements View.OnClickListener{
                                 HotItemAdapter hotItemAdapter = new HotItemAdapter(1, productId, R.layout.item_choose_content, exchangeProductModel.getData().getProdPrices());
                                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                                 recyclerView.setAdapter(hotItemAdapter);
+
                             }
                         }else {
                             ToastUtil.showErroMsg(context,exchangeProductModel.getMessage());

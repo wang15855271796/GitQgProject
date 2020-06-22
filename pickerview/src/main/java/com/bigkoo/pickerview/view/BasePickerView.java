@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -39,7 +40,7 @@ public class BasePickerView {
     private Animation outAnim;
     private Animation inAnim;
     private boolean isShowing;
-
+    public ViewGroup decorView;//显示pickerview的根View,默认是activity的根view
     protected int animGravity = Gravity.BOTTOM;
 
     private Dialog mDialog;
@@ -57,7 +58,9 @@ public class BasePickerView {
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM);
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
+
         if (isDialog()) {
+
             //如果是对话框模式
             dialogView = (ViewGroup) layoutInflater.inflate(R.layout.layout_basepickerview, null, false);
             //设置界面的背景为透明
@@ -79,7 +82,8 @@ public class BasePickerView {
             });
         } else {
             //如果只是要显示在屏幕的下方
-            //decorView是activity的根View,包含 contentView 和 titleView
+
+//            decorView是activity的根View,包含 contentView 和 titleView
             if (mPickerOptions.decorView == null) {
                 mPickerOptions.decorView = (ViewGroup) ((Activity) context).getWindow().getDecorView();
             }
@@ -93,6 +97,7 @@ public class BasePickerView {
             contentContainer = (ViewGroup) rootView.findViewById(R.id.content_container);
             contentContainer.setLayoutParams(params);
         }
+
         setKeyBackCancelable(true);
     }
 

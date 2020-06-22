@@ -99,6 +99,7 @@ public class PayResultActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+
         mIvBack = FVHelper.fv(this, R.id.iv_activity_back);
 //        mLavLoading = FVHelper.fv(this, R.id.lav_activity_loading);
         mIvSuccess = FVHelper.fv(this, R.id.iv_activity_order_success);
@@ -124,6 +125,7 @@ public class PayResultActivity extends BaseSwipeActivity {
                     intent.putExtra(AppConstant.ORDERSTATE, "");
                     intent.putExtra(AppConstant.RETURNPRODUCTMAINID, "");
                     startActivity(intent);
+                    Log.d("sddddd...........","000000");
                     finish();
                 }else if (orderDeliveryType==1){
                     Intent intent = new Intent(mContext, SelfSufficiencyOrderDetailActivity.class);
@@ -131,7 +133,7 @@ public class PayResultActivity extends BaseSwipeActivity {
                     intent.putExtra(AppConstant.ORDERSTATE, "");
                     intent.putExtra(AppConstant.RETURNPRODUCTMAINID, "");
                     startActivity(intent);
-//                    Log.d("sssssssssssswwwwwwwwww","sdsdsdsdsd00000");
+                    Log.d("sddddd...........","111111");
                     finish();
                 }
 

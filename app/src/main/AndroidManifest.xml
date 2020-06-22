@@ -202,7 +202,7 @@
         <activity android:name=".activity.mine.MessageCenterActivity"
             android:screenOrientation="portrait" />
         <!--  -->
-        <activity android:name=".activity.TestActivity"
+        <activity android:name=".activity.Test1Activity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.mine.account.EditAccountInputPhoneActivity"
             android:screenOrientation="portrait" />

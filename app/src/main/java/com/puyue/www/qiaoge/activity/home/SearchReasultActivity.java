@@ -25,6 +25,7 @@ import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
 import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.dialog.CouponDialog;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
@@ -32,6 +33,7 @@ import com.puyue.www.qiaoge.listener.OnItemClickListener;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
+import com.puyue.www.qiaoge.utils.LoginUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -84,7 +86,7 @@ public class SearchReasultActivity extends BaseSwipeActivity {
     @Override
     public void findViewById() {
         ButterKnife.bind(this);
-
+        refreshLayout.autoRefresh();
         ll_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +101,7 @@ public class SearchReasultActivity extends BaseSwipeActivity {
             }
         });
 
-        refreshLayout.setEnableLoadMore(false);
+
         tv_activity_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,7 +112,7 @@ public class SearchReasultActivity extends BaseSwipeActivity {
         });
 
 
-
+            refreshLayout.setEnableLoadMore(false);
             refreshLayout.setOnRefreshListener(new OnRefreshListener() {
                 @Override
                 public void onRefresh(@NonNull RefreshLayout refreshLayout) {
@@ -146,8 +148,7 @@ public class SearchReasultActivity extends BaseSwipeActivity {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(SearchReasultActivity.this))) {
 
                 }else {
-                    AppHelper.showMsg(SearchReasultActivity.this, "请先登录");
-                    startActivity(LoginActivity.getIntent(SearchReasultActivity.this, LoginActivity.class));
+                    initDialog();
                 }
             }
         });
@@ -162,7 +163,6 @@ public class SearchReasultActivity extends BaseSwipeActivity {
         view = View.inflate(mContext, R.layout.item_head, null);
         searchWord = getIntent().getStringExtra(AppConstant.SEARCHWORD);
         tv_activity_result.setText(searchWord);
-        getRecommendList(1,10);
 
 
     }
@@ -192,7 +192,7 @@ public class SearchReasultActivity extends BaseSwipeActivity {
                             if(recommendModel.getData().getSearchProd()!=null) {
                                 searchList.addAll(searchResultsModel.getData().getSearchProd().getList());
                                 searchReasultAdapter.notifyDataSetChanged();
-
+                                refreshLayout.setEnableLoadMore(true);
                             }
 
                             if(recommendModel.getData().getRecommendProd().size()!=0) {
@@ -202,8 +202,7 @@ public class SearchReasultActivity extends BaseSwipeActivity {
                                         if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(SearchReasultActivity.this))) {
 
                                         }else {
-                                            AppHelper.showMsg(SearchReasultActivity.this, "请先登录");
-                                            startActivity(LoginActivity.getIntent(SearchReasultActivity.this, LoginActivity.class));
+                                            initDialog();
                                         }
                                     }
                                 });
@@ -212,13 +211,30 @@ public class SearchReasultActivity extends BaseSwipeActivity {
                                 recyclerView.setAdapter(searchResultAdapter);
                             }
 
-                            refreshLayout.setEnableLoadMore(true);
+
 
                         } else {
                             AppHelper.showMsg(mContext, recommendModel.getMessage());
                         }
                     }
                 });
+    }
+    CouponDialog couponDialog;
+    private void initDialog() {
+        couponDialog = new CouponDialog(mActivity) {
+            @Override
+            public void Login() {
+                startActivity(LoginActivity.getIntent(mActivity, LoginActivity.class));
+                dismiss();
+            }
+
+            @Override
+            public void Register() {
+                LoginUtil.initRegister(getContext());
+                dismiss();
+            }
+        };
+        couponDialog.show();
     }
 
     @Override

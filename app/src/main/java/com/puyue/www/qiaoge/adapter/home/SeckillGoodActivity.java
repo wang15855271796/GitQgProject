@@ -177,7 +177,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
     private long startTime;
     private long endTime;
     private int warnMe;
-    String num = null;
+    String num;
     String city;
     //图片详情集合
     private List<String> detailList = new ArrayList<>();
@@ -215,14 +215,9 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
         if (getIntent() != null && getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             productId = bundle.getInt(AppConstant.ACTIVEID);
+            num = bundle.getString("num");
+            city = bundle.getString("city");
 
-            if(bundle.getString("num")!=null) {
-                num = bundle.getString("num");
-            }
-
-            if(bundle.getString("city")!=null) {
-                city = bundle.getString("city");
-            }
         }
         return false;
     }
@@ -292,6 +287,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
         sbv_star_bar = findViewById(R.id.sbv_star_bar);
         tv_status = findViewById(R.id.tv_status);
 
+
         tv_change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -315,33 +311,34 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
         typeIntent = getIntent().getIntExtra("type", 1);
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+
         if(num!=null) {
 
             if(num.equals("-1")) {
-                getProductDetail(productId,null);
+                getProductDetail(productId);
                 ll_service.setVisibility(View.GONE);
                 mTvAddCar.setEnabled(true);
                 mTvAddCar.setText("加入购物车");
                 mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
             }else {
-                getProductDetail(productId,num);
+                getProductDetail(productId);
                 ll_service.setVisibility(View.VISIBLE);
                 mTvAddCar.setEnabled(false);
                 mTvAddCar.setBackgroundResource(R.drawable.app_car);
-                Log.d("dwdwdwdsds.......","-1-1-1-1");
             }
         }else {
-            getProductDetail(productId,num);
+            getProductDetail(productId);
             mTvAddCar.setEnabled(true);
             mTvAddCar.setText("加入购物车");
             mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
-            Log.d("dwdwdwdsds.......","00000");
+
 
         }
         getCustomerPhone();
         getAllCommentList(pageNum, pageSize, productId, businessType);
 
-        imageViewAdapter = new ImageViewAdapter(mContext,R.layout.item_imageview,detailList);
+        imageViewAdapter = new ImageViewAdapter(R.layout.item_imageview,detailList);
         recyclerViewImage.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerViewImage.setAdapter(imageViewAdapter);
     }
@@ -538,7 +535,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
     /**
      * 获取详情
      */
-    private void getProductDetail(final int productId,String jumpFlag) {
+    private void getProductDetail(final int productId) {
         GetSpecialDetailAPI.requestData(mContext, productId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -623,7 +620,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-
+                                Log.d("dwdddddddddd.....","dwddddddd");
                                 boolean exceed24 = DateUtils.isExceed24(currents, starts);
                                 if(exceed24) {
                                     //大于24
@@ -1364,7 +1361,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
                     public void onNext(UpdateUserInvitationModel updateUserInvitationModel) {
                         if (updateUserInvitationModel.isSuccess()) {
                             UserInfoHelper.saveUserType(mContext, AppConstant.USER_TYPE_WHOLESALE);
-                            getProductDetail(productId,num);
+                            getProductDetail(productId);
                         } else {
                             AppHelper.showMsg(mContext, updateUserInvitationModel.getMessage());
                         }

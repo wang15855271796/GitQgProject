@@ -290,7 +290,7 @@ public class PickCityUtil {
         })
                 .setTitleText("请选择自提时间段")
                 .setTitleColor(Color.parseColor("#F56D23"))
-
+                .setFlag(true)
                 .setCancelColor(Color.parseColor("#F56D23"))
                 .setSubmitColor(Color.parseColor("#F56D23"))
                 .setOptionsSelectChangeListener(new OnOptionsSelectChangeListener() {

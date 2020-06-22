@@ -54,6 +54,9 @@ import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
+import com.puyue.www.qiaoge.utils.PickUtils;
+import com.puyue.www.qiaoge.utils.ToastUtil;
+import com.puyue.www.qiaoge.view.PickCityUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -534,6 +537,7 @@ public class EditAndAddActivity extends BaseSwipeActivity  implements OnGetSugge
     }
 
     private void showPickerView() {
+
         OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
@@ -554,10 +558,12 @@ public class EditAndAddActivity extends BaseSwipeActivity  implements OnGetSugge
                 .setDividerColor(Color.BLACK)
                 .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
                 .setContentTextSize(20)
+                .setFlag(false)
                 .build();
-//        Log.d("aaaaabbbbb.......",options3Items.size()+"xx");
         pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
         pvOptions.show();
+
+
     }
     private void parseData(List<AreaModel.DataBean> data) {
         options1Items = data;

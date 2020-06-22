@@ -63,6 +63,7 @@ public class AppConstant {
     public static final String COMMONTYPE = "commonBuy";
     public static final String RECOMMEND = "recommend";
     public static final String ACTIVEID = "activeId";
+    public static final String NUM = "num";
     public static final String ORDERID = "orderId";
     public static final String ORDERSTATE = "orderState";
     public static final String RETURNPRODUCTMAINID = "returnProductMainId";

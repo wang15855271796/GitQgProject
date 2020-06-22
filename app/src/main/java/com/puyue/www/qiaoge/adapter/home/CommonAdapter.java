@@ -83,6 +83,7 @@ public class CommonAdapter extends BaseQuickAdapter<CouponModel.DataBean.Actives
                 if(style.equals("2")) {
                     Intent intent = new Intent(mContext,SeckillGoodActivity.class);
                     intent.putExtra(AppConstant.ACTIVEID,item.getActiveId());
+                    intent.putExtra("num","-1");
                     mContext.startActivity(intent);
                 }else {
                     Intent intent = new Intent(mContext,SpecialGoodDetailActivity.class);

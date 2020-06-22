@@ -445,7 +445,7 @@ public class SelfSufficiencyOrderDetailActivity extends BaseSwipeActivity {
         iv_time_arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showGetTime();
+//                showGetTime();
             }
         });
 

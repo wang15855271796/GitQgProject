@@ -22,6 +22,9 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -59,6 +62,7 @@ import com.puyue.www.qiaoge.activity.mine.login.RegisterMessageActivity;
 import com.puyue.www.qiaoge.activity.mine.order.ConfirmActivity;
 import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
+import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletNewActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletPointActivity;
 import com.puyue.www.qiaoge.adapter.CouponListAdapter;
 import com.puyue.www.qiaoge.adapter.home.CommonAdapter;
@@ -429,6 +433,17 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                                     startTime = couponModel.getData().getStartTime();
                                     skillAdapter = new SkillAdapter(R.layout.item_skill_list, actives);
                                     recyclerViewTest.setAdapter(skillAdapter);
+
+                                    Log.d("wddddddddssss......","1111");
+                                    rb_1.setTextColor(Color.parseColor("#ffffff"));
+                                    rb_1.setBackgroundResource(R.drawable.shape_oranges_home);
+
+                                    rb_2.setTextColor(Color.parseColor("#FF680A"));
+                                    rb_2.setBackgroundResource(R.drawable.shape_white_home);
+
+                                    rb_3.setTextColor(Color.parseColor("#FF680A"));
+                                    rb_3.setBackgroundResource(R.drawable.shape_white_home);
+
                                     skillAdapter.setOnclick(new CommonAdapter.OnClick() {
                                         @Override
                                         public void shoppingCartOnClick(int position) {
@@ -505,6 +520,15 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                                     commonAdapter = new CommonAdapter(11+"",R.layout.item_commons_list, actives);
                                     recyclerViewTest.setAdapter(commonAdapter);
 
+                                    rb_2.setTextColor(Color.parseColor("#ffffff"));
+                                    rb_2.setBackgroundResource(R.drawable.shape_oranges_home);
+
+                                    rb_1.setTextColor(Color.parseColor("#FF680A"));
+                                    rb_1.setBackgroundResource(R.drawable.shape_white_home);
+
+                                    rb_3.setTextColor(Color.parseColor("#FF680A"));
+                                    rb_3.setBackgroundResource(R.drawable.shape_white_home);
+
                                     commonAdapter.setOnclick(new CommonAdapter.OnClick() {
                                         @Override
                                         public void shoppingCartOnClick(int position) {
@@ -532,7 +556,14 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                                     actives.addAll(data1.getActives());
                                     commonAdapter = new CommonAdapter(3+"",R.layout.item_commons_list, actives);
                                     recyclerViewTest.setAdapter(commonAdapter);
+                                    rb_1.setTextColor(Color.parseColor("#FF680A"));
+                                    rb_1.setBackgroundResource(R.drawable.shape_white_home);
 
+                                    rb_2.setTextColor(Color.parseColor("#FF680A"));
+                                    rb_2.setBackgroundResource(R.drawable.shape_white_home);
+
+                                    rb_3.setTextColor(Color.parseColor("#ffffff"));
+                                    rb_3.setBackgroundResource(R.drawable.shape_oranges_home);
                                     commonAdapter.setOnclick(new CommonAdapter.OnClick() {
                                         @Override
                                         public void shoppingCartOnClick(int position) {
@@ -612,6 +643,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     public void onDestroy() {
         super.onDestroy();
         verticalBanner.stop();
+        tv_offer.clearAnimation();
         EventBus.getDefault().unregister(this);
     }
 
@@ -700,15 +732,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         rb_1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d("wddddddddssss......","1111");
-                rb_1.setTextColor(Color.parseColor("#ffffff"));
-                rb_1.setBackgroundResource(R.drawable.shape_oranges_home);
 
-                rb_2.setTextColor(Color.parseColor("#FF680A"));
-                rb_2.setBackgroundResource(R.drawable.shape_white_home);
-
-                rb_3.setTextColor(Color.parseColor("#FF680A"));
-                rb_3.setBackgroundResource(R.drawable.shape_white_home);
                 getSpikeList(2);
 
             }
@@ -718,14 +742,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d("wddddddddssss......","2222");
-                rb_2.setTextColor(Color.parseColor("#ffffff"));
-                rb_2.setBackgroundResource(R.drawable.shape_oranges_home);
 
-                rb_1.setTextColor(Color.parseColor("#FF680A"));
-                rb_1.setBackgroundResource(R.drawable.shape_white_home);
-
-                rb_3.setTextColor(Color.parseColor("#FF680A"));
-                rb_3.setBackgroundResource(R.drawable.shape_white_home);
                 getSpikeList(11);
 
 
@@ -736,14 +753,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d("wddddddddssss......","333");
-                rb_1.setTextColor(Color.parseColor("#FF680A"));
-                rb_1.setBackgroundResource(R.drawable.shape_white_home);
 
-                rb_2.setTextColor(Color.parseColor("#FF680A"));
-                rb_2.setBackgroundResource(R.drawable.shape_white_home);
-
-                rb_3.setTextColor(Color.parseColor("#ffffff"));
-                rb_3.setBackgroundResource(R.drawable.shape_oranges_home);
                 getSpikeList(3);
 
             }
@@ -890,7 +900,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
         //六个品种点击
         typeAdapter = new TypesAdapter(classifyList);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext , 2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(mActivity , 2);
         rv_type.setLayoutManager(gridLayoutManager);
         rv_type.setAdapter(typeAdapter);
 
@@ -945,7 +955,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                             }
 
                         }else {
-                            AppHelper.showMsg(mContext,privacyModel.getMessage());
+                            AppHelper.showMsg(mActivity,privacyModel.getMessage());
                         }
                     }
                 });
@@ -968,7 +978,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
                     @Override
                     public void onNext(ProductNormalModel getCommonProductModel) {
-                        Log.d("dsdfddsss.........",type);
                         if (getCommonProductModel.isSuccess()) {
                             if(getCommonProductModel.getData().getList().size()>0) {
                                 switchRb7();
@@ -1175,6 +1184,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                 isSend();
 //                getCouponList();
                 getBaseLists();
+
                 isTurn();
                 getDriveInfo();
                 EventBus.getDefault().post(new BackEvent());
@@ -1212,7 +1222,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                             }
 
                         }else {
-                            AppHelper.showMsg(mContext,privacyModel.getMessage());
+                            AppHelper.showMsg(mActivity,privacyModel.getMessage());
                         }
                     }
                 });
@@ -1312,7 +1322,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                                     couponListDialog.show();
                                 }else {
                                     couponListDialog.dismiss();
-                                    Log.d("dwsddddsssssss.......","fssdwwdd");
                                     QueryHomePropup();
                                 }
 
@@ -1329,7 +1338,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
      * 首页活动弹窗
      */
     private void QueryHomePropup() {
-        QueryHomePropupAPI.requestQueryHomePropup(mContext)
+        QueryHomePropupAPI.requestQueryHomePropup(mActivity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<QueryHomePropupModel>() {
@@ -1346,22 +1355,18 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                     @Override
                     public void onNext(QueryHomePropupModel queryHomePropupModel) {
                         if (queryHomePropupModel.isSuccess()) {
-                            Log.d("dwsddddsssssss.......","000");
                             if(queryHomePropupModel.getData().getHomePropup()!=null) {
-                                Log.d("dwsddddsssssss.......","333");
                                 QueryHomePropupModel.DataBean.HomePropupBean homePropup = queryHomePropupModel.getData().getHomePropup();
                                 homeActivityDialog = new HomeActivityDialog(mActivity,homePropup);
-                                Log.d("dwsddddsssssss.......","11111");
                                 if (queryHomePropupModel.getData().isPropup()) {
                                     homeActivityDialog.show();
-                                    Log.d("dwsddddsssssss.......","22222");
                                 }else {
                                     homeActivityDialog.dismiss();
                                 }
                             }
 
                         } else {
-                            AppHelper.showMsg(mContext, queryHomePropupModel.getMessage());
+                            AppHelper.showMsg(mActivity, queryHomePropupModel.getMessage());
                         }
                     }
                 });
@@ -1389,14 +1394,10 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                         if(turnModel.isSuccess()) {
                             data2 = turnModel.getData();
                             List<String> list = new ArrayList<>();
-                            List<String> list1 = new ArrayList<>();
                             for (int i = 0; i <data2.size() ; i++) {
                                 list.add(data2.get(i).getPoolNo());
                             }
 
-//                            for (int i = 0; i <6 ; i++) {
-//                                list1.add("ssss"+i);
-//                            }
                             turnTableDialog = new TurnTableDialog(mActivity,list);
                             turnTableDialog.show();
                         }else {
@@ -1519,16 +1520,29 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
                             iconList.clear();
                             iconList.addAll(data.getIcons());
-                            deductAmountStr = data.getDeductAmountStr();
-                            if(data.getOfferStr()!="") {
+                            if(data.getDeductAmountStr()!=null) {
+                                deductAmountStr = data.getDeductAmountStr();
+                            }
+
+                            if(data.getOfferStr()!=null) {
                                 offerStr = data.getOfferStr();
                                 tv_offer.setText(offerStr);
+
+                                Animation scaleAnimation = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                                scaleAnimation.setDuration(3000);
+                                scaleAnimation.setFillAfter(true);
+                                scaleAnimation.setFillBefore(false);
+                                scaleAnimation.setRepeatCount(-1);
+                                scaleAnimation.setRepeatMode(Animation.REVERSE);
+                                scaleAnimation.setStartOffset(0);
+                                scaleAnimation.setInterpolator(mActivity, android.R.anim.decelerate_interpolator);//设置动画插入器
+                                tv_offer.startAnimation(scaleAnimation);
                                 tv_offer.setVisibility(View.VISIBLE);
                             }else {
                                 tv_offer.setVisibility(View.GONE);
                             }
 
-                            //八个icon Adapter
+                            //八个icon Adapter 142603
                             rvIconAdapter = new RvIconAdapter(R.layout.item_home_icon,iconList,deductAmountStr);
                             rv_icon.setLayoutManager(new GridLayoutManager(context,4));
                             rv_icon.setAdapter(rvIconAdapter);
@@ -1542,7 +1556,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                             spikeNum = indexInfoModel.getData().getSpikeNum();
                             teamNum = indexInfoModel.getData().getTeamNum();
                             specialNum = indexInfoModel.getData().getSpecialNum();
-
                             if(spikeNum!=0) {
                                 rb_1.setVisibility(View.VISIBLE);
                                 rb_1.setChecked(true);
@@ -1604,6 +1617,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
                             if(teamNum==0&&specialNum==0&&spikeNum==0) {
                                 ll_active.setVisibility(View.GONE);
+
                             }else {
                                 ll_active.setVisibility(View.VISIBLE);
                             }
@@ -1688,7 +1702,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                         Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
                         startActivity(intent);
                     }else if(AppConstant.BALANCE.equals(banners.get(position).getProdPage())){
-                        Intent intent = new Intent(getActivity(), MyWalletPointActivity.class);
+                        Intent intent = new Intent(getActivity(), MyWalletNewActivity.class);
                         startActivity(intent);
                     }else if(AppConstant.POINT.equals(banners.get(position).getProdPage())){
                         Intent intent = new Intent(getActivity(), MinerIntegralActivity.class);
@@ -1709,10 +1723,12 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                     int businessId = Integer.parseInt(banners.get(position).getBusinessId());
                     if(businessType.equals("2")) {
                         Intent intent = new Intent(getActivity(), SeckillGoodActivity.class);
-                        intent.putExtra(AppConstant.ACTIVEID,businessId );
+//                        intent.putExtra(AppConstant.NUM,businessId);
+                        intent.putExtra("num","-1");
+                        intent.putExtra(AppConstant.ACTIVEID,businessId);
                         startActivity(intent);
                     }else if(businessType.equals("3")) {
-                        Intent intent = new Intent(getActivity(), TeamGoodsDetailActivity.class);
+                        Intent intent = new Intent(getActivity(), SpecialGoodDetailActivity.class);
                         intent.putExtra(AppConstant.ACTIVEID, businessId);
                         startActivity(intent);
                     }else if(businessType.equals("11")) {
@@ -1726,39 +1742,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
             }
         });
     }
-
-
-    /**
-     * 获取更新
-     */
-    private void requestUpdates() {
-        UpdateAPI.requestUpdate(getContext(), AppHelper.getVersion(getContext()))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<UpdateModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(UpdateModel updateModel) {
-                        mModelUpdate = updateModel;
-                        if (mModelUpdate.success) {
-                            isUpdate = updateModel.data.forceUpdate;
-                        } else {
-                            AppHelper.showMsg(mActivity, mModelUpdate.message);
-                        }
-                    }
-                });
-
-    }
-
     /**
      * 获取更新
      */
@@ -1829,7 +1812,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
         mBtnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //   ((BaseSwipeActivity) mContext).finish();
                 mDialog.dismiss();
             }
         });
@@ -1996,6 +1978,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     }
 
 
+
     @Override
     public void onSliderClick(BaseSliderView slider) {
         String banner_url = slider.getBundle().getString("banner_url");
@@ -2048,10 +2031,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void cartNum8(UpDateNumEvent8 event) {
-        getCartNum();
-    }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void cartNum9(UpDateNumEvent9 event) {
         getCartNum();
     }
     @Subscribe(threadMode = ThreadMode.MAIN)

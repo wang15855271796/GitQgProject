@@ -21,12 +21,12 @@ public class GetProductDetailAPI {
     private interface GetProductDetailService {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.GETPRODUCTDETAIL)
-        Observable<GetProductDetailModel> getData(@Field("productMainId") int productId,@Field("jumpFlag") String jumpFlag);
+        Observable<GetProductDetailModel> getData(@Field("productMainId") int productId);
     }
 
-    public static Observable<GetProductDetailModel> requestData(Context context, int productMainId,String jumpFlag) {
+    public static Observable<GetProductDetailModel> requestData(Context context, int productMainId) {
         GetProductDetailService service = RestHelper.getBaseRetrofit(context).create(GetProductDetailService.class);
-        return service.getData(productMainId,jumpFlag);
+        return service.getData(productMainId);
     }
 
 
@@ -40,4 +40,18 @@ public class GetProductDetailAPI {
         GetExchageProductService service = RestHelper.getBaseRetrofit(context).create(GetExchageProductService.class);
         return service.getData(productId,businessType);
     }
+
+
+
+    private interface GetProductDetailServicse {
+        @FormUrlEncoded
+        @POST(AppInterfaceAddress.GETPRODUCTDETAIL)
+        Observable<GetProductDetailModel> getData(@Field("productMainId") int productMainId);
+    }
+
+    public static Observable<GetProductDetailModel> requestDatas(Context context, int productMainId) {
+        GetProductDetailServicse service = RestHelper.getBaseRetrofit(context).create(GetProductDetailServicse.class);
+        return service.getData(productMainId);
+    }
+
 }

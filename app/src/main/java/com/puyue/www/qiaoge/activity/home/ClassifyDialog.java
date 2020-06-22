@@ -193,7 +193,6 @@ public class ClassifyDialog extends Dialog implements View.OnClickListener {
             case R.id.iv_close:
                 dismiss();
                 EventBus.getDefault().unregister(this);
-                Log.d("swdddddddd......","wdddddd");
                 break;
 
             case R.id.iv_cart:

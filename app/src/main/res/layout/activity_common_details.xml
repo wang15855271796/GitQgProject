@@ -294,6 +294,7 @@
         </android.support.v4.widget.NestedScrollView>
 
         <RelativeLayout
+
             android:alpha="0.4"
             android:background="@drawable/shape_grey"
             android:layout_width="40dp"
@@ -365,9 +366,6 @@
                     android:textSize="12dp" />
 
         </RelativeLayout>
-
-
-
 
     </LinearLayout>
     <include layout="@layout/view_include_common_detail" />

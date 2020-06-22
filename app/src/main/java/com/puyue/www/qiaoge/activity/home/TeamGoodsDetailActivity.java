@@ -108,7 +108,6 @@ import rx.schedulers.Schedulers;
 public class TeamGoodsDetailActivity extends BaseSwipeActivity {
     private ImageView mIvBack;
     private Banner mBanner;
-    private TextView mTvTitle;
     private TextView tv_price;
     private TextView mTvInve;
     private TextView mTvVolume;
@@ -118,7 +117,6 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
     TextView tv_old_price;
     private TextView mTvDesc;
     TextView tv_title;
-    private LinearLayout mLlSingle;
     TextView tv_name;
     private TextView mTvGroupPrice;
     private ImageView mTvSub;
@@ -127,7 +125,6 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
     private TextView mTvTotalAmount;
     private TextView mTvTotalMoney;
     private LinearLayout mLlCustomer;
-    //private LinearLayout mLlCollection;
     private TextView mTvCollection;
     private ImageView mIvCollection;
     private LinearLayout mLlCar;
@@ -151,7 +148,6 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
     //推荐
     private RecyclerView mRvRecommend;
     private GoodsRecommendAdapter mAdapterRecommend;
-    private List<GetProductListModel.DataBean.ListBean> mListRecommend = new ArrayList<>();
     private int masterWorkerId;
     private byte businessType = 3;
     private boolean isCollection;
@@ -166,10 +162,7 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
     SnapUpCountDownTimerView tv_cut_down;
     // 商品详情
     private RecyclerView recyclerViewImage;
-    private GoodsDetailAdapter mAdapterImage;
-    private List<GoodsDetailModel> mListDetailImage = new ArrayList<>();
     private AppBarLayout appBarLayout;
-    private TextView textViewTitle;
     private Date currents;
     private Date starts;
     private Date ends;
@@ -186,9 +179,7 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
     private ImageView buyImg;
     TextView tv_limit_num;
     private RelativeLayout rl_share;
-    private String productName;
     private GoodsRecommendAdapter adapterRecommend;
-    GuessModel searchResultsModel;
     //搜索集合
     private List<GuessModel.DataBean> searchList = new ArrayList<>();
 
@@ -243,7 +234,6 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
         mTvVolume = FVHelper.fv(this, R.id.tv_activity_team_volume);
         tv_spec = FVHelper.fv(this, R.id.tv_spec);
         mTvDesc = FVHelper.fv(this, R.id.tv_activity_team_desc);
-        mLlSingle = FVHelper.fv(this, R.id.ll_activity_team_single_buy);
 
         mTvGroupPrice = FVHelper.fv(this, R.id.tv_activity_team_group_price);
         mTvSub = FVHelper.fv(this, R.id.tv_activity_team_sub);
@@ -263,7 +253,7 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
         mTvCarAmount = FVHelper.fv(this, R.id.tv_include_common_amount);
         mTvFee = FVHelper.fv(this, R.id.tv_include_common_fee);
         mTvAddCar = FVHelper.fv(this, R.id.tv_add_car);
-        recyclerViewRecommend.setVisibility(View.GONE);
+
         //详情
         View viewDetail = LayoutInflater.from(this).inflate(R.layout.item_viewpager, null);
         mRvDetail = FVHelper.fv(viewDetail, R.id.rv_item_viewpager);
@@ -279,9 +269,9 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
         mListView.add(viewRecommend);
 
         recyclerViewRecommend = (RecyclerView) findViewById(R.id.recyclerViewRecommend);
+        recyclerViewRecommend.setVisibility(View.GONE);
         recyclerViewImage = (RecyclerView) findViewById(R.id.recyclerViewImage);
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
-        textViewTitle = (TextView) findViewById(R.id.textViewTitleSpike);
         ImageViewShare = (ImageView) findViewById(R.id.ImageViewShare);
 
         adapterRecommend = new GoodsRecommendAdapter(R.layout.item_goods_recommend, searchList);
@@ -510,7 +500,6 @@ public class TeamGoodsDetailActivity extends BaseSwipeActivity {
                     @Override
                     public void onNext(SpecialGoodModel model) {
                         if (model.isSuccess()) {
-                            productName=model.getData().getActiveName();
                             //填充banner
                             images.clear();
                             if (model.getData().getTopPics() != null) {

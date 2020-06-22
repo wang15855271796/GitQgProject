@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.adapter.market;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,7 +38,6 @@ public class GoodsRecommendAdapter extends BaseQuickAdapter<GuessModel.DataBean,
     protected void convert(BaseViewHolder helper, final GuessModel.DataBean model) {
         if (StringHelper.notEmptyAndNull(model.getImgUrl())) {
             GlideModel.disPlayError(mContext,model.getImgUrl(),helper.getView(R.id.iv_item_goods_recommend));
-
         }
         helper.setText(R.id.tv_item_goods_recommend_name, model.getProductName());
 //        helper.setText(R.id.tv_item_goods_recommend_price, model.getMinMaxPrice());

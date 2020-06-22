@@ -17,7 +17,7 @@
     <TextView
         android:id="@+id/tv"
         android:layout_marginTop="@dimen/dp_10"
-        android:text="手起不错哦!"
+        android:text="手气不错哦!"
         android:textColor="#fff"
         android:textSize="@dimen/size_18dp"
         android:layout_centerHorizontal="true"

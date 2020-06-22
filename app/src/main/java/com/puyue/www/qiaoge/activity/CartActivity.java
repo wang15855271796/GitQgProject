@@ -316,7 +316,7 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                                 List<CartCommonGoodsModel.DetailListBean> commonGoodsDetailList = new ArrayList<>();
                                 if(specProductList.get(j).isSelected()) {
                                     int cartId = specProductList.get(j).getCartId();
-                                    cartIds.clear();
+//                                    cartIds.clear();
                                     cartIds.add(cartId);
                                     cartListStr = cartIds.toString();
                                     for (int k = 0; k <productDescVOList.size() ; k++) {
@@ -341,7 +341,7 @@ public class CartActivity extends BaseSwipeActivity implements View.OnClickListe
                                 List<CartCommonGoodsModel.DetailListBean> commonGoodsDetailList = new ArrayList<>();
                                 if(specProductList.get(j).isSelected()) {
                                     int cartId = specProductList.get(j).getCartId();
-                                    cartIds.clear();
+//                                    cartIds.clear();
                                     cartIds.add(cartId);
                                     cartListStr = cartIds.toString();
                                     for (int k = 0; k <productDescVOList.size() ; k++) {

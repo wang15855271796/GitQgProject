@@ -5,6 +5,8 @@ import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -84,6 +86,10 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                                     public void onFinish() {
                                         try {
                                             Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
+//                                            AlphaAnimation alphaAnimation = (AlphaAnimation) AnimationUtils.loadAnimation(mContext, R.anim.alpha);
+//                                            iv_pic.startAnimation(alphaAnimation);
+
+
                                             i++;
                                             if(i==data.get(0).getProdPics().size()) {
                                                 i = 0;
@@ -112,6 +118,8 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                                     @Override
                                     public void onFinish() {
                                         try {
+//                                            AlphaAnimation alphaAnimation = (AlphaAnimation) AnimationUtils.loadAnimation(mContext, R.anim.alpha);
+//                                            iv_pic.startAnimation(alphaAnimation);
                                             Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
                                             i++;
                                             if(i==data.get(1).getProdPics().size()) {
@@ -142,6 +150,8 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                                     @Override
                                     public void onFinish() {
                                         try {
+//                                            AlphaAnimation alphaAnimation = (AlphaAnimation) AnimationUtils.loadAnimation(mContext, R.anim.alpha);
+//                                            iv_pic.startAnimation(alphaAnimation);
                                             Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
                                             i++;
                                             if(i==data.get(2).getProdPics().size()) {
@@ -173,6 +183,8 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                                     @Override
                                     public void onFinish() {
                                         try {
+//                                            AlphaAnimation alphaAnimation = (AlphaAnimation) AnimationUtils.loadAnimation(mContext, R.anim.alpha);
+//                                            iv_pic.startAnimation(alphaAnimation);
                                             Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
                                             i++;
                                             if(i==data.get(3).getProdPics().size()) {
@@ -201,6 +213,8 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                                     @Override
                                     public void onFinish() {
                                         try {
+//                                            AlphaAnimation alphaAnimation = (AlphaAnimation) AnimationUtils.loadAnimation(mContext, R.anim.alpha);
+//                                            iv_pic.startAnimation(alphaAnimation);
                                             Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
                                             i++;
                                             if(i==data.get(4).getProdPics().size()) {
@@ -230,6 +244,8 @@ public class TypesAdapter extends BaseMultiItemQuickAdapter<IndexInfoModel.DataB
                                     @Override
                                     public void onFinish() {
                                         try {
+//                                            AlphaAnimation alphaAnimation = (AlphaAnimation) AnimationUtils.loadAnimation(mContext, R.anim.alpha);
+//                                            iv_pic.startAnimation(alphaAnimation);
                                             Glide.with(mContext).load(item.getProdPics().get(i)).into(iv_pic);
                                             i++;
                                             if(i==data.get(5).getProdPics().size()) {

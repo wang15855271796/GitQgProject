@@ -81,7 +81,7 @@ public class PickerOptions {
     public ViewGroup decorView;
     public int textGravity = Gravity.CENTER;
     public Context context;
-
+    public boolean flag;
     public String textContentConfirm;//确定按钮文字
     public String textContentCancel;//取消按钮文字
     public String textContentTitle;//标题文字
@@ -92,9 +92,8 @@ public class PickerOptions {
 
     public int bgColorWheel = PICKER_VIEW_BG_COLOR_DEFAULT;//滚轮背景颜色
     public int bgColorTitle = PICKER_VIEW_BG_COLOR_TITLE;//标题背景颜色
-
     public int textSizeSubmitCancel = 17;//确定取消按钮大小
-    public int textSizeTitle = 18;//标题文字大小
+    public int textSizeTitle = 14;//标题文字大小
     public int textSizeContent = 18;//内容文字大小
 
     public int textColorOut = 0xFFa8a8a8; //分割线以外的文字颜色

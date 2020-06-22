@@ -1098,7 +1098,7 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
                                         intent.putExtra("orderId", generateOrderModel.getData());
                                         intent.putExtra("payAmount", Double.parseDouble(payAmount));
                                         intent.putExtra("remark", messageEditText.getText().toString());
-                                        intent.putExtra("orderDeliveryType", 0);
+                                        intent.putExtra("orderDeliveryType", 1);
                                         startActivity(intent);
                                         mActivity.finish();
                                     }
@@ -1108,7 +1108,7 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
                                         intent.putExtra("orderId", generateOrderModel.getData());
                                         intent.putExtra("payAmount", Double.parseDouble(payAmount));
                                         intent.putExtra("remark", messageEditText.getText().toString());
-                                        intent.putExtra("orderDeliveryType", 0);
+                                        intent.putExtra("orderDeliveryType", 1);
                                         startActivity(intent);
                                         Log.d("温馨提示......","222222");
                                         mActivity.finish();

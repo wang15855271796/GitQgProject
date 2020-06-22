@@ -43,6 +43,7 @@ public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.Icon
         ImageView iv_tip = helper.getView(R.id.iv_tip);
         ImageView iv_icon = helper.getView(R.id.iv_icon);
         TextView tv_tip = helper.getView(R.id.tv_tip);
+
         if(deductstr.isEmpty()) {
             iv_tip.setVisibility(View.GONE);
             tv_tip.setVisibility(View.GONE);

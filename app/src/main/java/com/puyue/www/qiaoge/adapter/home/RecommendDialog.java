@@ -78,6 +78,7 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
     TextView tv_price_total;
     @BindView(R.id.tv_free_desc)
     TextView tv_free_desc;
+
     SearchResultsModel.DataBean.RecommendProdBean listBean;
     int pos = 0;
 
@@ -124,7 +125,7 @@ public class RecommendDialog extends Dialog implements View.OnClickListener {
             getWindow().setAttributes(attributes);
         }
         iv_close.setOnClickListener(this);
-
+        iv_cart.setOnClickListener(this);
         List<SearchResultsModel.DataBean.RecommendProdBean.ProdSpecsBean> prodSpecs = listBean.getProdSpecs();
 
         //切换规格

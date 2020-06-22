@@ -5,6 +5,7 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.SDKInitializer;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -31,6 +32,7 @@ public class QiaoGeApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         CrashReport.initCrashReport(getApplicationContext(), "385e5aaa75", false);
+        SDKInitializer.initialize(getApplicationContext());
 //        mLocationClient = new LocationClient(getApplicationContext());
 //        //声明LocationClient类
 //        mLocationClient.registerLocationListener(myListener);

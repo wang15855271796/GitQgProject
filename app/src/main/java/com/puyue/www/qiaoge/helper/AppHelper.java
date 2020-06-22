@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.UnicornManager;
 import com.puyue.www.qiaoge.adapter.market.PhotoViewAdapter;
 import com.puyue.www.qiaoge.event.LogoutEvent;
 import com.puyue.www.qiaoge.view.PhotoViewPager;
@@ -182,13 +183,7 @@ public class AppHelper {
         mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isTablet(context)) {
-                    AppHelper.showMsg(context.getApplicationContext(), "当前设备不具备拨号功能");
-                } else {
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + cell));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                }
+                UnicornManager.inToUnicorn(context);
                 mDialog.dismiss();
             }
         });

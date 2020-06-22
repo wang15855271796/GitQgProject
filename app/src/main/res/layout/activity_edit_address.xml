@@ -270,6 +270,7 @@
                     android:layout_height="15dp"
                     android:background="@drawable/app_checkbox_style"
                     android:button="@null"
+
                     android:clickable="false"
                     android:enabled="false" />
 

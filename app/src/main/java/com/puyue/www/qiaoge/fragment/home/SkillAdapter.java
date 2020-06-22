@@ -81,6 +81,7 @@ public class SkillAdapter extends BaseQuickAdapter<CouponModel.DataBean.ActivesB
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,SeckillGoodActivity.class);
                 intent.putExtra(AppConstant.ACTIVEID,item.getActiveId());
+                intent.putExtra("num","-1");
                 mContext.startActivity(intent);
 
             }

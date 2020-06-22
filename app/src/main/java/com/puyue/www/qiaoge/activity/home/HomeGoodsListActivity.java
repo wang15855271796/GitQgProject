@@ -397,6 +397,7 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
                                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                                     Intent intent = new Intent(mContext, SeckillGoodActivity.class);
                                     intent.putExtra(AppConstant.ACTIVEID, mListSeckill.get(position).activeId);
+                                    intent.putExtra("num","-1");
                                     startActivity(intent);
 
                                 }

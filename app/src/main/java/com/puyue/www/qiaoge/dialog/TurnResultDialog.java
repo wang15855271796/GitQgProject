@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,11 +14,15 @@ import android.widget.TextView;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
+import com.puyue.www.qiaoge.api.mine.order.MyOrderNumAPI;
+import com.puyue.www.qiaoge.event.CouponEvent;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.PrivacyModel;
 import com.puyue.www.qiaoge.event.TurnModel;
 import com.puyue.www.qiaoge.event.TurnReceiveModel;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.StringHelper;
+import com.puyue.www.qiaoge.model.mine.order.MyOrderNumModel;
 import com.puyue.www.qiaoge.view.LuckPan;
 import com.puyue.www.qiaoge.view.LuckPanAnimEndCallBack;
 
@@ -61,6 +67,7 @@ public class TurnResultDialog extends Dialog {
                 dismiss();
                 PrivacyDialog privacyDialog = new PrivacyDialog(mContext,content);
                 privacyDialog.show();
+                EventBus.getDefault().post(new CouponEvent());
             }
         });
         iv_result.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +75,7 @@ public class TurnResultDialog extends Dialog {
             public void onClick(View v) {
                 mContext.startActivity(new Intent(mContext, HomeActivity.class));
                 EventBus.getDefault().post(new GoToMarketEvent());
+                EventBus.getDefault().post(new CouponEvent());
                 dismiss();
                 PrivacyDialog privacyDialog = new PrivacyDialog(mContext,content);
                 privacyDialog.show();

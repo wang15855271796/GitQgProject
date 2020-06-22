@@ -138,7 +138,7 @@ public class CommonListDialog extends Dialog implements View.OnClickListener{
                 pos = position;
                 chooseSpecAdapter.selectPosition(position);
                 int productId = exchangeProductModel1s.getData().getProdSpecs().get(position).getProductId();
-                Log.d("wwssssssssss.....",productId+"");
+
                 exchangeList(productId);
             }
         });

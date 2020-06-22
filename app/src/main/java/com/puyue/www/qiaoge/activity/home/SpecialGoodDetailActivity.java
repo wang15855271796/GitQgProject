@@ -315,28 +315,28 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         //获取数据
         if(num!=null) {
             if(num.equals("-1")) {
-                getProductDetail(productId,null);
+                getProductDetail(productId);
                 ll_service.setVisibility(View.GONE);
                 mTvAddCar.setEnabled(true);
                 mTvAddCar.setText("加入购物车");
                 mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
 
             }else {
-                getProductDetail(productId,num);
+                getProductDetail(productId);
                 ll_service.setVisibility(View.VISIBLE);
                 mTvAddCar.setEnabled(false);
                 mTvAddCar.setBackgroundResource(R.drawable.app_car);
 
             }
         }else {
-            getProductDetail(productId,num);
+            getProductDetail(productId);
             mTvAddCar.setEnabled(true);
             mTvAddCar.setText("加入购物车");
             mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
         }
         getCustomerPhone();
         getAllCommentList(pageNum, pageSize, productId, businessType);
-        imageViewAdapter = new ImageViewAdapter(mContext,R.layout.item_imageview,detailList);
+        imageViewAdapter = new ImageViewAdapter(R.layout.item_imageview,detailList);
         recyclerViewImage.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerViewImage.setAdapter(imageViewAdapter);
     }
@@ -520,7 +520,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     /**
      * 获取详情
      */
-    private void getProductDetail(final int productId,String jumpFlag) {
+    private void getProductDetail(final int productId) {
         GetSpecialDetailAPI.requestData(mContext, productId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -1296,7 +1296,7 @@ private float star;
                     public void onNext(UpdateUserInvitationModel updateUserInvitationModel) {
                         if (updateUserInvitationModel.isSuccess()) {
                             UserInfoHelper.saveUserType(mContext, AppConstant.USER_TYPE_WHOLESALE);
-                            getProductDetail(productId,num);
+                            getProductDetail(productId);
                         } else {
                             AppHelper.showMsg(mContext, updateUserInvitationModel.getMessage());
                         }

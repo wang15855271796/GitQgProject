@@ -295,7 +295,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                                 int cartId = specProductList.get(j).getCartId();
                                 cartIds.add(cartId);
                                 cartListStr = cartIds.toString();
-//                                Log.d("wodemingzishiss000.....",cartListStr);
                                 for (int k = 0; k < productDescVOList.size(); k++) {
 //                                    CartsListModel.DataBean.ValidListBean.SpecProductListBean.ProductDescVOListBean productDescVOListBean = productDescVOList.get(k);
 //
@@ -356,7 +355,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                                 List<CartCommonGoodsModel.DetailListBean> commonGoodsDetailList = new ArrayList<>();
                                 if(specProductList.get(j).isSelected()) {
                                     int cartId = specProductList.get(j).getCartId();
-                                    cartIds.clear();
+//                                    cartIds.clear();
                                     cartIds.add(cartId);
                                     cartListStr = cartIds.toString();
                                     for (int k = 0; k <productDescVOList.size() ; k++) {
@@ -382,9 +381,10 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                                 if(specProductList.get(j).isSelected()) {
                                     int cartId = specProductList.get(j).getCartId();
 
-                                    cartIds.clear();
+//                                    cartIds.clear();
                                     cartIds.add(cartId);
                                     cartListStr = cartIds.toString();
+                                    Log.d("wodemingzishiss000.....",cartListStr+"dd");
                                     for (int k = 0; k <productDescVOList.size() ; k++) {
                                         CartsListModel.DataBean.ValidListBean.SpecProductListBean.ProductDescVOListBean productDescVOListBean = productDescVOList.get(k);
                                         priceCommonGoods = Double.parseDouble(BigDecimalUtils.add(Double.toString(priceCommonGoods),BigDecimalUtils.mul(productDescVOListBean.getPrice(),
@@ -465,13 +465,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                 alertDialog.dismiss();
             }
         });
-
+//        Log.d("wddsdsddwwdwfff....", unList.size()+"");
         mTvConfirm.setOnClickListener(new NoDoubleClickListener() {
             @Override
             public void onNoDoubleClick(View view) {
                 for (int i = 0; i <unList.size() ; i++) {
 //                    unCartsId.clear();
                     List<CartsListModel.DataBean.InValidListBean.SpecProductListBeanX> specProductList = unList.get(i).getSpecProductList();
+
                     for (int j = 0; j <specProductList.size() ; j++) {
                         int cartId = specProductList.get(j).getCartId();
                         unCartsId.add(cartId);
@@ -605,6 +606,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                             intent.putExtra("normalProductBalanceVOStr", normalProductBalanceVOStr);
                             intent.putExtra("activityBalanceVOStr", activityBalanceVOStr);
                             intent.putExtra("cartListStr", cartListStr);
+                            Log.d("wdwdwdddddd.........",cartListStr);
                             startActivity(intent);
                             }else {
                             ToastUtil.showSuccessMsg(mActivity, cartBalanceModel.message);
@@ -776,7 +778,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                         //过期列表
                         List<CartsListModel.DataBean.InValidListBean> inValidList = cartListModel.getData().getInValidList();
                         unList.addAll(inValidList);
-
                         if(unList.size()==0) {
                             rl_unable.setVisibility(View.GONE);
                             rv_unable.setVisibility(View.GONE);

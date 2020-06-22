@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.view.GlideModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -21,15 +22,15 @@ import java.util.List;
 public class ImageViewAdapter extends BaseQuickAdapter<String,BaseViewHolder> {
 
     private ImageView imageView;
-    Context mContext;
-    public ImageViewAdapter(Context mContext, int layoutResId, @Nullable List<String> data) {
+    public ImageViewAdapter(int layoutResId, @Nullable List<String> data) {
         super(layoutResId, data);
-        this.mContext = mContext;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, String item) {
         imageView = helper.getView(R.id.iv_image);
         Glide.with(mContext).load(item).into(imageView);
+
+
     }
 }

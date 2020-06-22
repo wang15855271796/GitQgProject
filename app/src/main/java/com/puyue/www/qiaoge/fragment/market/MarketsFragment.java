@@ -47,6 +47,7 @@ import com.puyue.www.qiaoge.activity.mine.login.RegisterActivity;
 import com.puyue.www.qiaoge.activity.mine.login.RegisterMessageActivity;
 import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
+import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletNewActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletPointActivity;
 import com.puyue.www.qiaoge.adapter.home.CommonProductActivity;
 import com.puyue.www.qiaoge.adapter.home.HotProductActivity;
@@ -1490,7 +1491,7 @@ public class MarketsFragment extends BaseFragment {
                         Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
                         startActivity(intent);
                     }else if(AppConstant.BALANCE.equals(banners.get(position).getProdPage())){
-                        Intent intent = new Intent(getActivity(), MyWalletPointActivity.class);
+                        Intent intent = new Intent(getActivity(), MyWalletNewActivity.class);
                         startActivity(intent);
                     }else if(AppConstant.POINT.equals(banners.get(position).getProdPage())){
                         Intent intent = new Intent(getActivity(), MinerIntegralActivity.class);
@@ -1512,9 +1513,10 @@ public class MarketsFragment extends BaseFragment {
                     if(businessType.equals("2")) {
                         Intent intent = new Intent(getActivity(), SeckillGoodActivity.class);
                         intent.putExtra(AppConstant.ACTIVEID,businessId );
+                        intent.putExtra("num","-1");
                         startActivity(intent);
                     }else if(businessType.equals("3")) {
-                        Intent intent = new Intent(getActivity(), TeamGoodsDetailActivity.class);
+                        Intent intent = new Intent(getActivity(), SpecialGoodDetailActivity.class);
                         intent.putExtra(AppConstant.ACTIVEID, businessId);
                         startActivity(intent);
                     }else if(businessType.equals("11")) {

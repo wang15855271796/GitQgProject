@@ -45,6 +45,10 @@ public class OptionsPickerBuilder {
         mPickerOptions.textContentTitle = textContentTitle;
         return this;
     }
+    public OptionsPickerBuilder setFlag(boolean flag) {
+        mPickerOptions.flag = flag;
+        return this;
+    }
 
     public OptionsPickerBuilder isDialog(boolean isDialog) {
         mPickerOptions.isDialog = isDialog;
