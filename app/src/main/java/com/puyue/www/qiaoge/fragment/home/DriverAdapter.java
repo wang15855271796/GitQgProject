@@ -81,7 +81,7 @@ public class DriverAdapter extends BaseQuickAdapter<DriverInfo.DataBean,BaseView
                         if (getCustomerPhoneModel.isSuccess()) {
                             cell = getCustomerPhoneModel.getData();
                         } else {
-                            AppHelper.showMsg(mContext, getCustomerPhoneModel.getMessage() );
+                            AppHelper.showMsg(mContext, getCustomerPhoneModel.getMessage());
                         }
                     }
                 });

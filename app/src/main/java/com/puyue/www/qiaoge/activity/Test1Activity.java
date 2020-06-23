@@ -9,7 +9,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +29,8 @@ import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -109,6 +115,8 @@ import com.puyue.www.qiaoge.popupwindow.HomePopuWindow;
 import com.puyue.www.qiaoge.utils.LoginUtil;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.FlowLayout;
+import com.puyue.www.qiaoge.view.IdeaScrollView;
+import com.puyue.www.qiaoge.view.IdeaViewPager;
 import com.puyue.www.qiaoge.view.StarBarView;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
@@ -136,49 +144,29 @@ import rx.schedulers.Schedulers;
  */
 public class Test1Activity extends BaseSwipeActivity{
 
-    private int productId;
-    private byte businessType = 1;
+    @BindView(R.id.scrollView)
+    IdeaScrollView scrollView;
+    @BindView(R.id.viewPager)
+    IdeaViewPager viewPager;
+    @BindView(R.id.ll_head)
+    LinearLayout ll_head;
+    @BindView(R.id.radioGroup)
+    RadioGroup radioGroup;
+    private float currentPercentage = 0;
+    private boolean isNeedScrollTo = true;
 
-    private GoodsRecommendAdapter adapterRecommend;
-    @BindView(R.id.recyclerViewImage)
-    RecyclerView recyclerViewImage;
-    @BindView(R.id.recyclerViewRecommend)
-    RecyclerView recyclerViewRecommend;
 
-
-    public List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs;
-
-    GuessModel searchResultsModel;
-    //猜你喜欢集合
-    private List<GuessModel.DataBean> searchList = new ArrayList<>();
-    //图片详情集合
-    private List<String> detailList = new ArrayList<>();
-    private ImageViewAdapter imageViewAdapter;
-    private List<String> detailPic;
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            Bundle bundle = getIntent().getExtras();
 
-            productId = bundle.getInt(AppConstant.ACTIVEID);
-
-            if (!TextUtils.isEmpty(bundle.getString("equipment"))) {
-                businessType = 7;
-            }
-        }
         return false;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        handleExtra(savedInstanceState);
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void setContentView() {
-        setContentView(R.layout.test2);
+        setContentView(R.layout.activity_product_detail);
     }
 
     @Override
@@ -189,14 +177,67 @@ public class Test1Activity extends BaseSwipeActivity{
     @Override
     public void setViewData() {
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
-        Log.d("wddsdd.........",productId+"");
-        getProductDetail(productId);
+        ArrayList<Integer> araryDistance = new ArrayList<>();
 
+        Rect rectangle= new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(rectangle);
+        scrollView.setViewPager(viewPager,getMeasureHeight(ll_head)-rectangle.top);
+        radioGroup.setAlpha(0);
+        radioGroup.check(radioGroup.getChildAt(0).getId());
+        scrollView.setOnSelectedIndicateChangedListener(new IdeaScrollView.OnSelectedIndicateChangedListener() {
+            @Override
+            public void onSelectedChanged(int position) {
+                isNeedScrollTo = false;
+                radioGroup.check(radioGroup.getChildAt(position).getId());
+                isNeedScrollTo = true;
+            }
+        });
 
+        scrollView.setOnScrollChangedColorListener(new IdeaScrollView.OnScrollChangedColorListener() {
+            @Override
+            public void onChanged(float percentage) {
+                int color = getAlphaColor(percentage>0.9f?1.0f:percentage);
+                ll_head.setBackgroundDrawable(new ColorDrawable(color));
+                radioGroup.setBackgroundDrawable(new ColorDrawable(color));
+                radioGroup.setAlpha((percentage>0.9f?1.0f:percentage)*255);
+                setRadioButtonTextColor(percentage);
 
+            }
 
+            @Override
+            public void onChangedFirstColor(float percentage) {
 
+            }
+
+            @Override
+            public void onChangedSecondColor(float percentage) {
+
+            }
+        });
+
+        RadioGroup.OnCheckedChangeListener radioGroupListener = new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                for(int i=0;i<radioGroup.getChildCount();i++){
+                    RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
+                    radioButton.setTextColor(radioButton.isChecked()?getRadioCheckedAlphaColor(currentPercentage):getRadioAlphaColor(currentPercentage));
+                    if(radioButton.isChecked()&&isNeedScrollTo){
+                        scrollView.setPosition(i);
+                    }
+                }
+            }
+        };
+        radioGroup.setOnCheckedChangeListener(radioGroupListener);
+    }
+
+    private void setRadioButtonTextColor(float percentage) {
+        if(Math.abs(percentage-currentPercentage)>=0.1f){
+            for(int i=0;i<radioGroup.getChildCount();i++){
+                RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
+                radioButton.setTextColor(radioButton.isChecked()?getRadioCheckedAlphaColor(percentage):getRadioAlphaColor(percentage));
+            }
+            this.currentPercentage = percentage;
+        }
     }
 
     @Override
@@ -204,91 +245,30 @@ public class Test1Activity extends BaseSwipeActivity{
 
     }
 
+    public int getAlphaColor(float f){
+        return Color.argb((int) (f*255),0x09,0xc1,0xf4);
+    }
 
-    /**
-     * 获取详情
-     */
-    private void getProductDetail(final int productId) {
-        GetProductDetailAPI.requestDatas(mContext,productId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GetProductDetailModel>() {
-                    @Override
-                    public void onCompleted() {
+    public int getLayerAlphaColor(float f){
+        return Color.argb((int) (f*255),0x09,0xc1,0xf4);
+    }
 
-                    }
+    public int getRadioCheckedAlphaColor(float f){
+        return Color.argb((int) (f*255),0x44,0x44,0x44);
+    }
 
-                    @Override
-                    public void onError(Throwable e) {
+    public int getRadioAlphaColor(float f){
+        return Color.argb((int) (f*255),0xFF,0xFF,0xFF);
+    }
 
-                    }
-
-                    @Override
-                    public void onNext(GetProductDetailModel model) {
-                        if (model.isSuccess()) {
-                            if(model.getData()!=null) {
-                                detailPic = model.getData().getDetailPic();
-                                imageViewAdapter = new ImageViewAdapter(R.layout.item_imageview,detailPic);
-                                recyclerViewImage.setLayoutManager(new LinearLayoutManager(mActivity));
-                                recyclerViewImage.setAdapter(imageViewAdapter);
-                                Log.d("dwdasass.....","sffs");
-                            }
-
-
-
-                            getProductList();
-
-
-                        } else {
-                            ToastUtil.showErroMsg(mActivity,model.getMessage());
-                        }
-                    }
-                });
+    public int getMeasureHeight(View view){
+        int width = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        int height = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        view.measure(width, height);
+        return view.getMeasuredHeight();
     }
 
 
-    /**
-     * 推荐
-     **/
-    private void getProductList() {
-
-        RecommendApI.getLikeList(mContext,productId+"")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GuessModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(GuessModel recommendModel) {
-                        if (recommendModel.isSuccess()) {
-                            searchResultsModel = recommendModel;
-                            if(recommendModel.getData()!=null) {
-                                searchList.addAll(recommendModel.getData());
-                                adapterRecommend = new GoodsRecommendAdapter(R.layout.item_goods_recommend, searchList);
-                                LinearLayoutManager linearLayoutManagerCoupons = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
-                                recyclerViewRecommend.setLayoutManager(linearLayoutManagerCoupons);
-                                recyclerViewRecommend.setAdapter(adapterRecommend);
-                            }
-
-                        } else {
-                            ToastUtil.showSuccessMsg(mContext, recommendModel.getMessage());
-                        }
-                    }
-                });
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void messageEventBuss(ReduceNumEvent event) {
-        //刷新UI
-
-
-    }
 }

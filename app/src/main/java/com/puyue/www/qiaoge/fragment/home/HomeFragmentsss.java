@@ -43,6 +43,7 @@ import com.githang.statusbar.StatusBarCompat;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.RoundImageView;
+import com.puyue.www.qiaoge.activity.Test1Activity;
 import com.puyue.www.qiaoge.activity.home.ChangeCityActivity;
 import com.puyue.www.qiaoge.activity.home.ChooseAddressActivity;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
@@ -1884,9 +1885,10 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
             case R.id.rl_message:
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(getActivity()))) {
-                    Intent intents = new Intent(getActivity(), MessageCenterActivity.class);
-                    startActivityForResult(intents, 101);
+                    Intent intents = new Intent(getActivity(), Test1Activity.class);
+//                    startActivityForResult(intents, 101);
 
+                    startActivity(intents);
                 } else {
                     initDialog();
                 }
