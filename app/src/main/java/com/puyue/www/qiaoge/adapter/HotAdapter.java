@@ -87,6 +87,7 @@ public class HotAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean.Lis
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,CommonGoodsDetailActivity.class);
                 intent.putExtra(AppConstant.ACTIVEID,item.getProductMainId());
+//                intent.putExtra("num","-1");
                 mContext.startActivity(intent);
             }
         });

@@ -201,6 +201,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
 
             if(bundle.getString("city")!=null) {
                 city = bundle.getString("city");
+
             }
 
             productId = bundle.getInt(AppConstant.ACTIVEID);
@@ -267,6 +268,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //获取数据
+
         if(num!=null) {
             if(num.equals("-1")) {
                 getProductDetail(productId);
@@ -383,6 +385,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                     if(chooseDialog==null) {
                         chooseDialog = new ChooseDialog(mContext,productId1,models);
                     }
+                    chooseDialog.show();
                 }else {
                     initDialog();
                 }
@@ -449,6 +452,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                     @Override
                     public void onNext(GetProductDetailModel model) {
                         if (model.isSuccess()) {
+
                             detailList.clear();
                             detailList.addAll(model.getData().getDetailPic());
                             imageViewAdapter.notifyDataSetChanged();
@@ -471,12 +475,14 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                                 @Override
                                 public void addDialog(int position) {
                                     if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
+
                                         if(UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_RETAIL)) {
                                             if (StringHelper.notEmptyAndNull(cell)) {
 
                                             }
                                         }else {
                                             chooseSpecAdapter.selectPosition(position);
+
                                             if(chooseDialog==null){
                                                 productMainId = model.getData().getProductMainId();
                                                 chooseDialog = new ChooseDialog(mContext, productId1,models);
