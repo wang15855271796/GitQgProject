@@ -190,7 +190,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     String num = null;
     String city;
     private GetProductDetailModel models;
-
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
         if (getIntent() != null && getIntent().getExtras() != null) {
@@ -383,6 +382,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                     if(chooseDialog==null) {
                         chooseDialog = new ChooseDialog(mContext,productId1,models);
                     }
+                    chooseDialog.show();
                 }else {
                     initDialog();
                 }

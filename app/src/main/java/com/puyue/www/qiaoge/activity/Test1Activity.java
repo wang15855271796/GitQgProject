@@ -190,7 +190,6 @@ public class Test1Activity extends BaseSwipeActivity{
     public void setViewData() {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        Log.d("wddsdd.........",productId+"");
         getProductDetail(productId);
 
 

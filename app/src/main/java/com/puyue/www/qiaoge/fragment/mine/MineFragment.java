@@ -42,23 +42,27 @@ import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MinerIntegralActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletDetailActivity;
 import com.puyue.www.qiaoge.activity.mine.wallet.MyWalletNewActivity;
+import com.puyue.www.qiaoge.api.home.GetCustomerPhoneAPI;
 import com.puyue.www.qiaoge.api.mine.AccountCenterAPI;
 import com.puyue.www.qiaoge.api.mine.UpdateAPI;
 import com.puyue.www.qiaoge.api.mine.order.MyOrderNumAPI;
 import com.puyue.www.qiaoge.api.mine.subaccount.MineAccountAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.event.CouponEvent;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.GoToMineEvent;
 import com.puyue.www.qiaoge.event.MessageEvent;
 import com.puyue.www.qiaoge.fragment.cart.CartFragment;
+import com.puyue.www.qiaoge.fragment.home.CityEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.User;
+import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.mine.AccountCenterModel;
 import com.puyue.www.qiaoge.model.mine.UpdateModel;
 import com.puyue.www.qiaoge.model.mine.order.MineCenterModel;
@@ -104,8 +108,7 @@ public class MineFragment extends BaseFragment {
     private AccountCenterModel mModelAccountCenter;
     private String mUserCell;
     private int mStateCode;
-
-    // private MyOrderNumModel mModelMyOrderNum;
+    TextView tv_phone;
     private SuperTextView mViewWaitPaymentNum;
     private SuperTextView mViewWaitShipmentNum;
     private SuperTextView mViewWaitReceivingNum;
@@ -216,6 +219,7 @@ public class MineFragment extends BaseFragment {
 
         EventBus.getDefault().register(this);
         rl_zizhi = (view.findViewById(R.id.rl_zizhi));
+
         mIvAvatar = (view.findViewById(R.id.iv_mine_avatar));//头像
         mineIntegral = (view.findViewById(R.id.mineIntegral));//积分
         mTvPhone = (view.findViewById(R.id.tv_mine_phone));
@@ -322,7 +326,7 @@ public class MineFragment extends BaseFragment {
 
 
         requestUpdate();
-
+        getCustomerPhone();
     }
 
     @Override
@@ -970,7 +974,6 @@ public class MineFragment extends BaseFragment {
                             mModelAccountCenter = accountCenterModel;
                             mStateCode = mModelAccountCenter.code;
                             AppHelper.UserLogout(getContext(), mStateCode, 1);
-                            Log.d("swdswdwddddd....","sdwdwqddddd");
                             if (mModelAccountCenter.success) {
                                 updateAccountCenter();
 
@@ -995,13 +998,14 @@ public class MineFragment extends BaseFragment {
         mDialog = new AlertDialog.Builder(getActivity()).create();
         mDialog.show();
         mDialog.getWindow().setContentView(R.layout.dialog_call_phone);
-
+        tv_phone = mDialog.getWindow().findViewById(R.id.tv_phone);
         mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDialog.dismiss();
             }
         });
+        tv_phone.setText(cell);
         mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1162,6 +1166,7 @@ public class MineFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void message(MessageEvent messageEvent) {
         tv_number.setVisibility(View.GONE);
+        getCustomerPhone();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1170,6 +1175,7 @@ public class MineFragment extends BaseFragment {
         requestUserInfo();
         useAccount();
         requestUpdate();
+        getCustomerPhone();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1178,7 +1184,7 @@ public class MineFragment extends BaseFragment {
         requestUserInfo();
         useAccount();
         requestUpdate();
-
+        getCustomerPhone();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1187,9 +1193,52 @@ public class MineFragment extends BaseFragment {
         requestUserInfo();
         useAccount();
         requestUpdate();
+        getCustomerPhone();
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void changes(CityEvent cityEvent) {
+        requestOrderNum();
+        requestUserInfo();
+        useAccount();
+        requestUpdate();
+        getCustomerPhone();
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void changess(AddressEvent event) {
+        requestOrderNum();
+        requestUserInfo();
+        useAccount();
+        requestUpdate();
+        getCustomerPhone();
+    }
+    String cell;
+    private void getCustomerPhone() {
+        GetCustomerPhoneAPI.requestData(mActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<GetCustomerPhoneModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(GetCustomerPhoneModel getCustomerPhoneModel) {
+                        if (getCustomerPhoneModel.isSuccess()) {
+                            cell = getCustomerPhoneModel.getData();
+                        } else {
+                            AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                        }
+                    }
+                });
+    }
 
 }

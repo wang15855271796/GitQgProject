@@ -44,7 +44,6 @@ public class SubAccountListAdapter extends BaseQuickAdapter<SubAccountListModel.
         helper.setText(R.id.tv_name,item.getName());
         helper.setText(R.id.tv_phone,item.getPhone());
         helper.setText(R.id.tv_read,item.getState());
-        Log.d("wdwdwdwdwdwd....",item.getState());
         LinearLayout ll_root = helper.getView(R.id.ll_root);
         deliverType = UserInfoHelper.getDeliverType(mContext);
         ll_root.setOnClickListener(new View.OnClickListener() {

@@ -580,7 +580,6 @@ public class WheelSurfPanView extends View {
 
     public void setmTypeNum(int mTypeNum) {
         this.mTypeNum = mTypeNum;
-        Log.d("wddddrrere.........",mTypeNum+"");
     }
 
     public void setmDeses(String[] mDeses) {

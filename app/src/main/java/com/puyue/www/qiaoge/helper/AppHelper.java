@@ -172,8 +172,8 @@ public class AppHelper {
         final AlertDialog mDialog = new AlertDialog.Builder(context).create();
         mDialog.show();
         mDialog.getWindow().setContentView(R.layout.dialog_call_phone);
-        TextView mTvCell = (TextView) mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_phone);
-//        mTvCell.setText(cell);
+        TextView mTvCell = (TextView) mDialog.getWindow().findViewById(R.id.tv_phone);
+        mTvCell.setText(cell);
         mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

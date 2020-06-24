@@ -80,7 +80,6 @@ public class HotItemAdapter extends BaseQuickAdapter<ExchangeProductModel.DataBe
         }
 
         tv_num.setText(item.getCartNum()+"");
-        Log.d("dwssssssssssss....",item.getCartNum()+"");
         iv_cut = helper.getView(R.id.iv_cut);
         iv_add = helper.getView(R.id.iv_add);
         iv_add.setOnClickListener(new View.OnClickListener() {

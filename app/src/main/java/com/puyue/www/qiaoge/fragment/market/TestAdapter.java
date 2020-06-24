@@ -119,7 +119,6 @@ public class TestAdapter extends BaseQuickAdapter<CartsListModel.DataBean.ValidL
 
                 EventBus.getDefault().post(new UpdateEvent(getAllPrice()));
                 iProductSelectCallback.update(data);
-                Log.d("wuouwowdfuduf..........",data+"");
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));

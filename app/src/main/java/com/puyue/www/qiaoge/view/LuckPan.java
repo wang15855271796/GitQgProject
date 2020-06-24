@@ -176,7 +176,6 @@ public class LuckPan extends View {
                     imgWidth + imgWidth * Math.abs(Math.cos(Math.toRadians(Math.abs(180 - mItemAnge * i)))));
 
             RectF rect1 = new RectF(x - w *2, y - h *2, x + w *2, y + h *2);
-            Log.d("sdsdssds...",x-w/1+"");
             canvas.drawBitmap(mListBitmap.get(i), null, rect1, null);
         }
     }
