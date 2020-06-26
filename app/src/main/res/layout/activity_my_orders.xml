@@ -98,7 +98,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xTabDisplayNum="7"
-        android:background="#F6F6F6"
+        android:background="#ffffff"
         app:xTabIndicatorHeight="0dp"
         app:xTabMode="fixed"
         app:xTabSelectedTextColor="#F56D23"

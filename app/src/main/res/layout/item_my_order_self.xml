@@ -1,17 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayoutItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
-    android:background="@color/app_color_white"
+    android:layout_marginLeft="@dimen/size_12dp"
+    android:layout_marginRight="@dimen/size_12dp"
+    android:layout_marginTop="@dimen/size_12dp"
+    android:background="@drawable/shape_f9f9f9"
     android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_item_my_order"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv"
+            tools:text="自营商品"
+            android:textStyle="bold"
+            android:textSize="@dimen/sp_14"
+            android:textColor="#F46D23"
+            android:layout_marginTop="@dimen/size_15dp"
+            android:layout_marginLeft="@dimen/size_17dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_toRightOf="@+id/tv"
+            tools:text="隔日送达"
+            android:id="@+id/tv2"
+            android:textSize="@dimen/sp_12"
+            android:textColor="#F46D23"
+            android:layout_marginTop="@dimen/size_15dp"
+            android:layout_marginLeft="@dimen/size_11dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_toRightOf="@+id/tv2"
+            tools:text="订单编号:2313213131313313"
+            android:textSize="@dimen/sp_12"
+            android:textColor="#F46D23"
+            android:layout_marginRight="@dimen/sp_14"
+            android:layout_marginTop="@dimen/size_15dp"
+            android:layout_marginLeft="@dimen/size_11dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
 
     <RelativeLayout
@@ -116,16 +151,23 @@
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_18dp"
-            android:layout_toLeftOf="@+id/tv_item_my_order_all_price"
-            android:text="￥"
-            android:textColor="#F6551A"
-            android:textSize="@dimen/size_9dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <TextView
+            tools:text="共计5件"
+            android:layout_marginRight="@dimen/size_15dp"
+            android:layout_toLeftOf="@+id/tv_item_my_order_all_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="sdsddddddddds"
+            android:layout_marginRight="@dimen/size_15dp"
             android:id="@+id/tv_item_my_order_all_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -133,6 +175,7 @@
             android:layout_centerVertical="true"
             android:textColor="#F6551A"
             android:textSize="@dimen/size_15dp" />
+
     </RelativeLayout>
 
     <RelativeLayout

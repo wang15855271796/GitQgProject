@@ -8,8 +8,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +28,8 @@ import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,6 +87,8 @@ import com.puyue.www.qiaoge.model.mine.GetShareInfoModle;
 import com.puyue.www.qiaoge.utils.LoginUtil;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.FlowLayout;
+import com.puyue.www.qiaoge.view.IdeaScrollView;
+import com.puyue.www.qiaoge.view.IdeaViewPager;
 import com.puyue.www.qiaoge.view.StarBarView;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
@@ -115,7 +123,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     private TextView mTvPrice;
     private String productName;
     private ImageView buyImg;
-    private TextView mTvSpec;
     private LinearLayout mLlCustomer;
     private TextView mTvCollection;
     private ImageView mIvCollection;
@@ -137,6 +144,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     private String cell;
     private String type;
     private CollapsingToolbarLayoutStateHelper state;
+    private float currentPercentage = 0;
     //用户评论
     private TextView userEvaluationNum;
     private TextView goodsEvaluationNumber;
@@ -173,6 +181,18 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     TextView tv_city;
     @BindView(R.id.tv_change)
     TextView tv_change;
+    @BindView(R.id.scrollView)
+    IdeaScrollView scrollView;
+    @BindView(R.id.viewPager)
+    IdeaViewPager viewPager;
+    @BindView(R.id.ll_head)
+    LinearLayout ll_head;
+    @BindView(R.id.ll_detail)
+    LinearLayout ll_detail;
+    @BindView(R.id.ll_cer)
+    LinearLayout ll_cer;
+    @BindView(R.id.radioGroup)
+    RadioGroup radioGroup;
     private AlertDialog mTypedialog;
     LinearLayout ll_service;
     public List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs;
@@ -190,6 +210,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     String num = null;
     String city;
     private GetProductDetailModel models;
+    private boolean isNeedScrollTo = true;
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
@@ -231,7 +252,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         mBanner = FVHelper.fv(this, R.id.banner_activity_common);
         mTvTitle = FVHelper.fv(this, R.id.tv_activity_common_title);
         mTvPrice = FVHelper.fv(this, R.id.tv_activity_common_price);
-        mTvSpec = FVHelper.fv(this, R.id.tv_activity_common_spec);
         mLlCustomer = FVHelper.fv(this, R.id.ll_include_common_customer);
         mTvCollection = FVHelper.fv(this, R.id.tv_include_common_collection);
         mIvCollection = FVHelper.fv(this, R.id.iv_include_common_collection);
@@ -264,7 +284,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     public void setViewData() {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        typeIntent = getIntent().getIntExtra("type", 1);
+//        typeIntent = getIntent().getIntExtra("type", 1);
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //获取数据
@@ -307,7 +327,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         imageViewAdapter = new ImageViewAdapter(R.layout.item_imageview,detailList);
         recyclerViewImage.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerViewImage.setAdapter(imageViewAdapter);
-
+        initStat();
     }
 
     @Override
@@ -467,7 +487,6 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                                 iv_flag.setVisibility(View.VISIBLE);
                                 Glide.with(mContext).load(model.getData().getTypeUrl()).into(iv_flag);
                             }
-                            mTvSpec.setText("规格:"+model.getData().getSpec());
                             tv_sale.setText(model.getData().getSalesVolume());
                             prodSpecs = model.getData().getProdSpecs();
                             tv_desc.setText("产品说明："+model.getData().getIntroduction());
@@ -1131,5 +1150,104 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         getCartNum();
 
     }
+    /**
+     * 设置状态栏交互
+     */
+    private void initStat() {
+        ArrayList<Integer> araryDistance = new ArrayList<>();
+        araryDistance.add(0);
+        araryDistance.add(getMeasureHeight(ll_detail));
+        araryDistance.add(getMeasureHeight(ll_detail)+getMeasureHeight(ll_cer));
+        scrollView.setArrayDistance(araryDistance);
+        Rect rectangle= new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(rectangle);
+        scrollView.setViewPager(viewPager,getMeasureHeight(ll_head)-rectangle.top);
+        radioGroup.setAlpha(0);
+        radioGroup.check(radioGroup.getChildAt(0).getId());
+        scrollView.setOnSelectedIndicateChangedListener(new IdeaScrollView.OnSelectedIndicateChangedListener() {
+            @Override
+            public void onSelectedChanged(int position) {
+                isNeedScrollTo = false;
+                if(radioGroup.getChildAt(position)!=null) {
+                    radioGroup.check(radioGroup.getChildAt(position).getId());
+                }
 
+                isNeedScrollTo = true;
+            }
+        });
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+        scrollView.setOnScrollChangedColorListener(new IdeaScrollView.OnScrollChangedColorListener() {
+            @Override
+            public void onChanged(float percentage) {
+                int color = getAlphaColor(percentage>0.9f?1.0f:percentage);
+                ll_head.setBackgroundDrawable(new ColorDrawable(color));
+                radioGroup.setBackgroundDrawable(new ColorDrawable(color));
+                radioGroup.setAlpha((percentage>0.9f?1.0f:percentage)*255);
+                setRadioButtonTextColor(percentage);
+
+            }
+
+            @Override
+            public void onChangedFirstColor(float percentage) {
+
+            }
+
+            @Override
+            public void onChangedSecondColor(float percentage) {
+
+            }
+        });
+
+        RadioGroup.OnCheckedChangeListener radioGroupListener = new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                for(int i=0;i<radioGroup.getChildCount();i++){
+                    RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
+                    radioButton.setTextColor(radioButton.isChecked()?Color.parseColor("#FF703C"):Color.parseColor("#333333"));
+                    if(radioButton.isChecked()&&isNeedScrollTo){
+                        scrollView.setPosition(i);
+                    }
+                }
+            }
+        };
+        radioGroup.setOnCheckedChangeListener(radioGroupListener);
+    }
+
+    public int getAlphaColor(float f){
+        return Color.argb((int) (f*255),0xFF,0xFF,0xFF);
+    }
+
+    public int getMeasureHeight(View view){
+        int width = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        int height = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        view.measure(width, height);
+        return view.getMeasuredHeight();
+    }
+
+    private void setRadioButtonTextColor(float percentage) {
+        if(Math.abs(percentage-currentPercentage)>=0.1f){
+            for(int i=0;i<radioGroup.getChildCount();i++){
+                RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
+                radioButton.setTextColor(radioButton.isChecked()?Color.parseColor("#FF703C"):Color.parseColor("#333333"));
+            }
+            this.currentPercentage = percentage;
+        }
+    }
 }

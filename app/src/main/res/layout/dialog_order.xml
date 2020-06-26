@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_root"
+    android:background="@drawable/shape_choose_address"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="温馨提示"
+                android:layout_marginTop="@dimen/size_27dp"
+                android:layout_gravity="center_horizontal"
+                android:textSize="@dimen/size_18dp"
+                android:textColor="#333333"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textSize="@dimen/sp_14"
+                android:textColor="#333333"
+                android:layout_marginTop="@dimen/size_27dp"
+                android:layout_marginRight="@dimen/size_19dp"
+                android:layout_marginLeft="@dimen/size_19dp"
+                android:text="您的订单中包含翘歌自营商品和翘歌非自营商品，我们将会会分2次进行发出，自营商品在次日送达，非自营商品将在隔日送达！"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:orientation="vertical"
+                android:id="@+id/rl_bg"
+                android:layout_marginTop="@dimen/size_33dp"
+                android:background="@drawable/shape_oranges"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/size_23dp"
+                android:layout_marginRight="@dimen/size_23dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_40dp">
+
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/tv_second"
+                    android:textColor="#EA4200"
+                    tools:text="我知道了(3s)"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="@dimen/size_15dp"
+                    android:textSize="@dimen/size_16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+</LinearLayout>

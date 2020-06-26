@@ -48,6 +48,7 @@ import com.chuanglan.shanyan_sdk.listener.InitListener;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
+import com.githang.statusbar.StatusBarCompat;
 import com.puyue.www.qiaoge.CustomViewPager;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.TabEntity;
@@ -142,24 +143,54 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ${王涛} on 2020/5/20
  */
-public class Test1Activity extends BaseSwipeActivity{
-
+public class Test1Activity extends BaseSwipeActivity implements View.OnClickListener {
+    @BindView(R.id.iv_back)
+    ImageView iv_back;
     @BindView(R.id.scrollView)
     IdeaScrollView scrollView;
     @BindView(R.id.viewPager)
     IdeaViewPager viewPager;
     @BindView(R.id.ll_head)
     LinearLayout ll_head;
+    @BindView(R.id.ll_detail)
+    LinearLayout ll_detail;
+    @BindView(R.id.ll_cer)
+    LinearLayout ll_cer;
     @BindView(R.id.radioGroup)
     RadioGroup radioGroup;
+    @BindView(R.id.tv_city)
+    TextView tv_city;
+    @BindView(R.id.tv_add_car)
+    TextView mTvAddCar;
+    @BindView(R.id.ll_service)
+    LinearLayout ll_service;
     private float currentPercentage = 0;
     private boolean isNeedScrollTo = true;
-
-
-
+    String num = null;
+    String city;
+    private int productId;
+    private byte businessType = 1;
+    private ImageViewAdapter imageViewAdapter;
+    private GetProductDetailModel models;
+    private int productId1;
+    private String productName;
+    //图片详情集合
+    private List<String> detailList = new ArrayList<>();
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            Bundle bundle = getIntent().getExtras();
+            if(bundle.getString("num")!=null) {
+                num = bundle.getString("num");
+            }
 
+            if(bundle.getString("city")!=null) {
+                city = bundle.getString("city");
+
+            }
+
+            productId = bundle.getInt(AppConstant.ACTIVEID);
+        }
         return false;
     }
 
@@ -177,8 +208,37 @@ public class Test1Activity extends BaseSwipeActivity{
     @Override
     public void setViewData() {
         ButterKnife.bind(this);
-        ArrayList<Integer> araryDistance = new ArrayList<>();
 
+        if(city!=null) {
+            tv_city.setText("该商品为"+city+"地区商品，请切换到该地区购买");
+        }
+
+
+
+
+        iv_back.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_back:
+                EventBus.getDefault().post(new NumEvent());
+                finish();
+                break;
+        }
+    }
+
+    /**
+     * 设置状态栏交互
+     */
+    private void initStat() {
+        ArrayList<Integer> araryDistance = new ArrayList<>();
+        araryDistance.add(0);
+        araryDistance.add(getMeasureHeight(ll_detail));
+        araryDistance.add(getMeasureHeight(ll_detail)+getMeasureHeight(ll_cer));
+        scrollView.setArrayDistance(araryDistance);
         Rect rectangle= new Rect();
         getWindow().getDecorView().getWindowVisibleDisplayFrame(rectangle);
         scrollView.setViewPager(viewPager,getMeasureHeight(ll_head)-rectangle.top);
@@ -188,11 +248,28 @@ public class Test1Activity extends BaseSwipeActivity{
             @Override
             public void onSelectedChanged(int position) {
                 isNeedScrollTo = false;
-                radioGroup.check(radioGroup.getChildAt(position).getId());
+                if(radioGroup.getChildAt(position)!=null) {
+                    radioGroup.check(radioGroup.getChildAt(position).getId());
+                }
+
                 isNeedScrollTo = true;
             }
         });
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
 
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
         scrollView.setOnScrollChangedColorListener(new IdeaScrollView.OnScrollChangedColorListener() {
             @Override
             public void onChanged(float percentage) {
@@ -220,7 +297,7 @@ public class Test1Activity extends BaseSwipeActivity{
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 for(int i=0;i<radioGroup.getChildCount();i++){
                     RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
-                    radioButton.setTextColor(radioButton.isChecked()?getRadioCheckedAlphaColor(currentPercentage):getRadioAlphaColor(currentPercentage));
+                    radioButton.setTextColor(radioButton.isChecked()?Color.parseColor("#FF703C"):Color.parseColor("#333333"));
                     if(radioButton.isChecked()&&isNeedScrollTo){
                         scrollView.setPosition(i);
                     }
@@ -230,11 +307,12 @@ public class Test1Activity extends BaseSwipeActivity{
         radioGroup.setOnCheckedChangeListener(radioGroupListener);
     }
 
+
     private void setRadioButtonTextColor(float percentage) {
         if(Math.abs(percentage-currentPercentage)>=0.1f){
             for(int i=0;i<radioGroup.getChildCount();i++){
                 RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
-                radioButton.setTextColor(radioButton.isChecked()?getRadioCheckedAlphaColor(percentage):getRadioAlphaColor(percentage));
+                radioButton.setTextColor(radioButton.isChecked()?Color.parseColor("#FF703C"):Color.parseColor("#333333"));
             }
             this.currentPercentage = percentage;
         }
@@ -246,18 +324,6 @@ public class Test1Activity extends BaseSwipeActivity{
     }
 
     public int getAlphaColor(float f){
-        return Color.argb((int) (f*255),0x09,0xc1,0xf4);
-    }
-
-    public int getLayerAlphaColor(float f){
-        return Color.argb((int) (f*255),0x09,0xc1,0xf4);
-    }
-
-    public int getRadioCheckedAlphaColor(float f){
-        return Color.argb((int) (f*255),0x44,0x44,0x44);
-    }
-
-    public int getRadioAlphaColor(float f){
         return Color.argb((int) (f*255),0xFF,0xFF,0xFF);
     }
 
@@ -269,6 +335,7 @@ public class Test1Activity extends BaseSwipeActivity{
         view.measure(width, height);
         return view.getMeasuredHeight();
     }
+
 
 
 }

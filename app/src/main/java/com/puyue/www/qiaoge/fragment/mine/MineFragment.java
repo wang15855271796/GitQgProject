@@ -48,21 +48,27 @@ import com.puyue.www.qiaoge.api.mine.order.MyOrderNumAPI;
 import com.puyue.www.qiaoge.api.mine.subaccount.MineAccountAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.event.CouponEvent;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.GoToMineEvent;
 import com.puyue.www.qiaoge.event.MessageEvent;
+import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.fragment.cart.CartFragment;
+import com.puyue.www.qiaoge.fragment.home.CityEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.NetWorkHelper;
+import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.User;
+import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.mine.AccountCenterModel;
 import com.puyue.www.qiaoge.model.mine.UpdateModel;
 import com.puyue.www.qiaoge.model.mine.order.MineCenterModel;
 import com.puyue.www.qiaoge.model.mine.order.MyOrderNumModel;
+import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.SuperTextView;
 import com.puyue.www.qiaoge.view.scrollview.MyRecyclerAdapter;
 
@@ -156,7 +162,7 @@ public class MineFragment extends BaseFragment {
     private TextView tv_use_deduct;//使用优惠券
     private ImageView iv_use_deduct;//使用优惠券
     RelativeLayout rl_zizhi;
-
+    String cell;
     private int day;
     private String giftNo;
     private LinearLayout ll_amount;//余额
@@ -291,7 +297,7 @@ public class MineFragment extends BaseFragment {
     public void setViewData() {
         mViewVersionPoint.setVisibility(View.GONE);
         mTvVersion.setText(getString(R.string.textVersion) + AppHelper.getVersion(getContext()));
-
+        getCustomerPhone();
         if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(getContext()))) {
             //有userId,显示userId,
             requestUserInfo();
@@ -323,6 +329,23 @@ public class MineFragment extends BaseFragment {
 
         requestUpdate();
 
+    }
+
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    ToastUtil.showSuccessMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
+
+            @Override
+            public void onFaild(String errorMsg) {
+            }
+        });
     }
 
     @Override
@@ -995,7 +1018,8 @@ public class MineFragment extends BaseFragment {
         mDialog = new AlertDialog.Builder(getActivity()).create();
         mDialog.show();
         mDialog.getWindow().setContentView(R.layout.dialog_call_phone);
-
+        TextView mTvCell = (TextView) mDialog.getWindow().findViewById(R.id.tv_phone);
+        mTvCell.setText(cell);
         mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1178,7 +1202,7 @@ public class MineFragment extends BaseFragment {
         requestUserInfo();
         useAccount();
         requestUpdate();
-
+        getCustomerPhone();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1187,9 +1211,28 @@ public class MineFragment extends BaseFragment {
         requestUserInfo();
         useAccount();
         requestUpdate();
+        getCustomerPhone();
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getCoupons(AddressEvent couponEvent) {
+        requestOrderNum();
+        requestUserInfo();
+        useAccount();
+        requestUpdate();
+        getCustomerPhone();
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getCouponss(CityEvent couponEvent) {
+        requestOrderNum();
+        requestUserInfo();
+        useAccount();
+        requestUpdate();
+        getCustomerPhone();
+
+    }
 
 }

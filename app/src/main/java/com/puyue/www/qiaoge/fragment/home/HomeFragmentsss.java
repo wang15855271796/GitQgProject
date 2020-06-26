@@ -1885,8 +1885,8 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
             case R.id.rl_message:
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(getActivity()))) {
-                    Intent intents = new Intent(getActivity(), Test1Activity.class);
-//                    startActivityForResult(intents, 101);
+                    Intent intents = new Intent(getActivity(), MessageCenterActivity.class);
+                    startActivityForResult(intents, 101);
 
                     startActivity(intents);
                 } else {
