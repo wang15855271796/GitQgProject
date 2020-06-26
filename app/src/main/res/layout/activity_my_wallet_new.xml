@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -57,7 +58,7 @@
             android:layout_marginLeft="@dimen/size_21dp"
             android:layout_marginTop="@dimen/size_10dp"
             android:textColor="@color/white"
-
+            tools:text="2000"
             android:textSize="@dimen/size_25dp" />
     </LinearLayout>
 
@@ -97,9 +98,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_10dp"
-            android:drawableLeft="@mipmap/qg_bill_chzh"
+            android:drawableLeft="@mipmap/ic_account_detail"
             android:gravity="center"
-            android:text="余额充值"
+            android:text="余额明细"
             android:drawablePadding="@dimen/size_15dp"
             android:padding="@dimen/size_8dp"
             android:textColor="@color/color_252525"
@@ -191,9 +192,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_10dp"
-            android:drawableLeft="@mipmap/ic_account_detail"
+            android:drawableLeft="@mipmap/icon_coupons"
             android:gravity="center"
-            android:text="余额明细"
+            android:text="兑换无门槛不限时优惠券"
             android:drawablePadding="@dimen/size_15dp"
             android:padding="@dimen/size_8dp"
             android:textColor="@color/color_252525"

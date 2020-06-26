@@ -296,6 +296,10 @@
         <activity android:name=".activity.cart.ErrorActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".activity.cart.ExchangeActivity"
+            android:screenOrientation="portrait"/>
+
+
         <activity android:name=".activity.cart.CancleResultActivity"
             android:screenOrientation="portrait"
             />

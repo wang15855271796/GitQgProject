@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.cart.ExchangeActivity;
 import com.puyue.www.qiaoge.api.mine.GetMyBalanceAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
@@ -84,11 +85,9 @@ public class MyWalletNewActivity extends BaseSwipeActivity {
         relativeLayoutBalance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mActivity, MyWalletActivity.class);
+                Intent intent = new Intent(mActivity, ExchangeActivity.class);
                 UserInfoHelper.saveUserWalletNum(getContext(), num);
                 startActivity(intent);
-//                finish();
-                //startActivity(MyWalletActivity.getIntent(mActivity, MyWalletActivity.class));
             }
         });
         banner.setOnClickListener(new View.OnClickListener() {
