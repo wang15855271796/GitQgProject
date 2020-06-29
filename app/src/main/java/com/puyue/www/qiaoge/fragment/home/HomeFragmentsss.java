@@ -135,6 +135,7 @@ import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.utils.Utils;
 
 import com.puyue.www.qiaoge.view.CustomPopWindow;
+import com.puyue.www.qiaoge.view.GlideModel;
 import com.puyue.www.qiaoge.view.LuckPanAnimEndCallBack;
 import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 import com.puyue.www.qiaoge.view.StatusBarUtil;
@@ -1494,8 +1495,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                             classifyList.clear();
                             classifyList.addAll(data.getClassifyList());
                             if(indexInfoModel.getData().getHomeBackPic()!=null) {
-                                Glide.with(mActivity).load(indexInfoModel.getData().getHomeBackPic()).into(iv_bg);
-
+                                GlideModel.disPlayPlaceHolder(mActivity,indexInfoModel.getData().getHomeBackPic(),iv_bg);
                             }
 
                             for (int i = 0; i <classifyList.size() ; i++) {
