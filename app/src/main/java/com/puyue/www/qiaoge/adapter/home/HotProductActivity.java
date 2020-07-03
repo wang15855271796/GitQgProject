@@ -227,11 +227,13 @@ public class HotProductActivity extends BaseSwipeActivity implements View.OnClic
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getCartNum(UpDateNumEvent6 event) {
         getCartNum();
+        Log.d("dwdfffffff....","000");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getCartNum(NumEvent event) {
         getCartNum();
+        Log.d("dwdfffffff....","111");
     }
 
     @Override

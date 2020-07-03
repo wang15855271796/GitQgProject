@@ -15,6 +15,10 @@ public class AppInterfaceAddress {
     //http://192.168.101.41:8088/
 
     /**
+     *关键字搜索
+     */
+    public static final String Hot_Key = "common/getSearchHotKey";
+    /**
      * 获取注销原因
      */
 

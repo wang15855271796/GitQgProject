@@ -21,6 +21,7 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListActivity;
 import com.puyue.www.qiaoge.activity.mine.account.EditAddressActivity;
 import com.puyue.www.qiaoge.adapter.mine.SuggestAdressAdapter;
+import com.puyue.www.qiaoge.api.home.CancleAPI;
 import com.puyue.www.qiaoge.api.mine.address.AddressListAPI;
 import com.puyue.www.qiaoge.api.mine.address.DefaultAddressAPI;
 import com.puyue.www.qiaoge.base.BaseModel;
@@ -31,6 +32,8 @@ import com.puyue.www.qiaoge.fragment.home.CityEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
+import com.puyue.www.qiaoge.model.CancleReasonModel;
+import com.puyue.www.qiaoge.model.HotKeyModel;
 import com.puyue.www.qiaoge.model.mine.address.AddressModel;
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.view.SearchView;
@@ -51,7 +54,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ${王涛} on 2019/12/20
  */
-public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnClickListener, SearchView.SearchViewListener, OnGetSuggestionResultListener {
+public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnClickListener, SearchView.SearchViewListener {
     @BindView(R.id.tv_tip)
     TextView tv_tip;
     @BindView(R.id.rl_tip)
@@ -144,7 +147,6 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
 
         //设置监听
         searchView.setSearchViewListener(this);
-        mSuggestionSearch.setOnGetSuggestionResultListener(this);
 
     }
 
@@ -169,7 +171,7 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
                             EventBus.getDefault().post(new AddressEvent());
                             UserInfoHelper.saveChangeFlag(mActivity,"0");
                             finish();
-                            Log.d("woshidajiadeg.....","wwddddd");
+
                         } else {
                             AppHelper.showMsg(mContext, baseModel.message);
                         }
@@ -311,69 +313,48 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
      */
     @Override
     public void onRefreshAutoComplete(String text) {
-
+        Log.d("defefffffff",text+"");
         if(!text.equals("")) {
             search_recycleView.setVisibility(View.VISIBLE);
-            ll_address.setVisibility(View.GONE);
-            if (cityName!=null&&StringHelper.notEmptyAndNull(cityName)) {
-                /* 使用建议搜索服务获取建议列表，结果在onSuggestionResult()中更新 */
-                mSuggestionSearch.requestSuggestion((new SuggestionSearchOption())
-                        .keyword(text)
-                        .city(cityName));
-
-            }
-
+            getReasonList(text);
         }else {
             search_recycleView.setVisibility(View.GONE);
-            ll_address.setVisibility(View.VISIBLE);
+
         }
 
     }
 
+    private void getReasonList(String text) {
+        CancleAPI.getHot(mContext,text)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<HotKeyModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(HotKeyModel hotKeyModel) {
+                        if (hotKeyModel.isSuccess()) {
+                            if(hotKeyModel.getData()!=null) {
+
+                            }
+                        } else {
+                            AppHelper.showMsg(mContext, hotKeyModel.getMessage());
+                        }
+                    }
+                });
+    }
 
     @Override
     public void onSearch(String text) {
         search_recycleView.setVisibility(View.GONE);
 
-    }
-
-    @Override
-    public void onGetSuggestionResult(SuggestionResult suggestionResult) {
-
-//        if (suggestionResult == null || suggestionResult.getAllSuggestions() == null) {
-//            //permission_unfinished
-//            return;
-//        }
-//
-//        List<String> suggest = new ArrayList<>();
-//
-//        for (SuggestionResult.SuggestionInfo info : suggestionResult.getAllSuggestions()) {
-//            if (info.key != null) {
-//                suggest.add(info.key);
-//            }
-//        }
-//        search_recycleView.setVisibility(View.VISIBLE);
-//
-//        adressAdapter = new SuggestAdressAdapter(suggest, mContext, new SuggestAdressAdapter.onClick() {
-//            @Override
-//            public void setLocation(int pos) {
-//                isClick = SharedPreferencesUtil.getInt(mActivity, "isClick");
-//                Intent intent = new Intent();//跳回首页
-//                UserInfoHelper.saveChangeFlag(mActivity,"1");
-//                Log.d("swdddddffffff.....",areaName+"......."+areaName1);
-//                if(isClick==0) {
-//                    UserInfoHelper.saveCity(mActivity,cityName);
-//                    UserInfoHelper.saveAreaName(mActivity,areaName);
-//                }else {
-//                    UserInfoHelper.saveCity(mActivity,city);
-//                    UserInfoHelper.saveAreaName(mActivity,areaName1);
-//                }
-//                setResult(104,intent);
-//                finish();
-//            }
-//        });
-//        search_recycleView.setLayoutManager(new LinearLayoutManager(mContext));
-//        search_recycleView.setAdapter(adressAdapter);
-//        adressAdapter.notifyDataSetChanged();
     }
 }

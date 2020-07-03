@@ -22,14 +22,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
+import com.baidu.mapapi.search.sug.SuggestionResult;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.xrecyclerview.DensityUtil;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.flow.FlowLayout;
 import com.puyue.www.qiaoge.activity.flow.TagAdapter;
 import com.puyue.www.qiaoge.activity.flow.TagFlowLayout;
+import com.puyue.www.qiaoge.adapter.HotKeyAdapter;
 import com.puyue.www.qiaoge.adapter.cart.RecommendAdapter;
 import com.puyue.www.qiaoge.adapter.home.SearchHistoryAdapter;
 import com.puyue.www.qiaoge.api.cart.RecommendApI;
+import com.puyue.www.qiaoge.api.home.CancleAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -37,7 +42,9 @@ import com.puyue.www.qiaoge.helper.FVHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
+import com.puyue.www.qiaoge.model.HotKeyModel;
 import com.puyue.www.qiaoge.model.home.RecommendModel;
+import com.puyue.www.qiaoge.view.SearchView;
 
 
 import java.util.ArrayList;
@@ -54,7 +61,7 @@ import rx.schedulers.Schedulers;
  * Created by WinSinMin on 2018/4/13.
  */
 
-public class SearchStartActivity extends BaseSwipeActivity implements View.OnFocusChangeListener {
+public class SearchStartActivity extends BaseSwipeActivity implements View.OnFocusChangeListener ,SearchView.SearchViewListener, OnGetSuggestionResultListener {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.et_goods)
@@ -63,6 +70,10 @@ public class SearchStartActivity extends BaseSwipeActivity implements View.OnFoc
     TagFlowLayout fl_search;
     @BindView(R.id.tv_arrow)
     TextView tv_arrow;
+    @BindView(R.id.searchView)
+    SearchView searchView;
+    @BindView(R.id.search_recycleView)
+    RecyclerView search_recycleView;
     private TextView mIvSearch;
     private TextView mTvCancle;
     private ImageView iv_clear;
@@ -71,11 +82,12 @@ public class SearchStartActivity extends BaseSwipeActivity implements View.OnFoc
     private String searchWord;
     private List<String> mListHistory = new ArrayList<>();
     private AlertDialog mDialog;
-    //    private LineBreakLayout lineBreakLayout;
     private String common;
     RecommendAdapter recommendAdapter;
     List<String> list = new ArrayList<>();
     private TagAdapter mRecordsAdapter;
+    List<HotKeyModel.DataBean> data;
+    HotKeyAdapter hotKeyAdapter;
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
 
@@ -102,7 +114,6 @@ public class SearchStartActivity extends BaseSwipeActivity implements View.OnFoc
 
     @Override
     public void findViewById() {
-//        lineBreakLayout = FVHelper.fv(this, R.id.tv_item_search_history);
         mIvSearch = FVHelper.fv(this, R.id.iv_activity_search_start);
         mTvCancle = FVHelper.fv(this, R.id.tv_activity_search_cancle);
         iv_clear = FVHelper.fv(this, R.id.iv_clear);
@@ -148,7 +159,7 @@ public class SearchStartActivity extends BaseSwipeActivity implements View.OnFoc
     public void setViewData() {
         searchWord = UserInfoHelper.getUserSearchContent(mContext);
         etGoods.setOnFocusChangeListener(this);
-
+        searchView.setSearchViewListener(this);
         String history = UserInfoHelper.getUserSearchHistory(mContext);
         if (StringHelper.notEmptyAndNull(history)) {
             for (Object o : history.split(",")) {
@@ -158,6 +169,7 @@ public class SearchStartActivity extends BaseSwipeActivity implements View.OnFoc
         } else {
             iv_clear.setVisibility(View.GONE);
         }
+
         mRecordsAdapter = new TagAdapter<String>(mListHistory) {
 
             @Override
@@ -182,7 +194,7 @@ public class SearchStartActivity extends BaseSwipeActivity implements View.OnFoc
                 }
             }
         });
-////
+
         fl_search.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public void onTagClick(View view, int position, FlowLayout parent) {
@@ -203,8 +215,7 @@ public class SearchStartActivity extends BaseSwipeActivity implements View.OnFoc
                 finish();
             }
         });
-//
-//
+
         tv_arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,49 +225,6 @@ public class SearchStartActivity extends BaseSwipeActivity implements View.OnFoc
         });
         fl_search.setAdapter(mRecordsAdapter);
 
-
-
-
-        //历史记录
-//        lineBreakLayout.removeAllViews();
-//        for (int i = 0; i < mListHistory.size(); i++) {
-//            TextView tv = new TextView(mContext);
-//            tv.setTextColor(Color.parseColor("#000000"));
-//            tv.setBackgroundResource(R.drawable.app_linebreak_search_bg);
-//            tv.setTextSize(12);
-//            tv.setPadding(30, 30, 30, 30);
-//            final String pos = mListHistory.get(i);
-//            tv.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    UserInfoHelper.saveUserContent(mContext, pos);
-//                    Intent intent = new Intent(mContext, SearchReasultActivity.class);
-//                    intent.putExtra(AppConstant.SEARCHTYPE, searchType);
-//                    intent.putExtra(AppConstant.SEARCHWORD, pos);
-//
-//                    if (common!=null&&StringHelper.notEmptyAndNull(common)){
-//                        intent.putExtra("good_buy","common");
-//                    }else {
-//                        intent.putExtra("good_buy","");
-//                    }
-//
-//                    savaHistory(pos);
-//                   startActivity(intent);
-//                   finish();
-//                }
-//            });
-//
-//            if (!TextUtils.isEmpty(mListHistory.get(i))) {
-//                tv.setText(mListHistory.get(i));
-//
-//            } else {
-//                tv.setText("");
-//            }
-//
-//            lineBreakLayout.addView(tv);
-//
-//
-//        }
         editKeyBoard();
     }
 
@@ -278,7 +246,8 @@ public class SearchStartActivity extends BaseSwipeActivity implements View.OnFoc
             if (view == mTvCancle) {
                 hintKbTwo();
                 finish();
-            } else if (view == mIvSearch) {
+            }
+            else if (view == mIvSearch) {
                 if (etGoods.getText().toString().isEmpty()) {
                     //传参和输入都是空
                     AppHelper.showMsg(mContext, "请输入商品名称");
@@ -301,7 +270,8 @@ public class SearchStartActivity extends BaseSwipeActivity implements View.OnFoc
                     finish();
                     savaHistory(etGoods.getText().toString());
                     //  finish();
-                } else {
+                }
+                else {
                     //默认关键字
                     Intent intent = new Intent(mContext, SearchReasultActivity.class);
                     intent.putExtra(AppConstant.SEARCHTYPE, searchType);
@@ -433,4 +403,91 @@ public class SearchStartActivity extends BaseSwipeActivity implements View.OnFoc
             etGoods.setHint("");
         }
     }
+
+    @Override
+    public void onGetSuggestionResult(SuggestionResult suggestionResult) {
+
+    }
+
+    @Override
+    public void onRefreshAutoComplete(String text) {
+        if(!text.equals("")) {
+            search_recycleView.setVisibility(View.VISIBLE);
+            getReasonList(text);
+        }else {
+            search_recycleView.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onSearch(String text) {
+        search_recycleView.setVisibility(View.GONE);
+
+        if (text.isEmpty()) {
+            //传参和输入都是空
+            AppHelper.showMsg(mContext, "请输入商品名称");
+
+        } else if (!text.isEmpty()) {
+            UserInfoHelper.saveUserContent(mContext, text);
+            //输入不为空,优先输入
+            UserInfoHelper.saveUserHistory(mContext, text);
+            Intent intent = new Intent(mContext, SearchReasultActivity.class);
+            intent.putExtra(AppConstant.SEARCHTYPE, searchType);
+            intent.putExtra(AppConstant.SEARCHWORD, text);
+            if (common!=null&&StringHelper.notEmptyAndNull(common)){
+                intent.putExtra("good_buy","common");
+            }else {
+                intent.putExtra("good_buy","");
+            }
+
+            startActivity(intent);
+            finish();
+            savaHistory(text);
+            //  finish();
+        }
+
+    }
+
+    private void getReasonList(String text) {
+        CancleAPI.getHot(mContext,text)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<HotKeyModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(HotKeyModel hotKeyModel) {
+                        if (hotKeyModel.isSuccess()) {
+                            if(hotKeyModel.getData()!=null) {
+                                data = hotKeyModel.getData();
+                                hotKeyAdapter = new HotKeyAdapter(R.layout.item_key_hot,data);
+                                search_recycleView.setLayoutManager(new LinearLayoutManager(mActivity));
+                                search_recycleView.setAdapter(hotKeyAdapter);
+
+                                hotKeyAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                                        Intent intent = new Intent(mContext,SearchReasultActivity.class);
+                                        intent.putExtra(AppConstant.SEARCHWORD,data.get(position).getKey()+data.get(position).getKeyBegin()+data.get(position).getKeyEnd());
+                                        mContext.startActivity(intent);
+                                        finish();
+                                    }
+                                });
+                            }
+                        } else {
+                            AppHelper.showMsg(mContext, hotKeyModel.getMessage());
+                        }
+                    }
+                });
+    }
+
+
 }

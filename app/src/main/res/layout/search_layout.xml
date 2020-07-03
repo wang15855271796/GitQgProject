@@ -1,12 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:background="#eee"
-    android:layout_marginRight="@dimen/size_15dp"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+    android:background="#ffffff"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingTop="6dp">
+
+        <LinearLayout
+            android:id="@+id/search_btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/ic_back_arrow" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="@dimen/size_5dp"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/size_5dp"
+            android:layout_weight="1"
+            android:background="@drawable/app_search"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="6dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_32dp">
+
+                <EditText
+                    android:id="@+id/search_et_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/size_45dp"
+                    android:drawablePadding="5dp"
+                    android:background="@drawable/shape_shouye"
+                    android:hint="请输入商品名称"
+                    android:imeOptions="actionSearch"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/app_cancle_gray"
+                    android:textSize="14dp" />
+
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/search_iv_delete"
+                    android:src="@mipmap/ic_search_close"
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/size_5dp"
+                    android:layout_marginRight="@dimen/size_50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:id="@+id/tv_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="0.06"
+                    android:padding="5dp"
+                    android:text="搜索"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/color_333"
+                    android:textSize="13sp" />
+
+            </RelativeLayout>
+
+
+
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_activity_search_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="取消"
+            android:textColor="@color/app_front_black"
+            android:textSize="15dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
         android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +120,6 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/search_et_input"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_width="match_parent"
@@ -33,7 +133,6 @@
             <ImageView
                 android:visibility="gone"
                 android:layout_marginRight="20dp"
-                android:id="@+id/search_iv_delete"
                 android:layout_gravity="right|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -41,7 +140,6 @@
 
         <Button
             android:visibility="gone"
-            android:id="@+id/search_btn_back"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
@@ -62,3 +160,5 @@
         android:layout_height="200dp">
     </ListView>
 </LinearLayout>
+
+

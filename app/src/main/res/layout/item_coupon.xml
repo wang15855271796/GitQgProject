@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:background="@drawable/shouye"
+        android:layout_marginTop="@dimen/size_13dp"
+        android:layout_marginRight="@dimen/size_13dp"
+        android:layout_marginLeft="@dimen/size_13dp"
+        android:layout_width="match_parent"
+        android:layout_height="98dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv"
+                android:layout_marginTop="@dimen/size_30dp"
+                android:textSize="@dimen/sp_16"
+                android:textColor="#666666"
+                android:layout_marginLeft="@dimen/size_27dp"
+                android:text="请输入优惠券金额"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:layout_toRightOf="@+id/tv"
+                android:layout_width="150dp"
+                android:layout_marginTop="@dimen/size_20dp"
+                android:layout_marginLeft="@dimen/size_20dp"
+                android:background="@drawable/shape_purple"
+                android:layout_height="@dimen/size_36dp" />
+
+            <TextView
+                android:layout_below="@+id/tv"
+                android:text="无门槛不限期优惠券"
+                android:textColor="#FF6F08"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginLeft="@dimen/size_27dp"
+                android:textSize="@dimen/sp_12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>

@@ -43,6 +43,8 @@ import com.githang.statusbar.StatusBarCompat;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.RoundImageView;
+import com.puyue.www.qiaoge.activity.Test1Activity;
+import com.puyue.www.qiaoge.activity.TestActivity;
 import com.puyue.www.qiaoge.activity.home.ChangeCityActivity;
 import com.puyue.www.qiaoge.activity.home.ChooseAddressActivity;
 import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
@@ -135,6 +137,7 @@ import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.utils.Utils;
 
 import com.puyue.www.qiaoge.view.CustomPopWindow;
+import com.puyue.www.qiaoge.view.GlideModel;
 import com.puyue.www.qiaoge.view.LuckPanAnimEndCallBack;
 import com.puyue.www.qiaoge.view.SnapUpCountDownTimerView;
 import com.puyue.www.qiaoge.view.StatusBarUtil;
@@ -431,10 +434,14 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                                     tv_desc.setText(data1.getDesc());
                                     currentTime = couponModel.getData().getCurrentTime();
                                     startTime = couponModel.getData().getStartTime();
-                                    skillAdapter = new SkillAdapter(R.layout.item_skill_list, actives);
-                                    recyclerViewTest.setAdapter(skillAdapter);
+                                    if(actives.size()>2) {
+                                        skillAdapter = new SkillAdapter(R.layout.item_skill_list, actives);
+                                        recyclerViewTest.setAdapter(skillAdapter);
+                                    }else {
+                                        skillAdapter = new SkillAdapter(R.layout.item_skill_lists, actives);
+                                        recyclerViewTest.setAdapter(skillAdapter);
+                                    }
 
-                                    Log.d("wddddddddssss......","1111");
                                     rb_1.setTextColor(Color.parseColor("#ffffff"));
                                     rb_1.setBackgroundResource(R.drawable.shape_oranges_home);
 
@@ -517,9 +524,13 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                                     rl_more3.setVisibility(View.GONE);
                                     rl_more.setVisibility(View.GONE);
                                     actives.addAll(data1.getActives());
-                                    commonAdapter = new CommonAdapter(11+"",R.layout.item_commons_list, actives);
-                                    recyclerViewTest.setAdapter(commonAdapter);
-
+                                    if(actives.size()>2) {
+                                        commonAdapter = new CommonAdapter(11+"",R.layout.item_commons_list, actives);
+                                        recyclerViewTest.setAdapter(commonAdapter);
+                                    }else {
+                                        commonAdapter = new CommonAdapter(11+"",R.layout.item_skill_lists, actives);
+                                        recyclerViewTest.setAdapter(commonAdapter);
+                                    }
                                     rb_2.setTextColor(Color.parseColor("#ffffff"));
                                     rb_2.setBackgroundResource(R.drawable.shape_oranges_home);
 
@@ -554,8 +565,14 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
                                     rb_3.setVisibility(View.VISIBLE);
                                     actives.addAll(data1.getActives());
-                                    commonAdapter = new CommonAdapter(3+"",R.layout.item_commons_list, actives);
-                                    recyclerViewTest.setAdapter(commonAdapter);
+                                    if(actives.size()>2) {
+                                        commonAdapter = new CommonAdapter(3+"",R.layout.item_commons_list, actives);
+                                        recyclerViewTest.setAdapter(commonAdapter);
+                                    }else {
+                                        commonAdapter = new CommonAdapter(3+"",R.layout.item_skill_lists, actives);
+                                        recyclerViewTest.setAdapter(commonAdapter);
+                                    }
+
                                     rb_1.setTextColor(Color.parseColor("#FF680A"));
                                     rb_1.setBackgroundResource(R.drawable.shape_white_home);
 
@@ -1494,8 +1511,7 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                             classifyList.clear();
                             classifyList.addAll(data.getClassifyList());
                             if(indexInfoModel.getData().getHomeBackPic()!=null) {
-                                Glide.with(mActivity).load(indexInfoModel.getData().getHomeBackPic()).into(iv_bg);
-
+                                GlideModel.disPlayPlaceHolder(mActivity,indexInfoModel.getData().getHomeBackPic(),iv_bg);
                             }
 
                             for (int i = 0; i <classifyList.size() ; i++) {
@@ -1617,7 +1633,6 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
 
                             if(teamNum==0&&specialNum==0&&spikeNum==0) {
                                 ll_active.setVisibility(View.GONE);
-
                             }else {
                                 ll_active.setVisibility(View.VISIBLE);
                             }
@@ -1886,6 +1901,8 @@ public class HomeFragmentsss extends BaseFragment implements View.OnClickListene
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(getActivity()))) {
                     Intent intents = new Intent(getActivity(), MessageCenterActivity.class);
                     startActivityForResult(intents, 101);
+//                    Intent intent2 = new Intent(getActivity(), Test1Activity.class);
+//                    startActivity(intent2);
 
                 } else {
                     initDialog();

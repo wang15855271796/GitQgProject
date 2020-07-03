@@ -113,10 +113,7 @@ public class MyWalletNewActivity extends BaseSwipeActivity {
         relative_account_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent =new Intent(mContext,MyWalletDetailActivity.class);
-
-                intent.putExtra("showType",2);
+                Intent intent =new Intent(mContext,ExchangeActivity.class);
                 startActivity(intent);
 
 

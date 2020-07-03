@@ -90,7 +90,6 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-
             android:id="@+id/ll_cart"
             android:layout_width="match_parent"
             android:layout_height="100dp"
@@ -99,32 +98,33 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_cart_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginRight="@dimen/dp_10"
-            android:layout_marginTop="@dimen/size_20dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/ll_cart_list"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_marginTop="@dimen/size_20dp"-->
+            <!--android:focusable="true"-->
+            <!--android:focusableInTouchMode="true"-->
+            <!--android:orientation="vertical">-->
 
 
             <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <android.support.v7.widget.RecyclerView
-
                         android:id="@+id/rv_cart"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_marginRight="@dimen/dp_10"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         />
+
                     <RelativeLayout
                         android:id="@+id/rl_unable"
                         android:visibility="gone"
@@ -156,47 +156,71 @@
                             android:textColor="@color/color_F6551A"
                             android:textSize="15dp" />
                     </RelativeLayout>
+
                     <android.support.v7.widget.RecyclerView
                         android:visibility="gone"
                         android:id="@+id/rv_unable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#ffffff" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_NoData"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="338dp"
+                        android:layout_marginLeft="@dimen/size_15dp"
+                        android:layout_marginRight="@dimen/size_15dp"
+                        android:background="@drawable/app_my_wallet_bg"
+                        android:orientation="vertical"
+                        >
+
+                        <TextView
+                            android:drawableTop="@mipmap/ic_no_datas"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/size_50dp"
+                            android:gravity="center"
+                            android:drawablePadding="@dimen/size_15dp"
+                            android:text="今日宜补货~ "
+                            android:textColor="@color/color_4C4C4C"
+                            android:textSize="@dimen/size_22dp" />
+
+                        <ImageView
+                            android:id="@+id/imageGoBay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/size_50dp"
+                            android:src="@mipmap/ic_go_bay" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv"
+                        android:layout_gravity="center_horizontal"
+                        android:text="为您推荐"
+                        android:layout_marginTop="@dimen/size_20dp"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/sp_16"
+                        android:textColor="#333333"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_below="@+id/tv"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:id="@+id/rv_recommend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
                 </LinearLayout>
 
 
         </android.support.v4.widget.NestedScrollView>
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_NoData"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/size_15dp"
-            android:visibility="gone"
-            android:layout_marginTop="@dimen/size_50dp"
-            android:layout_marginRight="@dimen/size_15dp"
-            android:background="@drawable/app_my_wallet_bg"
-            android:orientation="vertical"
-            >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_100dp"
-                android:gravity="center"
-                android:text="今日宜补货~ "
-                android:textColor="@color/color_4C4C4C"
-                android:textSize="@dimen/size_22dp" />
-
-            <ImageView
-                android:id="@+id/imageGoBay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/size_50dp"
-                android:src="@mipmap/ic_go_bay" />
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
     </FrameLayout>
 

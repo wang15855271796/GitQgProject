@@ -8,6 +8,7 @@ import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
 import com.puyue.www.qiaoge.helper.RestHelper;
 import com.puyue.www.qiaoge.model.CancleModel;
 import com.puyue.www.qiaoge.model.CancleReasonModel;
+import com.puyue.www.qiaoge.model.HotKeyModel;
 import com.puyue.www.qiaoge.model.home.ClickCollectionModel;
 
 import retrofit2.http.Field;
@@ -44,6 +45,20 @@ public class CancleAPI {
     public static Observable<CancleReasonModel> getList(Context context, String sysKey) {
         CancleReasonService service = RestHelper.getBaseRetrofit(context).create(CancleReasonService.class);
         return service.getData(sysKey);
+    }
+
+    /**
+     * 注销原因
+     */
+    private interface HotService {
+        @FormUrlEncoded
+        @POST(AppInterfaceAddress.Hot_Key)
+        Observable<HotKeyModel> getData(@Field("searchKey") String searchKey);
+    }
+
+    public static Observable<HotKeyModel> getHot(Context context, String searchKey) {
+        HotService service = RestHelper.getBaseRetrofit(context).create(HotService.class);
+        return service.getData(searchKey);
     }
 
 }

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_marginTop="@dimen/dp_10"
+        android:id="@+id/rl_group"
+        android:orientation="vertical"
+        android:background="@drawable/shouye"
+        android:layout_width="match_parent"
+        android:paddingBottom="@dimen/size_15dp"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/rl_pic"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_pic"
+                android:layout_marginTop="@dimen/size_15dp"
+                android:layout_centerHorizontal="true"
+                tools:src="@mipmap/icon_baidu"
+                android:layout_width="140dp"
+                android:layout_height="140dp" />
+
+            <View
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@drawable/app_sub_account_item_btn"
+                android:layout_width="152dp"
+                android:layout_height="152dp"/>
+
+            <ImageView
+                android:visibility="gone"
+                android:layout_centerInParent="true"
+                android:id="@+id/iv_sale_done"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_width="@dimen/size_27dp"
+                android:layout_height="@dimen/size_27dp" />
+        </RelativeLayout>
+
+        <TextView
+            tools:text="销量1000"
+            android:paddingLeft="5dp"
+            android:id="@+id/tv_sale"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/size_5dp"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/dp_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/iv_flag"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textColor="#333333"
+            android:maxLines="1"
+            android:id="@+id/tv_name"
+            android:layout_marginTop="@dimen/size_15dp"
+            android:layout_below="@+id/rl_pic"
+            android:ellipsize="end"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:textSize="@dimen/sp_14"
+            tools:text="华清源腿排腿排华排......................"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="15.0"
+            android:textColor="#FF5000"
+            android:id="@+id/tv_price"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:textSize="@dimen/size_16dp"
+            android:layout_below="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/iv_add"
+            android:src="@mipmap/app_add"
+            android:layout_marginRight="@dimen/size_15dp"
+            android:padding="5dp"
+            android:layout_below="@+id/tv_name"
+            android:layout_marginTop="@dimen/size_3dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/size_32dp"
+            android:layout_height="@dimen/size_32dp" />
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+</LinearLayout>

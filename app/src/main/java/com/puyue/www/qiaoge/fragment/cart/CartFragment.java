@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -26,6 +27,7 @@ import com.puyue.www.qiaoge.adapter.cart.CartUnableAdapter;
 import com.puyue.www.qiaoge.api.cart.CartBalanceAPI;
 import com.puyue.www.qiaoge.api.cart.CartListAPI;
 import com.puyue.www.qiaoge.api.cart.DeleteCartAPI;
+import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
 import com.puyue.www.qiaoge.api.mine.order.CartGetReductDescAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.base.BaseModel;
@@ -43,18 +45,23 @@ import com.puyue.www.qiaoge.event.UpDateNumEvent7;
 import com.puyue.www.qiaoge.event.UpDateNumEvent8;
 import com.puyue.www.qiaoge.event.UpDateNumEvent9;
 import com.puyue.www.qiaoge.fragment.home.CityEvent;
+import com.puyue.www.qiaoge.fragment.home.MustAdapter;
 import com.puyue.www.qiaoge.fragment.market.MarketsFragment;
 import com.puyue.www.qiaoge.fragment.market.TestAdapter;
 import com.puyue.www.qiaoge.helper.AlwaysMarqueeTextViewHelper;
+import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.BigDecimalUtils;
 import com.puyue.www.qiaoge.helper.CollapsingToolbarLayoutStateHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
+import com.puyue.www.qiaoge.helper.StringHelper;
+import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.cart.CartActivityGoodsModel;
 import com.puyue.www.qiaoge.model.cart.CartBalanceModel;
 import com.puyue.www.qiaoge.model.cart.CartCommonGoodsModel;
 import com.puyue.www.qiaoge.model.cart.CartsListModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
+import com.puyue.www.qiaoge.model.home.MustModel;
 import com.puyue.www.qiaoge.model.mine.order.CartGetReductModel;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.Arith;
@@ -121,6 +128,10 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     FrameLayout fl;
     @BindView(R.id.iv_back)
     ImageView iv_back;
+    @BindView(R.id.tv)
+    TextView tv;
+    @BindView(R.id.rv_recommend)
+    RecyclerView rv_recommend;
     //失效商品的cartId
     List<Integer> unCartsId = new ArrayList<>();
     //点击删除时的cartId存储集合
@@ -129,7 +140,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     private GoToMarket mlisenter;
     private TestAdapter testAdapter;
     List<CartsListModel.DataBean.ValidListBean> data;
-
+    MustAdapter mustAdapter;
+    //为你推荐列表
+    private List<MustModel.DataBean> list = new ArrayList<>();
     //可用列表
     private List<CartsListModel.DataBean.ValidListBean> mListCart = new ArrayList<>();
     private List<CartsListModel.DataBean.InValidListBean> unList = new ArrayList<>();
@@ -143,7 +156,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     private String activityBalanceVOStr = "";
     private String cartListStr;
     private double discribe;
-
+    String flag = "common";
     public static CartFragment getInstance() {
         CartFragment fragment = new CartFragment();
         Bundle bundle = new Bundle();
@@ -547,6 +560,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                             ToastUtil.showSuccessMsg(mActivity, "删除商品成功");
                             getCartNum();
                             requestCartList();
+                            getProductsList();
                         } else {
                             ToastUtil.showSuccessMsg(mActivity,baseModel.message);
                         }
@@ -669,7 +683,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     public void messageEventBuss(ReduceNumEvent event) {
         //刷新UI
         requestCartList();
-
+        getProductsList();
     }
 
     //这里用了eventBus来进行实时价格的UI更改。
@@ -691,11 +705,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
         }else {
             ll_service.setVisibility(View.GONE);
         }
+        getProductsList();
     }
 
     @Override
     public void setViewData() {
         requestCartList();
+        getProductsList();
     }
 
     private void getAllPrice(List<CartsListModel.DataBean.ValidListBean> validList) {
@@ -778,6 +794,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                         //过期列表
                         List<CartsListModel.DataBean.InValidListBean> inValidList = cartListModel.getData().getInValidList();
                         unList.addAll(inValidList);
+
+
                         if(unList.size()==0) {
                             rl_unable.setVisibility(View.GONE);
                             rv_unable.setVisibility(View.GONE);
@@ -847,16 +865,67 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                 });
     }
 
+    /**
+     * 必买列表(王涛)
+     * @param
+     */
+
+    private void getProductsList() {
+        IndexHomeAPI.getMust(mActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<MustModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(MustModel getCommonProductModel) {
+                        if (getCommonProductModel.isSuccess()) {
+                            //为您推荐列表
+                            mustAdapter = new MustAdapter(flag,R.layout.item_team_list, getCommonProductModel.getData(), new MustAdapter.Onclick() {
+                                @Override
+                                public void addDialog() {
+                                    requestCartList();
+                                    getProductsList();
+                                }
+                            });
+
+                                rv_recommend.setLayoutManager(new GridLayoutManager(mActivity,2));
+                                rv_recommend.setAdapter(mustAdapter);
+
+
+                        } else {
+                            AppHelper.showMsg(mActivity, getCommonProductModel.getMessage());
+                        }
+                    }
+                });
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void messageEventBusss(BackEvent event) {
         //刷新UI
         requestCartList();
         getCartNum();
+        getProductsList();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void cityEvent(CityEvent event) {
         requestCartList();
+        getProductsList();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getTotals(UpDateNumEvent1 upDateNumEvent) {
+        requestCartList();
+        getProductsList();
     }
 
 }
