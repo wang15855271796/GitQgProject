@@ -316,9 +316,9 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
         if(num!=null) {
 
             if(num.equals("-1")) {
+                mTvAddCar.setEnabled(false);
                 getProductDetail(productId);
                 ll_service.setVisibility(View.GONE);
-                mTvAddCar.setEnabled(true);
                 mTvAddCar.setText("加入购物车");
                 mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
             }else {
@@ -328,8 +328,8 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
                 mTvAddCar.setBackgroundResource(R.drawable.app_car);
             }
         }else {
+            mTvAddCar.setEnabled(false);
             getProductDetail(productId);
-            mTvAddCar.setEnabled(true);
             mTvAddCar.setText("加入购物车");
             mTvAddCar.setBackgroundResource(R.drawable.app_car_orange);
 
@@ -719,7 +719,7 @@ public class SeckillGoodActivity extends BaseSwipeActivity {
                                 }
                             });
 
-
+                            mTvAddCar.setEnabled(true);
 
                         } else {
                             AppHelper.showMsg(mContext, model.getMessage());

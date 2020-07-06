@@ -299,7 +299,6 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
                                     public void onNext(GetDeliverTimeModel getDeliverTimeModel) {
 
                                         if (getDeliverTimeModel.success) {
-                                            lav_activity_loading.hide();
                                             if (getDeliverTimeModel.data != null) {
                                                 mlist.clear();
                                                 try {
@@ -650,7 +649,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
                         if (generateOrderModel.success) {
 //                            LoadingDialog.getInstance(getActivity()).dismiss();
 
-                            lav_activity_loading.hide();
+
                             if (Integer.parseInt(UserInfoHelper.getDate(mActivity)) != currentDay) {
                                 if(toRecharge&&totalAmount>toRechargeAmount) {
 
@@ -682,7 +681,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
                                 Log.d("swhihihihiiih....","sssssss");
                                 mActivity.finish();
                             }
-
+                            lav_activity_loading.hide();
                         } else {
                             AppHelper.showMsg(mActivity, generateOrderModel.message);
                             lav_activity_loading.hide();
