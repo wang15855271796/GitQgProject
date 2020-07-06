@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.alipay.sdk.app.PayTask;
 import com.bumptech.glide.Glide;
+import com.chinaums.pppay.unify.UnifyPayPlugin;
+import com.chinaums.pppay.unify.UnifyPayRequest;
 import com.puyue.www.qiaoge.QiaoGeApplication;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.cart.ConfirmOrderActivity;
