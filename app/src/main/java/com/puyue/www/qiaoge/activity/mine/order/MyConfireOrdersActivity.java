@@ -23,6 +23,8 @@ import com.alipay.sdk.app.PayTask;
 import com.bumptech.glide.Glide;
 import com.chinaums.pppay.unify.UnifyPayPlugin;
 import com.chinaums.pppay.unify.UnifyPayRequest;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.puyue.www.qiaoge.QiaoGeApplication;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.cart.ConfirmOrderActivity;
@@ -57,6 +59,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -301,13 +304,29 @@ public class MyConfireOrdersActivity extends BaseSwipeActivity {
                                 finish();*/
                             } else if (payChannel == 2) {
                                 //支付宝支付 已经改好了
-                                aliPay(orderPayModel.data.payToken);
+                                try {
+                                    JSONObject jsonObject = new JSONObject(orderPayModel.data.payToken);
+                                    String qrCode = jsonObject.getString("qrCode");
+                                    Log.d("qwdfdfffffff......",qrCode);
+                                    aliPay(qrCode);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
                             } else if (payChannel == 3) {
                                 //微信支付
                                 weChatPay(orderPayModel.data.payToken);
                             }else if(payChannel == 14) {
                                 //银联
-                                payAliPay(orderPayModel.data.payToken);
+//                                payAliPay(orderPayModel.data.payToken);
+                                try {
+                                    JSONObject jsonObject = new JSONObject(orderPayModel.data.payToken);
+                                    String qrCode = jsonObject.getString("qrCode");
+                                    payAliPay(orderPayModel.data.payToken);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
 
 
