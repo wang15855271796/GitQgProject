@@ -1051,7 +1051,6 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
 
     // 去支付
     private void requestOrderNum() {
-
         GenerateOrderAPI.requestGenerateOrder(mActivity, activityBalanceVOStr, normalProductBalanceVOStr, cartListStr, NewgiftDetailNo, messageEditText.getText().toString(),
                 deliverTimeStart, deliverTimeEnd, deliverTimeName, 1, et_name.getText().toString(), et_phone.getText().toString(), mYear)//NewgiftDetailNo
                 .subscribeOn(Schedulers.io())
@@ -1070,52 +1069,14 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
                     @Override
                     public void onNext(GenerateOrderModel generateOrderModel) {
                         if (generateOrderModel.success) {
-                            Log.d("温馨提示......","00000");
-//                            Log.e(TAG, "onNext: activityBalanceVOStr="+activityBalanceVOStr+"?normalProductBalanceVOStr="+normalProductBalanceVOStr+"?equipmentBalanceVOStr="+equipmentBalanceVOStr
-//                                    +"?cartListStr="+cartListStr+"?giftDetailNo="+giftDetailNo+"?=messageEditText.getText().toString()"+messageEditText.getText().toString() );
-//                            orderId = generateOrderModel.getData();
-//                            Intent intent = new Intent(mActivity, MyConfireOrdersActivity.class);
-//                            intent.putExtra("orderId", generateOrderModel.getData());
-//                            intent.putExtra("payAmount", Double.parseDouble(payAmount));
-//                            intent.putExtra("remark", messageEditText.getText().toString());
-//                            intent.putExtra("orderDeliveryType", 1);
-//                            startActivity(intent);
-
-//                            if (generateOrderModel.success) {
-//                                if (UserInfoHelper.getDate(mActivity).equals("") || Integer.parseInt(UserInfoHelper.getDate(mActivity)) != currentDay) {
-                            if (Integer.parseInt(UserInfoHelper.getDate(mActivity)) != currentDay) {
-                                    if(toRecharge&&totalAmount>toRechargeAmount) {
-
-                                        Intent intent = new Intent(mActivity,CartPoint.class);
-                                        intent.putExtra(AppConstant.ORDERID, generateOrderModel.getData());
-                                        intent.putExtra("orderAmount", totalAmount + "");
-                                        startActivity(intent);
-
-                                        mActivity.finish();
-                                    }else {
-                                        orderId = generateOrderModel.getData();
-                                        Intent intent = new Intent(mActivity, MyConfireOrdersActivity.class);
-                                        intent.putExtra("orderId", generateOrderModel.getData());
-                                        intent.putExtra("payAmount", Double.parseDouble(payAmount));
-                                        intent.putExtra("remark", messageEditText.getText().toString());
-                                        intent.putExtra("orderDeliveryType", 1);
-                                        startActivity(intent);
-                                        mActivity.finish();
-                                    }
-                                }else {
-                                        orderId = generateOrderModel.getData();
-                                        Intent intent = new Intent(mActivity, MyConfireOrdersActivity.class);
-                                        intent.putExtra("orderId", generateOrderModel.getData());
-                                        intent.putExtra("payAmount", Double.parseDouble(payAmount));
-                                        intent.putExtra("remark", messageEditText.getText().toString());
-                                        intent.putExtra("orderDeliveryType", 1);
-                                        startActivity(intent);
-                                        Log.d("温馨提示......","222222");
-                                        mActivity.finish();
-//                                }
-
-//                            }
-                                    }
+                            orderId = generateOrderModel.getData();
+                            Intent intent = new Intent(mActivity, MyConfireOrdersActivity.class);
+                            intent.putExtra("orderId", generateOrderModel.getData());
+                            intent.putExtra("payAmount", Double.parseDouble(payAmount));
+                            intent.putExtra("remark", messageEditText.getText().toString());
+                            intent.putExtra("orderDeliveryType", 1);
+                            startActivity(intent);
+                            mActivity.finish();
                         } else {
                             AppHelper.showMsg(mActivity, generateOrderModel.message);
                         }
@@ -1127,7 +1088,7 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
     public void onEventMainThread(AddressEvent event) {
 
         list.clear();
-        requestCartBalance(NewgiftDetailNo, 1);////NewgiftDetailNo
+        requestCartBalance(NewgiftDetailNo, 1);
         userChooseDeduct();
     }
 

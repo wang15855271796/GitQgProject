@@ -199,54 +199,54 @@ public class MyConfireOrdersActivity extends BaseSwipeActivity {
                             String userWalletAccount = UserInfoHelper.getUserWalletAccount(mContext);
 
                             Log.i("account", "onNoDoubleClick: " + payAmount + "____" + Double.parseDouble(userWalletAccount));
-                            if (payAmount > Double.parseDouble(userWalletAccount)) {
-                                AlertDialog mDialog = new AlertDialog.Builder(mActivity).create();
-                                mDialog.show();
-                                Window window = mDialog.getWindow();
-                                window.setGravity(Gravity.CENTER);
-                                window.setContentView(R.layout.dialog_wallet_account);
-
-                                TextView tvCancel = window.findViewById(R.id.tv_sub_close);
-                                TextView tvConfirm = window.findViewById(R.id.tv_sub_confirm);
-                                //  ImageView iv_cancel = window.findViewById(R.id.iv_cancel);
-
-                             /*   iv_cancel.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        mDialog.dismiss();
-                                    }
-                                });*/
-                                tvCancel.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        mDialog.dismiss();
-                                    }
-                                });
-                                tvConfirm.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-
-                                        if ((payAmount - Double.parseDouble(userWalletAccount) < 1000) && (payAmount - Double.parseDouble(userWalletAccount) >= 0)) {
-                                            num = "3";
-                                        } else if ((payAmount - Double.parseDouble(userWalletAccount) < 3000) && (payAmount - Double.parseDouble(userWalletAccount) >= 1000)) {
-                                            num = "2";
-                                        } else if ((payAmount - Double.parseDouble(userWalletAccount) < 6000) && (payAmount - Double.parseDouble(userWalletAccount) >= 3000)) {
-                                            num = "1";
-                                        } else if ((payAmount - Double.parseDouble(userWalletAccount) > 6000)) {
-                                            num = "0";
-                                        }
-
-                                        UserInfoHelper.saveUserWalletNum(getContext(), num);
-
-                                        Intent intent = new Intent(mActivity, MyWalletActivity.class);
-
-                                        startActivity(intent);
-                                        mDialog.dismiss();
-                                        //startActivity(new Intent(mActivity, MyWalletActivity.class));
-                                    }
-                                });
-
-                            }
+//                            if (payAmount > Double.parseDouble(userWalletAccount)) {
+//                                AlertDialog mDialog = new AlertDialog.Builder(mActivity).create();
+//                                mDialog.show();
+//                                Window window = mDialog.getWindow();
+//                                window.setGravity(Gravity.CENTER);
+//                                window.setContentView(R.layout.dialog_wallet_account);
+//
+//                                TextView tvCancel = window.findViewById(R.id.tv_sub_close);
+//                                TextView tvConfirm = window.findViewById(R.id.tv_sub_confirm);
+//                                //  ImageView iv_cancel = window.findViewById(R.id.iv_cancel);
+//
+//                             /*   iv_cancel.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        mDialog.dismiss();
+//                                    }
+//                                });*/
+//                                tvCancel.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        mDialog.dismiss();
+//                                    }
+//                                });
+//                                tvConfirm.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//
+//                                        if ((payAmount - Double.parseDouble(userWalletAccount) < 1000) && (payAmount - Double.parseDouble(userWalletAccount) >= 0)) {
+//                                            num = "3";
+//                                        } else if ((payAmount - Double.parseDouble(userWalletAccount) < 3000) && (payAmount - Double.parseDouble(userWalletAccount) >= 1000)) {
+//                                            num = "2";
+//                                        } else if ((payAmount - Double.parseDouble(userWalletAccount) < 6000) && (payAmount - Double.parseDouble(userWalletAccount) >= 3000)) {
+//                                            num = "1";
+//                                        } else if ((payAmount - Double.parseDouble(userWalletAccount) > 6000)) {
+//                                            num = "0";
+//                                        }
+//
+//                                        UserInfoHelper.saveUserWalletNum(getContext(), num);
+//
+//                                        Intent intent = new Intent(mActivity, MyWalletActivity.class);
+//
+//                                        startActivity(intent);
+//                                        mDialog.dismiss();
+//                                        //startActivity(new Intent(mActivity, MyWalletActivity.class));
+//                                    }
+//                                });
+//
+//                            }
                         }
                     }
                     //调支付接口
@@ -303,6 +303,9 @@ public class MyConfireOrdersActivity extends BaseSwipeActivity {
                             } else if (payChannel == 3) {
                                 //微信支付
                                 weChatPay(orderPayModel.data.payToken);
+                            }else if(payChannel == 14) {
+                                //银联
+                                payAliPay(orderPayModel.data.payToken);
                             }
 
 
@@ -313,6 +316,17 @@ public class MyConfireOrdersActivity extends BaseSwipeActivity {
                         }
                     }
                 });
+    }
+
+    /**
+     * 支付宝
+     * @param parms
+     */
+    private void payAliPay(String parms){
+        UnifyPayRequest msg = new UnifyPayRequest();
+        msg.payChannel = UnifyPayRequest.CHANNEL_ALIPAY;
+        msg.payData = parms;
+        UnifyPayPlugin.getInstance(this).sendPayRequest(msg);
     }
 
     @Override

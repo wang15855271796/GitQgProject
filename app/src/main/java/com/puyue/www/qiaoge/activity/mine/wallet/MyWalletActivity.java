@@ -433,8 +433,10 @@ public class MyWalletActivity extends BaseSwipeActivity {
 
                     @Override
                     public void onNext(RechargeModel rechargeModel) {
+
                         logoutAndToHome(mContext, rechargeModel.code);
                         if (rechargeModel.success) {
+
                             if (rechargeType == 2) {
                                 //支付宝支付
                                 outTradeNo = rechargeModel.data.outTradeNo;
