@@ -914,6 +914,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
         requestCartList();
         getCartNum();
         getProductsList();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        requestCartList();
+        getCartNum();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

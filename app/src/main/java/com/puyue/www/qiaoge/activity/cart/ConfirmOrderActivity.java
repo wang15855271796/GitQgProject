@@ -186,10 +186,10 @@ public class ConfirmOrderActivity extends BaseSwipeActivity {
                                 finish();
                             } else if (payChannel == 2) {
                                 //支付宝支付
-                                aliPay(orderPayModel.data.payToken);
+                                aliPay(orderPayModel.data.appPayRequest);
                             } else if (payChannel == 3) {
                                 //微信支付
-                                weChatPay(orderPayModel.data.payToken);
+                                weChatPay(orderPayModel.data.appPayRequest);
                             }
                         } else {
                             AppHelper.showMsg(ConfirmOrderActivity.this, orderPayModel.message);

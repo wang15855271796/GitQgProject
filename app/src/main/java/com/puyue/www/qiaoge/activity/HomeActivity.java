@@ -230,14 +230,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         guide = UserInfoHelper.getGuide(mActivity);
         UserInfoHelper.saveChangeFlag(mContext,0+"");
 
-
-/**
-          *如果用户不是第一次使用则直接调转到显示界面,否则调转到引导界面
-          */
-        if (guide.equals("")) {
-            showDialogGuide();
-        }
-
         JPushInterface.init(this);
         String registrationID = JPushInterface.getRegistrationID(this);
 
@@ -247,43 +239,6 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
             mLocationClient.start();
 
 }
-
-
-    /**
-     * 引导页
-     */
-    private void showDialogGuide() {
-
-        UserInfoHelper.saveGuide(mActivity, "guide");
-        final AlertDialog alertDialog = new AlertDialog.Builder(mContext, R.style.DialogStyle).create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.show();
-        Window window = alertDialog.getWindow();
-        window.setContentView(R.layout.home_guide);
-        window.setGravity(Gravity.TOP | Gravity.RIGHT);
-        ImageView ivGuideOne = window.findViewById(R.id.iv_guide_one);
-        ivGuideOne.setVisibility(View.VISIBLE);
-        ivGuideOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ivGuideOne.setVisibility(View.GONE);
-                ImageView ivGuideTwo = window.findViewById(R.id.iv_guide_two);
-                ivGuideTwo.setVisibility(View.VISIBLE);
-                ivGuideTwo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ivGuideOne.setVisibility(View.GONE);
-                        ivGuideTwo.setVisibility(View.GONE);
-                        alertDialog.dismiss();
-                    }
-                });
-
-
-            }
-        });
-
-
-    }
 
     private void sendLocation() {
         SendLocationAPI.requestData(mContext, locationMessage)

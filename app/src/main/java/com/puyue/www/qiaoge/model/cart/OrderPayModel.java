@@ -34,5 +34,6 @@ public class OrderPayModel {
         public String title;
         public String payToken;
         public int payType;
+        public String appPayRequest;
     }
 }

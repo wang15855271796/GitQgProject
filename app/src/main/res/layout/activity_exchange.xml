@@ -70,6 +70,7 @@
                 android:text="一键兑换"
                 android:textColor="#ffffff"
                 android:padding="@dimen/size_5dp"
+                android:id="@+id/tv_exchange"
                 android:background="@drawable/shape_purple"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/size_25dp"

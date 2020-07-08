@@ -7,12 +7,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.CouponsAdapter;
 import com.puyue.www.qiaoge.adapter.CouponListsAdapter;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
+import com.puyue.www.qiaoge.dialog.ExCouponDialog;
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
@@ -31,6 +34,10 @@ public class ExchangeActivity extends BaseSwipeActivity implements View.OnClickL
     RecyclerView recyclerView;
     @BindView(R.id.iv_add)
     ImageView iv_add;
+    @BindView(R.id.bt_sure)
+    Button bt_sure;
+    @BindView(R.id.tv_exchange)
+    TextView tv_exchange;
     int num = 0;
     private List<String> list = new ArrayList<>();
     private CouponListsAdapter couponListsAdapter;
@@ -55,6 +62,8 @@ public class ExchangeActivity extends BaseSwipeActivity implements View.OnClickL
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerView.setAdapter(couponListsAdapter);
         iv_add.setOnClickListener(this);
+        tv_exchange.setOnClickListener(this);
+        bt_sure.setOnClickListener(this);
     }
 
     private List<String> initData() {
@@ -82,9 +91,17 @@ public class ExchangeActivity extends BaseSwipeActivity implements View.OnClickL
                 finish();
                 break;
 
+            case R.id.bt_sure:
+                ExCouponDialog exCouponDialog = new ExCouponDialog(mActivity,mDatas);
+                exCouponDialog.show();
+                break;
             case R.id.iv_add:
                 SharedPreferencesUtil.saveInt(mActivity,"nums",num);
                 couponListsAdapter.addData(list.size());
+                break;
+
+            case R.id.tv_exchange:
+
                 break;
         }
     }
