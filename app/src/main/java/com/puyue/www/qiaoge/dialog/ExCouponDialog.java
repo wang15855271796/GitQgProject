@@ -2,7 +2,9 @@ package com.puyue.www.qiaoge.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +14,13 @@ import android.widget.LinearLayout;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.cart.ExchangeActivity;
+import com.puyue.www.qiaoge.adapter.ExchangeAdapter;
+import com.puyue.www.qiaoge.model.cart.ExChangeModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,8 +36,8 @@ public class ExCouponDialog extends Dialog {
     public Unbinder binder;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    ArrayList<String> mDatas;
-    public ExCouponDialog(Context context, ArrayList<String> mDatas) {
+    List<ExChangeModel.DetailListBean> mDatas;
+    public ExCouponDialog(Context context, List<ExChangeModel.DetailListBean> mDatas) {
         super(context, R.style.dialog);
         this.context = context;
         this.mDatas = mDatas;
@@ -49,9 +54,9 @@ public class ExCouponDialog extends Dialog {
         WindowManager.LayoutParams attributes = getWindow().getAttributes();
         attributes.width = Utils.getScreenWidth(context);
         getWindow().setAttributes(attributes);
-
-//        ExchangeAdapter exchangeAdapter = new ExchangeAdapter(R.layout.item_exchange,mDatas);
-//        recyclerView.setAdapter(exchangeAdapter);
+        ExchangeAdapter exchangeAdapter = new ExchangeAdapter(R.layout.item_exchange,mDatas);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(exchangeAdapter);
 
     }
 }

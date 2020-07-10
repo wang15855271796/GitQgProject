@@ -39,7 +39,7 @@ public class MyWalletNewActivity extends BaseSwipeActivity {
     private String bannerUrl;
     private String commissionUrl;
     private String num = "0";
-
+    GetMyBalanceModle getMyBalanceModles;
 
     private TextView tv_amount;
 
@@ -114,6 +114,7 @@ public class MyWalletNewActivity extends BaseSwipeActivity {
             @Override
             public void onClick(View v) {
                 Intent intent =new Intent(mContext,ExchangeActivity.class);
+                intent.putExtra("amount",getMyBalanceModles.getData().getAmount());
                 startActivity(intent);
 
 
@@ -140,7 +141,7 @@ public class MyWalletNewActivity extends BaseSwipeActivity {
                     public void onNext(GetMyBalanceModle getMyBalanceModle) {
                         if (getMyBalanceModle.isSuccess()) {
                         //    balancePrice.setText(getMyBalanceModle.getData().getAmount());
-
+                            getMyBalanceModles = getMyBalanceModle;
                             tv_amount.setText(getMyBalanceModle.getData().getAmount());
                             UserInfoHelper.saveUserWallet(mContext, getMyBalanceModle.getData().getAmount());
 
