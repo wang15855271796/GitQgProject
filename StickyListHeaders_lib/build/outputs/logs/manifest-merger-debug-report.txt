@@ -1,0 +1,11 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\GitQgProject\StickyListHeaders_lib\AndroidManifest.xml:2:1-6:12
+INJECTED from D:\GitQgProject\StickyListHeaders_lib\AndroidManifest.xml:2:1-6:12
+INJECTED from D:\GitQgProject\StickyListHeaders_lib\AndroidManifest.xml:2:1-6:12
+	package
+		ADDED from D:\GitQgProject\StickyListHeaders_lib\AndroidManifest.xml:3:5-61
+		INJECTED from D:\GitQgProject\StickyListHeaders_lib\AndroidManifest.xml
+		INJECTED from D:\GitQgProject\StickyListHeaders_lib\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\GitQgProject\StickyListHeaders_lib\AndroidManifest.xml:2:11-69

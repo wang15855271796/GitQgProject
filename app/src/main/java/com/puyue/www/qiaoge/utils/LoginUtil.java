@@ -22,7 +22,6 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static io.dcloud.common.util.ReflectUtils.getApplicationContext;
 
 /**
  * Created by ${王涛} on 2020/5/25
@@ -32,7 +31,7 @@ public class LoginUtil {
     private static String token1;
 
     public static void initRegister(Context context) {
-        OneKeyLoginManager.getInstance().setAuthThemeConfig(ConfigUtils.getCJSConfig(getApplicationContext()));
+        OneKeyLoginManager.getInstance().setAuthThemeConfig(ConfigUtils.getCJSConfig(context));
         openLoginActivity(context);
     }
 
@@ -46,7 +45,7 @@ public class LoginUtil {
                     Log.e("VVV", "拉起授权页成功： code==" + code + "   result==" + result);
                 } else {
                     Log.e("VVV", "拉起授权页失败： code==" + code + "   result==" + result);
-                    Intent intent = new Intent(getApplicationContext(),RegisterMessageActivity.class);
+                    Intent intent = new Intent(context,RegisterMessageActivity.class);
                     context.startActivity(intent);
                 }
             }
@@ -75,7 +74,7 @@ public class LoginUtil {
     }
 
     private static void checks(String result,Context context) {
-        GetCustomerPhoneAPI.getData(getApplicationContext(),result)
+        GetCustomerPhoneAPI.getData(context,result)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<OneRegisterModel>() {

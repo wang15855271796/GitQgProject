@@ -189,8 +189,6 @@
             android:screenOrientation="portrait" />
         <activity android:name=".fragment.mine.IntelliGencyActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.mine.login.DcloudActvity"
-            android:screenOrientation="portrait" />
         <!-- android:screenOrientation="portrait" -->
         <activity
             android:name=".activity.mine.login.RegisterActivity"
@@ -209,6 +207,8 @@
             android:screenOrientation="portrait" />
         <!--  -->
         <activity android:name=".activity.Test1Activity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.TestActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.mine.account.EditAccountInputPhoneActivity"
             android:screenOrientation="portrait" />
@@ -303,6 +303,7 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".activity.cart.ExchangeActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden"
             android:screenOrientation="portrait"/>
 
 
@@ -312,6 +313,8 @@
         <activity android:name=".activity.mine.MessageDetailActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.cart.PayResultActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.cart.PaysResultActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.mine.wallet.WalletResultActivity"
             android:screenOrientation="portrait" />
@@ -381,6 +384,10 @@
         <activity android:name=".activity.mine.order.NewOrderDetailActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".NewWebViewActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".fragment.home.NewWebViewsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.WebDriverActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.mine.wallet.MinerIntegralActivity"
             android:screenOrientation="portrait" />

@@ -70,9 +70,21 @@ public class CouponFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getCustomerPhone();
+    }
+
+    @Override
     public void initViews(View view) {
         bind = ButterKnife.bind(this, view);
-        couponsAdapter = new CouponsAdapter(R.layout.item_coupon_list, couponList);
+        getCustomerPhone();
+        couponsAdapter = new CouponsAdapter(R.layout.item_coupon_list, couponList, new CouponsAdapter.Onclick() {
+            @Override
+            public void addDialog() {
+                showPhoneDialog(cell);
+            }
+        });
         recycleView.setLayoutManager(new LinearLayoutManager(mActivity));
         recycleView.setAdapter(couponsAdapter);
 
@@ -87,6 +99,47 @@ public class CouponFragment extends BaseFragment {
         getCouponList();
 //        getCustomerPhone();
     }
+
+    /**
+     * 弹出电话号码
+     */
+    private AlertDialog mDialog;
+    TextView tv_phone;
+    public void showPhoneDialog(final String cell) {
+        mDialog = new AlertDialog.Builder(mActivity).create();
+        mDialog.show();
+        mDialog.getWindow().setContentView(R.layout.dialog_shouye_tip);
+        tv_phone = mDialog.getWindow().findViewById(R.id.tv_phone);
+        tv_phone.setText(cell);
+        mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * @param
+     */
+
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
+
+            @Override
+            public void onFaild(String errorMsg) {
+            }
+        });
+    }
+
 
     /**
      * 选择店铺类型

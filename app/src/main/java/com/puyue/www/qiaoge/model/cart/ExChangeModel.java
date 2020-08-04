@@ -10,13 +10,13 @@ public class ExChangeModel {
 
 
     public static class DetailListBean {
-        public List<Double> list = new ArrayList<>();
-        public List<Double> expend = new ArrayList<>();
+        public List<String> list = new ArrayList<>();
+        public List<String> expend = new ArrayList<>();
         public int amount;
         public int num;
 //        public int expend;
 
-        public DetailListBean(List<Double> list, int num,List<Double> expend) {
+        public DetailListBean(List<String> list, int num,List<String> expend) {
             this.list = list;
             this.num = num;
             this.expend = expend;
@@ -31,14 +31,5 @@ public class ExChangeModel {
                     ", num=" + num +
                     '}';
         }
-
-//        @Override
-//        public String toString() {
-//            final StringBuffer sb = new StringBuffer("{")StringBuffer;
-//            sb.append("\"productCombinationPriceId\":").append(productCombinationPriceId);
-//            sb.append(", \"totalNum\":").append(totalNum);
-//            sb.append('}');
-//            return sb.toString();
-//        }
     }
 }

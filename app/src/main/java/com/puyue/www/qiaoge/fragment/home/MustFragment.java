@@ -1,9 +1,11 @@
 package com.puyue.www.qiaoge.fragment.home;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
@@ -13,9 +15,12 @@ import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.dialog.CouponDialog;
 import com.puyue.www.qiaoge.event.BackEvent;
+import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
+import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.MustModel;
 import com.puyue.www.qiaoge.utils.LoginUtil;
 
@@ -74,8 +79,9 @@ public class MustFragment extends BaseFragment {
     @Override
     public void findViewById(View view) {
         bind = ButterKnife.bind(this, view);
+        getCustomerPhone();
         emptyView = View.inflate(mActivity, R.layout.layout_empty, null);
-        mustAdapter = new MustAdapter(flag,R.layout.item_team_list, list, new MustAdapter.Onclick() {
+        mustAdapter = new MustAdapter(R.layout.item_team_list, list, new MustAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
@@ -85,11 +91,52 @@ public class MustFragment extends BaseFragment {
                 }
 
             }
+
+            @Override
+            public void tipClick() {
+                showPhoneDialog(cell);
+            }
         });
         recyclerView.setLayoutManager(new GridLayoutManager(mActivity,2));
         recyclerView.setAdapter(mustAdapter);
 
         mustAdapter.setEmptyView(emptyView);
+    }
+
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
+
+            @Override
+            public void onFaild(String errorMsg) {
+            }
+        });
+    }
+
+    /**
+     * 弹出电话号码
+     */
+    private AlertDialog mDialog;
+    TextView tv_phone;
+    public void showPhoneDialog(final String cell) {
+        mDialog = new AlertDialog.Builder(mActivity).create();
+        mDialog.show();
+        mDialog.getWindow().setContentView(R.layout.dialog_shouye_tip);
+        tv_phone = mDialog.getWindow().findViewById(R.id.tv_phone);
+        tv_phone.setText(cell);
+        mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
     }
 
     /**
@@ -130,6 +177,17 @@ public class MustFragment extends BaseFragment {
     }
 
 
+    /**
+     * 接收地址切换时的授权处理
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getPriceType(CityEvent event) {
+        getCustomerPhone();
+        getProductsList();
+    }
+
+
     @Override
     public void setViewData() {
 
@@ -139,7 +197,7 @@ public class MustFragment extends BaseFragment {
     public void getMust(BackEvent event) {
         //刷新UI
         getProductsList();
-
+        getCustomerPhone();
     }
 
     @Override

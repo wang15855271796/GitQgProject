@@ -19,6 +19,7 @@ import com.puyue.www.qiaoge.model.home.GetProductListModel;
 import com.puyue.www.qiaoge.model.home.GuessModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.model.market.GoodsRecommendModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.view.GlideModel;
 
 import java.util.List;
@@ -48,6 +49,7 @@ public class GoodsRecommendAdapter extends BaseQuickAdapter<GuessModel.DataBean,
             public void onNoDoubleClick(View view) {
                 Intent intent = new Intent(mContext, CommonGoodsDetailActivity.class);
                 intent.putExtra(AppConstant.ACTIVEID, model.getProductMainId());
+                intent.putExtra("priceType",SharedPreferencesUtil.getString(mContext,"priceType"));
                 mContext.startActivity(intent);
             }
         });

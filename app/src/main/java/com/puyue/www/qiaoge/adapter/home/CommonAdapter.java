@@ -16,6 +16,7 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.model.home.CouponModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 
 import java.util.List;
 
@@ -35,6 +36,8 @@ public class CommonAdapter extends BaseQuickAdapter<CouponModel.DataBean.Actives
     String style;
     public OnClick onClick;
     ImageView iv_sale_done;
+    TextView tv_price;
+    TextView tv_desc;
     public CommonAdapter(String style,int layoutResId, @Nullable List<CouponModel.DataBean.ActivesBean> data) {
         super(layoutResId, data);
         this.style = style;
@@ -49,6 +52,8 @@ public class CommonAdapter extends BaseQuickAdapter<CouponModel.DataBean.Actives
     @Override
     protected void convert(final BaseViewHolder helper, CouponModel.DataBean.ActivesBean item) {
         iv_pic = helper.getView(R.id.iv_pic);
+        tv_price = helper.getView(R.id.tv_price);
+        tv_desc = helper.getView(R.id.tv_desc);
         iv_sale_done = helper.getView(R.id.iv_sale_done);
         iv_flag = helper.getView(R.id.iv_flag);
         iv_add = helper.getView(R.id.iv_add);
@@ -76,6 +81,27 @@ public class CommonAdapter extends BaseQuickAdapter<CouponModel.DataBean.Actives
             iv_sale_done.setVisibility(View.GONE);
         }
 
+//        tv_desc.setVisibility(View.GONE);
+//        tv_old_price.setVisibility(View.VISIBLE);
+//        tv_price.setVisibility(View.VISIBLE);
+        if(SharedPreferencesUtil.getString(mContext,"priceType").equals("1")) {
+            tv_desc.setVisibility(View.GONE);
+            tv_old_price.setVisibility(View.VISIBLE);
+            tv_price.setVisibility(View.VISIBLE);
+        }else {
+            tv_desc.setVisibility(View.VISIBLE);
+            tv_old_price.setVisibility(View.GONE);
+            tv_price.setVisibility(View.GONE);
+        }
+
+        tv_desc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onClick!=null) {
+                    onClick.tipClick();
+                }
+            }
+        });
 
         rl_group.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,11 +109,13 @@ public class CommonAdapter extends BaseQuickAdapter<CouponModel.DataBean.Actives
                 if(style.equals("2")) {
                     Intent intent = new Intent(mContext,SeckillGoodActivity.class);
                     intent.putExtra(AppConstant.ACTIVEID,item.getActiveId());
+                    intent.putExtra("priceType",SharedPreferencesUtil.getString(mContext,"priceType"));
                     intent.putExtra("num","-1");
                     mContext.startActivity(intent);
                 }else {
                     Intent intent = new Intent(mContext,SpecialGoodDetailActivity.class);
                     intent.putExtra(AppConstant.ACTIVEID,item.getActiveId());
+                    intent.putExtra("priceType",SharedPreferencesUtil.getString(mContext,"priceType"));
                     mContext.startActivity(intent);
                 }
             }
@@ -97,18 +125,20 @@ public class CommonAdapter extends BaseQuickAdapter<CouponModel.DataBean.Actives
             @Override
             public void onClick(View v) {
                 if(onClick!=null) {
-                    onClick.shoppingCartOnClick(helper.getAdapterPosition());
-                }
+                    if(SharedPreferencesUtil.getString(mContext,"priceType").equals("1")) {
+                        onClick.shoppingCartOnClick(helper.getAdapterPosition());
+                    }else {
+                        onClick.tipClick();
+                    }
 
-//                if(style.equals("2")) {
-//
-//                }
+                }
             }
         });
     }
 
     public interface OnClick {
         void shoppingCartOnClick(int position);
+        void tipClick();
     }
 
 }

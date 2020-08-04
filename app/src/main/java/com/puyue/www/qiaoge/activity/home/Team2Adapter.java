@@ -45,7 +45,7 @@ public class Team2Adapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean
     protected void convert(BaseViewHolder helper, TeamActiveQueryModel.DataBean item) {
         recyclerView = helper.getView(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        Team1InnerAdapter teamInnerAdapter = new Team1InnerAdapter(R.layout.zuhe_inner,item.getActives());
+        Team1InnerAdapter teamInnerAdapter = new Team1InnerAdapter(R.layout.zuhe_inner,item.getActives(),onclick);
         recyclerView.setAdapter(teamInnerAdapter);
 
         tv_cut_down = helper.getView(R.id.tv_cut_down);

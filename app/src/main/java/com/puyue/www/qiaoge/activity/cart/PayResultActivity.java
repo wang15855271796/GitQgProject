@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.puyue.www.qiaoge.NewWebViewActivity;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.account.EditPasswordInputCodeActivity;
+import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.order.NewOrderDetailActivity;
 import com.puyue.www.qiaoge.activity.mine.order.OrderDetailActivity;
 import com.puyue.www.qiaoge.activity.mine.order.SelfSufficiencyOrderDetailActivity;
@@ -80,6 +81,7 @@ public class PayResultActivity extends BaseSwipeActivity {
             if (bundle.getString(AppConstant.ORDERDELIVERYTYPE,null)!=null){
                 orderDeliveryType=Integer.parseInt(bundle.getString(AppConstant.ORDERDELIVERYTYPE,null));
             }
+
 
             Log.i("aarqwrq", "findViewById: "+orderDeliveryType);
         }
@@ -150,7 +152,10 @@ public class PayResultActivity extends BaseSwipeActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            EventBus.getDefault().post(new BackEvent());
+            Intent intent = MyOrdersActivity.getIntent(mActivity, MyOrdersActivity.class, AppConstant.ALL);
+            intent.putExtra("orderDeliveryType",0);
+            startActivity(intent);
+
             finish();
             return true;
         }

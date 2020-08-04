@@ -27,6 +27,7 @@ import com.android.tu.loadingdialog.LoadingDailog;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.CartActivity;
+import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListActivity;
 import com.puyue.www.qiaoge.activity.mine.account.AddressListsActivity;
 import com.puyue.www.qiaoge.adapter.mine.MyWalletAdapter;
@@ -43,6 +44,7 @@ import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.event.BackEvent;
+import com.puyue.www.qiaoge.event.GoToCartFragmentEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
@@ -547,6 +549,8 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
             tvNewOrderPay.setImageResource(R.mipmap.ic_pay_alipay);
         } else if (getOrderDetailModel.payChannelType == 3) {
             tvNewOrderPay.setImageResource(R.mipmap.ic_we_chat_icon);
+        }else{
+            tvNewOrderPay.setImageResource(R.mipmap.ic_pay_alipay);
         }
 
 
@@ -923,7 +927,8 @@ public class NewOrderDetailActivity extends BaseSwipeActivity {
                         if (copyToCartModel.success) {
                             //将订单内的商品加入购物车
                             AppHelper.showMsg(mContext, copyToCartModel.message);
-                            startActivity(CartActivity.getIntent(mContext, CartActivity.class));
+                            startActivity(new Intent(mContext, HomeActivity.class));
+                            EventBus.getDefault().post(new GoToCartFragmentEvent());
 
                         } else {
                             AppHelper.showMsg(mContext, copyToCartModel.message);

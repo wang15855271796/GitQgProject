@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.puyue.www.qiaoge.view.CompatToolbar
+        android:layout_marginTop="@dimen/size_20dp"
+        android:id="@+id/compatToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/app_border_bottom_bg">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:src="@mipmap/ic_back_arrow" />
+
+        <TextView
+            android:id="@+id/tv_activity_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="13dp"
+            android:layout_marginTop="13dp"
+            android:text="兑换结果"
+            android:textColor="@color/app_top_bar_text"
+            android:textSize="18dp" />
+    </com.puyue.www.qiaoge.view.CompatToolbar>
+
+    <LinearLayout
+        android:layout_below="@+id/compatToolbar"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_60dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_activity_order_success"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@mipmap/icon_ex_success"
+                />
+
+            <TextView
+                android:text="兑换成功！"
+                android:layout_marginTop="@dimen/size_15dp"
+                android:gravity="center"
+                android:textSize="@dimen/size_20dp"
+                android:textColor="#000000"
+                android:id="@+id/textViewSuccess"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="您可以在优惠券中查看！"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_desc"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:text="(倒计时3s后自动"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tv_back"
+                    android:textColor="#F56D23"
+                    android:layout_toRightOf="@+id/tv_desc"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:text="返回..."
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_toRightOf="@+id/tv_back"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:text=")"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+
+            <TextView
+                android:textSize="@dimen/dp_10"
+                android:textColor="@color/color_AAA8AB"
+                android:layout_marginTop="@dimen/size_15dp"
+                android:gravity="center"
+                android:id="@+id/otherMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/iv_activity_order_error"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@mipmap/icon_pay_error"
+                />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:visibility="gone"
+                android:id="@+id/lav_activity_loading"
+                android:layout_width="33dp"
+                android:layout_height="5dp"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="loading_result.json"
+                app:lottie_loop="true" />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tv_activity_result_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="等待支付"
+                android:textColor="@color/app_front_black"
+                android:textSize="15dp" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/size_20dp"
+            android:id="@+id/tv_look"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/app_pay_request_tv_bg"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="查看优惠券"
+            android:textColor="#000000"
+            android:textSize="18dp" />
+
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/imageViewRecommend"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

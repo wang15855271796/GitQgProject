@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +16,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -23,10 +26,14 @@ import android.widget.TextView;
 
 import com.android.tu.loadingdialog.LoadingDailog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 import com.puyue.www.qiaoge.R;
+import com.puyue.www.qiaoge.activity.view.NormalDecoration;
 import com.puyue.www.qiaoge.adapter.mine.AccountSelectAdapter;
+import com.puyue.www.qiaoge.adapter.mine.BillAdapter;
 import com.puyue.www.qiaoge.adapter.mine.MyWalletDetailAdapter;
 import com.puyue.www.qiaoge.adapter.mine.SearchAccountAdapter;
+import com.puyue.www.qiaoge.adapter.mine.StickyListAdapter;
 import com.puyue.www.qiaoge.adapter.mine.WalletAdapter;
 import com.puyue.www.qiaoge.api.home.GetSumPriceAPI;
 import com.puyue.www.qiaoge.api.mine.GetWallertRecordByPageAPI;
@@ -44,6 +51,10 @@ import com.puyue.www.qiaoge.popupwindow.MyWallDetailPopuwindow;
 import com.puyue.www.qiaoge.view.datepicker.CustomDatePicker;
 import com.puyue.www.qiaoge.view.selectmenu.MenuBarTwo;
 import com.puyue.www.qiaoge.view.selectmenu.MyListView;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -69,27 +80,25 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
     private Toolbar toolbar;
     private TextView textViewDetailed;
     private LinearLayout linearLayoutOnclick;
-    private PtrClassicFrameLayout ptrClassicFrameLayout;
+//    private PtrClassicFrameLayout ptrClassicFrameLayout;
     private RecyclerView recyclerView;
     private LinearLayout noData;// 没有数据的界面
     private LinearLayout data; // 没有数据的界面
     private TextView textScreen;// 筛选
     private int pageNum = 1;
     private MyWalletDetailAdapter adapter;
-    private List<GetWallertRecordByPageModel.DataBean.ListBean> mListData;
+    private List<GetWallertRecordByPageModel.DataBean.RecordsBean> mListData;
     private LoadingDailog dialog;
-
+    StickyListHeadersListView lv;
     private String selectDate;
     private String year;
     private String month;
     private LinearLayout mLlTimeSelect;
-
     private MyWallDetailPopuwindow popuwindow;
     List listPopuwindow = new ArrayList();
     private String recordType;
     private CustomDatePicker mCpDate;
     private ImageView detailedImage;
-
     //筛选
     private TextView tv_select;
     //账户选择
@@ -106,14 +115,13 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
     private PopupWindow popupWindow;
     //明细弹窗
     private PopupWindow mPopupWindowOne;
-    //
+    RelativeLayout rl_select;
     private List<SearchListModel.DataBean.List1Bean> mList1 = new ArrayList<>();//筛选
     private List<SearchListModel.DataBean.List2Bean> mList2 = new ArrayList<>();//账户
     private List<SearchListModel.DataBean.List3Bean> mList3 = new ArrayList<>();//全部明细
-
+    GetWallertRecordByPageModel getWallertRecordByPageModels;
     private LinearLayout ll_account;
     private boolean isSelected;
-
     private String phone;
     private String walletRecordChannelType;
 
@@ -122,8 +130,13 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
     private ArrayList<String> titles;
 
     private int showType;
-
+    List<String> list = new ArrayList<>();
     private TextView tv_tool;
+    StickyListAdapter adapters;
+    private boolean isLoading = false;
+    SmartRefreshLayout refreshLayout;
+    private List<GetWallertRecordByPageModel.DataBean.RecordsBean> records;
+    private GetWallertRecordByPageModel.DataBean.RecordsBean recordsBean;
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
@@ -137,11 +150,13 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+        rl_select = FVHelper.fv(this, R.id.rl_select);
+        refreshLayout = FVHelper.fv(this, R.id.refreshLayout);
         mLlTimeSelect = FVHelper.fv(this, R.id.ll_activity_wallet_time);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         textViewDetailed = (TextView) findViewById(R.id.textViewDetailed);
         linearLayoutOnclick = (LinearLayout) findViewById(R.id.linearLayoutOnclick);
-        ptrClassicFrameLayout = (PtrClassicFrameLayout) findViewById(R.id.ptrClassicFrameLayout);
+//        ptrClassicFrameLayout = (PtrClassicFrameLayout) findViewById(R.id.ptrClassicFrameLayout);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         noData = (LinearLayout) findViewById(R.id.noData);
         data = (LinearLayout) findViewById(R.id.data);
@@ -157,16 +172,56 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
         ll_account = findViewById(R.id.ll_account);
         tv_tool = findViewById(R.id.tv_tool);
 
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                if(getWallertRecordByPageModels.getData()!=null&&getWallertRecordByPageModels.getData().getLastMonth()!=null&&getWallertRecordByPageModels.getData().getRecords().size()>0) {
+                    GetWallertRecordByPageModel.DataBean data = getWallertRecordByPageModels.getData();
+                    getWallertRecord(recordType,data.getLastYear(),data.getLastMonth(),null,showType,walletRecordChannelType);
+                    refreshLayout.finishLoadMore();
+                }else {
+                    adapters.notifyDataSetChanged();
+                    refreshLayout.finishLoadMoreWithNoMoreData();
+                }
+            }
+        });
+
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                mListData.clear();
+                getWallertRecord(recordType,year, month, phone,showType,walletRecordChannelType);
+                refreshLayout.finishRefresh();
+            }
+        });
     }
 
     @Override
     public void setViewData() {
         mListData = new ArrayList<>();
-        mListData.clear();
+        lv = FVHelper.fv(this, R.id.lv);
+        adapters = new StickyListAdapter(mActivity, mListData, lists, new StickyListAdapter.Onclick() {
+            @Override
+            public void clicks() {
+                mLlTimeSelect.setVisibility(View.VISIBLE);
+                mCpDate.show(selectDate);
+            }
+        });
+        lv.setAdapter(adapters);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(mContext, MyCountDetailActivity.class);
+                intent.putExtra("id", mListData.get(position).getId());
+                intent.putExtra("type", mListData.get(position).getType());
+                mContext.startActivity(intent);
+            }
+        });
         showType = getIntent().getIntExtra("showType", 0);
 
         if (showType == 1) {
-            tv_tool.setText("我的账单");
+            tv_tool.setText("我的账单  ");
         } else if (showType == 2) {
             tv_tool.setText("余额明细");
         }
@@ -189,12 +244,9 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
         setRecyclerView();
         requsetSearchMsg(showType);
         setTime();
-        getWallertRecord(pageNum, recordType, year, month, phone, walletRecordChannelType, showType);
+        getWallertRecord(recordType,year, month, phone,showType,walletRecordChannelType);
         requsetPrice(recordType, year, month, phone, walletRecordChannelType,showType);
-
         titles = new ArrayList<>();
-
-
         titles.add("全部账户");
 
 
@@ -256,10 +308,10 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
                                     public void getValue(String value, int position) {
                                         mb_bar.setTitle(value);
                                         pageNum = 1;
-
                                         phone = mList2.get(position).getKey();
                                         mListData.clear();
-                                        getWallertRecord(pageNum, recordType, year, month, phone, walletRecordChannelType, showType);
+//                                        getWallertRecord(year, month, phone, walletRecordChannelType, showType);
+                                        refreshLayout.autoRefresh();
                                         requsetPrice(recordType, year, month, phone, walletRecordChannelType,showType);
                                     }
                                 });
@@ -288,15 +340,6 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
                 finish();
             }
         });
-
-        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                pageNum++;
-                getWallertRecord(pageNum, recordType, year, month, phone, walletRecordChannelType, showType);
-                requsetPrice(recordType, year, month, phone, walletRecordChannelType,showType);
-            }
-        }, recyclerView);
 
         linearLayoutOnclick.setOnClickListener(noDoubleClickListener);
         textScreen.setOnClickListener(noDoubleClickListener);
@@ -353,10 +396,8 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
                     dialog.show();
                     tv_detail_select.setText(mList3.get(position).getValue());
                     mListData.clear();
-                    getWallertRecord(pageNum, recordType, year, month, phone, walletRecordChannelType, showType);
+                    getWallertRecord(recordType,year, month, phone,showType,walletRecordChannelType);
                     requsetPrice(recordType, year, month, phone, walletRecordChannelType,showType);
-
-
             }
         });
         //添加分隔线
@@ -371,8 +412,6 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
                 bgAlpha(1f);
             }
         });
-
-
     }
 
     private void bgAlpha(float bgAlpha) {
@@ -425,21 +464,20 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
                 madater.selectPosition(position);
                 isSelected = true;
                 recordType = mList1.get(position).getKey();
-
             }
         });
+
 
         tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isSelected) {
                     isSelected = false;
-                    dialog.show();
                     popupWindow.dismiss();
                     pageNum = 1;
                     mListData.clear();
-                    getWallertRecord(pageNum, recordType, year, month, phone, walletRecordChannelType, showType);
-                    requsetPrice(recordType, year, month, phone, walletRecordChannelType,showType);
+                    getWallertRecord(recordType,year,month,"",showType,null);
+                    requsetPrice(recordType, year, month, phone, walletRecordChannelType,1);
 
                 } else {
                     AppHelper.showMsg(mContext, "请选择筛选类型");
@@ -510,14 +548,14 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
     /**
      * 网络请求
      */
-    private void getWallertRecord(final int pageNum, String recordType, String year, String month, String phone, String walletRecordChannelType, int showType) {
-        GetWallertRecordByPageAPI.requestData(mContext, pageNum, 10, recordType, year, month, "0", phone, showType, walletRecordChannelType)
+    List<GetWallertRecordByPageModel.DataBean> lists = new ArrayList();
+    private void getWallertRecord(String types,String year, String month, String phone,int showType,String walletRecordChannelType) {
+        GetWallertRecordByPageAPI.requestData(mContext, types, year, month, phone, showType,walletRecordChannelType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<GetWallertRecordByPageModel>() {
                     @Override
                     public void onCompleted() {
-
 
                     }
 
@@ -528,79 +566,82 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
 
                     @Override
                     public void onNext(GetWallertRecordByPageModel getWallertRecordByPageModel) {
-                        dialog.dismiss();
-                        ptrClassicFrameLayout.refreshComplete();
-
-                        if (getWallertRecordByPageModel.success) {
-
-                            if (getWallertRecordByPageModel.data.list != null && getWallertRecordByPageModel.data.list.size() > 0) {
+                        if (getWallertRecordByPageModel.isSuccess()) {
+                            getWallertRecordByPageModels = getWallertRecordByPageModel;
+                            Log.d("swsssssssssss.....",getWallertRecordByPageModel.getData().getRecords().size()+"");
+                            if (getWallertRecordByPageModel.getData().getRecords() != null && getWallertRecordByPageModel.getData().getRecords().size() > 0) {
                                 data.setVisibility(View.VISIBLE);
                                 noData.setVisibility(View.GONE);
-                                if (pageNum == 1) {
-
-                                    adapter.setNewData(getWallertRecordByPageModel.data.list);
-                                } else {
-                                    adapter.addData(getWallertRecordByPageModel.data.list);
+                                records = getWallertRecordByPageModel.getData().getRecords();
+                                rl_select.setVisibility(View.GONE);
+                                for (int i = 0; i < records.size(); i++) {
+                                    recordsBean = records.get(i);
+                                    GetWallertRecordByPageModel.DataBean data = getWallertRecordByPageModel.getData();
+                                    lists.add(data);
                                 }
+                                mListData.addAll(records);
+                                adapters.notifyDataSetChanged();
+
                             } else {
+//                                refreshLayout.finishLoadMoreWithNoMoreData();
+                                rl_select.setVisibility(View.GONE);
+//                                refreshLayout.finishLoadMoreWithNoMoreData();
+//                                if(mListData.size()==0) {
+//                                    noData.setVisibility(View.VISIBLE);
+//                                    data.setVisibility(View.GONE);
+//                                    adapters.notifyDataSetChanged();
+//                                    refreshLayout.finishLoadMoreWithNoMoreData();
+//                                }
                                 data.setVisibility(View.GONE);
                                 noData.setVisibility(View.VISIBLE);
+                                adapters.notifyDataSetChanged();
                             }
-                            if (getWallertRecordByPageModel.data.hasNextPage) {
-                                adapter.loadMoreComplete();
-                            } else {
-                                adapter.loadMoreEnd(false);
-                            }
+                            dialog.dismiss();
                         } else {
-                            AppHelper.showMsg(MyWalletDetailActivity.this, getWallertRecordByPageModel.message);
+                            AppHelper.showMsg(MyWalletDetailActivity.this, getWallertRecordByPageModel.getMessage());
                         }
                     }
                 });
     }
 
     private void setRecyclerView() {
-        adapter = new MyWalletDetailAdapter(R.layout.item_my_wallet_detail, mListData);
+//        adapter = new MyWalletDetailAdapter(R.layout.item_my_wallet_detail, mListData);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (recyclerView.canScrollVertically(-1)) {
-                    ptrClassicFrameLayout.setEnabled(false);
-                } else {
-                    ptrClassicFrameLayout.setEnabled(true);
-                }
-            }
-        });
-        recyclerView.setAdapter(adapter);
-        ptrClassicFrameLayout.setPtrHandler(new PtrHandler() {
-            @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
-
-            }
-
-            @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
-                pageNum = 1;
-                mListData.clear();
-            /*    year = null;
-                month = null;*/
-                getWallertRecord(pageNum, recordType, year, month, phone, walletRecordChannelType, showType);
-                requsetSearchMsg(showType);
-                requsetPrice(recordType, year, month, phone, walletRecordChannelType,showType);
-
-            }
-        });
-
-
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                if (recyclerView.canScrollVertically(-1)) {
+//                    ptrClassicFrameLayout.setEnabled(false);
+//                } else {
+//                    ptrClassicFrameLayout.setEnabled(true);
+//                }
+//            }
+//        });
+////        recyclerView.setAdapter(adapter);
+//        ptrClassicFrameLayout.setPtrHandler(new PtrHandler() {
+//            @Override
+//            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+//                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+//
+//            }
+//
+//            @Override
+//            public void onRefreshBegin(PtrFrameLayout frame) {
+//                pageNum = 1;
+//                mListData.clear();
+////                getWallertRecord(year, month, phone, walletRecordChannelType, showType);
+//                requsetSearchMsg(showType);
+//                requsetPrice(recordType, year, month, phone, walletRecordChannelType,showType);
+//
+//            }
+//        });
     }
-
 
     //  明细筛选
     private void setPopuwindow() {
@@ -613,31 +654,37 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
 
                 switch (position) {
                     case 0: // 全部明细
+//                        refreshLayout.autoRefresh();
                         popuwindow.dismiss();
                         detailedImage.setImageResource(R.mipmap.ic_mine_detailed);
                         textViewDetailed.setText("全部明细");
                         recordType = 0 + "";
                         pageNum = 1;
                         mListData.clear();
-                        getWallertRecord(pageNum, recordType, year, month, phone, walletRecordChannelType, showType);
+                        Log.d("wsssssssss.....","00000");
+//                        getWallertRecord(recordType,year, month, phone,showType,walletRecordChannelType);
                         break;
                     case 1: // 收入明细
+//                        refreshLayout.autoRefresh();
                         popuwindow.dismiss();
                         detailedImage.setImageResource(R.mipmap.ic_mine_detailed);
                         textViewDetailed.setText("收入明细");
                         recordType = 2 + "";
                         pageNum = 1;
                         mListData.clear();
-                        getWallertRecord(pageNum, recordType, year, month, phone, walletRecordChannelType, showType);
+
+//                        getWallertRecord(recordType,year, month, phone,showType,walletRecordChannelType);
                         break;
                     case 2: //支出明细
+//                        refreshLayout.autoRefresh();
                         popuwindow.dismiss();
                         detailedImage.setImageResource(R.mipmap.ic_mine_detailed);
                         textViewDetailed.setText("支出明细");
                         recordType = 1 + "";
                         pageNum = 1;
                         mListData.clear();
-                        getWallertRecord(pageNum, recordType, year, month, phone, walletRecordChannelType, showType);
+
+//                        getWallertRecord(recordType,year, month, phone,showType,walletRecordChannelType);
                         break;
                 }
 
@@ -661,10 +708,11 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
                 tv_month_select.setText(year + "-" + month);
                 dialog.show();
                 mListData.clear();
-                getWallertRecord(pageNum, recordType, year, month, phone, walletRecordChannelType, showType);
+                getWallertRecord(null,year,month,null,showType,null);
                 requsetPrice(recordType, year, month, phone, walletRecordChannelType,showType);
                 textScreen.setTag("down");
                 mLlTimeSelect.setVisibility(View.GONE);
+
             }
         }, "2017-12-01 00:00", now, hiddenView); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
         mCpDate.setCancleClickListener(new CustomDatePicker.OnCancleClickListener() {
@@ -701,11 +749,7 @@ public class MyWalletDetailActivity extends BaseSwipeActivity {
 
                     @Override
                     public void onNext(GetSumPriceModel getSumPriceModel) {
-
-
                         if (getSumPriceModel.isSuccess()) {
-
-
                             tv_income.setText("收入" + "￥ " + String.valueOf(getSumPriceModel.getData().getIn()));
                             tv_expenditure.setText("支出" + "￥ " + String.valueOf(getSumPriceModel.getData().getOut()));
                         } else {

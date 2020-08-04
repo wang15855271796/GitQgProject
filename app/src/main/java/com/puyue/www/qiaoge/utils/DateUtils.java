@@ -7,7 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -58,6 +60,166 @@ public class DateUtils {
 			"yyyy-MM-dd HH:mm:ss");
 	private static SimpleDateFormat w = new SimpleDateFormat("MM月dd日");
 	private static SimpleDateFormat w2 = new SimpleDateFormat("HH:mm");
+
+	/**
+	 * 时间格式
+	 */
+	public static final String DATE_FORMAT_NORMAL = "yyyy-MM";
+
+	/**
+	 * 时间格式（年月日）
+	 */
+	public static final String DATE_FORMAT_YYMMDD = "yyyy-MM-dd";
+
+	@SuppressLint("SimpleDateFormat")
+//	 public static void main(String[] args) throws ParseException {
+////	 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+////	 Date date = format.parse("2015-08-19 12:35:35");
+////	 System.out.println(getTime("2015-08-19 14:35:35","HH:mm"));
+////		 getMonthTime("2016-03-20 15:53:28", DATE_FORMAT_NORMAL,"yyyy-MM");
+//		 getShopListHeader("2014-12-20 15:53:28", DATE_FORMAT_NORMAL);
+//	 }
+
+	/**
+	 * 格式化时间到店面列表项标题需要的样式</br>
+	 * 本年本月显示“本月”；本来其他月份只显示月份；非本年日期全部显示年份+月份
+	 *
+	 * @param dateTime 待计算时间
+	 * @param format 时间格式
+	 * @return
+	 * @throws ParseException
+	 */
+	public static String getShopListHeader(String dateTime, String format) throws ParseException {
+		String headerText="";
+		//判断是否是本年的时间
+		if(isThisYear(dateTime, format)){
+			//是今年的时间
+			if(isThisMonth(dateTime, format)){
+				//是今年本月的时间：显示“本月”
+				headerText="本月";
+			}else{
+				//是今年的其他月份:只显示月份
+				headerText = getTime(dateTime, format, "M月");
+			}
+		}else{
+			//非今年的时间：显示年+月
+			headerText = getTime(dateTime, format, "yyyy年M月");
+		}
+		System.out.println("headerText="+headerText);
+		return headerText;
+	}
+
+	/**
+	 * 判断是否是本年的时间
+	 * @param dateTime
+	 * @param format
+	 * @return
+	 * @throws ParseException
+	 */
+	@SuppressLint("SimpleDateFormat")
+	@SuppressWarnings("deprecation")
+	public static boolean isThisYear(String dateTime, String format) throws ParseException{
+		Calendar cal = Calendar.getInstance();
+		// 使用格林尼治时域，防止不同时间戳间的时差
+		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+		cal.setTimeInMillis(System.currentTimeMillis());
+		int currentYear=cal.get(Calendar.YEAR);
+		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+		Date date = dateFormat.parse(dateTime);
+		return date.getYear()==(currentYear-1900);
+	}
+
+	/**
+	 * 判断是否是本年本月的时间
+	 * @param dateTime
+	 * @param format
+	 * @return
+	 * @throws ParseException
+	 */
+	@SuppressLint("SimpleDateFormat")
+	@SuppressWarnings("deprecation")
+	public static boolean isThisMonth(String dateTime, String format) throws ParseException{
+		if(!isThisYear(dateTime, format)){
+			//不是本年的时间，显然不是本年本月的时间
+			return false;
+		}
+		Calendar cal = Calendar.getInstance();
+		// 使用格林尼治时域，防止不同时间戳间的时差
+		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+		cal.setTimeInMillis(System.currentTimeMillis());
+		int currentMonth=cal.get(Calendar.MONTH);
+		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+		Date date = dateFormat.parse(dateTime);
+		return date.getMonth()==currentMonth;
+	}
+
+	/**
+	 * 获取精确到月份的时间
+	 *
+	 * @param dateTime
+	 *            待计算时间
+	 * @param formatFrom
+	 *            原时间格式
+	 * @param formatTo 目标时间格式
+	 * @return
+	 * @throws ParseException
+	 */
+	@SuppressLint("SimpleDateFormat")
+	public static final long getMonthTime(String dateTime, String formatFrom,String formatTo)
+			throws ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(formatFrom);
+		Date date = dateFormat.parse(dateTime);
+		dateFormat = new SimpleDateFormat(formatTo);
+		String afterDateTime = dateFormat.format(date);
+		long time = dateFormat.parse(afterDateTime).getTime();
+		return time;
+	}
+
+	/**
+	 * 格式化时间
+	 * @param dateTime
+	 * @param formatFrom
+	 * @param formatTo
+	 * @return
+	 * @throws ParseException
+	 */
+	@SuppressLint("SimpleDateFormat")
+	public static String getTime(String dateTime, String formatFrom,
+								 String formatTo) throws ParseException {
+		if (isBlank(dateTime) || isBlank(formatFrom)
+				|| isBlank(formatTo)) {
+			return "";
+		}
+		SimpleDateFormat dateFormat = new SimpleDateFormat(formatFrom);
+		Date date = dateFormat.parse(dateTime);
+		dateFormat = new SimpleDateFormat(formatTo);
+		return dateFormat.format(date);
+	}
+
+	/**
+	 * 字符串空判断
+	 * <pre>is null or its length is 0 or it is made by space</pre>
+	 *
+	 * <pre>
+	 * isBlank(null) = true;
+	 * isBlank(&quot;&quot;) = true;
+	 * isBlank(&quot;  &quot;) = true;
+	 * isBlank(&quot;a&quot;) = false;
+	 * isBlank(&quot;a &quot;) = false;
+	 * isBlank(&quot; a&quot;) = false;
+	 * isBlank(&quot;a b&quot;) = false;
+	 * </pre>
+	 *
+	 * @param str
+	 * @return if string is null or its size is 0 or it is made by space, return
+	 *         true, else return false.
+	 */
+	public static boolean isBlank(String str)
+	{
+		return (str == null || str.trim().length() == 0);
+	}
+
+
 
 	/**
 	 * 获取系统当前时间long型

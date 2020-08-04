@@ -42,6 +42,7 @@ import com.puyue.www.qiaoge.activity.ConfigUtils;
 import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.activity.WebDriverActivity;
 import com.puyue.www.qiaoge.activity.mine.account.EditAccountInputPhoneActivity;
+import com.puyue.www.qiaoge.api.home.CityChangeAPI;
 import com.puyue.www.qiaoge.api.home.GetCustomerPhoneAPI;
 import com.puyue.www.qiaoge.api.home.OneRegisterModel;
 import com.puyue.www.qiaoge.api.mine.login.LoginAPI;
@@ -51,7 +52,9 @@ import com.puyue.www.qiaoge.helper.NetWorkHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
+import com.puyue.www.qiaoge.model.IsShowModel;
 import com.puyue.www.qiaoge.model.mine.login.LoginModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -71,6 +74,8 @@ import java.util.Locale;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import static cn.com.chinatelecom.account.api.CtAuth.mContext;
 
 /**
  * Created by Administrator on 2018/4/3.
@@ -263,8 +268,8 @@ public class LoginActivity extends BaseSwipeActivity {
 
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(LoginActivity.this,DcloudActvity.class);
-                        startActivity(intent);
+//                        Intent intent = new Intent(LoginActivity.this,DcloudActvity.class);
+//                        startActivity(intent);
                     }
                 });
                 LinearLayout linearLayout = window.findViewById(R.id.linearlayout_driver);
@@ -294,7 +299,7 @@ public class LoginActivity extends BaseSwipeActivity {
                     public void onClick(View v) {
 ////https://shaokao.qoger.com/apph5/html/OrderList.html
                         //http://120.55.55.99:8082/apph5/html/OrderList.html
-                        String url = "https://shaokao.qoger.com/apph5/html/OrderList.html";
+                        String url = "http://120.55.55.99:8082/apph5/html/OrderList.html";
 
                         Intent intent = new Intent(mContext, WebDriverActivity.class);
                         intent.putExtra("URL", url);
@@ -490,7 +495,7 @@ public class LoginActivity extends BaseSwipeActivity {
         UserInfoHelper.saveUserType(mContext, String.valueOf(mModelLogin.data.userBaseInfoVO.type));
         UserInfoHelper.saveCity(mContext, city);
 
-
+        isShow();
         //登录成功,登录状态有变化,需要让
         UserInfoHelper.saveUserHomeRefresh(mContext, "");
         UserInfoHelper.saveUserMarketRefresh(mContext, "");
@@ -504,6 +509,38 @@ public class LoginActivity extends BaseSwipeActivity {
 //        EventBus.getDefault().post(new LogoutsEvent());
 //
 //        finish();
+    }
+
+    /**
+     * 是否展示授权
+     */
+    private void isShow() {
+        CityChangeAPI.isShow(mContext)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<IsShowModel>() {
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(IsShowModel isShowModel) {
+                        if(isShowModel.isSuccess()) {
+                            if(isShowModel.data!=null) {
+                                SharedPreferencesUtil.saveString(mContext,"priceType",isShowModel.getData().enjoyProduct);
+                            }
+                        }else {
+                            AppHelper.showMsg(mContext,isShowModel.getMessage());
+                        }
+                    }
+                });
     }
 
 //    public class MyLocationListener extends BDAbstractLocationListener {

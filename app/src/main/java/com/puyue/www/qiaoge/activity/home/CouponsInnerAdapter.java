@@ -27,6 +27,7 @@ import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.TeamActiveQueryModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -56,14 +57,17 @@ public class CouponsInnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.D
     private List<TeamActiveQueryModel.DataBean.ActivesBean> actives;
     private int activeId1;
     private TextView tv_coupon;
-
-    public CouponsInnerAdapter(int layoutResId, @Nullable List<TeamActiveQueryModel.DataBean.ActivesBean> data) {
+    RelativeLayout rl_price;
+    TextView tv_price;
+    public CouponsInnerAdapter(int layoutResId, @Nullable List<TeamActiveQueryModel.DataBean.ActivesBean> data, CouponsAdapter.Onclick onclick) {
         super(layoutResId, data);
+        this.onclick = onclick;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, TeamActiveQueryModel.DataBean.ActivesBean item) {
-
+        rl_price = helper.getView(R.id.rl_price);
+        tv_price = helper.getView(R.id.tv_price);
         tv_old_price = helper.getView(R.id.tv_old_price);
         tv_coupon = helper.getView(R.id.tv_coupon);
         iv_pic = helper.getView(R.id.iv_pic);
@@ -76,8 +80,8 @@ public class CouponsInnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.D
         Glide.with(mContext).load(item.getDefaultPic()).into(iv_pic);
         helper.setText(R.id.tv_name,item.getActiveName());
         helper.setText(R.id.tv_spec,item.getSpec());
-        helper.setText(R.id.tv_price,item.getPrice());
-        helper.setText(R.id.tv_old_price,item.getOldPrice());
+//        helper.setText(R.id.tv_price,item.getPrice());
+//        helper.setText(R.id.tv_old_price,item.getOldPrice());
         pb.setProgress(Integer.parseInt(item.getProgress()));
         tv_total.setText(item.getRemainNum());
         rl_root.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +89,7 @@ public class CouponsInnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.D
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,SpecialGoodDetailActivity.class);
                 intent.putExtra(AppConstant.ACTIVEID,item.getActiveId());
+                intent.putExtra("priceType",SharedPreferencesUtil.getString(mContext,"priceType"));
                 mContext.startActivity(intent);
             }
         });
@@ -96,14 +101,36 @@ public class CouponsInnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.D
             rl_coupon.setVisibility(View.GONE);
         }
 
-        if(item.getSaleDone()==0) {
-            //已售完
-            tv_add.setText("  已售罄  ");
-            tv_add.setBackgroundResource(R.drawable.shape_detail_grey);
+        if(SharedPreferencesUtil.getString(mContext,"priceType").equals("1")) {
+            rl_price.setVisibility(View.GONE);
+            tv_add.setVisibility(View.VISIBLE);
+            tv_price.setVisibility(View.VISIBLE);
+            tv_price.setText(item.getPrice());
+            tv_old_price.setVisibility(View.VISIBLE);
+            tv_old_price.setText(item.getOldPrice());
+            if(item.getSaleDone()==0) {
+                //已售完
+                tv_add.setText("  已售罄  ");
+                tv_add.setBackgroundResource(R.drawable.shape_detail_grey);
+            }else {
+                tv_add.setText("立即加购");
+                tv_add.setBackgroundResource(R.drawable.shape_orange);
+            }
         }else {
-            tv_add.setText("立即加购");
-            tv_add.setBackgroundResource(R.drawable.shape_orange);
+            rl_price.setVisibility(View.VISIBLE);
+            tv_add.setVisibility(View.GONE);
+            tv_price.setText("价格授权后可见");
+            tv_old_price.setVisibility(View.INVISIBLE);
         }
+
+        rl_price.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onclick!=null) {
+                    onclick.addDialog();
+                }
+            }
+        });
         tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         tv_old_price.getPaint().setAntiAlias(true);//抗锯齿
 

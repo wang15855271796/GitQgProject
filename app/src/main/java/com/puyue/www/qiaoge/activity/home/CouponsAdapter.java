@@ -28,8 +28,10 @@ import java.util.logging.Logger;
 public class CouponsAdapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean,BaseViewHolder> {
 
     RecyclerView recyclerView;
-    public CouponsAdapter(int layoutResId, @Nullable List<TeamActiveQueryModel.DataBean> data) {
+    Onclick onclick;
+    public CouponsAdapter(int layoutResId, @Nullable List<TeamActiveQueryModel.DataBean> data,Onclick onclick) {
         super(layoutResId, data);
+        this.onclick = onclick;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class CouponsAdapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBe
         recyclerView = helper.getView(R.id.recyclerView);
         helper.setText(R.id.tv_time,item.getTitle());
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        CouponsInnerAdapter couponsInnerAdapter = new CouponsInnerAdapter(R.layout.coupon_inner,item.getActives());
+        CouponsInnerAdapter couponsInnerAdapter = new CouponsInnerAdapter(R.layout.coupon_inner,item.getActives(),onclick);
         recyclerView.setAdapter(couponsInnerAdapter);
 
 

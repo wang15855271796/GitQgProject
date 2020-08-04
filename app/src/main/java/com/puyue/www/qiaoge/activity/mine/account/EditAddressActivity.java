@@ -58,6 +58,7 @@ import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -117,7 +118,7 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
     private BaseModel mModelAddAddress;
     private BaseModel mModelEditAddress;
     private boolean isDefaultNow = false;
-
+    AVLoadingIndicatorView lav_activity_loading;
     //private PoiSearch poiSearch= PoiSearch.newInstance();
     private SuggestionSearch mSuggestionSearch;
     //  省
@@ -201,6 +202,7 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
 
     @Override
     public void findViewById() {
+        lav_activity_loading =  (AVLoadingIndicatorView) findViewById(R.id.lav_activity_loading);
         tv_edit_address_area = (TextView) findViewById(R.id.tv_edit_address_area);
         mIvBack = (ImageView) findViewById(R.id.iv_edit_address_back);
         mEditName = (EditText) findViewById(R.id.edit_edit_address_name);
@@ -483,9 +485,13 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
                 //请求接口反成功之后,调用onResult,finish这个activity
                 //回到上个地址列表页,重新请求一次地址列表数据
                 if (mEditPhone.getText().toString().length() == 11) {
+                    lav_activity_loading.setVisibility(View.VISIBLE);
+                    lav_activity_loading.show();
+                    mBtnConfirm.setEnabled(false);
                     if (mType.equals("add")) {
                         requestAddAddress();
                     } else if (mType.equals("edit")) {
+                        mBtnConfirm.setEnabled(false);
                         requestEditAddress();
                     }
                 } else {
@@ -572,8 +578,14 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
                             intent.putExtra("defaultNum",isDefault);
                             EditAddressActivity.this.setResult(22, intent);
                             EventBus.getDefault().post(new AddressEvent());
+                            mBtnConfirm.setEnabled(true);
+                            lav_activity_loading.setVisibility(View.GONE);
+                            lav_activity_loading.hide();
                             finish();
                         } else {
+                            mBtnConfirm.setEnabled(true);
+                            lav_activity_loading.setVisibility(View.GONE);
+                            lav_activity_loading.hide();
                             AppHelper.showMsg(mContext, mModelEditAddress.message);
                         }
                     }
@@ -613,8 +625,14 @@ public class EditAddressActivity extends BaseSwipeActivity implements OnGetSugge
                             intent.putExtra("type", "add");
                             EditAddressActivity.this.setResult(11, intent);
                             EventBus.getDefault().post(new AddressEvent());
+                            mBtnConfirm.setEnabled(true);
+                            lav_activity_loading.setVisibility(View.GONE);
+                            lav_activity_loading.hide();
                             finish();
                         } else {
+                            mBtnConfirm.setEnabled(true);
+                            lav_activity_loading.setVisibility(View.GONE);
+                            lav_activity_loading.hide();
                             AppHelper.showMsg(mContext, mModelAddAddress.message);
                         }
                     }

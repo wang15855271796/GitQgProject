@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -113,17 +114,32 @@
 
                     <TextView
                         android:id="@+id/tv_price"
+                        android:visibility="gone"
                         android:layout_centerVertical="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="￥100.00—￥100.00"
+                        tools:text="￥100.00—￥100.00"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="-5dp"
                         android:layout_marginTop="3dp"
                         android:textColor="#FF703C"
                         android:textSize="13sp" />
 
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/tv_price_desc"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="价格授权后可见"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="-5dp"
+                        android:layout_marginTop="3dp"
+                        android:textColor="#FF703C"
+                        android:textSize="14sp" />
+
                     <RelativeLayout
+                        android:visibility="gone"
                         android:id="@+id/rl_spec"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="@dimen/size_20dp"
@@ -138,6 +154,25 @@
                             android:layout_centerInParent="true"
                             android:layout_marginRight="@dimen/size_15dp"
                             android:textSize="@dimen/size_11dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/rl_price"
+                        android:visibility="gone"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/size_20dp"
+                        android:background="@drawable/shape_orange_radius_11"
+                        android:layout_width="@dimen/size_70dp"
+                        android:layout_height="@dimen/size_26dp">
+
+                        <TextView
+                            android:text="获取授权"
+                            android:textColor="#fff"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="@dimen/size_15dp"
+                            android:textSize="@dimen/size_12dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
@@ -159,7 +194,6 @@
                         android:layout_height="wrap_content">
 
                         <TextView
-
                             android:text="规格"
                             android:id="@+id/tv"
                             android:layout_marginLeft="15dp"

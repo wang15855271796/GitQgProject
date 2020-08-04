@@ -67,7 +67,7 @@ public class CouponsFragment extends BaseFragment {
         bind = ButterKnife.bind(this, view);
         initStatusBarWhiteColor();
         EventBus.getDefault().register(this);
-        commonAdapter = new CommonAdapter(style,R.layout.item_common_list, actives);
+//        commonAdapter = new CommonAdapter(style,R.layout.item_common_list, actives);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);

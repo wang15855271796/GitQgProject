@@ -29,6 +29,8 @@ import com.puyue.www.qiaoge.utils.LoginUtil;
 
 import java.util.List;
 
+import static cn.com.chinatelecom.account.api.CtAuth.mContext;
+
 public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.IconsBean,BaseViewHolder> {
 
     String deductstr;
@@ -151,8 +153,12 @@ public class RvIconAdapter extends BaseQuickAdapter<IndexInfoModel.DataBean.Icon
     }
 
     private void setIntentConsult(String URL) {
-        Intent intent = new Intent(mContext, NewWebViewActivity.class);
+
+        Intent intent = new Intent(mContext, NewWebViewsActivity.class);
         intent.putExtra("URL", URL);
+        intent.putExtra("city", UserInfoHelper.getCity(mContext));
+        intent.putExtra("area",UserInfoHelper.getAreaName(mContext));
+        intent.putExtra("changeFlag",UserInfoHelper.getChangeFlag(mContext));
         intent.putExtra("TYPE", 2);
         intent.putExtra("name","consult");
         mContext.startActivity(intent);

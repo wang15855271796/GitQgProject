@@ -275,6 +275,7 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
 
                     break;
                 case R.id.buttonPay:// 去支付
+                    buttonPay.setEnabled(false);
                     lav_activity_loading.show();
                     if (LinearLayoutAddress.getVisibility() == View.VISIBLE) { // 没有地址
                         AppHelper.showMsg(mActivity, "请填写地址");
@@ -659,10 +660,13 @@ public class ConfirmOrderDeliverFragment extends BaseFragment {
                                     mActivity.finish();
                                 }
                             lav_activity_loading.hide();
-
+                            lav_activity_loading.setVisibility(View.GONE);
+                            buttonPay.setEnabled(true);
                         } else {
                             AppHelper.showMsg(mActivity, generateOrderModel.message);
+                            lav_activity_loading.setVisibility(View.GONE);
                             lav_activity_loading.hide();
+                            buttonPay.setEnabled(true);
                         }
                     }
                 });

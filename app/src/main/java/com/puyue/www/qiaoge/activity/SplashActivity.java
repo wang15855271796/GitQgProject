@@ -88,6 +88,8 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
      */
     private void handleSplash() {
 
+        //对于银联支付没有回调的处理方式
+
         // 闪屏的核心代码
         SharedPreferencesUtil.getString(mContext,"once").equals("-1");
 //        if(SharedPreferencesUtil.getString(mContext,"once").equals("0")) {

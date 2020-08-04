@@ -24,6 +24,7 @@ import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.home.ExchangeProductModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.view.ExpandLayout;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
@@ -47,15 +48,16 @@ public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.Da
     private ImageView iv_type;
     Onclick onclick;
     SearchDialog searchDialog;
-    public SearchReasultAdapter(int layoutResId, @Nullable List<SearchResultsModel.DataBean.SearchProdBean.ListBean> data,Onclick onclick) {
+    private TextView tv_price_desc;
+    public SearchReasultAdapter( int layoutResId, @Nullable List<SearchResultsModel.DataBean.SearchProdBean.ListBean> data, Onclick onclick) {
         super(layoutResId, data);
         this.onclick = onclick;
-
     }
 
     @Override
     protected void convert(BaseViewHolder helper, SearchResultsModel.DataBean.SearchProdBean.ListBean item) {
         ImageView iv_no_data = helper.getView(R.id.iv_no_data);
+        tv_price_desc = helper.getView(R.id.tv_price_desc);
         iv_type = helper.getView(R.id.iv_type);
         if(item.getFlag()==0) {
             Glide.with(mContext).load(item.getTypeUrl()).into(iv_no_data);
@@ -74,18 +76,41 @@ public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.Da
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,CommonGoodsDetailActivity.class);
                 intent.putExtra(AppConstant.ACTIVEID, item.getProductMainId());
+                intent.putExtra("priceType", SharedPreferencesUtil.getString(mContext,"priceType"));
                 mContext.startActivity(intent);
             }
         });
-
+        RelativeLayout rl_price = helper.getView(R.id.rl_price);
+        TextView tv_price = helper.getView(R.id.tv_price);
         helper.setText(R.id.tv_name,item.getProductName());
         helper.setText(R.id.tv_stock_total,item.getInventory());
         helper.setText(R.id.tv_sale,item.getSalesVolume());
-        helper.setText(R.id.tv_price,item.getMinMaxPrice());
         helper.setText(R.id.tv_desc,item.getSpecialOffer());
         tv_stock = helper.getView(R.id.tv_stock);
         tv_stock.setText(item.getInventory());
 
+        if(SharedPreferencesUtil.getString(mContext,"priceType").equals("1")) {
+            rl_price.setVisibility(View.GONE);
+            rl_spec.setVisibility(View.VISIBLE);
+            tv_price.setText(item.getMinMaxPrice());
+            tv_price.setVisibility(View.VISIBLE);
+            tv_price_desc.setVisibility(View.GONE);
+        }else {
+            rl_spec.setVisibility(View.GONE);
+            rl_price.setVisibility(View.VISIBLE);
+            tv_price.setText(item.getMinMaxPrice());
+            tv_price.setVisibility(View.GONE);
+            tv_price_desc.setVisibility(View.VISIBLE);
+        }
+
+        rl_price.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onclick!=null) {
+                    onclick.getPrice();
+                }
+            }
+        });
         rl_spec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +135,7 @@ public class SearchReasultAdapter extends BaseQuickAdapter<SearchResultsModel.Da
 
     public interface Onclick {
         void addDialog();
+        void getPrice();
     }
 
 }

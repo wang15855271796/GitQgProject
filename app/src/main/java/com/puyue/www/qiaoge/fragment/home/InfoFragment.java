@@ -79,7 +79,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static android.app.Activity.RESULT_OK;
-import static io.dcloud.common.util.ReflectUtils.getApplicationContext;
+
 
 /**
  * Created by ${王涛} on 2020/1/5
@@ -112,12 +112,17 @@ public class InfoFragment extends BaseFragment {
     private final static int FILECHOOSER_RESULTCODE = 1;// 表单的结果回调</span>
 
     private String name;
-
+    String area;
+    String city;
+    String changeFlag;
 
     private int index;
 
     private List<String> list;
     private int iphone;
+    private String city1;
+    private String areaName;
+    private String changeFlag1;
 
     @Override
     public int setLayoutId() {
@@ -140,6 +145,10 @@ public class InfoFragment extends BaseFragment {
 
     @Override
     public void setViewData() {
+        city1 = UserInfoHelper.getCity(mActivity);
+        areaName = UserInfoHelper.getAreaName(mActivity);
+        changeFlag1 = UserInfoHelper.getChangeFlag(mActivity);
+
         mUrl = getArguments().getString("URL");
         type = getArguments().getInt("TYPE", 0);
         name = getArguments().getString("name");
@@ -170,7 +179,7 @@ public class InfoFragment extends BaseFragment {
 
         settings.setDomStorageEnabled(true);
         settings.setAppCacheMaxSize(1024 * 1024 * 8);
-        String appCachePath = getApplicationContext().getCacheDir().getAbsolutePath();
+        String appCachePath = getActivity().getApplicationContext().getCacheDir().getAbsolutePath();
         settings.setAppCachePath(appCachePath);
         settings.setAllowFileAccess(true);
         settings.setAppCacheEnabled(true);
@@ -224,11 +233,13 @@ public class InfoFragment extends BaseFragment {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
+                mWv.loadUrl("javascript:ocCityArea('"+city1+","+areaName+","+1+" ')");
             }
         });
-
-        mWv.loadUrl(mUrl);
-
+        mWv.loadUrl("javascript:ocCityArea('"+city1+","+areaName+","+1+" ')");
+        mWv.loadUrl("http://120.55.55.99:8082/apph5/html/information2.html");
+        Log.d("ssswwwwwwwwwwwww...",city1+"aa");
+        Log.d("ssswwwwwwwwwwwww...",areaName+"bb");
     }
 
     private void showCustomWebChromeClient() {

@@ -7,6 +7,7 @@ import android.util.Log;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -31,6 +32,8 @@ public class QiaoGeApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        SharedPreferencesUtil.saveString(this,"pays","-1");
+        Log.d("weeeeeeeeeee.....","000");
         CrashReport.initCrashReport(getApplicationContext(), "385e5aaa75", false);
         SDKInitializer.initialize(getApplicationContext());
 //        mLocationClient = new LocationClient(getApplicationContext());

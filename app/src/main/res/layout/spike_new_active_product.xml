@@ -132,7 +132,6 @@
                         android:progressDrawable="@drawable/layerlist_goods_progress"  />
 
                     <TextView
-
                         android:id="@+id/tv_item_spike_sales"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -193,7 +192,31 @@
                         android:text="立即加购"
                         android:textColor="@color/white"
                         android:textSize="11dp" />
+
+                    <RelativeLayout
+                        android:layout_centerVertical="true"
+                        android:visibility="gone"
+                        android:id="@+id/rl_price"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/shape_orange_radius_11"
+                        android:layout_width="@dimen/size_70dp"
+                        android:layout_height="@dimen/size_26dp">
+
+                        <TextView
+                            android:text="获取授权"
+                            android:textColor="#fff"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="@dimen/size_15dp"
+                            android:textSize="@dimen/size_12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </RelativeLayout>
+
                 </RelativeLayout>
+
+
+
 
             </RelativeLayout>
 

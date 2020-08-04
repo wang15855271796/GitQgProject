@@ -22,6 +22,7 @@ import com.puyue.www.qiaoge.activity.mine.account.AddressListActivity;
 import com.puyue.www.qiaoge.activity.mine.account.EditAddressActivity;
 import com.puyue.www.qiaoge.adapter.mine.SuggestAdressAdapter;
 import com.puyue.www.qiaoge.api.home.CancleAPI;
+import com.puyue.www.qiaoge.api.home.CityChangeAPI;
 import com.puyue.www.qiaoge.api.mine.address.AddressListAPI;
 import com.puyue.www.qiaoge.api.mine.address.DefaultAddressAPI;
 import com.puyue.www.qiaoge.base.BaseModel;
@@ -34,6 +35,7 @@ import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.CancleReasonModel;
 import com.puyue.www.qiaoge.model.HotKeyModel;
+import com.puyue.www.qiaoge.model.IsShowModel;
 import com.puyue.www.qiaoge.model.mine.address.AddressModel;
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.view.SearchView;
@@ -121,7 +123,12 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
         addressListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                requestEditDefaultAddress(list.get(position).id,null);
+                requestEditDefaultAddress(list.get(position).id,null,position);
+                areaName = getIntent().getStringExtra("areaName");
+//                SharedPreferencesUtil.saveString(mActivity,"cityName",list.get(position).getCityName());
+//                SharedPreferencesUtil.saveString(mActivity,"areaName",list.get(position).getAreaName());
+//                SharedPreferencesUtil.saveString(mActivity,"changeFlag","0");
+
                 finish();
             }
         });
@@ -150,7 +157,38 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
 
     }
 
-    private void requestEditDefaultAddress(int id, String ids) {
+    private void isShow() {
+        CityChangeAPI.isShow(mActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<IsShowModel>() {
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(IsShowModel isShowModel) {
+                        if(isShowModel.isSuccess()) {
+                            if(isShowModel.data!=null) {
+                                EventBus.getDefault().post(new AddressEvent());
+                                SharedPreferencesUtil.saveString(mActivity,"priceType",isShowModel.getData().enjoyProduct);
+                                finish();
+                            }
+                        }else {
+                            AppHelper.showMsg(mActivity,isShowModel.getMessage());
+                        }
+                    }
+                });
+    }
+
+    private void requestEditDefaultAddress(int id, String ids, int position) {
         DefaultAddressAPI.requestEditDefaultAddress(mContext, id, ids)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -168,9 +206,11 @@ public class ChooseAddressActivity extends BaseSwipeActivity implements View.OnC
                     @Override
                     public void onNext(BaseModel baseModel) {
                         if (baseModel.success) {
-                            EventBus.getDefault().post(new AddressEvent());
+                            UserInfoHelper.saveCity(mActivity,list.get(position).getCityName());
+                            UserInfoHelper.saveAreaName(mActivity,list.get(position).getAreaName());
                             UserInfoHelper.saveChangeFlag(mActivity,"0");
-                            finish();
+                            isShow();
+
 
                         } else {
                             AppHelper.showMsg(mContext, baseModel.message);

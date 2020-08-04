@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_detail"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,28 +15,28 @@
         android:paddingBottom="@dimen/size_15dp">
 
         <ImageView
-            android:id="@+id/iv_flag"
-            android:layout_marginTop="@dimen/size_10dp"
+            android:id="@+id/iv_pic"
+            android:layout_centerVertical="true"
             android:layout_width="@dimen/size_30dp"
             android:layout_height="@dimen/size_30dp"
             android:src="@mipmap/ic_account_detail" />
 
         <TextView
             android:layout_marginLeft="@dimen/size_15dp"
-            android:id="@+id/textTitle"
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/iv_flag"
-         android:paddingTop="@dimen/size_10dp"
-android:paddingBottom="@dimen/size_10dp"
-            android:text=""
+            android:layout_toRightOf="@+id/iv_pic"
+            android:paddingTop="@dimen/size_10dp"
+            android:paddingBottom="@dimen/size_10dp"
+            tools:text="名称"
             android:textColor="@color/app_black"
             android:textSize="@dimen/size_15dp" />
 
 
         <TextView
-
-            android:id="@+id/textPries"
+            android:id="@+id/tv_price"
+            tools:text="100"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -45,11 +46,12 @@ android:paddingBottom="@dimen/size_10dp"
 
         <TextView
             android:layout_marginLeft="@dimen/size_15dp"
-           android:layout_toRightOf="@id/iv_flag"
-            android:id="@+id/textTime"
+            android:layout_toRightOf="@id/iv_pic"
+            android:id="@+id/tv_time"
+            tools:text="2019.3.2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textTitle"
+            android:layout_below="@+id/tv_title"
             android:textColor="@color/color_ACAAAD"
             android:textSize="@dimen/size_12dp" />
 
@@ -57,15 +59,15 @@ android:paddingBottom="@dimen/size_10dp"
             android:id="@+id/textViewFrom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textPries"
+            android:layout_below="@+id/tv_price"
             android:layout_alignParentRight="true"
             android:textColor="@color/color_ACAAAD"
             android:textSize="@dimen/size_12dp" />
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_1dp"
-        android:background="@color/color_F6F6F6" />
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/size_1dp"-->
+        <!--android:background="#DDDDDD" />-->
 
 </LinearLayout>

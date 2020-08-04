@@ -60,6 +60,9 @@
 
         <TextView
             tools:text="规格"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:id="@+id/tv_spec"
             android:textSize="@dimen/size_12dp"
             android:textColor="#999999"
@@ -98,6 +101,7 @@
 
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_add"
                 android:text="  未开始  "
                 android:paddingRight="5dp"
@@ -111,6 +115,27 @@
                 android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_centerVertical="true"
+                android:id="@+id/rl_price"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/shape_orange_radius_11"
+                android:layout_width="@dimen/size_70dp"
+                android:layout_height="@dimen/size_26dp">
+
+                <TextView
+                    android:text="获取授权"
+                    android:textColor="#fff"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="@dimen/size_15dp"
+                    android:textSize="@dimen/size_12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
         </RelativeLayout>
 
 

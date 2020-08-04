@@ -15,6 +15,18 @@ public class AppInterfaceAddress {
     //http://192.168.101.41:8088/
 
     /**
+     *账户列表
+     */
+    public static final String My_Account = "wallet/queryWalletRecordMonth";
+    /**
+     *首页是否根据城市展示价格
+     */
+    public static final String Is_Show = "common/company/enjoyProduct";
+    /**
+     *余额兑换优惠券
+     */
+    public static final String Ex_Coupon = "user/exchangeBalanceToGift";
+    /**
      *关键字搜索
      */
     public static final String Hot_Key = "common/getSearchHotKey";
@@ -284,7 +296,7 @@ public class AppInterfaceAddress {
     /**
      * 我的账单列表
      */
-    public static final String GETWALLERTRECORDBYPAGE = "wallet/getWallertRecordByPage?";
+    public static final String GETWALLERTRECORDBYPAGE = "wallet/queryWalletRecordMonth";
 
 
     public static final String GET_CART_LIST = "cart/getMyCartList?";

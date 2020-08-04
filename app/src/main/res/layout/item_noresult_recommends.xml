@@ -93,25 +93,46 @@
                     android:textColor="#666"
                     android:textSize="12sp" />
 
-                <TextView
-                    android:id="@+id/tv_price"
-                    android:layout_centerVertical="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="￥100.00—￥100.00"
-                    android:textStyle="bold"
-                    android:layout_below="@+id/tv_stock_total"
-                    android:layout_marginLeft="@dimen/size_12dp"
-                    android:layout_marginRight="-5dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_toLeftOf="@+id/iv_close"
-                    android:textColor="#FF680A"
+                <LinearLayout
+                    android:id="@+id/ll_price"
                     android:layout_toRightOf="@+id/rl"
-                    android:textSize="16sp" />
+                    android:layout_below="@+id/tv_stock_total"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/tv_price"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="￥100.00—￥100.00"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="@dimen/size_12dp"
+                        android:layout_marginRight="-5dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_toLeftOf="@+id/iv_close"
+                        android:textColor="#FF680A"
+                        android:layout_toRightOf="@+id/rl"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_desc"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/size_12dp"
+                        android:visibility="gone"
+                        android:textColor="#FF680A"
+                        android:textSize="@dimen/sp_14"
+                        android:text="价格授权后可见"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
 
                 <RelativeLayout
                     android:layout_toRightOf="@+id/rl"
-                    android:layout_below="@+id/tv_price"
+                    android:layout_below="@+id/ll_price"
                     android:layout_toLeftOf="@+id/iv_close"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -120,7 +141,7 @@
                         android:id="@+id/tv_sale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="库存：300"
+                        tools:text="销量：300"
                         android:layout_marginTop="3dp"
                         android:layout_marginLeft="@dimen/size_12dp"
                         android:layout_toLeftOf="@+id/iv_close"
@@ -129,10 +150,11 @@
 
                     <RelativeLayout
                         android:id="@+id/rl_spec"
+                        android:visibility="gone"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/size_20dp"
+                        android:layout_marginRight="@dimen/size_10dp"
                         android:background="@drawable/shape_orange_radius_11"
-                        android:layout_width="@dimen/size_52dp"
+                        android:layout_width="@dimen/size_60dp"
                         android:layout_height="@dimen/size_26dp">
 
                         <TextView
@@ -140,7 +162,27 @@
                             android:text="选规格"
                             android:textColor="#fff"
                             android:layout_centerInParent="true"
-                            android:layout_marginRight="@dimen/size_15dp"
+                            android:layout_marginRight="@dimen/size_10dp"
+                            android:textSize="@dimen/size_12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_price"
+                        android:visibility="gone"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/size_10dp"
+                        android:background="@drawable/shape_orange_radius_11"
+                        android:layout_width="@dimen/size_70dp"
+                        android:layout_height="@dimen/size_26dp">
+
+                        <TextView
+                            android:text="获取授权"
+                            android:textColor="#fff"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="@dimen/size_10dp"
                             android:textSize="@dimen/size_12dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />

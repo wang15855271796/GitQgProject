@@ -29,6 +29,7 @@ import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LogoutsEvent;
 import com.puyue.www.qiaoge.api.PostLoadAmountAPI;
 import com.puyue.www.qiaoge.api.SendJsPushAPI;
+import com.puyue.www.qiaoge.api.home.CityChangeAPI;
 import com.puyue.www.qiaoge.api.home.QueryHomePropupAPI;
 import com.puyue.www.qiaoge.api.home.SendLocationAPI;
 import com.puyue.www.qiaoge.base.BaseActivity;
@@ -50,11 +51,13 @@ import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
+import com.puyue.www.qiaoge.model.IsShowModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.GetAddressModel;
 import com.puyue.www.qiaoge.model.home.QueryHomePropupModel;
 import com.puyue.www.qiaoge.popupwindow.HomePopuWindow;
 import com.puyue.www.qiaoge.utils.LoginUtil;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.view.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -158,9 +161,40 @@ public class HomeActivity extends BaseActivity implements CartFragment.FragmentI
         });
         setContentView(R.layout.activity_home);
 
+        isShow();
     }
 
+    /**
+     * 授权展示
+     */
+    private void isShow() {
+        CityChangeAPI.isShow(mActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<IsShowModel>() {
 
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(IsShowModel isShowModel) {
+                        if(isShowModel.isSuccess()) {
+                            if(isShowModel.data!=null) {
+                                SharedPreferencesUtil.saveString(mActivity,"priceType",isShowModel.getData().enjoyProduct);
+                            }
+                        }else {
+                            AppHelper.showMsg(mActivity,isShowModel.getMessage());
+                        }
+                    }
+                });
+    }
 
 
     @Override

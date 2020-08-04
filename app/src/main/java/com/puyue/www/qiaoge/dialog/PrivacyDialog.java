@@ -37,7 +37,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static cn.com.chinatelecom.account.api.CtAuth.mContext;
-import static io.dcloud.common.util.ReflectUtils.getApplicationContext;
 
 /**
  * Created by ${王涛} on 2020/4/15
@@ -70,9 +69,9 @@ public class PrivacyDialog extends Dialog {
         countDownTimer = new CountDownTimer(5000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                checkbox.setEnabled(false);
-                ll_sure.setBackgroundResource(R.drawable.shape_orange_un);
-                ll_sure.setEnabled(false);
+                checkbox.setEnabled(true);
+                ll_sure.setBackgroundResource(R.drawable.shape_orange);
+                ll_sure.setEnabled(true);
                 tv_second.setText("("+millisUntilFinished / 1000 +"s"+")");
                 tv_second.setTextColor(Color.parseColor("#F56D23"));
 
@@ -126,7 +125,7 @@ public class PrivacyDialog extends Dialog {
 
         settings.setDomStorageEnabled(true);
         settings.setAppCacheMaxSize(1024 * 1024 * 8);
-        String appCachePath = getApplicationContext().getCacheDir().getAbsolutePath();
+        String appCachePath = mContext.getCacheDir().getAbsolutePath();
         settings.setAppCachePath(appCachePath);
         settings.setAllowFileAccess(true);
         settings.setAppCacheEnabled(true);

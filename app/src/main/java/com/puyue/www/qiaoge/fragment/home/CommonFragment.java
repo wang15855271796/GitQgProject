@@ -1,11 +1,13 @@
 package com.puyue.www.qiaoge.fragment.home;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
@@ -15,9 +17,12 @@ import com.puyue.www.qiaoge.api.home.ProductListAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.dialog.CouponDialog;
 import com.puyue.www.qiaoge.event.BackEvent;
+import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
+import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.utils.LoginUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -55,6 +60,8 @@ public class CommonFragment extends BaseFragment {
     String flag = "commonBuy";
     View emptyView;
     CouponDialog couponDialog;
+    String cell;
+
     //新品集合
     private List<ProductNormalModel.DataBean.ListBean> list = new ArrayList<>();
 
@@ -75,9 +82,10 @@ public class CommonFragment extends BaseFragment {
         if(!EventBus.getDefault().isRegistered(this)) {//加上判断
             EventBus.getDefault().register(this);
         }
+        getCustomerPhone();
         bind = ButterKnife.bind(this, view);
         refreshLayout.setEnableLoadMore(false);
-        commonListAdapter = new CommonListAdapter(flag,R.layout.item_team_list, list, new CommonListAdapter.Onclick() {
+        commonListAdapter = new CommonListAdapter(R.layout.item_team_list, list, new CommonListAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
@@ -86,6 +94,11 @@ public class CommonFragment extends BaseFragment {
                     initDialog();
                 }
 
+            }
+
+            @Override
+            public void tipClick() {
+                showPhoneDialog(cell);
             }
         });
         emptyView = View.inflate(mActivity, R.layout.layout_empty, null);
@@ -119,7 +132,41 @@ public class CommonFragment extends BaseFragment {
         });
     }
 
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
 
+            @Override
+            public void onFaild(String errorMsg) {
+            }
+        });
+    }
+
+    /**
+     * 弹出电话号码
+     */
+    private AlertDialog mDialog;
+    TextView tv_phone;
+    public void showPhoneDialog(final String cell) {
+        mDialog = new AlertDialog.Builder(mActivity).create();
+        mDialog.show();
+        mDialog.getWindow().setContentView(R.layout.dialog_shouye_tip);
+        tv_phone = mDialog.getWindow().findViewById(R.id.tv_phone);
+        tv_phone.setText(cell);
+        mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+    }
     /**
      * 常用清单列表(王涛)
      * @param pageNums
@@ -128,7 +175,6 @@ public class CommonFragment extends BaseFragment {
      */
 
     private void getProductsList(int pageNums, int pageSize, String type) {
-        Log.d("dsdfddsss.........",type);
         ProductListAPI.requestData(mActivity, pageNums, pageSize,type,null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

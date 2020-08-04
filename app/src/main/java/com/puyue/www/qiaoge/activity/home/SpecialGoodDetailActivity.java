@@ -161,6 +161,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     ProgressBar pb;
     private StarBarView sbv_star_bar;
     private TextView tv_status;
+    String priceType;
     private GoodsRecommendAdapter adapterRecommend;
     private List<GetProductListModel.DataBean.ListBean> listRecommend = new ArrayList<>();
     // 商品详情
@@ -197,10 +198,13 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
     boolean isChecked = false;
     RegisterShopAdapterTwo mRegisterAdapter;
     TextView tv_change;
+    TextView tv_desc_price;
     String num = null;
     String city;
     LinearLayout ll_service;
     TextView tv_city;
+    RelativeLayout rl_price;
+
     class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -223,6 +227,11 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                 city = bundle.getString("city");
             }
 
+            if(bundle.getString("priceType")!=null) {
+                priceType = bundle.getString("priceType");
+            }
+
+
         }
 
         return false;
@@ -236,12 +245,13 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
 
     @Override
     public void setContentView() {
-//        settranslucentStatus();
         setContentView(R.layout.activity_special_details);
     }
 
     @Override
     public void findViewById() {
+        rl_price = FVHelper.fv(this, R.id.rl_price);
+        tv_desc_price = FVHelper.fv(this, R.id.tv_desc_price);
         tv_change = FVHelper.fv(this, R.id.tv_change);
         tv_city = FVHelper.fv(this, R.id.tv_city);
         ll_service = FVHelper.fv(this, R.id.ll_service);
@@ -353,6 +363,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         } else {
             mIvCollection.setImageResource(R.mipmap.icon_collection_null);
         }
+        getCustomerPhone();
     }
 
 
@@ -519,6 +530,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
         }
     };
 
+
     /**
      * 获取详情
      */
@@ -547,6 +559,17 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                             tv_limit_num.setText(model.getData().getLimitNum());
                             tv_sale.setText(model.getData().getSaleVolume());
                             productName =model.getData().getActiveName();
+                            if(priceType.equals("1")) {
+                                mTvGroupPrice.setText(model.getData().getPrice());
+                                rl_price.setVisibility(View.VISIBLE);
+                                tv_desc_price.setVisibility(View.GONE);
+                                tv_old_price.setVisibility(View.VISIBLE);
+                            }else {
+                                tv_old_price.setVisibility(View.GONE);
+                                mTvGroupPrice.setText("价格授权后可见");
+                                rl_price.setVisibility(View.GONE);
+                                tv_desc_price.setVisibility(View.VISIBLE);
+                            }
                             tv_price.setText(model.getData().getShowPrice());
                             int progress = Integer.parseInt(model.getData().getProgress());
                             pb.setProgress(progress);
@@ -561,7 +584,7 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
 
                             tv_title.setText(model.getData().getActiveName());
                             tv_surplus.setText(model.getData().getRemainNum());
-                            mTvGroupPrice.setText(model.getData().getPrice());
+
                             tv_time.setText(model.getData().getStartTime()+"");
                             tv_spec.setText("规格："+model.getData().getSpec());
                             mTvInven.setText(model.getData().getRemainNum());
@@ -656,7 +679,9 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                                 @Override
                                 public void onClick(View v) {
                                     //增加
-                                    if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
+                                    if(priceType.equals("1")) {
+                                        mTvAdd.setEnabled(true);
+                                        if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
 
                                             //价格不为0表示获取数据成功
                                             amount++;
@@ -664,12 +689,19 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
                                             // mTvGroupAmount.setText(amount + unit);
                                             //mTvTotalMoney.setText("￥" + BigDecimalUtils.mul(price, amount, 2));
 
-                                    } else {
-                                        AppHelper.showMsg(mContext, "请先登录");
-                                        startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
+                                        } else {
+                                            AppHelper.showMsg(mContext, "请先登录");
+                                            startActivity(LoginActivity.getIntent(mContext, LoginActivity.class));
+                                        }
+                                    }else {
+                                        mTvAdd.setEnabled(false);
+                                        showPhoneDialog(cell);
+
                                     }
+
                                 }
                             });
+
                             if(currentTime<startTime) {
                                 mTvAddCar.setText("     未开始     ");
                                 mTvAddCar.setBackgroundResource(R.drawable.app_car);
@@ -725,6 +757,27 @@ public class SpecialGoodDetailActivity extends BaseSwipeActivity {
 
 
     }
+
+
+    /**
+     * 弹出电话号码
+     */
+    private AlertDialog mDialog;
+    TextView tv_phone;
+    public void showPhoneDialog(final String cell) {
+        mDialog = new AlertDialog.Builder(mActivity).create();
+        mDialog.show();
+        mDialog.getWindow().setContentView(R.layout.dialog_shouye_tip);
+        tv_phone = mDialog.getWindow().findViewById(R.id.tv_phone);
+        tv_phone.setText(cell);
+        mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+    }
+
 
 
 private float star;

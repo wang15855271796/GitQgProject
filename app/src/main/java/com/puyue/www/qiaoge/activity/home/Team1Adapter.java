@@ -39,7 +39,7 @@ public class Team1Adapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean
     protected void convert(BaseViewHolder helper, TeamActiveQueryModel.DataBean item) {
         recyclerView = helper.getView(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        TeamInnerAdapter teamInnerAdapter = new TeamInnerAdapter(R.layout.zuhe_inner,item.getActives());
+        TeamInnerAdapter teamInnerAdapter = new TeamInnerAdapter(R.layout.zuhe_inner,item.getActives(),onclick);
         recyclerView.setAdapter(teamInnerAdapter);
         helper.setText(R.id.tv_time,item.getTitle());
     }

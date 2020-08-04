@@ -21,6 +21,7 @@ import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.MarketGialog;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.view.FlowLayout;
 
 import java.util.List;
@@ -38,15 +39,19 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
     private ImageView iv_type;
     Onclick onclick;
     MarketGialog marketGialog;
+    private TextView tv_price;
 
-    public MarketGoodsAdapter(int layoutResId, @Nullable List<MarketRightModel.DataBean.ProdClassifyBean.ListBean> data, Onclick onclick) {
+    public MarketGoodsAdapter( int layoutResId, @Nullable List<MarketRightModel.DataBean.ProdClassifyBean.ListBean> data, Onclick onclick) {
         super(layoutResId, data);
         this.onclick = onclick;
+
     }
 
     @Override
     protected void convert(BaseViewHolder helper, MarketRightModel.DataBean.ProdClassifyBean.ListBean item) {
         int businessType = item.getBusinessType();
+        RelativeLayout rl_price = helper.getView(R.id.rl_price);
+        TextView tv_desc = helper.getView(R.id.tv_desc);
         ImageView iv_no_data = helper.getView(R.id.iv_no_data);
         iv_type = helper.getView(R.id.iv_type);
         if(item.getFlag()==0) {
@@ -67,10 +72,12 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
                 if(businessType==11) {
                     Intent intent = new Intent(mContext,SpecialGoodDetailActivity.class);
                     intent.putExtra(AppConstant.ACTIVEID, item.getActiveId());
+                    intent.putExtra("priceType",SharedPreferencesUtil.getString(mContext,"priceType"));
                     mContext.startActivity(intent);
                 }else {
                     Intent intent = new Intent(mContext,CommonGoodsDetailActivity.class);
                     intent.putExtra(AppConstant.ACTIVEID, item.getProductMainId());
+                    intent.putExtra("priceType",SharedPreferencesUtil.getString(mContext,"priceType"));
                     mContext.startActivity(intent);
                 }
             }
@@ -78,11 +85,22 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
 
         fl_container = helper.getView(R.id.fl_container);
         helper.setText(R.id.tv_name,item.getProductName());
-
+        tv_price = helper.getView(R.id.tv_price);
         helper.setText(R.id.tv_sale,item.getSalesVolume());
         helper.setText(R.id.tv_price,item.getMinMaxPrice());
         helper.setText(R.id.tv_stock_total,item.getInventory());
 
+        if(SharedPreferencesUtil.getString(mContext,"priceType").equals("1")) {
+            tv_price.setVisibility(View.VISIBLE);
+            tv_desc.setVisibility(View.GONE);
+            rl_price.setVisibility(View.GONE);
+            rl_spec.setVisibility(View.VISIBLE);
+        }else {
+            rl_price.setVisibility(View.VISIBLE);
+            rl_spec.setVisibility(View.GONE);
+            tv_price.setVisibility(View.GONE);
+            tv_desc.setVisibility(View.VISIBLE);
+        }
         TextView tv_choose_spec = helper.getView(R.id.tv_choose_spec);
         rl_spec.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +117,15 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
                 }
             }
         });
+
+        rl_price.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onclick!=null) {
+                    onclick.getPrice();
+                }
+            }
+        });
         tv_choose_spec.setText("选规格");
         iv_head = helper.getView(R.id.iv_head);
         Glide.with(mContext)
@@ -110,6 +137,7 @@ public class MarketGoodsAdapter extends BaseQuickAdapter<MarketRightModel.DataBe
 
     public interface Onclick {
         void addDialog();
+        void getPrice();
     }
 
 }

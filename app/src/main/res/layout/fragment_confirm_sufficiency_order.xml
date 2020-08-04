@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#F0F0F0"
     android:orientation="vertical"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.NestedScrollView
+    <RelativeLayout
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
     <LinearLayout
@@ -42,6 +46,18 @@
 
     </android.support.v4.widget.NestedScrollView>
 
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/lav_activity_loading"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:indicatorName="BallPulseIndicator"
+            style="@style/AVLoadingIndicatorView.Large"
+            app:indicatorColor="#f40"
+            />
+    </RelativeLayout>
     <LinearLayout
         android:id="@+id/ll_collect_bills"
         android:layout_width="match_parent"
@@ -169,4 +185,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/size_18dp" />
     </LinearLayout>
+
+
 </LinearLayout>

@@ -92,6 +92,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:visibility="gone"
             android:text="15.0"
             android:textColor="#FF5000"
             android:id="@+id/tv_price"
@@ -105,6 +106,7 @@
 
         <TextView
             android:text="15.0"
+            android:visibility="gone"
             android:textColor="#969696"
             android:id="@+id/tv_old_price"
             android:layout_marginTop="@dimen/size_3dp"
@@ -114,6 +116,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <TextView
+            android:id="@+id/tv_desc"
+            android:layout_marginLeft="@dimen/size_5dp"
+            android:layout_marginTop="@dimen/size_30dp"
+            android:layout_below="@+id/tv_name"
+            android:textColor="#FF5000"
+            android:visibility="gone"
+            android:textSize="@dimen/dp_10"
+            android:text="价格授权后可见"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/iv_add"

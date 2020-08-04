@@ -30,6 +30,8 @@
             <EditText
                 android:id="@+id/et"
                 tools:text="100"
+
+                android:inputType="number|numberDecimal"
                 android:imeOptions=""
                 android:layout_toRightOf="@+id/tv"
                 android:layout_width="150dp"
@@ -41,7 +43,7 @@
 
             <TextView
                 android:layout_below="@+id/tv"
-                android:text="无门槛不限期优惠券"
+                android:text="无门槛不限期优惠券*1"
                 android:textColor="#FF6F08"
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginLeft="@dimen/size_27dp"

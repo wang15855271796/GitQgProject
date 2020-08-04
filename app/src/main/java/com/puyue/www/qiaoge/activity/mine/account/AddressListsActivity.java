@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.adapter.mine.AddressAdapter;
+import com.puyue.www.qiaoge.api.home.CityChangeAPI;
 import com.puyue.www.qiaoge.api.mine.address.AddressListAPI;
 import com.puyue.www.qiaoge.api.mine.address.DefaultAddressAPI;
 import com.puyue.www.qiaoge.api.mine.address.DeleteAddressAPI;
@@ -22,8 +23,11 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
+import com.puyue.www.qiaoge.model.IsShowModel;
 import com.puyue.www.qiaoge.model.mine.address.AddressModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -66,6 +70,8 @@ public class AddressListsActivity extends BaseSwipeActivity {
     private String userAddress;
 
     private String mineToAddress;
+    private String areaName;
+    private String cityName;
 
 
     @Override
@@ -129,8 +135,11 @@ public class AddressListsActivity extends BaseSwipeActivity {
                                 mListData.get(i).isDefault = 1;
                                 //这里代表着切换了默认地址
                                 defaultId = mListData.get(i).id;
-                                Log.d("wdddddwdddd.....",defaultId+"");
                                 changeAddress = mListData.get(i).provinceName + mListData.get(i).cityName + mListData.get(i).areaName + mListData.get(i).detailAddress;
+                                areaName = mListData.get(position).getAreaName();
+                                cityName = mListData.get(position).getCityName();
+                                Log.d("dwssss.....",areaName);
+
                             }
                         } else {
                             mListData.get(i).isDefault = 0;
@@ -454,6 +463,36 @@ public class AddressListsActivity extends BaseSwipeActivity {
                 });
     }
 
+    private void isShow() {
+        CityChangeAPI.isShow(mActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<IsShowModel>() {
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(IsShowModel isShowModel) {
+                        if(isShowModel.isSuccess()) {
+                            EventBus.getDefault().post(new AddressEvent());
+                            if(isShowModel.data!=null) {
+                                SharedPreferencesUtil.saveString(mActivity,"priceType",isShowModel.getData().enjoyProduct);
+                            }
+                        }else {
+                            AppHelper.showMsg(mActivity,isShowModel.getMessage());
+                        }
+                    }
+                });
+    }
+
     private void requestEditDefaultAddress(int id, String orderId) {
         DefaultAddressAPI.requestEditDefaultAddress(mContext, id, orderId)
                 .subscribeOn(Schedulers.io())
@@ -474,7 +513,10 @@ public class AddressListsActivity extends BaseSwipeActivity {
                         mModelEditDefaultAddress = baseModel;
                         Log.e(TAG, "onNext: " + baseModel.success + baseModel.message + baseModel.code);
                         if (mModelEditDefaultAddress.success) {
-                            EventBus.getDefault().post(new AddressEvent());
+                            UserInfoHelper.saveChangeFlag(mActivity,"0");
+                            UserInfoHelper.saveCity(mActivity,cityName);
+                            UserInfoHelper.saveAreaName(mActivity,areaName);
+                            isShow();
                         } else {
                             AppHelper.showMsg(mContext, mModelEditDefaultAddress.message);
                         }

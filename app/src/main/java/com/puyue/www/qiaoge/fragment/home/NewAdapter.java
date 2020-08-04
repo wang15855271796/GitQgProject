@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.fragment.home;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -18,6 +19,7 @@ import com.puyue.www.qiaoge.dialog.NewDialog;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 
 import java.util.List;
 
@@ -29,18 +31,21 @@ public class NewAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean.Lis
     Onclick onclick;
     private NewDialog newDialog;
     private RelativeLayout rl_group;
-    String flag;
     private TextView tv_sale;
     ImageView iv_flag;
-    public NewAdapter(String flag,int layoutResId, @Nullable List<ProductNormalModel.DataBean.ListBean> activeList, Onclick onclick) {
+    String enjoyProduct;
+    private TextView tv_desc;
+    TextView tv_price;
+    public NewAdapter(int layoutResId, @Nullable List<ProductNormalModel.DataBean.ListBean> activeList, Onclick onclick) {
         super(layoutResId, activeList);
         this.activesBean = activeList;
         this.onclick = onclick;
-        this.flag = flag;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, ProductNormalModel.DataBean.ListBean item) {
+        tv_desc = helper.getView(R.id.tv_desc);
+        tv_price = helper.getView(R.id.tv_price);
         iv_pic = helper.getView(R.id.iv_pic);
         iv_flag = helper.getView(R.id.iv_flag);
         iv_add = helper.getView(R.id.iv_add);
@@ -48,63 +53,64 @@ public class NewAdapter extends BaseQuickAdapter<ProductNormalModel.DataBean.Lis
         tv_sale = helper.getView(R.id.tv_sale);
         Glide.with(mContext).load(item.getDefaultPic()).into(iv_pic);
         helper.setText(R.id.tv_name,item.getProductName());
-        helper.setText(R.id.tv_price,item.getMinMaxPrice());
-        if(flag.equals("hot")&&!item.getSalesVolume().equals("")) {
-            tv_sale.setVisibility(View.VISIBLE);
-            tv_sale.setText(item.getSalesVolume());
-            tv_sale.setBackgroundResource(R.drawable.shape_orange);
-        }else {
-            tv_sale.setVisibility(View.GONE);
 
-        }
-
-        if(flag.equals("common")) {
-            tv_sale.setVisibility(View.GONE);
-            tv_sale.setText(item.getSalesVolume());
-            iv_flag.setVisibility(View.VISIBLE);
-
-            Glide.with(mContext).load(item.getTypeUrl()).into(iv_flag);
-        }else {
-            iv_flag.setVisibility(View.GONE);
-        }
-
-
-        if(flag.equals("reduce")&&item.getDeductAmount().equals("")) {
-            tv_sale.setVisibility(View.GONE);
-
-        }else if(flag.equals("reduce")&&!item.getDeductAmount().equals("")){
-            tv_sale.setText(item.getDeductAmount()+"");
-            tv_sale.setVisibility(View.VISIBLE);
-            tv_sale.setBackgroundResource(R.drawable.shape_orange);
-        }
-
-        rl_group.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext,CommonGoodsDetailActivity.class);
-                intent.putExtra(AppConstant.ACTIVEID,item.getProductMainId());
-                mContext.startActivity(intent);
+        if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
+            if(SharedPreferencesUtil.getString(mContext,"priceType").equals("1")) {
+                tv_price.setVisibility(View.VISIBLE);
+                tv_desc.setVisibility(View.GONE);
+                tv_price.setText(item.getMinMaxPrice());
+            }else {
+                tv_price.setVisibility(View.GONE);
+                tv_desc.setVisibility(View.VISIBLE);
             }
-        });
+        }else {
+            tv_price.setText(item.getMinMaxPrice());
+            tv_price.setVisibility(View.VISIBLE);
+            tv_desc.setVisibility(View.GONE);
+//            if(SharedPreferencesUtil.getString(mContext,"priceType").equals("1")) {
+//                tv_price.setVisibility(View.VISIBLE);
+//                tv_desc.setVisibility(View.GONE);
+//                tv_price.setText(item.getMinMaxPrice());
+//            }else {
+//                tv_price.setVisibility(View.GONE);
+//                tv_desc.setVisibility(View.VISIBLE);
+//            }
+        }
+
 
 
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(onclick!=null) {
-                    onclick.addDialog();
-                }
+                    if(SharedPreferencesUtil.getString(mContext,"priceType").equals("1")) {
+                        onclick.addDialog();
+                        if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
+                            newDialog = new NewDialog(mContext,item.getProductId(),item);
+                            newDialog.show();
+                        }
+                    }else {
+                        onclick.tipClick();
+                    }
 
-                if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    newDialog = new NewDialog(mContext,item.getProductId(),item);
-                    newDialog.show();
                 }
             }
         });
+        rl_group.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,CommonGoodsDetailActivity.class);
+                intent.putExtra(AppConstant.ACTIVEID,item.getProductMainId());
+                intent.putExtra("priceType",SharedPreferencesUtil.getString(mContext,"priceType"));
+                mContext.startActivity(intent);
+            }
+        });
+
     }
 
     public interface Onclick {
         void addDialog();
+        void tipClick();
     }
 
 }

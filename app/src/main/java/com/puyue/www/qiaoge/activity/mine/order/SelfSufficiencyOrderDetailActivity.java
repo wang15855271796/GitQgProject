@@ -1033,6 +1033,8 @@ public class SelfSufficiencyOrderDetailActivity extends BaseSwipeActivity {
             tvNewOrderPay.setImageResource(R.mipmap.ic_pay_alipay);
         } else if (getOrderDetailModel.payChannelType == 3) {
             tvNewOrderPay.setImageResource(R.mipmap.ic_we_chat_icon);
+        }else if(getOrderDetailModel.payChannelType == 14) {
+
         }
 
 

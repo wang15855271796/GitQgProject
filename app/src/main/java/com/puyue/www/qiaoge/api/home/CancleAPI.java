@@ -8,6 +8,7 @@ import com.puyue.www.qiaoge.constant.AppInterfaceAddress;
 import com.puyue.www.qiaoge.helper.RestHelper;
 import com.puyue.www.qiaoge.model.CancleModel;
 import com.puyue.www.qiaoge.model.CancleReasonModel;
+import com.puyue.www.qiaoge.model.ExCouponModel;
 import com.puyue.www.qiaoge.model.HotKeyModel;
 import com.puyue.www.qiaoge.model.home.ClickCollectionModel;
 
@@ -59,6 +60,20 @@ public class CancleAPI {
     public static Observable<HotKeyModel> getHot(Context context, String searchKey) {
         HotService service = RestHelper.getBaseRetrofit(context).create(HotService.class);
         return service.getData(searchKey);
+    }
+
+    /**
+     * 余额兑换优惠券
+     */
+    private interface ExService {
+        @FormUrlEncoded
+        @POST(AppInterfaceAddress.Ex_Coupon)
+        Observable<ExCouponModel> getData(@Field("giftAmounts") String giftAmounts,@Field("payPwd")String payPwd);
+    }
+
+    public static Observable<ExCouponModel> getCopon(Context context, String giftAmounts,String payPwd) {
+        ExService service = RestHelper.getBaseRetrofit(context).create(ExService.class);
+        return service.getData(giftAmounts,payPwd);
     }
 
 }

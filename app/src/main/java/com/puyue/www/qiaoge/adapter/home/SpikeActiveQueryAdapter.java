@@ -8,12 +8,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
+import com.puyue.www.qiaoge.adapter.HotAdapter;
 import com.puyue.www.qiaoge.api.cart.AddCartAPI;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
@@ -21,6 +23,7 @@ import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.model.cart.AddCartModel;
 import com.puyue.www.qiaoge.model.home.SeckillListModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.view.GlideModel;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,15 +53,18 @@ public class SpikeActiveQueryAdapter extends BaseQuickAdapter<SeckillListModel.D
     private int activedId;
     LinearLayout ll_root;
     TextView tv_add_remind;
-    public SpikeActiveQueryAdapter(int layoutResId, @Nullable List<SeckillListModel.DataBean.KillsBean> data,int activedId) {
+    RelativeLayout rl_price;
+    Onclick onclick;
+    public SpikeActiveQueryAdapter(int layoutResId, @Nullable List<SeckillListModel.DataBean.KillsBean> data,int activedId,Onclick onclick) {
         super(layoutResId, data);
         this.activedId = activedId;
-
+        this.onclick = onclick;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, SeckillListModel.DataBean.KillsBean item) {
         ll_root = helper.getView(R.id.ll_root);
+        rl_price = helper.getView(R.id.rl_price);
         tv_add_remind = helper.getView(R.id.tv_add_remind);
         ivSpike = helper.getView(R.id.iv_item_spike_img);
         tvTitle = helper.getView(R.id.tv_item_spike_title);
@@ -72,7 +78,6 @@ public class SpikeActiveQueryAdapter extends BaseQuickAdapter<SeckillListModel.D
         mProgressBar = helper.getView(R.id.pb_item_spike);
         tvSoldSale = helper.getView(R.id.tv_item_spike_sales);
         tvTitle.setText(item.title);
-        tvPrice.setText(item.price);
         tvOldPrice.setText(item.oldPrice);
         tvPsc.setText(item.spec);
         tvSale.setText(item.sales);
@@ -83,7 +88,55 @@ public class SpikeActiveQueryAdapter extends BaseQuickAdapter<SeckillListModel.D
         String spikeFlag = UserInfoHelper.getSpikePosition(mContext);
         GlideModel.disPlayError(mContext,item.pic,ivSpike);
 
+        if(SharedPreferencesUtil.getString(mContext,"priceType").equals("1")) {
+            if(Integer.parseInt(spikeFlag)==0) {
+                //未开始
+                tv_add_remind.setVisibility(View.GONE);
+            }else {
+                // 已开始
+                ivSoldOut.setVisibility(View.GONE);
 
+                if(item.soldOut==0) {
+                    ivSoldOut.setVisibility(View.GONE);
+                    tv_add_remind.setVisibility(View.VISIBLE);
+                }else {
+                    ivSoldOut.setVisibility(View.VISIBLE);
+                    tv_add_remind.setVisibility(View.GONE);
+                }
+            }
+            tvPrice.setText(item.price);
+            rl_price.setVisibility(View.GONE);
+        }else {
+
+            if(Integer.parseInt(spikeFlag)==0) {
+                //未开始
+                tv_add_remind.setVisibility(View.GONE);
+            }else {
+                // 已开始
+                ivSoldOut.setVisibility(View.GONE);
+
+                if(item.soldOut==0) {
+                    ivSoldOut.setVisibility(View.GONE);
+                    tv_add_remind.setVisibility(View.VISIBLE);
+                }else {
+                    ivSoldOut.setVisibility(View.VISIBLE);
+                    tv_add_remind.setVisibility(View.GONE);
+                }
+            }
+            tvPrice.setText("价格授权后可见");
+            ivSoldOut.setVisibility(View.GONE);
+            tv_add_remind.setVisibility(View.GONE);
+            rl_price.setVisibility(View.VISIBLE);
+        }
+
+        rl_price.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onclick!=null) {
+                    onclick.tipClick();
+                }
+            }
+        });
         tv_add_remind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,21 +152,21 @@ public class SpikeActiveQueryAdapter extends BaseQuickAdapter<SeckillListModel.D
         });
 
 
-        if(Integer.parseInt(spikeFlag)==0) {
-            //未开始
-            tv_add_remind.setVisibility(View.GONE);
-        }else {
-            // 已开始
-            ivSoldOut.setVisibility(View.GONE);
-
-            if(item.soldOut==0) {
-                ivSoldOut.setVisibility(View.GONE);
-                tv_add_remind.setVisibility(View.VISIBLE);
-            }else {
-                ivSoldOut.setVisibility(View.VISIBLE);
-                tv_add_remind.setVisibility(View.GONE);
-            }
-        }
+//        if(Integer.parseInt(spikeFlag)==0) {
+//            //未开始
+//            tv_add_remind.setVisibility(View.GONE);
+//        }else {
+//            // 已开始
+//            ivSoldOut.setVisibility(View.GONE);
+//
+//            if(item.soldOut==0) {
+//                ivSoldOut.setVisibility(View.GONE);
+//                tv_add_remind.setVisibility(View.VISIBLE);
+//            }else {
+//                ivSoldOut.setVisibility(View.VISIBLE);
+//                tv_add_remind.setVisibility(View.GONE);
+//            }
+//        }
 
 
 
@@ -168,6 +221,11 @@ public class SpikeActiveQueryAdapter extends BaseQuickAdapter<SeckillListModel.D
                     }
                 });
     }
+
+    public interface Onclick {
+        void tipClick();
+    }
+
 
 
 }

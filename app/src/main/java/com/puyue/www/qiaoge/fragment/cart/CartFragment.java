@@ -31,40 +31,29 @@ import com.puyue.www.qiaoge.api.home.IndexHomeAPI;
 import com.puyue.www.qiaoge.api.mine.order.CartGetReductDescAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.base.BaseModel;
+import com.puyue.www.qiaoge.event.AddressEvent;
 import com.puyue.www.qiaoge.event.BackEvent;
 import com.puyue.www.qiaoge.event.GoToMarketEvent;
 import com.puyue.www.qiaoge.event.OnHttpCallBack;
-import com.puyue.www.qiaoge.event.UpDateNumEvent;
 import com.puyue.www.qiaoge.event.UpDateNumEvent1;
-import com.puyue.www.qiaoge.event.UpDateNumEvent2;
-import com.puyue.www.qiaoge.event.UpDateNumEvent3;
-import com.puyue.www.qiaoge.event.UpDateNumEvent4;
-import com.puyue.www.qiaoge.event.UpDateNumEvent5;
-import com.puyue.www.qiaoge.event.UpDateNumEvent6;
-import com.puyue.www.qiaoge.event.UpDateNumEvent7;
-import com.puyue.www.qiaoge.event.UpDateNumEvent8;
-import com.puyue.www.qiaoge.event.UpDateNumEvent9;
-import com.puyue.www.qiaoge.fragment.home.CityEvent;
 import com.puyue.www.qiaoge.fragment.home.MustAdapter;
-import com.puyue.www.qiaoge.fragment.market.MarketsFragment;
 import com.puyue.www.qiaoge.fragment.market.TestAdapter;
 import com.puyue.www.qiaoge.helper.AlwaysMarqueeTextViewHelper;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.BigDecimalUtils;
-import com.puyue.www.qiaoge.helper.CollapsingToolbarLayoutStateHelper;
 import com.puyue.www.qiaoge.helper.PublicRequestHelper;
-import com.puyue.www.qiaoge.helper.StringHelper;
-import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.cart.CartActivityGoodsModel;
 import com.puyue.www.qiaoge.model.cart.CartBalanceModel;
 import com.puyue.www.qiaoge.model.cart.CartCommonGoodsModel;
 import com.puyue.www.qiaoge.model.cart.CartsListModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
+import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.MustModel;
 import com.puyue.www.qiaoge.model.mine.order.CartGetReductModel;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.Arith;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -97,6 +86,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     CheckBox cb_select_all;
     @BindView(R.id.rv_cart)
     RecyclerView mRv;
+    @BindView(R.id.lav_activity_loading)
+    AVLoadingIndicatorView lav_activity_loading;
     @BindView(R.id.ll_select_all)
     LinearLayout ll_select_all;
     @BindView(R.id.linearLayoutButton)
@@ -128,10 +119,10 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     FrameLayout fl;
     @BindView(R.id.iv_back)
     ImageView iv_back;
-    @BindView(R.id.tv)
-    TextView tv;
     @BindView(R.id.rv_recommend)
     RecyclerView rv_recommend;
+    @BindView(R.id.tv)
+    ImageView tv;
     //失效商品的cartId
     List<Integer> unCartsId = new ArrayList<>();
     //点击删除时的cartId存储集合
@@ -157,6 +148,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     private String cartListStr;
     private double discribe;
     String flag = "common";
+    private String cell; // 客服电话
+
     public static CartFragment getInstance() {
         CartFragment fragment = new CartFragment();
         Bundle bundle = new Bundle();
@@ -183,6 +176,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
         iv_back.setVisibility(View.GONE);
         Window window = getActivity().getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        lav_activity_loading.show();
+        lav_activity_loading.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -288,6 +283,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                 break;
 
             case R.id.btn_sure:
+                btn_sure.setEnabled(false);
+                lav_activity_loading.show();
+                lav_activity_loading.setVisibility(View.VISIBLE);
                 mModelCartCommonGoods.amount.clear();
                 mModelCartCommonGoods.productIdList.clear();
                 mModelCartCommonGoods.detailList.clear();
@@ -397,7 +395,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
 //                                    cartIds.clear();
                                     cartIds.add(cartId);
                                     cartListStr = cartIds.toString();
-                                    Log.d("wodemingzishiss000.....",cartListStr+"dd");
                                     for (int k = 0; k <productDescVOList.size() ; k++) {
                                         CartsListModel.DataBean.ValidListBean.SpecProductListBean.ProductDescVOListBean productDescVOListBean = productDescVOList.get(k);
                                         priceCommonGoods = Double.parseDouble(BigDecimalUtils.add(Double.toString(priceCommonGoods),BigDecimalUtils.mul(productDescVOListBean.getPrice(),
@@ -445,6 +442,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                 mlisenter.jumpMarket();
                 break;
             case R.id.cb_select_all:
+//                requestCartLists();
+
                 if (mSelect) {
                     cb_select_all.setChecked(false);
                     testAdapter.setAllselect(false);
@@ -454,6 +453,57 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                 }
 
                 break;
+        }
+    }
+
+    private void requestCartLists() {
+        CartListAPI.requestCartLists(getContext())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<CartsListModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(CartsListModel cartListModel) {
+                        if(cartListModel.isSuccess()) {
+//                            getAllPrices(cartListModel.getData().getValidList());
+
+
+                        }else {
+
+                        }
+
+
+                    }
+                });
+    }
+    int productNum;
+    private void getAllPrices(List<CartsListModel.DataBean.ValidListBean> validList) {
+        if(validList!=null){
+            for (int i=0;i<validList.size();i++){
+                List<CartsListModel.DataBean.ValidListBean.SpecProductListBean> specProductList = validList.get(i).getSpecProductList();
+                for (int y=0;y<specProductList.size();y++){
+                    if(specProductList.get(y).isSelected()){
+                        List<CartsListModel.DataBean.ValidListBean.SpecProductListBean.ProductDescVOListBean> productDescVOList = specProductList.get(y).getProductDescVOList();
+                        for (int j = 0; j <productDescVOList.size() ; j++) {
+                            productNum = productDescVOList.get(j).getProductNum();
+
+                        }
+
+                    }
+                }
+            }
+
+            btn_sure.setText("结算"+"("+productNum+")");
         }
     }
 
@@ -478,7 +528,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                 alertDialog.dismiss();
             }
         });
-//        Log.d("wddsdsddwwdwfff....", unList.size()+"");
+        unCartsId.clear();
         mTvConfirm.setOnClickListener(new NoDoubleClickListener() {
             @Override
             public void onNoDoubleClick(View view) {
@@ -560,7 +610,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                             ToastUtil.showSuccessMsg(mActivity, "删除商品成功");
                             getCartNum();
                             requestCartList();
-                            getProductsList();
                         } else {
                             ToastUtil.showSuccessMsg(mActivity,baseModel.message);
                         }
@@ -620,14 +669,18 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                             intent.putExtra("normalProductBalanceVOStr", normalProductBalanceVOStr);
                             intent.putExtra("activityBalanceVOStr", activityBalanceVOStr);
                             intent.putExtra("cartListStr", cartListStr);
-                            Log.d("wdwdwdddddd.........",cartListStr);
                             startActivity(intent);
+                            lav_activity_loading.hide();
+                            lav_activity_loading.setVisibility(View.GONE);
+                            btn_sure.setEnabled(true);
                             }else {
+                            lav_activity_loading.hide();
+                            lav_activity_loading.setVisibility(View.GONE);
+                            btn_sure.setEnabled(true);
                             ToastUtil.showSuccessMsg(mActivity, cartBalanceModel.message);
                         }
                     }
                 });
-
     }
 
 
@@ -679,38 +732,11 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
     }
 
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void messageEventBuss(ReduceNumEvent event) {
-        //刷新UI
-        requestCartList();
-        getProductsList();
-    }
-
-    //这里用了eventBus来进行实时价格的UI更改。
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void messageEventBus(UpdateEvent event) {
-        //刷新UI
-//        requestCartList();
-        discribe = Double.parseDouble(event.getDiscribe());
-
-        tv_total_price.setText("￥"+discribe);
-        getScrollData(discribe);
-
-        if(sendAmount> discribe) {
-            double diff = sendAmount - discribe;
-            ll_service.setVisibility(View.VISIBLE);
-            double result = Double.parseDouble(String.format("%.2f", diff));
-            tv_price_desc.setText(""+result);
-
-        }else {
-            ll_service.setVisibility(View.GONE);
-        }
-        getProductsList();
-    }
 
     @Override
     public void setViewData() {
         requestCartList();
+        getCustomerPhone();
         getProductsList();
     }
 
@@ -727,7 +753,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                             BigDecimal interestRate = new BigDecimal(productDescVOList.get(j).getProductNum()); //数量
                             double interest = Arith.mul(Double.parseDouble(productDescVOList.get(j).getPrice()), interestRate);
                             allprice = allprice.add(BigDecimal.valueOf(interest));
-
+                            btn_sure.setText("结算"+"("+productDescVOList.get(j).getProductNum()+")");
                         }
                     }
                 }
@@ -782,59 +808,82 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
 
                     @Override
                     public void onNext(CartsListModel cartListModel) {
-                        mListCart.clear();
-                        unList.clear();
-                        sendAmount = Double.parseDouble(cartListModel.getData().getSendAmount());
-                        mRv.setLayoutManager(new LinearLayoutManager(getContext()));
-                        //可用列表
-                        List<CartsListModel.DataBean.ValidListBean> validList = cartListModel.getData().getValidList();
-                        mListCart.addAll(validList);
-                        testAdapter = new TestAdapter(R.layout.item_carts, mListCart,CartFragment.this);
-                        mRv.setAdapter(testAdapter);
-                        //过期列表
-                        List<CartsListModel.DataBean.InValidListBean> inValidList = cartListModel.getData().getInValidList();
-                        unList.addAll(inValidList);
+                        if(cartListModel.isSuccess()) {
+                            Log.d("dwdsssssssss......","123123");
+                            mListCart.clear();
+                            unList.clear();
+                            sendAmount = Double.parseDouble(cartListModel.getData().getSendAmount());
+                            mRv.setLayoutManager(new LinearLayoutManager(getContext()));
+
+                            //可用列表
+                            List<CartsListModel.DataBean.ValidListBean> validList = cartListModel.getData().getValidList();
+                            mListCart.addAll(validList);
+
+                            testAdapter = new TestAdapter(R.layout.item_carts, mListCart,CartFragment.this);
+//                            testAdapter = new Test2Adapter(mActivity,mListCart, new Test2Adapter.Onclick() {
+//                                @Override
+//                                public void clicks() {
+//                                    requestCartList();
+//                                }
+//
+//                                @Override
+//                                public void refreshCart() {
+//
+//                                }
+//                            });
+                            mRv.setAdapter(testAdapter);
+                            //过期列表
+                            List<CartsListModel.DataBean.InValidListBean> inValidList = cartListModel.getData().getInValidList();
+                            unList.addAll(inValidList);
 
 
-                        if(unList.size()==0) {
-                            rl_unable.setVisibility(View.GONE);
-                            rv_unable.setVisibility(View.GONE);
-                        }else {
-                            rl_unable.setVisibility(View.VISIBLE);
-                            rv_unable.setVisibility(View.VISIBLE);
-                        }
+                            if(unList.size()==0) {
+                                rl_unable.setVisibility(View.GONE);
+                                rv_unable.setVisibility(View.GONE);
+                            }else {
+                                rl_unable.setVisibility(View.VISIBLE);
+                                rv_unable.setVisibility(View.VISIBLE);
+                            }
 
-                        if(mListCart.size()==0&&unList.size()==0) {
-                            ll_NoData.setVisibility(View.VISIBLE);
-                            ll.setVisibility(View.GONE);
-                            tv_delete.setVisibility(View.GONE);
+                            if(mListCart.size()==0&&unList.size()==0) {
+                                ll_NoData.setVisibility(View.VISIBLE);
+                                ll.setVisibility(View.GONE);
+                                tv_delete.setVisibility(View.GONE);
 
-                            ll_service.setVisibility(View.GONE);
-                            getScrollData(0);
-                        }else {
-                            tv_delete.setVisibility(View.VISIBLE);
-                            ll_NoData.setVisibility(View.GONE);
-                            ll.setVisibility(View.VISIBLE);
+                                ll_service.setVisibility(View.GONE);
+                                getScrollData(0);
+                            }else {
+                                tv_delete.setVisibility(View.VISIBLE);
+                                ll_NoData.setVisibility(View.GONE);
+                                ll.setVisibility(View.VISIBLE);
 
-                            getAllPrice(validList);
+                                getAllPrice(validList);
 
-                        }
+                            }
 
-                        if(mListCart.size()==0 && unList.size()!=0) {
-                            ll_service.setVisibility(View.GONE);
-                            ll.setVisibility(View.GONE);
-                        }else {
+                            if(mListCart.size()==0 && unList.size()!=0) {
+//                                ll_NoData.setVisibility(View.VISIBLE);
+                                ll_service.setVisibility(View.GONE);
+                                ll.setVisibility(View.GONE);
+                            }else {
 //                            ll_service.setVisibility(View.VISIBLE);
 //                            ll.setVisibility(View.VISIBLE);
-                        }
+                            }
+
+//                            if(mListCart.size()==0 && unList.size()==0) {
+//                                ll_NoData.setVisibility(View.VISIBLE);
+//                                ll_service.setVisibility(View.GONE);
+//                                ll.setVisibility(View.GONE);
+//                            }
 
 
-                        if(mListCart.size()==0) {
+
+                            if(mListCart.size()==0) {
 //                            ll_service.setVisibility(View.GONE);
 //                            getScrollData(0);
-                        }else {
+                            }else {
 //                            getAllPrice(validList);
-                        }
+                            }
 
 //                        if(unList.size()!=0&&mListCart.size()!=0) {
 //                            ll.setVisibility(View.VISIBLE);
@@ -842,24 +891,31 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
 //                            ll.setVisibility(View.GONE);
 //                        }
 
-                        CartUnableAdapter unAbleAdapter = new CartUnableAdapter(R.layout.item_carts,unList);
+                            CartUnableAdapter unAbleAdapter = new CartUnableAdapter(R.layout.item_uncarts,unList);
+                            rv_unable.setLayoutManager(new LinearLayoutManager(mActivity));
+                            rv_unable.setAdapter(unAbleAdapter);
+                            unAbleAdapter.notifyDataSetChanged();
+                            testAdapter.notifyDataSetChanged();
 
-                        rv_unable.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        rv_unable.setAdapter(unAbleAdapter);
-
-                        testAdapter.notifyDataSetChanged();
-
-                        testAdapter.setResfreshListener(new TestAdapter.OnResfreshListener() {
-                            @Override
-                            public void onResfresh( boolean isSelect) {
-                                mSelect = isSelect;
-                                if(isSelect){
-                                    cb_select_all.setChecked(true);
-                                }else {
-                                    cb_select_all.setChecked(false);
+                            testAdapter.setResfreshListener(new TestAdapter.OnResfreshListener() {
+                                @Override
+                                public void onResfresh( boolean isSelect) {
+                                    mSelect = isSelect;
+                                    if(isSelect){
+                                        cb_select_all.setChecked(true);
+                                    }else {
+                                        cb_select_all.setChecked(false);
+                                    }
                                 }
-                            }
-                        });
+                            });
+
+                            lav_activity_loading.hide();
+                            lav_activity_loading.setVisibility(View.GONE);
+                        }else {
+                            lav_activity_loading.hide();
+                            lav_activity_loading.setVisibility(View.GONE);
+                        }
+
 
                     }
                 });
@@ -889,16 +945,28 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                     public void onNext(MustModel getCommonProductModel) {
                         if (getCommonProductModel.isSuccess()) {
                             //为您推荐列表
-                            mustAdapter = new MustAdapter(flag,R.layout.item_team_list, getCommonProductModel.getData(), new MustAdapter.Onclick() {
+                            if(getCommonProductModel.getData()!=null) {
+                                tv.setVisibility(View.VISIBLE);
+
+                            }else {
+                                tv.setVisibility(View.GONE);
+                            }
+
+                            mustAdapter = new MustAdapter(R.layout.item_team_list, getCommonProductModel.getData(), new MustAdapter.Onclick() {
                                 @Override
                                 public void addDialog() {
                                     requestCartList();
-                                    getProductsList();
+                                }
+
+                                @Override
+                                public void tipClick() {
+                                    showPhoneDialog(cell);
                                 }
                             });
 
-                                rv_recommend.setLayoutManager(new GridLayoutManager(mActivity,2));
-                                rv_recommend.setAdapter(mustAdapter);
+
+                            rv_recommend.setLayoutManager(new GridLayoutManager(mActivity,2));
+                            rv_recommend.setAdapter(mustAdapter);
 
 
                         } else {
@@ -908,12 +976,54 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
                 });
     }
 
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
+
+            @Override
+            public void onFaild(String errorMsg) {
+            }
+        });
+    }
+
+    /**
+     * 弹出电话号码
+     */
+    private AlertDialog mDialog;
+    TextView tv_phone;
+    public void showPhoneDialog(final String cell) {
+        mDialog = new AlertDialog.Builder(getActivity()).create();
+        mDialog.show();
+        mDialog.getWindow().setContentView(R.layout.dialog_shouye_tip);
+        tv_phone = mDialog.getWindow().findViewById(R.id.tv_phone);
+        tv_phone.setText(cell);
+        mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+    }
+
+
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void messageEventBusss(BackEvent event) {
         //刷新UI
+        lav_activity_loading.setVisibility(View.VISIBLE);
+        lav_activity_loading.show();
         requestCartList();
+        Log.d("ddwsssssssssss....","www");
         getCartNum();
         getProductsList();
+        getCustomerPhone();
 
     }
 
@@ -924,16 +1034,58 @@ public class CartFragment extends BaseFragment implements View.OnClickListener,T
         getCartNum();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void cityEvent(CityEvent event) {
-        requestCartList();
-        getProductsList();
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void cityEvent(CityEvent event) {
+//        requestCartList();
+//
+//    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getTotals(UpDateNumEvent1 upDateNumEvent) {
         requestCartList();
         getProductsList();
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void messageEventBuss(ReduceNumEvent event) {
+        //刷新UI
+        lav_activity_loading.setVisibility(View.VISIBLE);
+        lav_activity_loading.show();
+        requestCartList();
+        getProductsList();
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void upPrice(AddressEvent event) {
+        //刷新UI
+        requestCartList();
+        getProductsList();
+        getCustomerPhone();
+    }
+
+    //这里用了eventBus来进行实时价格的UI更改。
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void messageEventBus(UpdateEvent event) {
+        //刷新UI
+//        requestCartList();
+        discribe = Double.parseDouble(event.getDiscribe());
+
+        tv_total_price.setText("￥"+discribe);
+        getScrollData(discribe);
+
+        if(sendAmount> discribe) {
+            double diff = sendAmount - discribe;
+            ll_service.setVisibility(View.VISIBLE);
+            double result = Double.parseDouble(String.format("%.2f", diff));
+            tv_price_desc.setText(""+result);
+
+        }else {
+            ll_service.setVisibility(View.GONE);
+        }
+        getProductsList();
+    }
+
+
 
 }

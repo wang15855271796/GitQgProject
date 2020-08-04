@@ -16,14 +16,21 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.HomeActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LogoutsEvent;
 import com.puyue.www.qiaoge.adapter.mine.AreaAdapter;
+import com.puyue.www.qiaoge.api.home.CityChangeAPI;
 import com.puyue.www.qiaoge.fragment.home.CityEvent;
+import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
+import com.puyue.www.qiaoge.model.IsShowModel;
 import com.puyue.www.qiaoge.model.home.CityChangeModel;
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by ${王涛} on 2019/12/19
@@ -57,39 +64,52 @@ public abstract class CityDialog extends Dialog implements View.OnClickListener 
         areaAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                isShow();
                 Confirm();
                 dismiss();
-
-                if(flag!=null) {
-                    UserInfoHelper.saveAreaName(mContext, areaNames.get(position).getAreaName());
-                    SharedPreferencesUtil.saveInt(mContext,"isClick",1);
-                    UserInfoHelper.saveChangeFlag(mContext,1+"");
-                    Intent intent = new Intent(mContext,HomeActivity.class);//跳回首页
-                    mContext.setResult(104,intent);
-                    EventBus.getDefault().post(new CityEvent());
-//                    EventBus.getDefault().post(new LogoutsEvent());
-                    mContext.startActivity(intent);
-                    mContext.finish();
-                }else {
-                    UserInfoHelper.saveAreaName(mContext, areaNames.get(position).getAreaName());
-                    SharedPreferencesUtil.saveInt(mContext,"isClick",1);
-                    UserInfoHelper.saveChangeFlag(mContext,1+"");
-                    Intent intent = new Intent(mContext,HomeActivity.class);//跳回首页
-                    mContext.setResult(104,intent);
-                    EventBus.getDefault().post(new CityEvent());
-//                    EventBus.getDefault().post(new LogoutsEvent());
-                    mContext.startActivity(intent);
-                    mContext.finish();
-                    Log.d("wdwdwdwdwdwd.......","11111");
-                }
-
-
+                UserInfoHelper.saveAreaName(mContext, areaNames.get(position).getAreaName());
+                SharedPreferencesUtil.saveInt(mContext,"isClick",1);
+                UserInfoHelper.saveChangeFlag(mContext,1+"");
+                Intent intent = new Intent(mContext,HomeActivity.class);//跳回首页
+                mContext.setResult(104,intent);
+                EventBus.getDefault().post(new CityEvent());
+                mContext.startActivity(intent);
+                mContext.finish();
 
             }
         });
 
         ll_root.setOnClickListener(this);
         iv_close.setOnClickListener(this);
+    }
+
+    private void isShow() {
+        CityChangeAPI.isShow(mContext)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<IsShowModel>() {
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(IsShowModel isShowModel) {
+                        if(isShowModel.isSuccess()) {
+                            if(isShowModel.data!=null) {
+                                SharedPreferencesUtil.saveString(mContext,"priceType",isShowModel.getData().enjoyProduct);
+                            }
+                        }else {
+                            AppHelper.showMsg(mContext,isShowModel.getMessage());
+                        }
+                    }
+                });
     }
 
 

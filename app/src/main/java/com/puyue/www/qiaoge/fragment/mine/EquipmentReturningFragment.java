@@ -105,7 +105,7 @@ private int orderDeliveryType;
      * 获取数据
      */
     private void requestOrdersList(int orderStatus) {
-        MyOrderListAPI.requestOrderList(getContext(), orderStatus, 1, 20,orderDeliveryType)
+        MyOrderListAPI.requestOrderList(getContext(), orderStatus, 1, 10,orderDeliveryType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<MyOrdersModel>() {

@@ -28,7 +28,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 28
         versionCode 38
-        versionName "2.6.0"
+        versionName "2.6.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         flavorDimensions "versionCode"
         multiDexEnabled true
@@ -199,7 +199,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.6.2'
 
     //选择配送时间
-//    implementation 'com.contrarywind:Android-PickerView:3.2.5'
+
+    //    implementation 'com.contrarywind:Android-PickerView:3.2.5'
 
     //退货图片上传espresso
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.0'
@@ -215,7 +216,6 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
-    //    implementation(name: 'lib.5plus.base-release', ext: 'aar')
     implementation 'com.lijiankun24:shadowlayout:1.0.0'
 
     //    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-20'
@@ -247,4 +247,5 @@ dependencies {
     implementation 'com.qiyukf.unicorn:unicorn:5.7.7'
     implementation files('libs/commons-codec-1.10.jar')
     implementation project(':pickerview')
+    implementation project(':StickyListHeaders_lib')
 }

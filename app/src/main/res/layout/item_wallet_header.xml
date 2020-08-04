@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#fff5f5f5">
+
+        <TextView
+            android:id="@+id/tv_month_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/size_16dp"
+            android:background="@drawable/month_select_bg"
+            android:drawableRight="@mipmap/ic_qg_bill_shxfl"
+            android:drawablePadding="@dimen/size_5dp"
+            android:paddingLeft="@dimen/size_8dp"
+            android:paddingTop="@dimen/size_5dp"
+            android:paddingRight="@dimen/size_8dp"
+            android:paddingBottom="@dimen/size_5dp"
+            android:text="本月"
+            android:textColor="#ff333333" />
+
+        <TextView
+            android:id="@+id/tv_expenditure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/size_8dp"
+            android:layout_marginRight="@dimen/size_10dp"
+            android:text="支出"
+            android:textColor="#ff9a9a9a"
+            android:textSize="@dimen/size_13dp" />
+
+        <TextView
+            android:id="@+id/tv_income"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_expenditure"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/size_10dp"
+            android:text="收入"
+            android:textColor="#ff9a9a9a"
+            android:textSize="@dimen/size_13dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

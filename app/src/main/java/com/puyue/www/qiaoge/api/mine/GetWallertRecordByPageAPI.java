@@ -22,20 +22,17 @@ public class GetWallertRecordByPageAPI {
     private interface GetWallertRecordByPageService {
         @FormUrlEncoded
         @POST(AppInterfaceAddress.GETWALLERTRECORDBYPAGE)
-        Observable<GetWallertRecordByPageModel> getData(@Field("pageNum") int pageNum,
-                                                        @Field("pageSize") int pageSize,
-                                                        @Field("types") String types,
+        Observable<GetWallertRecordByPageModel> getData(@Field("types") String types,
                                                         @Field("year") String year,
                                                         @Field("month") String month,
-                                                        @Field("flowRecordType") String flowRecordType,
                                                         @Field("phone") String phone,
                                                         @Field("showType") int showType,
                                                         @Field("walletRecordChannelType") String walletRecordChannelType);
 
     }
 
-    public static Observable<GetWallertRecordByPageModel> requestData(Context context, int pageNum, int pageSize, String types, String year, String month, String flowRecordType, String phone, int showType, String walletRecordChannelType) {
+    public static Observable<GetWallertRecordByPageModel> requestData(Context context, String types, String year, String month, String phone, int showType, String walletRecordChannelType) {
         GetWallertRecordByPageService service = RestHelper.getBaseRetrofit(context).create(GetWallertRecordByPageService.class);
-        return service.getData(pageNum, pageSize, types, year, month, flowRecordType, phone, showType, walletRecordChannelType);
+        return service.getData(types, year, month, phone, showType, walletRecordChannelType);
     }
 }

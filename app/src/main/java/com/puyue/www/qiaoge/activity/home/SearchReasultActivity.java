@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -24,20 +25,25 @@ import com.puyue.www.qiaoge.adapter.home.SearchReasultAdapter;
 import com.puyue.www.qiaoge.adapter.home.SearchResultAdapter;
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
 import com.puyue.www.qiaoge.api.cart.RecommendApI;
+import com.puyue.www.qiaoge.api.home.CityChangeAPI;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
 import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.dialog.CouponDialog;
+import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.event.UpDateNumEvent7;
 import com.puyue.www.qiaoge.event.UpDateNumEvent8;
 import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.OnItemClickListener;
+import com.puyue.www.qiaoge.model.IsShowModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
+import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.SearchResultsModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
@@ -87,8 +93,12 @@ public class SearchReasultActivity extends BaseSwipeActivity {
     SearchResultsModel searchResultsModel;
     //搜索集合
     private List<SearchResultsModel.DataBean.SearchProdBean.ListBean> searchList = new ArrayList<>();
+    private String priceType;
+    private String enjoyProduct;
+    private String cell; // 客服电话
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
+
         return false;
     }
 
@@ -101,6 +111,7 @@ public class SearchReasultActivity extends BaseSwipeActivity {
     public void findViewById() {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        priceType = getIntent().getStringExtra("priceType");
         refreshLayout.autoRefresh();
         rl_num.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +170,7 @@ public class SearchReasultActivity extends BaseSwipeActivity {
             });
 
 
-                        //搜索Adapter
+        //搜索Adapter
         searchReasultAdapter = new SearchReasultAdapter(R.layout.item_noresult_recommend, searchList, new SearchReasultAdapter.Onclick() {
             @Override
             public void addDialog() {
@@ -169,21 +180,58 @@ public class SearchReasultActivity extends BaseSwipeActivity {
                     initDialog();
                 }
             }
+
+            @Override
+            public void getPrice() {
+                showPhoneDialog(cell);
+            }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(searchReasultAdapter);
 
     }
 
+    private AlertDialog mDialog;
+    TextView tv_phone;
+    public void showPhoneDialog(final String cell) {
+        mDialog = new AlertDialog.Builder(mActivity).create();
+        mDialog.show();
+        mDialog.getWindow().setContentView(R.layout.dialog_shouye_tip);
+        tv_phone = mDialog.getWindow().findViewById(R.id.tv_phone);
+        tv_phone.setText(cell);
+        mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+    }
+
 
     @Override
     public void setViewData() {
-
         view = View.inflate(mContext, R.layout.item_head, null);
         searchWord = getIntent().getStringExtra(AppConstant.SEARCHWORD);
         tv_activity_result.setText(searchWord);
-
         getCartNum();
+        getCustomerPhone();
+    }
+
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
+
+            @Override
+            public void onFaild(String errorMsg) {
+            }
+        });
     }
 
     @Override
@@ -273,6 +321,11 @@ public class SearchReasultActivity extends BaseSwipeActivity {
                                         }else {
                                             initDialog();
                                         }
+                                    }
+
+                                    @Override
+                                    public void getPrice() {
+                                        showPhoneDialog(cell);
                                     }
                                 });
                                 searchResultAdapter.addHeaderView(view);

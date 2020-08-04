@@ -15,6 +15,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.model.home.TeamActiveQueryModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 
 import java.util.List;
 
@@ -23,7 +24,6 @@ import java.util.List;
  */
 public class Team1InnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.DataBean.ActivesBean,BaseViewHolder> {
 
-    CouponsAdapter.Onclick onclick;
     private ImageView iv_pic;
     TextView tv_old_price;
     private TeamActiveQueryModel.DataBean.ActivesBean activesBean;
@@ -36,38 +36,66 @@ public class Team1InnerAdapter extends BaseQuickAdapter<TeamActiveQueryModel.Dat
     private List<TeamActiveQueryModel.DataBean.ActivesBean> actives;
     private int activeId1;
     private TextView tv_coupon;
-
-    public Team1InnerAdapter(int layoutResId, @Nullable List<TeamActiveQueryModel.DataBean.ActivesBean> data) {
+    Team2Adapter.Onclick onclick;
+    RelativeLayout rl_price;
+    TextView tv_price;
+    public Team1InnerAdapter(int layoutResId, @Nullable List<TeamActiveQueryModel.DataBean.ActivesBean> data, Team2Adapter.Onclick onclick) {
         super(layoutResId, data);
+        this.onclick = onclick;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, TeamActiveQueryModel.DataBean.ActivesBean item) {
         tv_old_price = helper.getView(R.id.tv_old_price);
         tv_coupon = helper.getView(R.id.tv_coupon);
+        tv_price = helper.getView(R.id.tv_price);
         iv_pic = helper.getView(R.id.iv_pic);
         rl_root = helper.getView(R.id.rl_root);
         tv_add = helper.getView(R.id.tv_add);
         rl_coupon = helper.getView(R.id.rl_coupon);
-
+        rl_price =  helper.getView(R.id.rl_price);
         Glide.with(mContext).load(item.getDefaultPic()).into(iv_pic);
         helper.setText(R.id.tv_name,item.getActiveName());
         helper.setText(R.id.tv_spec,item.getSpec());
-        helper.setText(R.id.tv_price,item.getPrice());
-        helper.setText(R.id.tv_old_price,item.getOldPrice());
+//        helper.setText(R.id.tv_price,item.getPrice());
+//        helper.setText(R.id.tv_old_price,item.getOldPrice());
+
+        if(SharedPreferencesUtil.getString(mContext,"priceType").equals("1")) {
+            rl_price.setVisibility(View.GONE);
+            tv_add.setVisibility(View.VISIBLE);
+            tv_add.setText("  未开始  ");
+            tv_price.setVisibility(View.VISIBLE);
+            tv_old_price.setVisibility(View.VISIBLE);
+            tv_old_price.setText(item.getOldPrice());
+            tv_price.setText(item.getPrice());
+        }else {
+            rl_price.setVisibility(View.VISIBLE);
+            tv_add.setVisibility(View.GONE);
+            tv_price.setText("价格授权后可见");
+            tv_old_price.setVisibility(View.INVISIBLE);
+        }
+
+        rl_price.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onclick!=null) {
+                    onclick.addDialog();
+                }
+            }
+        });
+
 
         rl_root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,SpecialGoodDetailActivity.class);
+                intent.putExtra("priceType",SharedPreferencesUtil.getString(mContext,"priceType"));
                 intent.putExtra(AppConstant.ACTIVEID,item.getActiveId());
                 mContext.startActivity(intent);
             }
         });
-        rl_coupon.setVisibility(View.INVISIBLE);
 
-            //已售完
-        tv_add.setText("  未开始  ");
+        rl_coupon.setVisibility(View.INVISIBLE);
         tv_add.setBackgroundResource(R.drawable.shape_detail_grey);
         tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         tv_old_price.getPaint().setAntiAlias(true);//抗锯齿

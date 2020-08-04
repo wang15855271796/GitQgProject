@@ -131,7 +131,6 @@
                                 android:layout_marginRight="@dimen/size_10dp"
                                 android:textColor="#ffffff"
                                 android:textSize="13sp"
-
                                 android:layout_alignBaseline="@+id/tv_name"
                                 android:layout_alignParentRight="true"
                                 android:layout_width="wrap_content"
@@ -146,40 +145,58 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp" />
 
-                            <TextView
-                                android:text="￥"
-                                android:id="@+id/tv"
-                                android:textColor="#ffffff"
-                                android:layout_marginLeft="@dimen/size_15dp"
-                                android:layout_alignBaseline="@+id/tv_price"
+                            <RelativeLayout
+                                android:id="@+id/rl_price"
                                 android:layout_below="@+id/tv_name"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
-                            </TextView>
+                                <TextView
+                                    android:text="￥"
+                                    android:id="@+id/tv"
+                                    android:textColor="#ffffff"
+                                    android:layout_marginLeft="@dimen/size_15dp"
+                                    android:layout_alignBaseline="@+id/tv_price"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content">
+
+                                </TextView>
+
+                                <TextView
+                                    android:id="@+id/tv_price"
+                                    tools:text="700"
+                                    android:textColor="#ffffff"
+                                    android:textSize="@dimen/size_24dp"
+                                    android:layout_toRightOf="@+id/tv"
+                                    android:layout_marginLeft="@dimen/size_3dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <TextView
+                                    android:id="@+id/old_price"
+                                    tools:text="700"
+                                    android:layout_toRightOf="@+id/tv_price"
+                                    android:textColor="#ffffff"
+                                    android:textSize="@dimen/size_13dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginLeft="@dimen/size_15dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                            </RelativeLayout>
 
                             <TextView
-                                android:id="@+id/tv_price"
-                                android:text="700"
-                                android:layout_below="@+id/tv_name"
+                                android:id="@+id/tv_desc_price"
+                                android:visibility="gone"
                                 android:textColor="#ffffff"
-                                android:textSize="@dimen/size_24dp"
-                                android:layout_toRightOf="@+id/tv"
-                                android:layout_marginLeft="@dimen/size_3dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:id="@+id/old_price"
-                                android:text="700"
-                                android:layout_toRightOf="@+id/tv_price"
-                                android:layout_below="@+id/tv_name"
-                                android:textColor="#ffffff"
-                                android:textSize="@dimen/size_13dp"
-                                android:layout_marginTop="10dp"
+                                android:textSize="@dimen/sp_16"
                                 android:layout_marginLeft="@dimen/size_15dp"
+                                android:layout_marginTop="@dimen/sp_12"
+                                android:layout_below="@+id/tv_name"
+                                android:text="价格授权后可见"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
+
 
                             <RelativeLayout
                                 android:layout_marginRight="10dp"

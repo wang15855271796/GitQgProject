@@ -59,6 +59,7 @@ public class CitysAdapter extends BaseAdapter {
     public void setOnItemClickListeners(OnEventClickListener onEventClickListener) {
         mOnEventClickListener = onEventClickListener;
     }
+
     public void selectPosition(int position) {
         this.selectPosition = position;
         notifyDataSetChanged();
@@ -76,8 +77,6 @@ public class CitysAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_citys, null);
             holder = new Holder();

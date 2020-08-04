@@ -20,8 +20,10 @@ import java.util.List;
 public class UnCartSpecAdapter extends BaseQuickAdapter<CartsListModel.DataBean.InValidListBean.SpecProductListBeanX,BaseViewHolder> {
 
     RecyclerView recyclerView_price;
-    public UnCartSpecAdapter(int layoutResId, @Nullable List<CartsListModel.DataBean.InValidListBean.SpecProductListBeanX> data) {
+    String productName ;
+    public UnCartSpecAdapter(int layoutResId, @Nullable List<CartsListModel.DataBean.InValidListBean.SpecProductListBeanX> data, String productName) {
         super(layoutResId, data);
+        this.productName = productName;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class UnCartSpecAdapter extends BaseQuickAdapter<CartsListModel.DataBean.
         cb_item_in.setVisibility(View.GONE);
 
         recyclerView_price = helper.getView(R.id.recyclerView_price);
-        UnChooseCartPriceAdapter unChooseCartPriceAdapter = new UnChooseCartPriceAdapter(R.layout.item_choose_content,item.getProductDescVOList());
+        UnChooseCartPriceAdapter unChooseCartPriceAdapter = new UnChooseCartPriceAdapter(R.layout.item_choose_un,item.getProductDescVOList(),productName);
         recyclerView_price.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView_price.setAdapter(unChooseCartPriceAdapter);
 

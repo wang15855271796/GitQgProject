@@ -15,27 +15,27 @@ import java.util.List;
  * Created by WinSinMin on 2018/4/11.
  */
 
-public class WalletAdapter extends BaseQuickAdapter<GetWallertRecordByPageModel.DataBean.ListBean, BaseViewHolder> {
+public class WalletAdapter extends BaseQuickAdapter<GetWallertRecordByPageModel.DataBean.RecordsBean, BaseViewHolder> {
 
-    public WalletAdapter(int layoutResId, List<GetWallertRecordByPageModel.DataBean.ListBean> data) {
+    public WalletAdapter(int layoutResId, List<GetWallertRecordByPageModel.DataBean.RecordsBean> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, GetWallertRecordByPageModel.DataBean.ListBean model) {
-        helper.setText(R.id.tv_item_wallet_type, model.flowRecordTypeName);
-        helper.setText(R.id.tv_item_wallet_time, model.createDate);
-        helper.setText(R.id.tv_item_wallet_bank, model.walletRecordChannelType);
-        helper.setText(R.id.tv_item_wallet_amount, model.amount);
-        if (model.recordType == 1) {
-            //支出
-//            helper.setText(R.id.tv_item_wallet_amount, "-" + model.amount);
-            helper.setTextColor(R.id.tv_item_wallet_amount, Color.parseColor("#232131"));
-        } else {
-            //收入
-//            helper.setText(R.id.tv_item_wallet_amount, "+" + model.amount);
-            helper.setTextColor(R.id.tv_item_wallet_amount, Color.parseColor("#F54022"));
-        }
+    protected void convert(BaseViewHolder helper, GetWallertRecordByPageModel.DataBean.RecordsBean model) {
+//        helper.setText(R.id.tv_item_wallet_type, model.flowRecordTypeName);
+//        helper.setText(R.id.tv_item_wallet_time, model.createDate);
+//        helper.setText(R.id.tv_item_wallet_bank, model.walletRecordChannelType);
+//        helper.setText(R.id.tv_item_wallet_amount, model.amount);
+//        if (model.recordType == 1) {
+//            //支出
+////            helper.setText(R.id.tv_item_wallet_amount, "-" + model.amount);
+//            helper.setTextColor(R.id.tv_item_wallet_amount, Color.parseColor("#232131"));
+//        } else {
+//            //收入
+////            helper.setText(R.id.tv_item_wallet_amount, "+" + model.amount);
+//            helper.setTextColor(R.id.tv_item_wallet_amount, Color.parseColor("#F54022"));
+//        }
     }
 
 

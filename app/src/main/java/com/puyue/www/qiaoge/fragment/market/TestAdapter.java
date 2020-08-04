@@ -19,10 +19,12 @@ import com.puyue.www.qiaoge.activity.home.CommonGoodsDetailActivity;
 import com.puyue.www.qiaoge.activity.home.SpecialGoodDetailActivity;
 import com.puyue.www.qiaoge.activity.home.SpikeGoodsDetailsActivity;
 import com.puyue.www.qiaoge.activity.home.TeamGoodsDetailActivity;
+import com.puyue.www.qiaoge.adapter.home.SeckillGoodActivity;
 import com.puyue.www.qiaoge.constant.AppConstant;
 import com.puyue.www.qiaoge.fragment.cart.CartFragment;
 import com.puyue.www.qiaoge.fragment.cart.UpdateEvent;
 import com.puyue.www.qiaoge.model.cart.CartsListModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.view.Arith;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,22 +57,26 @@ public class TestAdapter extends BaseQuickAdapter<CartsListModel.DataBean.ValidL
                 if(item.getBusinessType()==1) {
                     Intent intent = new Intent(mContext,CommonGoodsDetailActivity.class);
                     intent.putExtra(AppConstant.ACTIVEID, item.getProductMainId());
+                    intent.putExtra("priceType", SharedPreferencesUtil.getString(mContext,"priceType"));
                     mContext.startActivity(intent);
                 }else if(item.getBusinessType()==2) {
                     //活动详情页,秒杀详情
-                    Intent intent = new Intent(mContext, SpikeGoodsDetailsActivity.class);
+                    Intent intent = new Intent(mContext, SeckillGoodActivity.class);
+                    intent.putExtra("priceType", SharedPreferencesUtil.getString(mContext,"priceType"));
+                    intent.putExtra("num","-1");
                     intent.putExtra(AppConstant.ACTIVEID, item.getBusinessId());
                     mContext.startActivity(intent);
                 }else if (item.getBusinessType() == 3) {
 //                        //活动,团购详情
                     Intent intent = new Intent(mContext, SpecialGoodDetailActivity.class);
+                    intent.putExtra("priceType", SharedPreferencesUtil.getString(mContext,"priceType"));
                     intent.putExtra(AppConstant.ACTIVEID, item.getBusinessId());
                     mContext.startActivity(intent);
 
                 }else if (item.getBusinessType() == 11) {
-//                        //设备详情页
                         Intent intent = new Intent(mContext, SpecialGoodDetailActivity.class);
                         intent.putExtra(AppConstant.ACTIVEID, item.getBusinessId());
+                        intent.putExtra("priceType", SharedPreferencesUtil.getString(mContext,"priceType"));
                         mContext.startActivity(intent);
                     }
             }

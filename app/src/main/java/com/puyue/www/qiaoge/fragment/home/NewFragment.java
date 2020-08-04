@@ -1,12 +1,15 @@
 package com.puyue.www.qiaoge.fragment.home;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.dcloud.android.annotation.NonNull;
+
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.activity.mine.login.RegisterActivity;
@@ -15,11 +18,15 @@ import com.puyue.www.qiaoge.api.home.ProductListAPI;
 import com.puyue.www.qiaoge.base.BaseFragment;
 import com.puyue.www.qiaoge.dialog.CouponDialog;
 import com.puyue.www.qiaoge.event.BackEvent;
+import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.helper.AppHelper;
+import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
+import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.utils.LoginUtil;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -56,10 +63,10 @@ public class NewFragment extends BaseFragment {
     String flag = "new";
     View emptyView;
     CouponDialog couponDialog;
+    String cell;
     //新品集合
     private List<ProductNormalModel.DataBean.ListBean> list = new ArrayList<>();
     private NewAdapter newAdapter;
-
     public static NewFragment getInstance() {
         NewFragment fragment = new NewFragment();
         Bundle bundle = new Bundle();
@@ -82,7 +89,7 @@ public class NewFragment extends BaseFragment {
         refreshLayout.setEnableLoadMore(false);
         emptyView = View.inflate(mActivity, R.layout.layout_empty, null);
         getProductsList(pageNum,11,"new");
-        newAdapter = new NewAdapter(flag,R.layout.item_team_list, list, new NewAdapter.Onclick() {
+        newAdapter = new NewAdapter(R.layout.item_team_list, list, new NewAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mActivity))) {
@@ -90,7 +97,11 @@ public class NewFragment extends BaseFragment {
                 }else {
                     initDialog();
                 }
+            }
 
+            @Override
+            public void tipClick() {
+                showPhoneDialog(cell);
             }
         });
 
@@ -135,7 +146,24 @@ public class NewFragment extends BaseFragment {
 
     }
 
-
+    /**
+     * 弹出电话号码
+     */
+    private AlertDialog mDialog;
+    TextView tv_phone;
+    public void showPhoneDialog(final String cell) {
+        mDialog = new AlertDialog.Builder(mActivity).create();
+        mDialog.show();
+        mDialog.getWindow().setContentView(R.layout.dialog_shouye_tip);
+        tv_phone = mDialog.getWindow().findViewById(R.id.tv_phone);
+        tv_phone.setText(cell);
+        mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+    }
     /**
      * 新品列表(王涛)
      * @param
@@ -161,7 +189,6 @@ public class NewFragment extends BaseFragment {
 
                     @Override
                     public void onNext(ProductNormalModel getCommonProductModel) {
-                        Log.d("dsdfddsss.........",type);
                         productNormalModel = getCommonProductModel;
                         if (getCommonProductModel.isSuccess()) {
                             newAdapter.notifyDataSetChanged();
@@ -185,9 +212,40 @@ public class NewFragment extends BaseFragment {
 
     }
 
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void messageEventBusss(BackEvent event) {
+        getCustomerPhone();
         refreshLayout.autoRefresh();
+    }
+
+
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
+
+            @Override
+            public void onFaild(String errorMsg) {
+            }
+        });
+    }
+
+    /**
+     * 接收地址切换时的授权处理
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getPriceType(CityEvent event) {
+        refreshLayout.autoRefresh();
+        getCustomerPhone();
+
     }
 
     @Override

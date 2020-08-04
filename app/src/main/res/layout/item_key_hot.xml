@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorWhite"
     android:id="@+id/ll_root"
     android:layout_height="44dp">
 
     <TextView
+        tools:text="全"
+        android:id="@+id/tv"
+        android:textColor="#999999"
+        android:layout_marginLeft="14dp"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_toRightOf="@+id/tv"
         android:id="@+id/tv_content"
         android:gravity="center_vertical"
-        android:text="全部商圈"
+        tools:text="全部商圈"
         android:layout_centerVertical="true"
         android:textColor="#333333"
         android:textSize="14dp"
-        android:layout_marginLeft="14dp"
         android:layout_marginRight="14dp"
         android:layout_width="match_parent"
         android:layout_weight="1"

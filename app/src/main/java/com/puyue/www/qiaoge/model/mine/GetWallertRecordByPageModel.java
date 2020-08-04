@@ -9,60 +9,268 @@ import java.util.List;
 
 public class GetWallertRecordByPageModel {
 
+
     /**
      * code : 1
      * message : 成功
-     * data : {"pageNum":1,"pageSize":10,"startRow":0,"pages":1,"total":6,"list":[{"flowRecordTypeName":"充值","createDate":"2018-05-02 14:38:36","amount":"100.00","walletRecordChannelType":"支付宝"},{"flowRecordTypeName":"提现(提现中)","createDate":"2018-04-28 14:41:01","amount":"100.00","walletRecordChannelType":"支付宝"},{"flowRecordTypeName":"提现(提现中)","createDate":"2018-04-28 14:31:37","amount":"100.00","walletRecordChannelType":"银行卡"},{"flowRecordTypeName":"提现(提现中)","createDate":"2018-04-28 14:31:14","amount":"100.00","walletRecordChannelType":"支付宝"},{"flowRecordTypeName":"充值","createDate":"2018-04-28 11:07:00","amount":"100.00","walletRecordChannelType":"支付宝"},{"flowRecordTypeName":"充值","createDate":"2018-04-28 11:05:46","amount":"100.00","walletRecordChannelType":"支付宝"}],"hasPrePage":false,"hasNextPage":false}
-     * success : true
+     * data : {"nextMonth":3,"nextYear":2020,"nowMonth":1,"nowYear":2020,"lastMonth":null,"lastYear":null,"inAmt":"0","outAmt":"1.98","records":[{"flowRecordTypeName":"购物消费","createDate":"2020-01-14 14:46:06","amount":"-1.98","walletRecordChannelType":"支付宝","recordType":1,"userId":562,"subUserId":562,"type":1,"id":249579,"iconUrl":"https://barbecue-img.oss-cn-hangzhou.aliyuncs.com/product/6115d2affece4b23bd1b311c3e8e2436.png"}]}
      * error : false
+     * success : true
      */
 
-    public int code;
-    public String message;
-    public DataBean data;
-    public boolean success;
-    public boolean error;
+    private int code;
+    private String message;
+    private DataBean data;
+    private boolean error;
+    private boolean success;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public DataBean getData() {
+        return data;
+    }
+
+    public void setData(DataBean data) {
+        this.data = data;
+    }
+
+    public boolean isError() {
+        return error;
+    }
+
+    public void setError(boolean error) {
+        this.error = error;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 
     public static class DataBean {
         /**
-         * pageNum : 1
-         * pageSize : 10
-         * startRow : 0
-         * pages : 1
-         * total : 6
-         * list : [{"flowRecordTypeName":"充值","createDate":"2018-05-02 14:38:36","amount":"100.00","walletRecordChannelType":"支付宝"},{"flowRecordTypeName":"提现(提现中)","createDate":"2018-04-28 14:41:01","amount":"100.00","walletRecordChannelType":"支付宝"},{"flowRecordTypeName":"提现(提现中)","createDate":"2018-04-28 14:31:37","amount":"100.00","walletRecordChannelType":"银行卡"},{"flowRecordTypeName":"提现(提现中)","createDate":"2018-04-28 14:31:14","amount":"100.00","walletRecordChannelType":"支付宝"},{"flowRecordTypeName":"充值","createDate":"2018-04-28 11:07:00","amount":"100.00","walletRecordChannelType":"支付宝"},{"flowRecordTypeName":"充值","createDate":"2018-04-28 11:05:46","amount":"100.00","walletRecordChannelType":"支付宝"}]
-         * hasPrePage : false
-         * hasNextPage : false
+         * nextMonth : 3
+         * nextYear : 2020
+         * nowMonth : 1
+         * nowYear : 2020
+         * lastMonth : null
+         * lastYear : null
+         * inAmt : 0
+         * outAmt : 1.98
+         * records : [{"flowRecordTypeName":"购物消费","createDate":"2020-01-14 14:46:06","amount":"-1.98","walletRecordChannelType":"支付宝","recordType":1,"userId":562,"subUserId":562,"type":1,"id":249579,"iconUrl":"https://barbecue-img.oss-cn-hangzhou.aliyuncs.com/product/6115d2affece4b23bd1b311c3e8e2436.png"}]
          */
 
-        public int pageNum;
-        public int pageSize;
-        public int startRow;
-        public int pages;
-        public int total;
-        public boolean hasPrePage;
-        public boolean hasNextPage;
-        public List<ListBean> list;
+        private int nextMonth;
+        private int nextYear;
+        private int nowMonth;
+        private int nowYear;
+        private String lastMonth;
+        private String lastYear;
+        private String inAmt;
+        private String outAmt;
+        private List<RecordsBean> records;
 
-        public static class ListBean {
+        public int getNextMonth() {
+            return nextMonth;
+        }
+
+        public void setNextMonth(int nextMonth) {
+            this.nextMonth = nextMonth;
+        }
+
+        public int getNextYear() {
+            return nextYear;
+        }
+
+        public void setNextYear(int nextYear) {
+            this.nextYear = nextYear;
+        }
+
+        public int getNowMonth() {
+            return nowMonth;
+        }
+
+        public void setNowMonth(int nowMonth) {
+            this.nowMonth = nowMonth;
+        }
+
+        public int getNowYear() {
+            return nowYear;
+        }
+
+        public void setNowYear(int nowYear) {
+            this.nowYear = nowYear;
+        }
+
+        public String getLastMonth() {
+            return lastMonth;
+        }
+
+        public void setLastMonth(String lastMonth) {
+            this.lastMonth = lastMonth;
+        }
+
+        public String getLastYear() {
+            return lastYear;
+        }
+
+        public void setLastYear(String lastYear) {
+            this.lastYear = lastYear;
+        }
+
+        public String getInAmt() {
+            return inAmt;
+        }
+
+        public void setInAmt(String inAmt) {
+            this.inAmt = inAmt;
+        }
+
+        public String getOutAmt() {
+            return outAmt;
+        }
+
+        public void setOutAmt(String outAmt) {
+            this.outAmt = outAmt;
+        }
+
+        public List<RecordsBean> getRecords() {
+            return records;
+        }
+
+        public void setRecords(List<RecordsBean> records) {
+            this.records = records;
+        }
+
+        public static class RecordsBean {
             /**
-             * flowRecordTypeName : 充值
-             * createDate : 2018-05-02 14:38:36
-             * amount : 100.00
+             * flowRecordTypeName : 购物消费
+             * createDate : 2020-01-14 14:46:06
+             * amount : -1.98
              * walletRecordChannelType : 支付宝
-             *  "type": 2,
-             *         "id": 1806
+             * recordType : 1
+             * userId : 562
+             * subUserId : 562
+             * type : 1
+             * id : 249579
+             * iconUrl : https://barbecue-img.oss-cn-hangzhou.aliyuncs.com/product/6115d2affece4b23bd1b311c3e8e2436.png
              */
+            private String dateTime;
+            private String flowRecordTypeName;
+            private String createDate;
+            private String amount;
+            private String walletRecordChannelType;
+            private int recordType;
+            private int userId;
+            private int subUserId;
+            private int type;
+            private int id;
+            private String iconUrl;
 
-            public String flowRecordTypeName;
-            public String createDate;
-            public String amount;
-            public int recordType;
-            public String walletRecordChannelType;
-            public int type;
-            public int id;
+            public String getDateTime() {
+                return dateTime;
+            }
 
-            public String iconUrl;
+            public void setDateTime(String dateTime) {
+                this.dateTime = dateTime;
+            }
+
+            public String getFlowRecordTypeName() {
+                return flowRecordTypeName;
+            }
+
+            public void setFlowRecordTypeName(String flowRecordTypeName) {
+                this.flowRecordTypeName = flowRecordTypeName;
+            }
+
+            public String getCreateDate() {
+                return createDate;
+            }
+
+            public void setCreateDate(String createDate) {
+                this.createDate = createDate;
+            }
+
+            public String getAmount() {
+                return amount;
+            }
+
+            public void setAmount(String amount) {
+                this.amount = amount;
+            }
+
+            public String getWalletRecordChannelType() {
+                return walletRecordChannelType;
+            }
+
+            public void setWalletRecordChannelType(String walletRecordChannelType) {
+                this.walletRecordChannelType = walletRecordChannelType;
+            }
+
+            public int getRecordType() {
+                return recordType;
+            }
+
+            public void setRecordType(int recordType) {
+                this.recordType = recordType;
+            }
+
+            public int getUserId() {
+                return userId;
+            }
+
+            public void setUserId(int userId) {
+                this.userId = userId;
+            }
+
+            public int getSubUserId() {
+                return subUserId;
+            }
+
+            public void setSubUserId(int subUserId) {
+                this.subUserId = subUserId;
+            }
+
+            public int getType() {
+                return type;
+            }
+
+            public void setType(int type) {
+                this.type = type;
+            }
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getIconUrl() {
+                return iconUrl;
+            }
+
+            public void setIconUrl(String iconUrl) {
+                this.iconUrl = iconUrl;
+            }
         }
     }
 }

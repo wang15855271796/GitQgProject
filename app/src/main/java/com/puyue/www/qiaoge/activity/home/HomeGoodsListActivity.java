@@ -1,5 +1,6 @@
 package com.puyue.www.qiaoge.activity.home;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,15 +28,18 @@ import com.puyue.www.qiaoge.base.BaseModel;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
 import com.puyue.www.qiaoge.calendar.utils.SelectBean;
 import com.puyue.www.qiaoge.constant.AppConstant;
+import com.puyue.www.qiaoge.event.OnHttpCallBack;
 import com.puyue.www.qiaoge.fragment.cart.ChangeStatEvent;
 import com.puyue.www.qiaoge.fragment.cart.NumEvent;
 import com.puyue.www.qiaoge.fragment.cart.ReduceNumEvent;
 import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.helper.FVHelper;
+import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.OnItemClickListener;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
+import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.SeckillListModel;
 import com.puyue.www.qiaoge.model.home.SpikeNewQueryModel;
 import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
@@ -127,10 +131,12 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
 
     @Override
     public void setViewData() {
+        getCustomerPhone();
         getCartNum();
         judgePageType();//进行差异性的设置。
         getNewSpikeTool();
         getState();
+
 
     }
 
@@ -372,7 +378,12 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
                         if (seckillListModel.success) {
                             seckillListModel1 = seckillListModel;
 
-                            mAdapterSpikeQuery = new SpikeActiveQueryAdapter(R.layout.spike_new_active_product, seckillListModel.data.kills, activeId);
+                            mAdapterSpikeQuery = new SpikeActiveQueryAdapter(R.layout.spike_new_active_product, seckillListModel.data.kills, activeId, new SpikeActiveQueryAdapter.Onclick() {
+                                @Override
+                                public void tipClick() {
+                                    showPhoneDialog(cell);
+                                }
+                            });
                             mRvData.setAdapter(mAdapterSpikeQuery);
 
                             mListSeckill.clear();
@@ -397,6 +408,7 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
                                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                                     Intent intent = new Intent(mContext, SeckillGoodActivity.class);
                                     intent.putExtra(AppConstant.ACTIVEID, mListSeckill.get(position).activeId);
+                                    intent.putExtra("priceType",SharedPreferencesUtil.getString(mContext,"priceType"));
                                     intent.putExtra("num","-1");
                                     startActivity(intent);
 
@@ -427,6 +439,46 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
                         }
                     }
                 });
+    }
+
+    /**
+     * 弹出电话号码
+     */
+    private AlertDialog mDialog;
+    TextView tv_phone;
+    public void showPhoneDialog(final String cell) {
+        mDialog = new AlertDialog.Builder(mActivity).create();
+        mDialog.show();
+        mDialog.getWindow().setContentView(R.layout.dialog_shouye_tip);
+        tv_phone = mDialog.getWindow().findViewById(R.id.tv_phone);
+        tv_phone.setText(cell);
+        mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * @param
+     */
+    String cell;
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
+
+            @Override
+            public void onFaild(String errorMsg) {
+            }
+        });
     }
 
     /**
@@ -483,6 +535,7 @@ public class HomeGoodsListActivity extends BaseSwipeActivity {
     protected void onResume() {
         super.onResume();
 //        isFirst = false;
+        getCustomerPhone();
     }
 
 

@@ -82,6 +82,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -100,7 +101,7 @@ import rx.schedulers.Schedulers;
  */
 public class WebDriverActivity extends BaseSwipeActivity {
 
-    private TextView mTvTitle;
+//    private TextView mTvTitle;
     private ProgressBar mProgress;
     private ImageView mIvBack;
 
@@ -146,7 +147,7 @@ public class WebDriverActivity extends BaseSwipeActivity {
 
     private boolean isLogin = false;
 
-
+    private int REQUEST_CODE_LOLIPOP = 1;  // 5.0以上版本
     private TextView tv_h5_title;
     private LinearLayout toolbar_h5;
     private Timer timer;
@@ -247,82 +248,29 @@ public class WebDriverActivity extends BaseSwipeActivity {
 
         //传当前地址信息
         //sendLocation();
-
+        showCustomWebChromeClient();
         // tv_h5_title.setText("司机登录");
-
-        mWv.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-
-                //  mTvTitle.setText(title);
-
-                //    tv_h5_title.setText("司机登录");
-
-
-            }
-
-
-            @Override
-            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-                callback.invoke(origin, true, true);
-                super.onGeolocationPermissionsShowPrompt(origin, callback);
-            }
-
-            @Override
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-
-
-                uploadMessageAboveL = filePathCallback;
-
-              /*  Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                i.addCategory(Intent.CATEGORY_OPENABLE);
-                i.setType("image/*");
-                startActivityForResult(Intent.createChooser(i, "Image Chooser"), 15);*/
-
-
-                //调起摄像头
-                take();
-
-                return true;
-            }
-
-
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onPermissionRequest(PermissionRequest request) {
-                //                super.onPermissionRequest(request);//必须要注视掉
-                request.grant(request.getResources());
-            }
-
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress != 100) {
-                    mProgress.setProgress(newProgress);
-                    mProgress.setVisibility(View.VISIBLE);
-                } else {
-                    mProgress.setVisibility(View.GONE);
-                }
-                super.onProgressChanged(view, newProgress);
-            }
-
-
-        });
-
-
         mWv.setWebViewClient(new WebViewClient() {
 
             @Nullable
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-//                Log.d("---request->", request.getUrl() + "");
-//                requestURl = request.getUrl();
-//                if (request.getUrl().toString().contains("callback")) {
-//                    String[] strings1 = request.getUrl().toString().split("[?]");
-//                    urlRequest = strings1[0].split("ajax://")[1];
-//                    arg = strings1[1].split("&");
-//                    requestUrl();
-//                }
+
+                requestURl = request.getUrl();
+                if (request.getUrl().toString().contains("callback")) {
+                    String[] strings1 = request.getUrl().toString().split("[?]");
+
+                    if (request.getUrl().toString().contains("protocol")) {
+                        //  urlRequest = strings1[0].split("ajax://")[1];
+                        urlRequest = "https://"+strings1[0].split("://")[1];
+                    } else {
+                        urlRequest = "http://"+strings1[0].split("://")[1];
+                    }
+
+
+                    arg = strings1[1].split("&");
+                    requestUrl();
+                }
                 return super.shouldInterceptRequest(view, request);
 
 
@@ -334,6 +282,8 @@ public class WebDriverActivity extends BaseSwipeActivity {
 
             }
         });
+
+
 
         mWv.loadUrl(mUrl);
         //   name = getIntent().getStringExtra("name");
@@ -797,36 +747,121 @@ public class WebDriverActivity extends BaseSwipeActivity {
 
         return;
     }
+    private void showCustomWebChromeClient() {
+        mWv.setWebChromeClient(new WebChromeClient() {
 
-    private void take() {
-        File imageStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "MyApp");
-        // Create the storage directory if it does not exist
-        //创建目录
-        if (!imageStorageDir.exists()) {
-            imageStorageDir.mkdirs();
+            // 5.0+
+            @Override
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+                if (uploadMessageAboveL != null) {
+                    uploadMessageAboveL.onReceiveValue(null);
+                }
+                uploadMessageAboveL = filePathCallback;
+
+                Intent intent = take();  // 选择文件及拍照
+                startActivityForResult(intent, REQUEST_CODE_LOLIPOP);
+                return true;
+            }
+
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+//                mTvTitle.setText(title);
+            }
+
+
+            // 4.1+
+            public void openFileChooser(ValueCallback<Uri> uploadFile, String acceptType, String capture) {
+
+            }
+        });
+    }
+
+    /**
+     * 随机产生文件名
+     */
+    private String randomFileName() {
+        return UUID.randomUUID().toString();
+    }
+    private String mCameraPhotoPath = "";  // 拍照的图片路径
+    private Intent take() {
+
+        String saveName = Environment.getExternalStorageDirectory().getPath() + "/" + Environment.DIRECTORY_DCIM + "/Camera/";
+
+        /**
+         * 打开相机intent
+         */
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(this.getPackageManager()) != null) {
+            File photoFile = null;
+            photoFile = new File(saveName + randomFileName() + ".jpg");
+            if (!photoFile.exists()) {
+                mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));  // 把Uri赋值给takePictureIntent
+            } else {
+                takePictureIntent = null;
+            }
         }
-        File file = new File(imageStorageDir + File.separator + "IMG_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
-        imageUri = Uri.fromFile(file);
 
-        final List<Intent> cameraIntents = new ArrayList<Intent>();
-        final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        final PackageManager packageManager = getPackageManager();
-        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
-        for (ResolveInfo res : listCam) {
-            final String packageName = res.activityInfo.packageName;
-            final Intent i = new Intent(captureIntent);
-            i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            i.setPackage(packageName);
-            i.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            cameraIntents.add(i);
-
+        Intent[] takeoutArray = null;
+        if (takePictureIntent != null) {
+            takeoutArray = new Intent[]{takePictureIntent};
+        } else {
+            takeoutArray = new Intent[0];
         }
-        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-        i.addCategory(Intent.CATEGORY_OPENABLE);
-        i.setType("image/*");
-        Intent chooserIntent = Intent.createChooser(i, "Image Chooser");
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[]{}));
-        WebDriverActivity.this.startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
+
+//        File imageStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "MyApp");
+//        // Create the storage directory if it does not exist
+//        //创建目录
+//        if (!imageStorageDir.exists()) {
+//            imageStorageDir.mkdirs();
+//        }
+//        File file = new File(imageStorageDir + File.separator + "IMG_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
+//        imageUri = Uri.fromFile(file);
+//
+//        final List<Intent> cameraIntents = new ArrayList<Intent>();
+//        final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        final PackageManager packageManager = getPackageManager();
+//        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+//        for (ResolveInfo res : listCam) {
+//            final String packageName = res.activityInfo.packageName;
+//            final Intent i = new Intent(captureIntent);
+//            i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+//            i.setPackage(packageName);
+//            i.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+//            cameraIntents.add(i);
+//
+//        }
+//         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+//                i.addCategory(Intent.CATEGORY_OPENABLE);
+//                i.setType("image/*");
+//                startActivityForResult(Intent.createChooser(i, "Image Chooser"), 15);
+
+//        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+//        i.addCategory(Intent.CATEGORY_OPENABLE);
+//        i.setType("image/*");
+//        Intent chooserIntent = Intent.createChooser(i, "Image Chooser");
+//        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[]{}));
+//        NewWebViewActivity.this.startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
+
+        /**
+         * 获取图片intent
+         */
+        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        contentSelectionIntent.setType("image/*");
+
+
+        /**
+         * 使用系统选择器
+         */
+        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, takeoutArray);  // 额外的intent
+
+        return chooserIntent;
+
+
     }
 
     @SuppressLint("NewApi")
@@ -948,37 +983,23 @@ public class WebDriverActivity extends BaseSwipeActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
-        if (requestCode == FILECHOOSER_RESULTCODE) {
-            if (null == mUploadMessage && null == uploadMessageAboveL)
-
-                return;
-
-            Uri result = data == null || resultCode != RESULT_OK ? null : data.getData();
-            if (uploadMessageAboveL != null) {
-                onActivityResultAboveL(requestCode, resultCode, data);
-            } else if (mUploadMessage != null) {
-
-                if (result != null) {
-                    String path = getPath(getApplicationContext(),
-                            result);
-
-                    Uri uri = Uri.fromFile(new File(path));
-
-                    mUploadMessage.onReceiveValue(uri);
+        if (requestCode == REQUEST_CODE_LOLIPOP) {  // 选择文件返回 5.0+
+            Uri[] results = null;
+            if (resultCode == RESULT_OK) {
+                if (data == null) {
+                    if (mCameraPhotoPath != null) {
+                        results = new Uri[]{Uri.parse(mCameraPhotoPath)};
+                    }
                 } else {
-                    mUploadMessage.onReceiveValue(imageUri);
+                    String dataString = data.getDataString();
+                    if (dataString != null) {
+                        results = new Uri[]{Uri.parse(dataString)};
+                    }
                 }
-                mUploadMessage = null;
-
-
             }
-        } else {
-            UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+            uploadMessageAboveL.onReceiveValue(results);  // 当获取要传图片的Uri，通过该方法回调通知
+            uploadMessageAboveL = null;
         }
-
-
     }
 
 }

@@ -56,7 +56,9 @@ public class MyCountDetailActivity extends BaseSwipeActivity {
     private LinearLayout ll_one; //关联记录
     private TextView tv_recode;//关联标题
     private ImageView iv_arrow;//关联箭头
-
+    View v1;
+    LinearLayout ll_desc;
+    LinearLayout ll_orderId;
     private TextView tv_vip_date;//会员到期时间
 
     private TextView tv_pay;//支付方式
@@ -110,6 +112,9 @@ public class MyCountDetailActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+        v1 = findViewById(R.id.v1);
+        ll_desc = findViewById(R.id.ll_desc);
+        ll_orderId = findViewById(R.id.ll_orderId);
         tv_bill_type = findViewById(R.id.tv_bill_type);
         iv_flag = findViewById(R.id.iv_flag);
         tv_amount = findViewById(R.id.tv_amount);
@@ -395,6 +400,15 @@ public class MyCountDetailActivity extends BaseSwipeActivity {
                                 iv_arrow.setVisibility(View.VISIBLE);
                                 tv_vip_date.setVisibility(View.GONE);
 
+                            }else if(type == 9) {
+                                tv_recode.setText("使用条件");
+                                tv_vip_date.setText("无门槛");
+                                tv_vip_date.setVisibility(View.VISIBLE);
+                                tv_pay_order.setText("平台余额");
+                                ll_detail.setVisibility(View.GONE);
+                                v1.setVisibility(View.GONE);
+                                ll_desc.setVisibility(View.GONE);
+                                ll_orderId.setVisibility(View.GONE);
                             }
 
 

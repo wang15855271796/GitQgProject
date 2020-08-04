@@ -41,6 +41,7 @@ import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -83,6 +84,8 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
     RelativeLayout rl_num;
     ProductNormalModel productNormalModel;
     String flag = "reduce";
+    String enjoyProduct;
+    String cell;
     //降价集合
     private List<ProductNormalModel.DataBean.ListBean> list = new ArrayList<>();
     @Override
@@ -116,8 +119,9 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
     public void findViewById() {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-
-        reduceAdapter = new ReduceAdapter(flag,R.layout.item_team_list, list, new ReduceAdapter.Onclick() {
+        getCustomerPhone();
+        enjoyProduct = SharedPreferencesUtil.getString(mActivity, "priceType");
+        reduceAdapter = new ReduceAdapter(enjoyProduct,flag,R.layout.item_team_list, list, new ReduceAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
@@ -128,7 +132,13 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
                 }
 
             }
+
+            @Override
+            public void tipClick() {
+                showPhoneDialog(cell);
+            }
         });
+
         refreshLayout.setEnableLoadMore(false);
         recyclerView.setLayoutManager(new MyGrideLayoutManager(mContext,2));
         recyclerView.setAdapter(reduceAdapter);
@@ -152,7 +162,6 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
                 startActivity(intent);
             }
         });
-        getProductsList(pageNum,pageSize,"reduct");
         getCartNum();
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -184,6 +193,47 @@ public class ReductionProductActivity extends BaseSwipeActivity implements View.
         });
 
     }
+
+    /**
+     * 弹出电话号码
+     */
+    private AlertDialog mDialog;
+    TextView tv_phone;
+    public void showPhoneDialog(final String cell) {
+        mDialog = new AlertDialog.Builder(mActivity).create();
+        mDialog.show();
+        mDialog.getWindow().setContentView(R.layout.dialog_shouye_tip);
+        tv_phone = mDialog.getWindow().findViewById(R.id.tv_phone);
+        tv_phone.setText(cell);
+        mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * @param
+     */
+
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
+
+            @Override
+            public void onFaild(String errorMsg) {
+            }
+        });
+    }
+
 
     /**
      * 购物车数量

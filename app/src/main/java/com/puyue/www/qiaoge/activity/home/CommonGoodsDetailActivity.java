@@ -175,6 +175,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     TextView tv_change;
     private AlertDialog mTypedialog;
     LinearLayout ll_service;
+    TextView tv_price;
     public List<GetProductDetailModel.DataBean.ProdSpecsBean> prodSpecs;
     private List<String> detailPic;
     private int productMainId;
@@ -189,6 +190,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     private ImageViewAdapter imageViewAdapter;
     String num = null;
     String city;
+    String priceType;
     private GetProductDetailModel models;
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
@@ -200,6 +202,10 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
 
             if(bundle.getString("city")!=null) {
                 city = bundle.getString("city");
+            }
+
+            if(bundle.getString("priceType")!=null) {
+                priceType = bundle.getString("priceType");
             }
 
             productId = bundle.getInt(AppConstant.ACTIVEID);
@@ -223,6 +229,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+        tv_price =  FVHelper.fv(this, R.id.tv_price);
         ll_service = FVHelper.fv(this, R.id.ll_service);
         tv_city = FVHelper.fv(this, R.id.tv_city);
         mIvBack = FVHelper.fv(this, R.id.iv_activity_back);
@@ -317,6 +324,8 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
         } else {
             mIvCollection.setImageResource(R.mipmap.icon_collection_null);
         }
+
+        getCustomerPhone();
     }
 
 
@@ -379,10 +388,15 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                 }
             } else if (view == mTvAddCar) {
                 if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                    if(chooseDialog==null) {
-                        chooseDialog = new ChooseDialog(mContext,productId1,models);
+                    if(priceType.equals("1")) {
+                        if(chooseDialog==null) {
+                            chooseDialog = new ChooseDialog(mContext,productId1,models);
+                        }
+                        chooseDialog.show();
+                    }else {
+                        showPhoneDialog(cell);
                     }
-                    chooseDialog.show();
+
                 }else {
                     initDialog();
                 }
@@ -429,6 +443,27 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
     };
 
     /**
+     * 授权弹窗
+     * @param cell
+     */
+
+    private AlertDialog mDialog;
+    TextView tv_phone;
+    private void showPhoneDialog(String cell) {
+        mDialog = new AlertDialog.Builder(mActivity).create();
+        mDialog.show();
+        mDialog.getWindow().setContentView(R.layout.dialog_shouye_tip);
+        tv_phone = mDialog.getWindow().findViewById(R.id.tv_phone);
+        tv_phone.setText(cell);
+        mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+    }
+
+    /**
      * 获取详情
      */
     private void getProductDetail(final int productId) {
@@ -456,7 +491,20 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                             productId1 = model.getData().getProductId();
                             productName = model.getData().getProductName();
                             mTvTitle.setText(productName);
-                            mTvPrice.setText(model.getData().getMinMaxPrice());
+                            if(priceType.equals("1")) {
+                                mTvPrice.setText(model.getData().getMinMaxPrice());
+                                mTvPrice.setVisibility(View.VISIBLE);
+                                tv_price.setVisibility(View.GONE);
+                            }else {
+                                mTvPrice.setVisibility(View.GONE);
+                                tv_price.setVisibility(View.VISIBLE);
+                            }
+                            tv_price.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    showPhoneDialog(cell);
+                                }
+                            });
                             if(model.getData().getTypeUrl()==null||model.getData().getTypeUrl().equals("")) {
                                 iv_flag.setVisibility(View.GONE);
                             }else {
@@ -471,19 +519,22 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
                                 @Override
                                 public void addDialog(int position) {
                                     if(StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
-                                        if(UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_RETAIL)) {
-                                            if (StringHelper.notEmptyAndNull(cell)) {
+                                        if(priceType.equals("1")) {
+                                            if(UserInfoHelper.getUserType(mContext).equals(AppConstant.USER_TYPE_RETAIL)) {
 
+                                            }else {
+                                                chooseSpecAdapter.selectPosition(position);
+                                                if(chooseDialog==null){
+                                                    productMainId = model.getData().getProductMainId();
+                                                    chooseDialog = new ChooseDialog(mContext, productId1,models);
+
+                                                }
+                                                chooseDialog.show();
                                             }
                                         }else {
-                                            chooseSpecAdapter.selectPosition(position);
-                                            if(chooseDialog==null){
-                                                productMainId = model.getData().getProductMainId();
-                                                chooseDialog = new ChooseDialog(mContext, productId1,models);
-
-                                            }
-                                            chooseDialog.show();
+                                            showPhoneDialog(cell);
                                         }
+
                                     }else {
                                         initDialog();
                                     }
@@ -938,6 +989,7 @@ public class CommonGoodsDetailActivity extends BaseSwipeActivity {
             }
         });
     }
+
 
     /**
      * 获取客服电话

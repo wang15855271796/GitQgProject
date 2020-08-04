@@ -630,7 +630,7 @@ public class CartsListModel {
              * additionProductVOList : null
              * valid : false
              */
-
+            private String priceStr;
             private String productName;
             private String flagUrl;
             private String defaultPic;
@@ -638,6 +638,14 @@ public class CartsListModel {
             private Object additionProductVOList;
             private boolean valid;
             private List<SpecProductListBeanX> specProductList;
+
+            public String getPriceStr() {
+                return priceStr;
+            }
+
+            public void setPriceStr(String priceStr) {
+                this.priceStr = priceStr;
+            }
 
             public String getProductName() {
                 return productName;

@@ -32,6 +32,7 @@ import com.puyue.www.qiaoge.model.cart.GetOrderDetailModel;
 import com.puyue.www.qiaoge.model.home.GetAllCommentListByPageModel;
 import com.puyue.www.qiaoge.model.home.JumpModel;
 import com.puyue.www.qiaoge.model.mine.order.NewOrderDetailModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.GlideModel;
 import com.puyue.www.qiaoge.view.LineBreakLayout;
@@ -165,12 +166,14 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
                                 if(jumpModel.getData().equals("-1")) {
                                     Intent intent = new Intent(mContext, SeckillGoodActivity.class);
                                     intent.putExtra(AppConstant.ACTIVEID,productId);
+                                    intent.putExtra("priceType",SharedPreferencesUtil.getString(mContext,"priceType"));
                                     intent.putExtra("num",jumpModel.getData());
                                     mContext.startActivity(intent);
                                 }else {
                                     Intent intent = new Intent(mContext, SeckillGoodActivity.class);
                                     intent.putExtra(AppConstant.ACTIVEID,productId);
                                     intent.putExtra("num",jumpModel.getData());
+                                    intent.putExtra("priceType",SharedPreferencesUtil.getString(mContext,"priceType"));
                                     intent.putExtra("city",jumpModel.getMessage());
                                     mContext.startActivity(intent);
                                 }
@@ -204,12 +207,14 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
                                 if(jumpModel.getData().equals("-1")) {
                                     Intent intent = new Intent(mContext, SpecialGoodDetailActivity.class);
                                     intent.putExtra(AppConstant.ACTIVEID,productId);
+                                    intent.putExtra("priceType", SharedPreferencesUtil.getString(mContext,"priceType"));
                                     intent.putExtra("num",jumpModel.getData());
                                     mContext.startActivity(intent);
                                 }else {
                                     Intent intent = new Intent(mContext, SpecialGoodDetailActivity.class);
                                     intent.putExtra(AppConstant.ACTIVEID,productId);
                                     intent.putExtra("num",jumpModel.getData());
+                                    intent.putExtra("priceType", SharedPreferencesUtil.getString(mContext,"priceType"));
                                     intent.putExtra("city",jumpModel.getMessage());
                                     mContext.startActivity(intent);
                                 }
@@ -246,11 +251,13 @@ public class NewOrderDetailAdapter extends BaseQuickAdapter<GetOrderDetailModel.
                                     Intent intent = new Intent(mContext, CommonGoodsDetailActivity.class);
                                     intent.putExtra(AppConstant.ACTIVEID,item.productMainId);
                                     intent.putExtra("num",jumpModel.getData());
+                                    intent.putExtra("priceType", SharedPreferencesUtil.getString(mContext,"priceType"));
                                     mContext.startActivity(intent);
                                 }else {
                                     Intent intent = new Intent(mContext, CommonGoodsDetailActivity.class);
                                     intent.putExtra(AppConstant.ACTIVEID,item.productMainId);
                                     intent.putExtra("num",jumpModel.getData());
+                                    intent.putExtra("priceType", SharedPreferencesUtil.getString(mContext,"priceType"));
                                     intent.putExtra("city",jumpModel.getMessage());
                                     mContext.startActivity(intent);
                                 }

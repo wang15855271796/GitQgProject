@@ -16,17 +16,17 @@ import java.util.List;
 /**
  * Created by ${王涛} on 2020/7/8
  */
-public class ExchangeAdapter extends BaseQuickAdapter<ExChangeModel.DetailListBean,BaseViewHolder> {
+public class ExchangeAdapter extends BaseQuickAdapter<String,BaseViewHolder> {
 
-    public ExchangeAdapter(int layoutResId, @Nullable List<ExChangeModel.DetailListBean> data) {
+    public ExchangeAdapter(int layoutResId, @Nullable List<String> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, ExChangeModel.DetailListBean item) {
-        helper.setText(R.id.tv_amount,item.list.get(helper.getAdapterPosition())+"");
-        helper.setText(R.id.tv_num,item.num+"");
-        helper.setText(R.id.tv_expend,item.expend.get(helper.getAdapterPosition())+"");
+    protected void convert(BaseViewHolder helper, String item) {
+        helper.setText(R.id.tv_amount,"优惠券"+item+"元");
+        helper.setText(R.id.tv_num,"*1");
+        helper.setText(R.id.tv_expend,item+"元");
 
     }
 }

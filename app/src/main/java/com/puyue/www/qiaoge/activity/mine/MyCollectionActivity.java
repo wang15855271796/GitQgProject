@@ -29,6 +29,7 @@ import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.mine.collection.CollectionListModel;
 import com.puyue.www.qiaoge.model.mine.collection.DeleteCollectionModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,6 +131,7 @@ public class MyCollectionActivity extends BaseSwipeActivity {
 
                     Intent intent = new Intent(mContext, CommonGoodsDetailActivity.class);
                     intent.putExtra(AppConstant.ACTIVEID, mList.get(position).getProductMainId());
+                    intent.putExtra("priceType", SharedPreferencesUtil.getString(mContext,"priceType"));
                     startActivity(intent);
 
                     }

@@ -631,7 +631,6 @@ public class MineFragment extends BaseFragment {
             {
                 String num = "0";
                 Intent intent = new Intent(mActivity, MyWalletNewActivity.class);
-
                 UserInfoHelper.saveUserWalletNum(getContext(), num);
                 startActivity(intent);
             } else if (view == ll_inviteAward)

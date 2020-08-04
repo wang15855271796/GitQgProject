@@ -2,6 +2,7 @@ package com.puyue.www.qiaoge.activity.mine;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.dcloud.android.annotation.NonNull;
 import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.mine.order.MySubOrderActivity;
 import com.puyue.www.qiaoge.activity.mine.order.NewOrderDetailActivity;

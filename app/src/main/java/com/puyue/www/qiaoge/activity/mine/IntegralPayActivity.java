@@ -5,13 +5,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.alipay.sdk.app.PayTask;
+import com.chinaums.pppay.unify.UnifyPayPlugin;
+import com.chinaums.pppay.unify.UnifyPayRequest;
 import com.puyue.www.qiaoge.QiaoGeApplication;
 import com.puyue.www.qiaoge.R;
 
+import com.puyue.www.qiaoge.activity.HomeActivity;
+import com.puyue.www.qiaoge.activity.mine.order.MyOrdersActivity;
 import com.puyue.www.qiaoge.activity.mine.order.VipPayResultActivity;
 import com.puyue.www.qiaoge.api.mine.order.CopyToCartAPI;
 import com.puyue.www.qiaoge.api.mine.order.VipPayAPI;
@@ -23,9 +28,11 @@ import com.puyue.www.qiaoge.helper.AppHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.mine.order.CopyToCartModel;
 import com.puyue.www.qiaoge.model.mine.order.VipPayModel;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -36,6 +43,8 @@ import java.util.Map;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import static com.umeng.socialize.utils.ContextUtil.getContext;
 
 /**
  * Created by ${daff}
@@ -53,6 +62,8 @@ public class IntegralPayActivity extends BaseSwipeActivity {
     private String outTradeNo;
     private static final int SDK_PAY_FLAG = 1;
     private static final int SDK_AUTH_FLAG = 2;
+    AVLoadingIndicatorView lav_activity_loading;
+    private Handler handler = new Handler();
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
         return false;
@@ -66,6 +77,7 @@ public class IntegralPayActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+        lav_activity_loading = (AVLoadingIndicatorView) findViewById(R.id.lav_activity_loading);
         imageViewBack = (ImageView) findViewById(R.id.imageViewBack);
         alipay = (ImageView) findViewById(R.id.rb_activity_order_alipay);
         wechat = (ImageView) findViewById(R.id.rb_activity_order_wechat);
@@ -110,6 +122,8 @@ public class IntegralPayActivity extends BaseSwipeActivity {
                         AppHelper.showMsg(mContext, "请选择支付方式");
                         return;
                     }
+                    lav_activity_loading.setVisibility(View.VISIBLE);
+                    lav_activity_loading.show();
                     requestVipPay();
                     break;
             }
@@ -136,12 +150,15 @@ public class IntegralPayActivity extends BaseSwipeActivity {
                     public void onNext(VipPayModel vipPayModel) {
                         if (vipPayModel.isSuccess()) {
                             outTradeNo = vipPayModel.getData().getOutTradeNo();
-                            if (payChannel == 2) {
+                            if (payChannel == 2&&vipPayModel.getData().getPayType()==2) {
                                 //支付宝支付
                                 aliPay(vipPayModel.getData().getPayToken());
                             } else if (payChannel == 3) {
                                 //微信支付
                                 weChatPay(vipPayModel.getData().getPayToken());
+                            }else if(vipPayModel.getData().getPayType()==14&&payChannel == 2) {
+                                //银联
+                                payAliPay(vipPayModel.getData().getPayToken());
                             }
                         } else {
                             AppHelper.showMsg(mContext, vipPayModel.getMessage());
@@ -150,6 +167,23 @@ public class IntegralPayActivity extends BaseSwipeActivity {
                 });
     }
 
+    private void payAliPay(String parms) {
+        UnifyPayRequest msg = new UnifyPayRequest();
+        msg.payChannel = UnifyPayRequest.CHANNEL_ALIPAY;
+        msg.payData = parms;
+        UnifyPayPlugin.getInstance(this).sendPayRequest(msg);
+        lav_activity_loading.setVisibility(View.GONE);
+        lav_activity_loading.hide();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = MyOrdersActivity.getIntent(getContext(), HomeActivity.class, AppConstant.ALL);
+                intent.putExtra("orderDeliveryType",0);
+                startActivity(intent);
+                finish();
+            }
+        },20000);
+    }
 
 
     //---------------------------支付逻辑------------------------------------------------//
@@ -173,6 +207,9 @@ public class IntegralPayActivity extends BaseSwipeActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        lav_activity_loading.setVisibility(View.GONE);
+        lav_activity_loading.hide();
 
     }
 
@@ -212,6 +249,8 @@ public class IntegralPayActivity extends BaseSwipeActivity {
                 mHandler.sendMessage(msg);
             }
         };
+        lav_activity_loading.setVisibility(View.GONE);
+        lav_activity_loading.hide();
         // 必须异步调用
         Thread payThread = new Thread(payRunnable);
         payThread.start();

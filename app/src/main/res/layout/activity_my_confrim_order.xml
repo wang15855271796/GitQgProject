@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -30,125 +31,145 @@
             android:textSize="@dimen/size_18dp" />
     </com.puyue.www.qiaoge.view.CompatToolbar>
 
-    <LinearLayout
-        android:layout_marginTop="@dimen/size_15dp"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_marginTop="@dimen/size_15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size_20dp"
-            android:layout_marginRight="@dimen/size_20dp"
-            android:layout_marginTop="@dimen/size_15dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/ic_balance_pay"
-                android:drawablePadding="@dimen/size_15dp"
-                android:gravity="center"
-                android:id="@+id/textView"
-                android:text="@string/balance"
-                android:textColor="@color/app_black"
-                android:textSize="@dimen/size_15dp" />
-            <TextView
-                android:textColor="@color/color_AAA8AB"
-                android:textSize="@dimen/size_15dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/size_15dp"
-                android:layout_toRightOf="@+id/textView"
-                android:id="@+id/textViewAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_marginLeft="@dimen/size_20dp"
+                android:layout_marginRight="@dimen/size_20dp"
+                android:layout_marginTop="@dimen/size_15dp">
 
-            <ImageView
-                android:layout_centerVertical="true"
-                android:id="@+id/rb_activity_order_balance"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_balance_pay"
+                    android:drawablePadding="@dimen/size_15dp"
+                    android:gravity="center"
+                    android:id="@+id/textView"
+                    android:text="@string/balance"
+                    android:textColor="@color/app_black"
+                    android:textSize="@dimen/size_15dp" />
+                <TextView
+                    android:textColor="@color/color_AAA8AB"
+                    android:textSize="@dimen/size_15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:layout_toRightOf="@+id/textView"
+                    android:id="@+id/textViewAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:id="@+id/rb_activity_order_balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/ic_pay_no" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_1dp"
+                android:layout_marginTop="@dimen/size_15dp"
+                android:background="@color/color_F6F6F6" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:src="@mipmap/ic_pay_no" />
-        </RelativeLayout>
+                android:layout_marginLeft="@dimen/size_20dp"
+                android:layout_marginRight="@dimen/size_20dp"
+                android:layout_marginTop="@dimen/size_15dp">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_1dp"
-            android:layout_marginTop="@dimen/size_15dp"
-            android:background="@color/color_F6F6F6" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_pay_alipay"
+                    android:drawablePadding="@dimen/size_15dp"
+                    android:gravity="center"
+                    android:text="@string/textAliPay"
+                    android:textColor="@color/app_black"
+                    android:textSize="@dimen/size_15dp" />
 
-        <RelativeLayout
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:id="@+id/rb_activity_order_alipay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/ic_pay_no" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_1dp"
+                android:layout_marginTop="@dimen/size_15dp"
+                android:background="@color/color_F6F6F6" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size_20dp"
+                android:layout_marginRight="@dimen/size_20dp"
+                android:layout_marginTop="@dimen/size_15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_pay_wechar"
+                    android:drawablePadding="@dimen/size_15dp"
+                    android:gravity="center"
+                    android:text="@string/textWeChatPay"
+                    android:textColor="@color/app_black"
+                    android:textSize="@dimen/size_15dp" />
+
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:id="@+id/rb_activity_order_wechat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/ic_pay_no" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_1dp"
+                android:layout_marginTop="@dimen/size_15dp"
+                android:background="@color/color_F6F6F6" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_below="@+id/ll"
+            android:id="@+id/okPay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size_20dp"
-            android:layout_marginRight="@dimen/size_20dp"
-            android:layout_marginTop="@dimen/size_15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/ic_pay_alipay"
-                android:drawablePadding="@dimen/size_15dp"
-                android:gravity="center"
-                android:text="@string/textAliPay"
-                android:textColor="@color/app_black"
-                android:textSize="@dimen/size_15dp" />
-
-            <ImageView
-                android:layout_centerVertical="true"
-                android:id="@+id/rb_activity_order_alipay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:src="@mipmap/ic_pay_no" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_1dp"
             android:layout_marginTop="@dimen/size_15dp"
-            android:background="@color/color_F6F6F6" />
+            android:src="@mipmap/ic_edittext_button" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:layout_marginTop="150dp"
+            android:visibility="gone"
+            android:id="@+id/lav_activity_loading"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size_20dp"
-            android:layout_marginRight="@dimen/size_20dp"
-            android:layout_marginTop="@dimen/size_15dp">
+            app:indicatorName="BallPulseIndicator"
+            style="@style/AVLoadingIndicatorView.Large"
+            app:indicatorColor="#f40"
+            />
+    </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/ic_pay_wechar"
-                android:drawablePadding="@dimen/size_15dp"
-                android:gravity="center"
-                android:text="@string/textWeChatPay"
-                android:textColor="@color/app_black"
-                android:textSize="@dimen/size_15dp" />
-
-            <ImageView
-                android:layout_centerVertical="true"
-                android:id="@+id/rb_activity_order_wechat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:src="@mipmap/ic_pay_no" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_1dp"
-            android:layout_marginTop="@dimen/size_15dp"
-            android:background="@color/color_F6F6F6" />
-    </LinearLayout>
-
-
-    <ImageView
-        android:id="@+id/okPay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_15dp"
-        android:src="@mipmap/ic_edittext_button" />
 
 </LinearLayout>

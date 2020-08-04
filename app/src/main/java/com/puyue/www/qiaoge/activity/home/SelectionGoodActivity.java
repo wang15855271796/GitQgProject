@@ -23,6 +23,7 @@ import com.puyue.www.qiaoge.activity.CartActivity;
 import com.puyue.www.qiaoge.activity.mine.login.LoginActivity;
 import com.puyue.www.qiaoge.adapter.home.RegisterShopAdapterTwo;
 import com.puyue.www.qiaoge.api.cart.GetCartNumAPI;
+import com.puyue.www.qiaoge.api.home.CityChangeAPI;
 import com.puyue.www.qiaoge.api.home.GetRegisterShopAPI;
 import com.puyue.www.qiaoge.api.home.UpdateUserInvitationAPI;
 import com.puyue.www.qiaoge.api.market.MarketGoodSelcetAPI;
@@ -40,11 +41,14 @@ import com.puyue.www.qiaoge.helper.PublicRequestHelper;
 import com.puyue.www.qiaoge.helper.StringHelper;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.OnItemClickListener;
+import com.puyue.www.qiaoge.model.IsShowModel;
 import com.puyue.www.qiaoge.model.cart.GetCartNumModel;
 import com.puyue.www.qiaoge.model.home.GetCustomerPhoneModel;
 import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
+import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
 import com.puyue.www.qiaoge.utils.LoginUtil;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.view.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -89,6 +93,9 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
     private List<MarketRightModel.DataBean.ProdClassifyBean.ListBean> list = new ArrayList<>();
     private int productId;
     private String title;
+    private String enjoyProduct;
+    String cell;
+    private String priceType;
 
     @Override
     public boolean handleExtra(Bundle savedInstanceState) {
@@ -102,7 +109,6 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getNum(UpDateNumEvent9 event) {
-        Log.d("cdwdwddsssvvv...","000");
         getCartNum();
     }
 
@@ -116,10 +122,13 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
     public void findViewById() {
         ButterKnife.bind(this);
         initStatusBarWhiteColor();
+        getCustomerPhone();
+        getProductsList(1,pageSize,productId);
         EventBus.getDefault().register(this);
+        enjoyProduct = SharedPreferencesUtil.getString(mActivity, "priceType");
         productId = getIntent().getIntExtra("productId",0);
         title = getIntent().getStringExtra("title");
-        selectionAdapter = new SelectionAdapter(R.layout.item_noresult_recommend, list, new SelectionAdapter.Onclick() {
+        selectionAdapter = new SelectionAdapter(enjoyProduct,R.layout.item_team_list, list, new SelectionAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
@@ -128,11 +137,17 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
                     initDialog();
                 }
             }
+
+            @Override
+            public void tipClick() {
+                showPhoneDialog(cell);
+            }
         });
+
         emptyView = View.inflate(mActivity, R.layout.layout_empty, null);
         selectionAdapter.setEmptyView(emptyView);
         refreshLayout.setEnableLoadMore(false);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
         recyclerView.setAdapter(selectionAdapter);
         recyclerView.setHasFixedSize(true);
         iv_back.setOnClickListener(this);
@@ -148,13 +163,13 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
                 }
             }
         });
+
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 pageNum = 1;
                 list.clear();
                 getProductsList(1,pageSize,productId);
-
                 refreshLayout.finishRefresh();
             }
         });
@@ -175,6 +190,47 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
         });
     }
 
+    /**
+     * 弹出电话号码
+     */
+    private AlertDialog mDialog;
+    TextView tv_phone;
+    public void showPhoneDialog(final String cell) {
+        mDialog = new AlertDialog.Builder(mActivity).create();
+        mDialog.show();
+        mDialog.getWindow().setContentView(R.layout.dialog_shouye_tip);
+        tv_phone = mDialog.getWindow().findViewById(R.id.tv_phone);
+        tv_phone.setText(cell);
+        mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * @param
+     */
+
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
+
+            @Override
+            public void onFaild(String errorMsg) {
+            }
+        });
+    }
+
+
     CouponDialog couponDialog;
     private void initDialog() {
         couponDialog = new CouponDialog(mActivity) {
@@ -192,7 +248,6 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
         };
         couponDialog.show();
     }
-
 
     /**
      * 获取精选分类
@@ -229,7 +284,6 @@ public class SelectionGoodActivity extends BaseSwipeActivity implements View.OnC
     @Override
     public void setViewData() {
         refreshLayout.autoRefresh();
-
         getCartNum();
 
     }

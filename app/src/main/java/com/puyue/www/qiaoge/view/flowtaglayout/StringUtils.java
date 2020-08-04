@@ -73,6 +73,10 @@ public class StringUtils {
         return true;
     }
 
+    public static String doubleToString(double num){
+        //使用0.00不足位补0，#.##仅保留有效位
+        return new DecimalFormat("0.00").format(num);
+    }
     public static boolean isNotBlank(String str) {
         return !isBlank(str);
     }

@@ -66,6 +66,7 @@ import com.puyue.www.qiaoge.model.mine.order.GenerateOrderModel;
 import com.puyue.www.qiaoge.model.mine.order.GetTimeOrderModel;
 import com.puyue.www.qiaoge.view.GCJ02ToWGS84Util;
 import com.puyue.www.qiaoge.view.PickCityUtil;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -181,7 +182,7 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
     double longitude2;
     private TextView tv_address;
 
-
+    AVLoadingIndicatorView lav_activity_loading;
     public LocationClient mLocationClient = null;
     private MyLocationListener myListener = new MyLocationListener();
     private UiSettings mUiSettings;
@@ -219,6 +220,7 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
     @Override
     public void findViewById(View view) {
         //  toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        lav_activity_loading = (AVLoadingIndicatorView) view.findViewById(R.id.lav_activity_loading);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         userName = (TextView) view.findViewById(R.id.userName);
         userPhone = (TextView) view.findViewById(R.id.userPhone);
@@ -630,9 +632,13 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
 
                     break;
                 case R.id.buttonPay:// 去支付
+
                     if (LinearLayoutAddress.getVisibility() == View.VISIBLE) { // 没有地址
                         AppHelper.showMsg(mActivity, "请填写地址");
                     } else {
+                        lav_activity_loading.show();
+                        buttonPay.setEnabled(false);
+                        lav_activity_loading.setVisibility(View.VISIBLE);
                         if (et_name.getText().toString() != null) {
                             if (et_phone.getText().toString() != null) {
                                 if (mYear != null) {
@@ -1076,9 +1082,16 @@ public class ConfirmOrderSufficiencyFragment extends BaseFragment {
                             intent.putExtra("remark", messageEditText.getText().toString());
                             intent.putExtra("orderDeliveryType", 1);
                             startActivity(intent);
+                            lav_activity_loading.hide();
+                            lav_activity_loading.setVisibility(View.GONE);
+                            buttonPay.setEnabled(true);
                             mActivity.finish();
                         } else {
                             AppHelper.showMsg(mActivity, generateOrderModel.message);
+                            lav_activity_loading.hide();
+                            buttonPay.setEnabled(true);
+                            lav_activity_loading.setVisibility(View.GONE);
+
                         }
                     }
                 });

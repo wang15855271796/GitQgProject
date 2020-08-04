@@ -76,6 +76,8 @@ public class MyOrdersItemAdapter extends BaseQuickAdapter<MyOrdersModel.DataBean
 
     @Override
     protected void convert(final BaseViewHolder helper, final MyOrdersModel.DataBean.ListBean item) {
+
+        helper.setIsRecyclable(false);
         againBay = helper.getView(R.id.againBay);
         commodityOne = helper.getView(R.id.commodityOne);
         commodityTwo = helper.getView(R.id.commodityTwo);
@@ -115,6 +117,7 @@ public class MyOrdersItemAdapter extends BaseQuickAdapter<MyOrdersModel.DataBean
 
 
         if (orderState == 11) { //退货订单 不显示按钮
+            Log.d("weeeesss..............","00000");
             imageGo.setVisibility(View.GONE);
             againBay.setVisibility(View.VISIBLE);
             evaluateNow.setVisibility(View.GONE);
@@ -123,7 +126,9 @@ public class MyOrdersItemAdapter extends BaseQuickAdapter<MyOrdersModel.DataBean
             cancelOrder.setVisibility(View.GONE);
             orderType.setText(item.returnOrderState);
         } else {
-            if (item.orderStatusName.equals("待付款")) { // 待付款不显示 再次购买 其他的显示，取消的显示
+            if (item.orderStatusName.equals("待付款")) {
+                // 待付款不显示 再次购买 其他的显示，取消的显示
+                Log.d("weeeesss..............","11111");
                 imageGo.setVisibility(View.VISIBLE);
                 cancelOrder.setVisibility(View.VISIBLE);
                 againBay.setVisibility(View.GONE);
@@ -131,6 +136,7 @@ public class MyOrdersItemAdapter extends BaseQuickAdapter<MyOrdersModel.DataBean
                 confirmOrder.setVisibility(View.GONE);
                 deleteOrder.setVisibility(View.GONE);
             } else if (item.orderStatusName.equals("已取消")) {
+                Log.d("weeeesss..............","22222");
                 imageGo.setVisibility(View.GONE);
                 deleteOrder.setVisibility(View.VISIBLE);
                 againBay.setVisibility(View.VISIBLE);
@@ -138,6 +144,7 @@ public class MyOrdersItemAdapter extends BaseQuickAdapter<MyOrdersModel.DataBean
                 evaluateNow.setVisibility(View.GONE);
                 confirmOrder.setVisibility(View.GONE);
             } else if (item.orderStatusName.equals("待发货")) {
+                Log.d("weeeesss..............","33333");
                 againBay.setVisibility(View.VISIBLE);
                 cancelOrder.setVisibility(View.GONE);
                 evaluateNow.setVisibility(View.GONE);
@@ -145,6 +152,7 @@ public class MyOrdersItemAdapter extends BaseQuickAdapter<MyOrdersModel.DataBean
                 deleteOrder.setVisibility(View.GONE);
                 confirmOrder.setVisibility(View.GONE);
             } else if (item.orderStatusName.equals("待收货")) {
+                Log.d("weeeesss..............","44444");
                 confirmOrder.setVisibility(View.VISIBLE);
                 againBay.setVisibility(View.VISIBLE);
                 imageGo.setVisibility(View.GONE);

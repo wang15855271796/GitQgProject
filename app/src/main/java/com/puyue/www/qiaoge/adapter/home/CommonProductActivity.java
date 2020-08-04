@@ -45,6 +45,7 @@ import com.puyue.www.qiaoge.model.home.GetRegisterShopModel;
 import com.puyue.www.qiaoge.model.home.ProductNormalModel;
 import com.puyue.www.qiaoge.model.home.UpdateUserInvitationModel;
 import com.puyue.www.qiaoge.utils.LoginUtil;
+import com.puyue.www.qiaoge.utils.SharedPreferencesUtil;
 import com.puyue.www.qiaoge.view.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -90,6 +91,8 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
     int PageNum;
     String flag = "common";
     CouponDialog couponDialog;
+    String cell;
+    private String enjoyProduct;
     //常用清单集合
     private List<ProductNormalModel.DataBean.ListBean> list = new ArrayList<>();
     @Override
@@ -107,7 +110,9 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initStatusBarWhiteColor();
-        commonProductAdapter = new CommonProductAdapter(flag,R.layout.item_team_list, list, new CommonProductAdapter.Onclick() {
+        getCustomerPhone();
+        enjoyProduct = SharedPreferencesUtil.getString(mActivity, "priceType");
+        commonProductAdapter = new CommonProductAdapter(enjoyProduct,flag,R.layout.item_team_list, list, new CommonProductAdapter.Onclick() {
             @Override
             public void addDialog() {
                 if (StringHelper.notEmptyAndNull(UserInfoHelper.getUserId(mContext))) {
@@ -115,6 +120,11 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
                 }else {
                    initDialog();
                 }
+            }
+
+            @Override
+            public void tipClick() {
+                showPhoneDialog(cell);
             }
         });
         refreshLayout.setEnableLoadMore(false);
@@ -156,6 +166,43 @@ public class CommonProductActivity extends BaseSwipeActivity implements View.OnC
                         refreshLayout.finishLoadMoreWithNoMoreData();
                     }
                 }
+            }
+        });
+    }
+
+    /**
+     * 弹出电话号码
+     */
+    private AlertDialog mDialog;
+    TextView tv_phone;
+    public void showPhoneDialog(final String cell) {
+        mDialog = new AlertDialog.Builder(mActivity).create();
+        mDialog.show();
+        mDialog.getWindow().setContentView(R.layout.dialog_shouye_tip);
+        tv_phone = mDialog.getWindow().findViewById(R.id.tv_phone);
+        tv_phone.setText(cell);
+        mDialog.getWindow().findViewById(R.id.tv_dialog_call_phone_sure).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+    }
+
+
+    private void getCustomerPhone() {
+        PublicRequestHelper.getCustomerPhone(mActivity, new OnHttpCallBack<GetCustomerPhoneModel>() {
+            @Override
+            public void onSuccessful(GetCustomerPhoneModel getCustomerPhoneModel) {
+                if (getCustomerPhoneModel.isSuccess()) {
+                    cell = getCustomerPhoneModel.getData();
+                } else {
+                    AppHelper.showMsg(mActivity, getCustomerPhoneModel.getMessage());
+                }
+            }
+
+            @Override
+            public void onFaild(String errorMsg) {
             }
         });
     }

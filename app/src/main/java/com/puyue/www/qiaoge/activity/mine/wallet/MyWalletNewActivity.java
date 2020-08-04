@@ -13,9 +13,15 @@ import com.puyue.www.qiaoge.R;
 import com.puyue.www.qiaoge.activity.cart.ExchangeActivity;
 import com.puyue.www.qiaoge.api.mine.GetMyBalanceAPI;
 import com.puyue.www.qiaoge.base.BaseSwipeActivity;
+import com.puyue.www.qiaoge.event.BackEvent;
+import com.puyue.www.qiaoge.event.ExBackEvent;
 import com.puyue.www.qiaoge.helper.UserInfoHelper;
 import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.model.mine.GetMyBalanceModle;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -57,6 +63,7 @@ public class MyWalletNewActivity extends BaseSwipeActivity {
 
     @Override
     public void findViewById() {
+        EventBus.getDefault().register(this);
         imageViewBack = (ImageView) findViewById(R.id.imageViewBack);
         relativeLayoutBalance = (RelativeLayout) findViewById(R.id.relativeLayoutBalance);
         relativeLayoutMyCommission = (RelativeLayout) findViewById(R.id.relativeLayoutMyCommission);
@@ -66,6 +73,21 @@ public class MyWalletNewActivity extends BaseSwipeActivity {
         banner = (ImageView) findViewById(R.id.banner);
         tv_amount = (TextView) findViewById(R.id.tv_amount);
         relative_account_detail = (RelativeLayout) findViewById(R.id.relative_account_detail);
+
+    }
+
+    /**
+     * 兑换优惠券返回刷新
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void exCoupon(ExBackEvent event) {
+        requestGoodsList();
 
     }
 
@@ -85,8 +107,9 @@ public class MyWalletNewActivity extends BaseSwipeActivity {
         relativeLayoutBalance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mActivity, ExchangeActivity.class);
+                Intent intent = new Intent(mActivity, MyWalletDetailActivity.class);
                 UserInfoHelper.saveUserWalletNum(getContext(), num);
+                intent.putExtra("showType",2);
                 startActivity(intent);
             }
         });
@@ -110,16 +133,7 @@ public class MyWalletNewActivity extends BaseSwipeActivity {
                 startActivity(intent);
             }
         });
-        relative_account_detail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =new Intent(mContext,ExchangeActivity.class);
-                intent.putExtra("amount",getMyBalanceModles.getData().getAmount());
-                startActivity(intent);
 
-
-            }
-        });
     }
 
     private void requestGoodsList() {
@@ -140,21 +154,17 @@ public class MyWalletNewActivity extends BaseSwipeActivity {
                     @Override
                     public void onNext(GetMyBalanceModle getMyBalanceModle) {
                         if (getMyBalanceModle.isSuccess()) {
-                        //    balancePrice.setText(getMyBalanceModle.getData().getAmount());
                             getMyBalanceModles = getMyBalanceModle;
                             tv_amount.setText(getMyBalanceModle.getData().getAmount());
-                            UserInfoHelper.saveUserWallet(mContext, getMyBalanceModle.getData().getAmount());
 
-                            myCommissionPrice.setText(getMyBalanceModle.getData().getCommission());
-                        /*    if (!TextUtils.isEmpty(getMyBalanceModle.getData().getAmountDesc())) {
-                                balanceNum.setVisibility(View.VISIBLE);
-                                balanceNum.setText(getMyBalanceModle.getData().getAmountDesc());
-                            } else {
-                                balanceNum.setVisibility(View.GONE);
-                            }*/
-                            bannerUrl = getMyBalanceModle.getData().getBanner().get(0).getBannerDetailUrl();
-                            commissionUrl = getMyBalanceModle.getData().getCommissionUrl();
-                            Glide.with(mActivity).load(getMyBalanceModle.getData().getBanner().get(0).getBannerUrl()).into(banner);
+                            relative_account_detail.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent =new Intent(mContext,ExchangeActivity.class);
+                                    intent.putExtra("amount",getMyBalanceModles.getData().getAmount());
+                                    startActivity(intent);
+                                }
+                            });
 
                         }
 

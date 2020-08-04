@@ -224,7 +224,7 @@ mListResult.clear();
     }
 
     private void requestOrdersList(int orderStatus) {
-        MyOrderListAPI.requestOrderList(getContext(), orderStatus, pageNum, 20, orderDeliveryType)
+        MyOrderListAPI.requestOrderList(getContext(), orderStatus, pageNum, 10, orderDeliveryType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<MyOrdersModel>() {

@@ -333,7 +333,7 @@ public class AppHelper {
         PhotoViewAdapter photoViewAdapter = new PhotoViewAdapter(mListUrl, mContext);
         mVp.setAdapter(photoViewAdapter);
         mVp.setCurrentItem(position);
-        mTv.setText(position + 1 + "/" + mListUrl.size());
+        mTv.setText(position  + 1+"/" + mListUrl.size());
         photoViewAdapter.setPhotoListener(new PhotoViewAdapter.OnPhotoListener() {
             @Override
             public void onPhotoListenter() {

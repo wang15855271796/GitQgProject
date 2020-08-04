@@ -110,7 +110,8 @@
                         android:layout_height="wrap_content">
 
                         <TextView
-                            tools:text="消费金额:110"
+                            android:id="@+id/tv_consume"
+                            android:text="消费金额:0"
                             android:textSize="@dimen/sp_16"
                             android:textColor="#666666"
                             android:layout_marginTop="@dimen/size_15dp"

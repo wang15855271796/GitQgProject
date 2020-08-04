@@ -57,6 +57,7 @@ import com.puyue.www.qiaoge.listener.NoDoubleClickListener;
 import com.puyue.www.qiaoge.utils.PickUtils;
 import com.puyue.www.qiaoge.utils.ToastUtil;
 import com.puyue.www.qiaoge.view.PickCityUtil;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -83,7 +84,7 @@ public class EditAndAddActivity extends BaseSwipeActivity  implements OnGetSugge
     public static final String CITY_CODE = "city_code";//市ID
     public static final String AREA_CODE = "area_code";
     public static final String ORDERID = "orderId";
-
+    AVLoadingIndicatorView lav_activity_loading;
     private String mType;
     private String mUserName;
     private String mUserPhone;
@@ -201,6 +202,7 @@ public class EditAndAddActivity extends BaseSwipeActivity  implements OnGetSugge
 
     @Override
     public void findViewById() {
+        lav_activity_loading = (AVLoadingIndicatorView) findViewById(R.id.lav_activity_loading);
         mIvBack = (ImageView) findViewById(R.id.iv_edit_address_back);
         mEditName = (EditText) findViewById(R.id.edit_edit_address_name);
         mEditPhone = (EditText) findViewById(R.id.edit_edit_address_phone);
@@ -399,8 +401,10 @@ public class EditAndAddActivity extends BaseSwipeActivity  implements OnGetSugge
                 //回到上个地址列表页,重新请求一次地址列表数据
                 if (mEditPhone.getText().toString().length() == 11) {
                     if (mType.equals("add")) {
+                        mBtnConfirm.setEnabled(false);
                         requestAddAddress();
                     } else if (mType.equals("edit")) {
+                        mBtnConfirm.setEnabled(false);
                         requestEditAddress();
                     }
                 } else {
@@ -460,8 +464,14 @@ public class EditAndAddActivity extends BaseSwipeActivity  implements OnGetSugge
                             intent.putExtra("defaultNum",isDefault);
                             EditAndAddActivity.this.setResult(22, intent);
                             EventBus.getDefault().post(new AddressEvent());
+                            mBtnConfirm.setEnabled(true);
+                            lav_activity_loading.setVisibility(View.GONE);
+                            lav_activity_loading.hide();
                             finish();
                         } else {
+                            mBtnConfirm.setEnabled(true);
+                            lav_activity_loading.setVisibility(View.GONE);
+                            lav_activity_loading.hide();
                             AppHelper.showMsg(mContext, mModelEditAddress.message);
                         }
                     }
@@ -477,6 +487,9 @@ public class EditAndAddActivity extends BaseSwipeActivity  implements OnGetSugge
             isDefault = 0;
         }
 
+        /**
+         * 新增地址
+         */
         AddAddressAPI.requestAddAddress(mContext, mEditName.getText().toString(), mEditPhone.getText().toString(), proviceCode, cityCode, areaCode, isDefault, keyWorldsView.getText().toString(), mEditStore.getText().toString(), "",orderId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -502,8 +515,14 @@ public class EditAndAddActivity extends BaseSwipeActivity  implements OnGetSugge
                             intent.putExtra("type", "add");
                             EditAndAddActivity.this.setResult(11, intent);
                             EventBus.getDefault().post(new AddressEvent());
+                            mBtnConfirm.setEnabled(true);
+                            lav_activity_loading.setVisibility(View.GONE);
+                            lav_activity_loading.hide();
                             finish();
                         } else {
+                            mBtnConfirm.setEnabled(true);
+                            lav_activity_loading.setVisibility(View.GONE);
+                            lav_activity_loading.hide();
                             AppHelper.showMsg(mContext, mModelAddAddress.message);
                         }
                     }
